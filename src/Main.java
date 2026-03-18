@@ -3,8 +3,6 @@ import java.util.Scanner;
 import javax.swing.JFrame;
 import org.json.simple.parser.ParseException;
 
-//hoi
-
 public class Main {
     public static void main(String[] args) throws IOException, ParseException {
         new Scanner(System.in);
