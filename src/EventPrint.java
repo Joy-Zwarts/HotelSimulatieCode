@@ -3,34 +3,46 @@ import java.awt.*;
 
 public class EventPrint implements HotelEventListener {
 
-    private JFrame frame; // maak frame aan om te laten zien
-    private JPanel panel; // maak panel aan voor de events
+    private JFrame frame; // frame voor events printen
+    private JPanel panel; // panel om de jlabels met de events aan toe te voegen
+    private JScrollPane scrollbar; // scrollbar toevoegen
 
     public EventPrint(HotelEventManager manager) {
 
         frame = new JFrame("Events");
         panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS)); // zet layout dat elk element onder elkaar wordt gezet
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-        frame.add(new JScrollPane(panel));
+        scrollbar = new JScrollPane(panel); // nieuwe scrollbar
+        frame.add(scrollbar); // voeg toe aan frame
+
         frame.setSize(500, 500);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
 
-        manager.registerListener(this); // register deze klasse als een listener
+        manager.registerListener(this);
     }
 
     @Override
-    public void notify(HotelEvent hotelEvent) { // functie die wordt aangeroepen als er iets gebeurt
-        printEvent(hotelEvent); // print het hotelEvent
+    public void notify(HotelEvent hotelEvent) {
+        printEvent(hotelEvent);
     }
 
     public void printEvent(HotelEvent hotelEvent) {
 
-        // maak een nieuw textlabel voor om het meegegeven event te printen
-        JLabel label = new JLabel("Time: " + hotelEvent.getTime() + " | Type: " + hotelEvent.getHotelEventType() + " | GuestID: " + hotelEvent.getGuestID() + " | Data: " + hotelEvent.getData());
+        JLabel label = new JLabel(
+                "Time: " + hotelEvent.getTime() +
+                        " | Type: " + hotelEvent.getHotelEventType() +
+                        " | GuestID: " + hotelEvent.getGuestID() +
+                        " | Data: " + hotelEvent.getData()
+        );
 
-        panel.add(label); // voeg deze toe aan de panel
-        panel.revalidate(); // teken de panel opnieuw
+        panel.add(label);
+        panel.revalidate();
+        panel.repaint();
+
+        // auto-scroll naar beneden
+        JScrollBar vertical = scrollbar.getVerticalScrollBar();
+        vertical.setValue(vertical.getMaximum());
     }
 }

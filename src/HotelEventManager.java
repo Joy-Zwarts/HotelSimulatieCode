@@ -39,13 +39,25 @@ public class HotelEventManager {
     private void generateEvent() {
         time += hte; // tijd aanpassen
 
+        int kansOpRandomEvent = rand.nextInt(1,5); // kies een random getal tussen 0 en 7
+
+        System.out.println(kansOpRandomEvent);
+
         HotelEventType[] values = HotelEventType.values(); // krijg de values van de enum (dan krijg je bijv 0 = NONE)
-        HotelEventType randomEvent = values[rand.nextInt(0, values.length)]; // kies een random event
+
+        HotelEventType gekozenEvent = null;
+
+        if (kansOpRandomEvent == 4){ // als het getal 6 is
+            gekozenEvent = values[rand.nextInt(values.length)]; // kies een random event
+        } else {
+            gekozenEvent = values[0]; // kies NONE
+        }
+
 
         int guestID = rand.nextInt(100, 999); // kies voor nu nog een random guestID
-        int data = rand.nextInt(10); // kies random data
+        int data = gekozenEvent.ordinal(); // geef door welk nummer het is in de lijst (idk wat je hiermee moet)
 
-        HotelEvent event = new HotelEvent(time, randomEvent, guestID, data); // maak een nieuw event aan
+        HotelEvent event = new HotelEvent(time, gekozenEvent, guestID, data); // maak een nieuw event aan
 
         notifyListeners(event); // notify de listeners van het nieuwe event
     }
