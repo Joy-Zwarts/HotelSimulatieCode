@@ -81,8 +81,8 @@ public class Layout {
             int w = ruimte.getDimensionW(); // get de wijdte
             int h = ruimte.getDimensionH(); // get de lengte
 
-            for (int y = startY; y < startY + h; y++) { // start bij de y positie, voor elke stap die kleiner is dan y + de hoogte
-                for (int x = startX; x < startX + w; x++) { // start bij de x positie, voor elke stap die kleiner is dan x + de breedte
+            for (int y = startY; y < startY + h; y++) { // startTimer bij de y positie, voor elke stap die kleiner is dan y + de hoogte
+                for (int x = startX; x < startX + w; x++) { // startTimer bij de x positie, voor elke stap die kleiner is dan x + de breedte
 
                     GridVakje vak = getGridVakje(x, y); // get het gridvakje die bij die coordinaten hoort
 
@@ -99,7 +99,7 @@ public class Layout {
 
                         // bepaal of dit vakje een bottom-rand moet hebben
                         boolean bottom;
-                        if (y == startY + h - 1) { // start y + hoogte - 1 omdat de y al een van de hoogte vakjes bevat
+                        if (y == startY + h - 1) { // startTimer y + hoogte - 1 omdat de y al een van de hoogte vakjes bevat
                             bottom = true;
                         } else {
                             bottom = false;
@@ -133,8 +133,8 @@ public class Layout {
             int w = element.getDimensionW(); // get de wijdte
             int h = element.getDimensionH(); // get de lengte
 
-            for (int y = startY; y < startY + h; y++) { // start bij de y positie, voor elke stap die kleiner is dan y + de hoogte
-                for (int x = startX; x < startX + w; x++) { // start bij de x positie, voor elke stap die kleiner is dan x + de breedte
+            for (int y = startY; y < startY + h; y++) { // startTimer bij de y positie, voor elke stap die kleiner is dan y + de hoogte
+                for (int x = startX; x < startX + w; x++) { // startTimer bij de x positie, voor elke stap die kleiner is dan x + de breedte
 
                     GridVakje vak = getGridVakje(x, y); // get het gridvakje die bij die coordinaten hoort
 
@@ -151,7 +151,7 @@ public class Layout {
 
                         // bepaal of dit vakje een bottom-rand moet hebben
                         boolean bottom;
-                        if (y == startY + h - 1) { // start y + hoogte - 1 omdat de y al een van de hoogte vakjes bevat
+                        if (y == startY + h - 1) { // startTimer y + hoogte - 1 omdat de y al een van de hoogte vakjes bevat
                             bottom = true;
                         } else {
                             bottom = false;

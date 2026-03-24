@@ -36,6 +36,6 @@ public class Main {
 
         EventPrint printerScherm = new EventPrint(manager); // maak een nieuw scherm aan om de events te printen
 
-        manager.start(); // start de klok
+        manager.startTimer(); // startTimer de klok
     }
 }

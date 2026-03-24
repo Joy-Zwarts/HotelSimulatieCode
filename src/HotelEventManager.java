@@ -31,9 +31,13 @@ public class HotelEventManager {
         this.hte = (hte);
     }
 
-    public void start() {
+    public void startScenario(){
+
+    }
+
+    public void startTimer() {
         timer = new Timer(hte, e -> generateEvent()); // maak de timer aan, tick per hte en per tick genereer een event
-        timer.start(); // start de klok
+        timer.start(); // startTimer de klok
     }
 
     private void generateEvent() {
@@ -66,6 +70,10 @@ public class HotelEventManager {
         for (HotelEventListener listener : listeners) { // per listeners in de lijst
             listener.notify(evt); // notify ze en geef de event mee
         }
+    }
+
+    public void pause() {
+
     }
 
     public void stop() { // stop de timer
