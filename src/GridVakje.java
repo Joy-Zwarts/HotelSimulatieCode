@@ -70,6 +70,14 @@ public class GridVakje {
         Vakjepanel.setBorder(vakjeRand);
     }
 
+    // In GridVakje.java
+    public void clearInhoud() {
+        // verwijder alle componenten in het vakje
+        getVakjepanel().removeAll();
+        // update het vakje visueel
+        getVakjepanel().repaint();
+    }
+
     // getters en setters
 
     public JPanel getVakjepanel() {

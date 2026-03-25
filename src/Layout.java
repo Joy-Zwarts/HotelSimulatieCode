@@ -73,6 +73,9 @@ public class Layout {
 
     // plaats ruimtes
 
+
+
+
     public void plaatsKamers() {
         for (Ruimte ruimte : ruimtes) { // voor elke ruimte in de lijst van ruimtes
             int startX = ruimte.getPositionX() ; // get de X positie -1 (de lift zit al op 0,0 dus we doen geen -1)
@@ -87,7 +90,11 @@ public class Layout {
                     GridVakje vak = getGridVakje(x, y); // get het gridvakje die bij die coordinaten hoort
 
                     if (vak != null) { // als die bestaat
-                        vak.zetInhoud(ruimte); // zet de inhoud van het vakje en geef het type en de classificatie mee (aantal sterren)
+                        if (x == startX && y == startY) {
+                            vak.zetInhoud(ruimte); // alleen label in linkerbovenhoek
+                        } else {
+                            vak.clearInhoud(); // alle andere vakjes van dit gebied leegmaken
+                        }
 
                         // bepaal of dit vakje een top-rand moet hebben
                         boolean top;
