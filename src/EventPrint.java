@@ -31,19 +31,25 @@ public class EventPrint implements HotelEventListener {
 
     public void printEvent(HotelEvent hotelEvent) {
 
-        JLabel label = new JLabel(
-                "Time: " + hotelEvent.getTime() +
-                        " | Type: " + hotelEvent.getHotelEventType() +
-                        " | GuestID: " + hotelEvent.getGuestID() +
-                        " | Data: " + hotelEvent.getData()
-        );
+        if (hotelEvent.getHotelEventType() == HotelEventType.NONE) {
 
-        panel.add(label);
-        panel.revalidate();
-        panel.repaint();
+        }
 
-        // auto-scroll naar beneden
-        JScrollBar vertical = scrollbar.getVerticalScrollBar();
-        vertical.setValue(vertical.getMaximum());
+        else {
+            JLabel label = new JLabel(
+                    "Time: " + hotelEvent.getTime() +
+                            " | Type: " + hotelEvent.getHotelEventType() +
+                            " | GuestID: " + hotelEvent.getGuestID() +
+                            " | Data: " + hotelEvent.getData()
+            );
+
+            panel.add(label);
+            panel.revalidate();
+            panel.repaint();
+
+            // auto-scroll naar beneden
+            JScrollBar vertical = scrollbar.getVerticalScrollBar();
+            vertical.setValue(vertical.getMaximum());
+        }
     }
 }
