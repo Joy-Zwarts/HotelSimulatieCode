@@ -19,6 +19,7 @@ public class EventPrint implements HotelEventListener {
         frame.setSize(500, 500);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
+        frame.setLocationRelativeTo(null);
 
         manager.registerListener(this);
     }

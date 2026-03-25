@@ -31,6 +31,7 @@ public class Main {
         frame1.add(layoutFixed.getHotelPanel()); // get het panel van de layout van het hotel en voeg deze toe aan het scherm
         frame1.pack(); // pas de grootte van het scherm aan gebaseerd op de grootte van wat erin zit
         frame1.setVisible(true); // laat het zien
+        frame1.setLocationRelativeTo(null);
 
         HotelEventManager manager = new HotelEventManager(1000); // maak een nieuwe hotelmanager aan
 
