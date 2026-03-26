@@ -63,11 +63,11 @@ public class LayoutParser {
                             break;
                     }
                     break;
-                case "Model.Restaurant":
+                case "Restaurant":
                     Ruimte restaurant = new Restaurant(areaType, position, dimension, capacity);
                     layout.addKamer(restaurant);
                     break;
-                case "Model.Fitness":
+                case "Fitness":
                     Ruimte fitness = new Fitness(areaType, position, dimension);
                     layout.addKamer(fitness);
                     break;

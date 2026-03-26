@@ -50,31 +50,31 @@ public class LayoutModel {
 
     public void addverplichteElementen() {
         String schachtDimension = "1," + gridLengte/2;
-        addKamerBuitenJson("Model.Schacht", "1,1", schachtDimension);
+        addKamerBuitenJson("Schacht", "1,1", schachtDimension);
         String verdiepingLift = "1," + (gridLengte+1)/2;
-        addKamerBuitenJson("Model.Lift", verdiepingLift, "1,1");
+        addKamerBuitenJson("Lift", verdiepingLift, "1,1");
         String schachtStart = "1," + (gridLengte/2 + 2);
-        addKamerBuitenJson("Model.Schacht", schachtStart, schachtDimension);
+        addKamerBuitenJson("Schacht", schachtStart, schachtDimension);
         String trappenPosition = gridBreedte + ",1";
         String trappenDimension = "1," + gridLengte;
         addKamerBuitenJson("Trappen", trappenPosition, trappenDimension);
         String lobbyPosition = "2," + gridLengte;
         String lobbyDimension = gridLengte-3 + ",1";
-        addKamerBuitenJson("Model.Lobby", lobbyPosition, lobbyDimension);
+        addKamerBuitenJson("Lobby", lobbyPosition, lobbyDimension);
     }
 
     public void addKamerBuitenJson(String AreaType, String position, String dimension){
         switch (AreaType) {
-            case "Model.Lift":
+            case "Lift":
                 verplichteElementen.add(new Lift(AreaType, position, dimension, (gridLengte + 1) / 2, true));
                 break;
-            case "Model.Schacht":
+            case "Schacht":
                 verplichteElementen.add(new Schacht(AreaType, position, dimension));
                 break;
             case "Trappen":
                 verplichteElementen.add(new Trappenhuis(AreaType, position, dimension));
                 break;
-            case "Model.Lobby":
+            case "Lobby":
                 verplichteElementen.add(new Lobby(AreaType, position, dimension));
                 break;
         }

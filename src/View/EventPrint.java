@@ -9,24 +9,25 @@ import javax.swing.*;
 import java.awt.*;
 
 public class EventPrint implements HotelEventListener {
-    private JPanel panel;
-    private JPanel panelTime;
-    private JScrollPane scrollbar;
-    private JLabel timeLabel;
-    private HotelEventManager manager;
+
+    private JFrame frame; // frame voor events printen
+    private JPanel panel; // panel om de jlabels met de events aan toe te voegen
+    private JScrollPane scrollbar; // scrollbar toevoegen
 
     public EventPrint(HotelEventManager manager) {
-        this.manager = manager;
-        panel = new JPanel();
-        panelTime = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-        JLabel timeLabel = new JLabel(String.valueOf(manager.getTime()));
-        panelTime.add(timeLabel);
-        panelTime.setPreferredSize(new Dimension(1500, 50));
-        scrollbar = new JScrollPane(panel);
-        scrollbar.setPreferredSize(new Dimension(525, 500)); // breedte + hoogte
 
+        frame = new JFrame("Events");
+        panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+        scrollbar = new JScrollPane(panel); // nieuwe scrollbar
+        frame.add(scrollbar); // voeg toe aan frame
+        panel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        getEventPanel().setPreferredSize(new Dimension(525, 100));
+        /*frame.setSize(500, 500);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+        frame.setLocationRelativeTo(null);*/
         manager.registerListener(this);
     }
 
@@ -34,9 +35,6 @@ public class EventPrint implements HotelEventListener {
         return scrollbar;
     }
 
-    public JPanel getTimePanel() {
-        return panelTime;
-    }
 
     @Override
     public void notify(HotelEvent hotelEvent) {
@@ -44,17 +42,24 @@ public class EventPrint implements HotelEventListener {
     }
 
     public void printEvent(HotelEvent hotelEvent) {
-        if (hotelEvent.getHotelEventType() != HotelEventType.NONE) {
+
+        if (hotelEvent.getHotelEventType() == HotelEventType.NONE) {
+
+        }
+
+        else {
             JLabel label = new JLabel(
                     "Time: " + hotelEvent.getTime() +
                             " | Type: " + hotelEvent.getHotelEventType() +
                             " | GuestID: " + hotelEvent.getGuestID() +
                             " | Data: " + hotelEvent.getData()
             );
+
             panel.add(label);
             panel.revalidate();
             panel.repaint();
 
+            // auto-scroll naar beneden
             JScrollBar vertical = scrollbar.getVerticalScrollBar();
             vertical.setValue(vertical.getMaximum());
         }
