@@ -1,3 +1,5 @@
+package Model;
+
 public class Lift extends Ruimte {
     private int verdieping;
     private boolean beschikbaar;

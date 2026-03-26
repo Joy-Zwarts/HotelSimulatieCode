@@ -1,3 +1,5 @@
+import Model.Ruimte;
+
 public class Kamer extends Ruimte {
     private RoomClassificatie classification;
 

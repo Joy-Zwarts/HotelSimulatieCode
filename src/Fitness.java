@@ -1,3 +1,5 @@
+import Model.Ruimte;
+
 public class Fitness extends Ruimte {
 
     public Fitness(String areaType, String position, String dimension) {

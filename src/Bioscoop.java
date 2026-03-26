@@ -1,3 +1,5 @@
+import Model.Ruimte;
+
 public class Bioscoop extends Ruimte {
 
     private int stoelen;

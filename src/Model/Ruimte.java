@@ -1,4 +1,6 @@
-    public class Ruimte {
+package Model;
+
+public class Ruimte {
 
         private String areaType;
         private String position;

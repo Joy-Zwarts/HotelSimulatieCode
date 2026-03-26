@@ -1,65 +1,21 @@
-import Model.*;
+package View;
+
+import Model.GridVakje;
+import Model.LayoutModel;
+import Model.Ruimte;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Layout {
-
-    private ArrayList<Ruimte> ruimtes;
-
-    private  ArrayList<Ruimte> verplichteElementen;
-
-    private HashMap<String, GridVakje> grid;
-
+public class LayoutView {
     private JPanel hotelPanel;
 
-    private int vakHoogte = 60;
-    private int vakBreedte = 120;
-
-    private int gridBreedte;
-    private int gridLengte;
-    private int gridWidth;
-
-
-    //constructor
-    public Layout() {
-        ruimtes = new ArrayList<>();
-        verplichteElementen = new ArrayList<>();
-        grid = new HashMap<>();
-    }
-
-    //add meegegeven kamer aan lijst van ruimtes
-    public void addKamer(Ruimte ruimte) {
-        ruimtes.add(ruimte);
-    }
-
-    // bepaal hoe groot hotel moet zijn
-    public void berekenGridGrootte() {
-
-        for (Ruimte ruimte : ruimtes) { // voor aantal ruimtes in de lijst
-
-            int right = ruimte.getPositionX() + ruimte.getDimensionW() - 1; // positie x plus hoe wijd de kamer is (-1 voor de x positie die al is meegerekend)
-            int bottom = ruimte.getPositionY() + ruimte.getDimensionH() - 1; // positie y plus hoe hoog de kamer is (-1 voor de y positie die al is meegerekend)
-
-            if (right > gridBreedte) { //zoek de meest rechtse positie+wijdte
-                gridBreedte = right; // dat is nu de breedte
-            }
-            if (bottom > gridLengte) { //zoek de meest onderste positie+hoogte
-                gridLengte = bottom; // dat is nu de lengte
-            }
-        }
-        gridBreedte = gridBreedte +2; // 2 extra kolommen voor de trap en liftschacht
-        gridLengte = gridLengte +1; // 1 extra rij voor de lobby
-    }
-
-    // maak alle grid vakjes
-    public void maakGrid() {
+    public void maakGrid(int gridBreedte, int gridLengte, int vakBreedte, int vakHoogte, HashMap<String, GridVakje> grid) {
 
         hotelPanel = new JPanel(null); // panel aanmaken voor de layout met een custom grid layout
-        gridWidth = gridBreedte*vakBreedte;
-        hotelPanel.setPreferredSize(new Dimension(gridWidth, gridLengte * vakHoogte)
+        hotelPanel.setPreferredSize(new Dimension(gridBreedte * vakBreedte, gridLengte * vakHoogte)
                 // bepaal aantal rijen (breedte) en hoe wijd die zijn (vakbreedte) en bepaal het aantal kolommen (lengte) en hoe hoog die zijn (vakhoogte)
         );
 
@@ -75,9 +31,7 @@ public class Layout {
         }
     }
 
-    // plaats ruimtes
-
-    public void plaatsKamers() {
+    public void plaatsKamers( ArrayList<Ruimte> ruimtes, ArrayList<Ruimte> verplichteElementen) {
         for (Ruimte ruimte : ruimtes) { // voor elke ruimte in de lijst van ruimtes
             int startX = ruimte.getPositionX() ; // get de X positie -1 (de lift zit al op 0,0 dus we doen geen -1)
             int startY = ruimte.getPositionY() -1; // get de Y positie -1 (posities beginnen vanaf 1 dus -1)
@@ -88,7 +42,7 @@ public class Layout {
             for (int y = startY; y < startY + h; y++) { // startTimer bij de y positie, voor elke stap die kleiner is dan y + de hoogte
                 for (int x = startX; x < startX + w; x++) { // startTimer bij de x positie, voor elke stap die kleiner is dan x + de breedte
 
-                    GridVakje vak = getGridVakje(x, y); // get het gridvakje die bij die coordinaten hoort
+                    GridVakje vak = LayoutModel.getGridVakje(x, y); // get het gridvakje die bij die coordinaten hoort
 
                     if (vak != null) { // als die bestaat
                         if (x == startX && y == startY) {
@@ -144,7 +98,7 @@ public class Layout {
             for (int y = startY; y < startY + h; y++) { // startTimer bij de y positie, voor elke stap die kleiner is dan y + de hoogte
                 for (int x = startX; x < startX + w; x++) { // startTimer bij de x positie, voor elke stap die kleiner is dan x + de breedte
 
-                    GridVakje vak = getGridVakje(x, y); // get het gridvakje die bij die coordinaten hoort
+                    GridVakje vak = LayoutModel.getGridVakje(x, y); // get het gridvakje die bij die coordinaten hoort
 
                     if (vak != null) { // als die bestaat
                         vak.zetInhoud(element); // zet de inhoud van het vakje en geef het type en de classificatie mee (aantal sterren)
@@ -188,57 +142,7 @@ public class Layout {
         }
     }
 
-    // getters en setters
-
     public JPanel getHotelPanel() {
         return hotelPanel;
     }
-
-
-    public GridVakje getGridVakje(int x, int y) {
-        String coordinaten = x+","+y;
-        return grid.get(coordinaten);
-    }
-
-    public int getGridBreedte() {
-        return gridBreedte;
-    }
-
-    public int getGridLengte() {
-        return gridLengte;
-    }
-
-    public void addverplichteElementen(Layout layoutFixed) {
-        String schachtDimension = "1," + gridLengte/2;
-        addKamerBuitenJson("Model.Schacht", "1,1", schachtDimension);
-        String verdiepingLift = "1," + (gridLengte+1)/2;
-        addKamerBuitenJson("Model.Lift", verdiepingLift, "1,1");
-        String schachtStart = "1," + (gridLengte/2 + 2);
-        addKamerBuitenJson("Model.Schacht", schachtStart, schachtDimension);
-        String trappenPosition = gridBreedte + ",1";
-        String trappenDimension = "1," + gridLengte;
-        addKamerBuitenJson("Trappen", trappenPosition, trappenDimension);
-        String lobbyPosition = "2," + gridLengte;
-        String lobbyDimension = gridLengte-3 + ",1";
-        addKamerBuitenJson("Model.Lobby", lobbyPosition, lobbyDimension);
-    }
-
-    public void addKamerBuitenJson(String AreaType, String position, String dimension){
-        switch (AreaType) {
-            case "Model.Lift":
-                verplichteElementen.add(new Lift(AreaType, position, dimension, (gridLengte + 1) / 2, true));
-                break;
-            case "Model.Schacht":
-                verplichteElementen.add(new Schacht(AreaType, position, dimension));
-                break;
-            case "Trappen":
-                verplichteElementen.add(new Trappenhuis(AreaType, position, dimension));
-                break;
-            case "Model.Lobby":
-                verplichteElementen.add(new Lobby(AreaType, position, dimension));
-                break;
-        }
-    }
-
-
 }

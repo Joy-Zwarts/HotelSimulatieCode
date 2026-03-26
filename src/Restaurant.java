@@ -1,3 +1,5 @@
+import Model.Ruimte;
+
 public class Restaurant extends Ruimte {
     private long capacity;
 
