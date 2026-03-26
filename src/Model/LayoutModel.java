@@ -65,16 +65,16 @@ public class LayoutModel {
 
     public void addKamerBuitenJson(String AreaType, String position, String dimension){
         switch (AreaType) {
-            case "Model.Lift":
+            case "Lift":
                 verplichteElementen.add(new Lift(AreaType, position, dimension, (gridLengte + 1) / 2, true));
                 break;
-            case "Model.Schacht":
+            case "Schacht":
                 verplichteElementen.add(new Schacht(AreaType, position, dimension));
                 break;
             case "Trappen":
                 verplichteElementen.add(new Trappenhuis(AreaType, position, dimension));
                 break;
-            case "Model.Lobby":
+            case "Lobby":
                 verplichteElementen.add(new Lobby(AreaType, position, dimension));
                 break;
         }
