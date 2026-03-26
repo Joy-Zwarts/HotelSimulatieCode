@@ -46,7 +46,8 @@ public class Main {
 
         // layout + events toevoegen
         frame.add(view.getHotelPanel(), BorderLayout.CENTER);
-        frame.add(printEvent.getEventPanel(), BorderLayout.EAST);
+        frame.add(printEvent.getPanelRechts(), BorderLayout.EAST);
+
 
         frame.setSize(1500, 800);
         frame.setLocationRelativeTo(null);
