@@ -18,6 +18,7 @@ public class Layout {
 
     private int gridBreedte;
     private int gridLengte;
+    private int gridWidth;
 
 
     //constructor
@@ -55,7 +56,8 @@ public class Layout {
     public void maakGrid() {
 
         hotelPanel = new JPanel(null); // panel aanmaken voor de layout met een custom grid layout
-        hotelPanel.setPreferredSize(new Dimension(gridBreedte * vakBreedte, gridLengte * vakHoogte)
+        gridWidth = gridBreedte*vakBreedte;
+        hotelPanel.setPreferredSize(new Dimension(gridWidth, gridLengte * vakHoogte)
                 // bepaal aantal rijen (breedte) en hoe wijd die zijn (vakbreedte) en bepaal het aantal kolommen (lengte) en hoe hoog die zijn (vakhoogte)
         );
 
@@ -193,9 +195,14 @@ public class Layout {
         return hotelPanel;
     }
 
+
     public GridVakje getGridVakje(int x, int y) {
         String coordinaten = x+","+y;
         return grid.get(coordinaten);
+    }
+
+    public int getGridWidth() {
+        return gridWidth;
     }
 
     public void addverplichteElementen(Layout layout) {
@@ -229,4 +236,6 @@ public class Layout {
                 break;
         }
     }
+
+
 }

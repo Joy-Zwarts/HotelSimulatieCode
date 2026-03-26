@@ -15,14 +15,19 @@ public class EventPrint implements HotelEventListener {
 
         scrollbar = new JScrollPane(panel); // nieuwe scrollbar
         frame.add(scrollbar); // voeg toe aan frame
-
-        frame.setSize(500, 500);
+        panel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        getEventPanel().setPreferredSize(new Dimension(525, 100));
+        /*frame.setSize(500, 500);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
-        frame.setLocationRelativeTo(null);
-
+        frame.setLocationRelativeTo(null);*/
         manager.registerListener(this);
     }
+
+    public JScrollPane getEventPanel() {
+        return scrollbar;
+    }
+
 
     @Override
     public void notify(HotelEvent hotelEvent) {
@@ -51,5 +56,11 @@ public class EventPrint implements HotelEventListener {
             JScrollBar vertical = scrollbar.getVerticalScrollBar();
             vertical.setValue(vertical.getMaximum());
         }
+
+
+
+
+
+
     }
 }
