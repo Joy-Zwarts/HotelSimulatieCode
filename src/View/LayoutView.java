@@ -37,8 +37,8 @@ public class LayoutView {
 
     public void plaatsKamers( ArrayList<Ruimte> ruimtes, ArrayList<Ruimte> verplichteElementen) {
         for (Ruimte ruimte : ruimtes) { // voor elke ruimte in de lijst van ruimtes
-            int startX = ruimte.getPositionX() ; // get de X positie -1 (de lift zit al op 0,0 dus we doen geen -1)
-            int startY = ruimte.getPositionY() -1; // get de Y positie -1 (posities beginnen vanaf 1 dus -1)
+            int startX = ruimte.getPositionX(); // get de X positie -1 (de lift zit al op 0,0 dus we doen geen -1)
+            int startY = ruimte.getPositionY() - 1; // get de Y positie -1 (posities beginnen vanaf 1 dus -1)
 
             int w = ruimte.getDimensionW(); // get de wijdte
             int h = ruimte.getDimensionH(); // get de lengte
@@ -93,8 +93,8 @@ public class LayoutView {
             }
         }
         for (Ruimte element : verplichteElementen) { // voor elke element in de lijst van verplichte elementen
-            int startX = element.getPositionX() -1; // get de Y positie -1 (posities beginnen vanaf 1 dus -1)
-            int startY = element.getPositionY() -1; // get de Y positie -1 (posities beginnen vanaf 1 dus -1)
+            int startX = element.getPositionX() - 1; // get de Y positie -1 (posities beginnen vanaf 1 dus -1)
+            int startY = element.getPositionY() - 1; // get de Y positie -1 (posities beginnen vanaf 1 dus -1)
 
             int w = element.getDimensionW(); // get de wijdte
             int h = element.getDimensionH(); // get de lengte
@@ -105,41 +105,52 @@ public class LayoutView {
                     GridVakje vak = grid.get(x + "," + y); // get het gridvakje die bij die coordinaten hoort
 
                     if (vak != null) { // als die bestaat
-                        vak.zetInhoud(element); // zet de inhoud van het vakje en geef het type en de classificatie mee (aantal sterren)
 
-                        // bepaal of dit vakje een top-rand moet hebben
-                        boolean top;
-                        if (y == startY) { // als de y hetzelfde is als de y van de gegeven positie (linksboven)
-                            top = true; // topborder moet er komen want dit is de bovenrand
+                        if (element.getAreaType().equals("Trappen")) {
+                            vak.zetInhoud(element); // zet de inhoud van het vakje en geef het type en de classificatie mee (aantal sterren)
                         } else {
-                            top = false; // anders niet
-                        }
+                            if (vak != null) { // als die bestaat
+                                if (x == startX && y == startY) {
+                                    vak.zetInhoud(element); // alleen label in linkerbovenhoek
+                                } else {
+                                    vak.clearInhoud(); // alle andere vakjes van dit gebied leegmaken
+                                }
+                            }
 
-                        // bepaal of dit vakje een bottom-rand moet hebben
-                        boolean bottom;
-                        if (y == startY + h - 1) { // startTimer y + hoogte - 1 omdat de y al een van de hoogte vakjes bevat
-                            bottom = true;
-                        } else {
-                            bottom = false;
-                        }
+                            // bepaal of dit vakje een top-rand moet hebben
+                            boolean top;
+                            if (y == startY) { // als de y hetzelfde is als de y van de gegeven positie (linksboven)
+                                top = true; // topborder moet er komen want dit is de bovenrand
+                            } else {
+                                top = false; // anders niet
+                            }
 
-                        // bepaal of dit vakje een left-rand moet hebben
-                        boolean left;
-                        if (x == startX) {
-                            left = true;
-                        } else {
-                            left = false;
-                        }
+                            // bepaal of dit vakje een bottom-rand moet hebben
+                            boolean bottom;
+                            if (y == startY + h - 1) { // startTimer y + hoogte - 1 omdat de y al een van de hoogte vakjes bevat
+                                bottom = true;
+                            } else {
+                                bottom = false;
+                            }
 
-                        // bepaal of dit vakje een right-rand moet hebben
-                        boolean right;
-                        if (x == startX + w - 1) {
-                            right = true;
-                        } else {
-                            right = false;
-                        }
+                            // bepaal of dit vakje een left-rand moet hebben
+                            boolean left;
+                            if (x == startX) {
+                                left = true;
+                            } else {
+                                left = false;
+                            }
 
-                        vak.setBorder(top, left, bottom, right);
+                            // bepaal of dit vakje een right-rand moet hebben
+                            boolean right;
+                            if (x == startX + w - 1) {
+                                right = true;
+                            } else {
+                                right = false;
+                            }
+
+                            vak.setBorder(top, left, bottom, right);
+                        }
                     }
                 }
             }
