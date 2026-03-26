@@ -78,6 +78,10 @@ public class HotelEventManager {
         }
     }
 
+    public int getTime() {
+        return time;
+    }
+
     public void pause() {
 
     }
