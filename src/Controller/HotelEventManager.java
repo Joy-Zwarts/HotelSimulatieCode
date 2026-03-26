@@ -49,18 +49,19 @@ public class HotelEventManager {
     private void generateEvent() {
         time += hte; // tijd aanpassen
 
-        int kansOpRandomEvent = rand.nextInt(1,5); // kies een random getal tussen 0 en 7
+        int kansOpRandomEvent = rand.nextInt(1,5); // kies een random getal tussen 1 en 5
 
-        System.out.println(kansOpRandomEvent);
 
         HotelEventType[] values = HotelEventType.values(); // krijg de values van de enum (dan krijg je bijv 0 = NONE)
 
         HotelEventType gekozenEvent = null;
 
-        if (kansOpRandomEvent == 4){ // als het getal 6 is
+        if (kansOpRandomEvent == 4){ // als het getal 4 is
             gekozenEvent = values[rand.nextInt(values.length)]; // kies een random event
+            System.out.println("Random event gekozen!");
         } else {
             gekozenEvent = values[0]; // kies NONE
+            System.out.println("NONE event gekozen!");
         }
 
 
