@@ -17,12 +17,14 @@ public class HotelEventManager {
 
     private Random rand = new Random();
 
-
     // constructor
 
     public HotelEventManager(int hte) {
         this.hte = hte;
         listeners = new ArrayList<>();
+    }
+    public void tick() { // tickevent
+        generateEvent();
     }
 
     public void registerListener(HotelEventListener listener) { // voeg listener toe aan de lijst van listeners
