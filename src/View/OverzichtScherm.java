@@ -1,3 +1,7 @@
+package View;
+
+import Model.Gast;
+
 import java.util.ArrayList;
 
 public class OverzichtScherm {

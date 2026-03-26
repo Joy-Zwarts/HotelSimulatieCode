@@ -1,3 +1,5 @@
+package Model;
+
 public class Gast extends Persoon {
     private RoomClassificatie wensen;
     private Kamer kamer;

@@ -1,4 +1,4 @@
-import Model.Ruimte;
+package Model;
 
 public class Fitness extends Ruimte {
 

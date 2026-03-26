@@ -1,3 +1,8 @@
+package Controller;
+
+import Model.Gast;
+import Model.Kamer;
+
 import java.util.ArrayList;
 
 public class Receptie {

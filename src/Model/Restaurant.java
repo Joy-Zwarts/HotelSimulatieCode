@@ -1,4 +1,4 @@
-import Model.Ruimte;
+package Model;
 
 public class Restaurant extends Ruimte {
     private long capacity;

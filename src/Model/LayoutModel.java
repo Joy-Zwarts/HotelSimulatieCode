@@ -84,4 +84,32 @@ public class LayoutModel {
         String coordinaten = x+","+y;
         return grid.get(coordinaten);
     }
+
+    public int getGridBreedte() {
+        return gridBreedte;
+    }
+
+    public int getGridLengte() {
+        return gridLengte;
+    }
+
+    public int getVakBreedte() {
+        return vakBreedte;
+    }
+
+    public int getVakHoogte() {
+        return vakHoogte;
+    }
+
+    public HashMap<String, GridVakje> getGrid() {
+        return grid;
+    }
+
+    public ArrayList<Ruimte> getRuimtes() {
+        return ruimtes;
+    }
+
+    public ArrayList<Ruimte> getVerplichteElementen() {
+        return verplichteElementen;
+    }
 }

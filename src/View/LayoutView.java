@@ -12,7 +12,11 @@ import java.util.HashMap;
 public class LayoutView {
     private JPanel hotelPanel;
 
+    private HashMap<String, GridVakje> grid;
+
     public void maakGrid(int gridBreedte, int gridLengte, int vakBreedte, int vakHoogte, HashMap<String, GridVakje> grid) {
+
+        this.grid = grid;
 
         hotelPanel = new JPanel(null); // panel aanmaken voor de layout met een custom grid layout
         hotelPanel.setPreferredSize(new Dimension(gridBreedte * vakBreedte, gridLengte * vakHoogte)
@@ -42,7 +46,7 @@ public class LayoutView {
             for (int y = startY; y < startY + h; y++) { // startTimer bij de y positie, voor elke stap die kleiner is dan y + de hoogte
                 for (int x = startX; x < startX + w; x++) { // startTimer bij de x positie, voor elke stap die kleiner is dan x + de breedte
 
-                    GridVakje vak = LayoutModel.getGridVakje(x, y); // get het gridvakje die bij die coordinaten hoort
+                    GridVakje vak = grid.get(x + "," + y); // get het gridvakje die bij die coordinaten hoort
 
                     if (vak != null) { // als die bestaat
                         if (x == startX && y == startY) {
@@ -98,7 +102,7 @@ public class LayoutView {
             for (int y = startY; y < startY + h; y++) { // startTimer bij de y positie, voor elke stap die kleiner is dan y + de hoogte
                 for (int x = startX; x < startX + w; x++) { // startTimer bij de x positie, voor elke stap die kleiner is dan x + de breedte
 
-                    GridVakje vak = LayoutModel.getGridVakje(x, y); // get het gridvakje die bij die coordinaten hoort
+                    GridVakje vak = grid.get(x + "," + y); // get het gridvakje die bij die coordinaten hoort
 
                     if (vak != null) { // als die bestaat
                         vak.zetInhoud(element); // zet de inhoud van het vakje en geef het type en de classificatie mee (aantal sterren)

@@ -1,3 +1,5 @@
+package Model;
+
 public enum HotelEventType {
     NONE,
     CHECK_IN,

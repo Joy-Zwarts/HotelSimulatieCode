@@ -1,3 +1,10 @@
+package View;
+
+import Controller.HotelEventManager;
+import Model.HotelEvent;
+import Model.HotelEventListener;
+import Model.HotelEventType;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -56,11 +63,5 @@ public class EventPrint implements HotelEventListener {
             JScrollBar vertical = scrollbar.getVerticalScrollBar();
             vertical.setValue(vertical.getMaximum());
         }
-
-
-
-
-
-
     }
 }

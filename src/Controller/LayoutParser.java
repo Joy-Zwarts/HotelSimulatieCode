@@ -1,7 +1,9 @@
+package Controller;
+
 import java.io.FileReader;
 import java.io.IOException;
 
-import Model.Ruimte;
+import Model.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -9,9 +11,9 @@ import org.json.simple.parser.ParseException;
 
 public class LayoutParser {
 
-    public Layout parse(String file) throws IOException, ParseException {
+    public LayoutModel parse(String file) throws IOException, ParseException {
 
-        Layout layout = new Layout();
+        LayoutModel layout = new LayoutModel();
 
         // parser en layout array aanmaken
         JSONParser parser = new JSONParser();
@@ -61,11 +63,11 @@ public class LayoutParser {
                             break;
                     }
                     break;
-                case "Restaurant":
+                case "Model.Restaurant":
                     Ruimte restaurant = new Restaurant(areaType, position, dimension, capacity);
                     layout.addKamer(restaurant);
                     break;
-                case "Fitness":
+                case "Model.Fitness":
                     Ruimte fitness = new Fitness(areaType, position, dimension);
                     layout.addKamer(fitness);
                     break;

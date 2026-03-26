@@ -1,3 +1,5 @@
+package Model;
+
 public enum RoomClassificatie {
     eenSter,
     tweeSterren,

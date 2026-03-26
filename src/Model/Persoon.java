@@ -1,3 +1,5 @@
+package Model;
+
 public class Persoon {
     private String targetLocatie;
     private String locatie;

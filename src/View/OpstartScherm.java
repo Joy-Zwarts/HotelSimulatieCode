@@ -1,3 +1,5 @@
+package View;
+
 public class OpstartScherm {
     private String gekozenFile;
     private OpstartScherm opstartScherm;

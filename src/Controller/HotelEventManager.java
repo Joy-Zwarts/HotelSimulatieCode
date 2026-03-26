@@ -1,3 +1,9 @@
+package Controller;
+
+import Model.HotelEvent;
+import Model.HotelEventListener;
+import Model.HotelEventType;
+
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Random;
