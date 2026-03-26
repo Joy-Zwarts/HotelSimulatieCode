@@ -64,7 +64,7 @@ public class GridVakje {
         java.net.URL url = getClass().getResource("/Res/" + bestand);
 
         if (url == null) {
-            System.out.println("❌ Niet gevonden: " + bestand);
+            System.out.println("Niet gevonden: " + bestand);
             return null;
         }
 
@@ -76,7 +76,7 @@ public class GridVakje {
             case "Cinema": return laadIcon("Cinema.png");
             case "Fitness": return laadIcon("Fitness.png");
             case "Lift": return laadIcon("Lift.png");
-            case "Trappen": return laadIcon("Trap.png"); // let op naam!
+            case "Trappen": return laadIcon("Trap.png");
             case "Restaurant": return laadIcon("Restaurant.png");
             case "Lobby": return laadIcon("Lobby.png");
             default: return null;
