@@ -3,6 +3,7 @@ package Controller;
 import Model.HotelEvent;
 import Model.HotelEventListener;
 import Model.HotelEventType;
+import View.OverzichtScherm;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -11,9 +12,10 @@ import java.util.Random;
 public class HotelEventManager {
 
     private int hte;
-    private Timer timer;
+    private static Timer timer;
     private ArrayList<HotelEventListener> listeners;
     private int time = 0;
+    private static boolean paused = false;
 
     private Random rand = new Random();
 
@@ -35,8 +37,16 @@ public class HotelEventManager {
         listeners.remove(listener);
     }
 
-    public void setHte(int hte) { // pas de hte aan
-        this.hte = (hte);
+    public void setHte(int nieuweHte) {
+        this.hte = nieuweHte;
+        if (timer != null) {
+            timer.stop(); // stop de huidige timer
+            timer = new Timer(hte, e -> generateEvent()); // maak nieuwe timer met nieuwe interval
+            timer.start(); // start de nieuwe timer
+            if (paused) {
+                pause();
+            }
+        }
     }
 
     public void startScenario(){
@@ -49,7 +59,7 @@ public class HotelEventManager {
     }
 
     private void generateEvent() {
-        time += hte; // tijd aanpassen
+        time += 1000; // tijd aanpassen
 
         int kansOpRandomEvent = rand.nextInt(1,5); // kies een random getal tussen 1 en 5
 
@@ -81,8 +91,16 @@ public class HotelEventManager {
         }
     }
 
-    public void pause() {
-
+    public static void pause() {
+        if (paused) {
+            paused = false;
+            timer.start();
+            OverzichtScherm.setInvisible();
+        } else {
+            paused = true;
+            timer.stop();
+            OverzichtScherm.setVisible();
+        }
     }
 
     public int getTime() {
@@ -92,5 +110,4 @@ public class HotelEventManager {
     public void stop() { // stop de timer
         timer.stop();
     }
-
 }

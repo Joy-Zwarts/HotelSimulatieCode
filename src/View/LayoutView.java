@@ -49,6 +49,9 @@ public class LayoutView {
                     GridVakje vak = grid.get(x + "," + y); // get het gridvakje die bij die coordinaten hoort
 
                     if (vak != null) { // als die bestaat
+
+                        vak.zetInhoud(ruimte);
+
                         if (x == startX && y == startY) {
                             vak.zetInhoud(ruimte); // alleen label in linkerbovenhoek
                         } else {
@@ -105,6 +108,8 @@ public class LayoutView {
                     GridVakje vak = grid.get(x + "," + y); // get het gridvakje die bij die coordinaten hoort
 
                     if (vak != null) { // als die bestaat
+
+                        vak.zetInhoud(element);
 
                         if (element.getAreaType().equals("Trappen")) {
                             vak.zetInhoud(element); // zet de inhoud van het vakje en geef het type en de classificatie mee (aantal sterren)

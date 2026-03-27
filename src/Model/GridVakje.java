@@ -1,8 +1,12 @@
 package Model;
 
+import Controller.HotelEventManager;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class GridVakje {
 
@@ -10,6 +14,7 @@ public class GridVakje {
     private int y;
     private JPanel Vakjepanel;
     private ImageIcon icon;
+    private Ruimte ruimte;
 
     // constructor
     public GridVakje(int x, int y, int breedte, int hoogte) {
@@ -20,10 +25,20 @@ public class GridVakje {
         Vakjepanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         Vakjepanel.setBackground(Color.WHITE);
         Vakjepanel.setBounds(x * breedte, y * hoogte, breedte, hoogte);
+        Vakjepanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(ruimte.getAreaType().equals("Lobby")){
+                    HotelEventManager.pause();
+                }
+                System.out.println("Geklikt op vakje: " + ruimte);
+            }
+        });
     }
 
     // zet wat er in het vakje zit
     public void zetInhoud(Ruimte ruimte) {
+        this.ruimte = ruimte;
 
         if (ruimte.getAreaType().equals("Room")) {
             this.icon = bepaalSterrenIcon(((Kamer) ruimte).getClassification());
@@ -102,5 +117,9 @@ public class GridVakje {
 
     public String getKey() {
         return x + "," + y;
+    }
+
+    public void setRuimte(Ruimte ruimte) {
+        this.ruimte = ruimte;
     }
 }
