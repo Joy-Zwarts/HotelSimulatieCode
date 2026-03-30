@@ -50,12 +50,11 @@ public class GridVakje {
 
         if (icon != null) {
             Vakjepanel.add(new JLabel(icon));
-        } else {
-            System.out.println("Geen icoon voor: " + ruimte.getAreaType());
         }
 
         Vakjepanel.revalidate();
         Vakjepanel.repaint();
+        setColor(ruimte);
     }
 
     public void setBorder(boolean top, boolean left, boolean bottom, boolean right) {
@@ -68,6 +67,20 @@ public class GridVakje {
                 topDikte, leftDikte, bottomDikte, rightDikte, Color.BLACK);
 
         Vakjepanel.setBorder(vakjeRand);
+    }
+
+    public void setColor (Ruimte ruimte) {
+        switch (ruimte.getAreaType()) {
+            case "Room": getVakjepanel().setBackground(new Color(0xEBD8BC)); break;
+            case "Lift": getVakjepanel().setBackground(new Color(0xEF3F36)); break;
+            case "Lobby": getVakjepanel().setBackground(new Color(0xD6A13C)); break;
+            case "Restaurant": getVakjepanel().setBackground(new Color(0xED9A5A)); break;
+            case "Fitness": getVakjepanel().setBackground(new Color(0xED9A5A)); break;
+            case "Cinema": getVakjepanel().setBackground(new Color(0xED9A5A)); break;
+            case "Schacht": getVakjepanel().setBackground(Color.DARK_GRAY); break;
+            case "Trappen": getVakjepanel().setBackground(new Color(0xEDC45A)); break;
+            default: getVakjepanel().setBackground(Color.WHITE); break;
+        }
     }
 
     public void clearInhoud() {
