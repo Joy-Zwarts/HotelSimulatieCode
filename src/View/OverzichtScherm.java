@@ -14,7 +14,7 @@ public class OverzichtScherm {
     private static JFrame pauseFrame;
 
     public OverzichtScherm() {
-        this.pauseFrame = new JFrame();
+        pauseFrame = new JFrame();
         pauseFrame.setSize(400, 200);
 
         JPanel panel = new JPanel(new BorderLayout());
