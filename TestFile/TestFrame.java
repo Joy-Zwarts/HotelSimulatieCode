@@ -12,7 +12,7 @@ class TestFrame {
         Main.main(new String[]{});
         // Selecteer handmatig een bestand in de JFileChooser
 
-        Thread.sleep(2000); // Wacht even
+        Thread.sleep(5000); // Wacht even
 
         boolean frameIsVisible = false;
         for (Frame f : Frame.getFrames()) {

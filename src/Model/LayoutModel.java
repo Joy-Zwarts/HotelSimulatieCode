@@ -16,9 +16,6 @@ public class LayoutModel {
     private int vakHoogte = 60;
     private int vakBreedte = 120;
 
-    private int gridBreedte;
-    private int gridLengte;
-
     //constructor
     public LayoutModel() {
         ruimtes = new ArrayList<>();
@@ -30,40 +27,22 @@ public class LayoutModel {
         ruimtes.add(ruimte);
     }
 
-    public void berekenGridGrootte() {
-
-        for (Ruimte ruimte : ruimtes) { // voor aantal ruimtes in de lijst
-
-            int right = ruimte.getPositionX() + ruimte.getDimensionW() - 1; // positie x plus hoe wijd de kamer is (-1 voor de x positie die al is meegerekend)
-            int bottom = ruimte.getPositionY() + ruimte.getDimensionH() - 1; // positie y plus hoe hoog de kamer is (-1 voor de y positie die al is meegerekend)
-
-            if (right > gridBreedte) { //zoek de meest rechtse positie+wijdte
-                gridBreedte = right; // dat is nu de breedte
-            }
-            if (bottom > gridLengte) { //zoek de meest onderste positie+hoogte
-                gridLengte = bottom; // dat is nu de lengte
-            }
-        }
-        gridBreedte = gridBreedte +2; // 2 extra kolommen voor de trap en liftschacht
-        gridLengte = gridLengte +1; // 1 extra rij voor de lobby
-    }
-
-    public void addverplichteElementen() {
+    public void addverplichteElementen(int gridLengte, int gridBreedte) {
         String schachtDimension = "1," + gridLengte/2;
-        addKamerBuitenJson("Schacht", "1,1", schachtDimension);
+        addKamerBuitenJson("Schacht", "1,1", schachtDimension, gridLengte);
         String verdiepingLift = "1," + (gridLengte+1)/2;
-        addKamerBuitenJson("Lift", verdiepingLift, "1,1");
+        addKamerBuitenJson("Lift", verdiepingLift, "1,1", gridLengte);
         String schachtStart = "1," + (gridLengte/2 + 2);
-        addKamerBuitenJson("Schacht", schachtStart, schachtDimension);
+        addKamerBuitenJson("Schacht", schachtStart, schachtDimension, gridLengte);
         String trappenPosition = gridBreedte + ",1";
         String trappenDimension = "1," + gridLengte;
-        addKamerBuitenJson("Trappen", trappenPosition, trappenDimension);
+        addKamerBuitenJson("Trappen", trappenPosition, trappenDimension, gridLengte);
         String lobbyPosition = "2," + gridLengte;
         String lobbyDimension = gridLengte-3 + ",1";
-        addKamerBuitenJson("Lobby", lobbyPosition, lobbyDimension);
+        addKamerBuitenJson("Lobby", lobbyPosition, lobbyDimension, gridLengte);
     }
 
-    public void addKamerBuitenJson(String AreaType, String position, String dimension){
+    public void addKamerBuitenJson(String AreaType, String position, String dimension, int gridLengte) {
         switch (AreaType) {
             case "Lift":
                 verplichteElementen.add(new Lift(AreaType, position, dimension, (gridLengte + 1) / 2, true));
@@ -83,14 +62,6 @@ public class LayoutModel {
     public GridVakje getGridVakje(int x, int y) {
         String coordinaten = x+","+y;
         return grid.get(coordinaten);
-    }
-
-    public int getGridBreedte() {
-        return gridBreedte;
-    }
-
-    public int getGridLengte() {
-        return gridLengte;
     }
 
     public int getVakBreedte() {
