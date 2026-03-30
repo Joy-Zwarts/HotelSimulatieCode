@@ -71,14 +71,14 @@ public class GridVakje {
 
     public void setColor (Ruimte ruimte) {
         switch (ruimte.getAreaType()) {
-            case "Room": getVakjepanel().setBackground(new Color(0xEBD8BC)); break;
-            case "Lift": getVakjepanel().setBackground(new Color(0xEF3F36)); break;
-            case "Lobby": getVakjepanel().setBackground(new Color(0xD6A13C)); break;
-            case "Restaurant": getVakjepanel().setBackground(new Color(0xED9A5A)); break;
-            case "Fitness": getVakjepanel().setBackground(new Color(0xED9A5A)); break;
-            case "Cinema": getVakjepanel().setBackground(new Color(0xED9A5A)); break;
+            case "Room": getVakjepanel().setBackground(new Color(0xD4C2A8)); break;
+            case "Lift": getVakjepanel().setBackground(new Color(0x8EA570)); break;
+            case "Lobby": getVakjepanel().setBackground(new Color(0xCDA12D)); break;
+            case "Restaurant": getVakjepanel().setBackground(new Color(0xC1864F)); break;
+            case "Fitness": getVakjepanel().setBackground(new Color(0xC1864F)); break;
+            case "Cinema": getVakjepanel().setBackground(new Color(0xC1864F)); break;
             case "Schacht": getVakjepanel().setBackground(Color.DARK_GRAY); break;
-            case "Trappen": getVakjepanel().setBackground(new Color(0xEDC45A)); break;
+            case "Trappen": getVakjepanel().setBackground(new Color(0x759DB6)); break;
             default: getVakjepanel().setBackground(Color.WHITE); break;
         }
     }
