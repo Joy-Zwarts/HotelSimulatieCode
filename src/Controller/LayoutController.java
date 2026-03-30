@@ -17,11 +17,11 @@ public class LayoutController {
 
     private void init() {
         // 1. Model voorbereiden
-        model.berekenGridGrootte();
-        model.addverplichteElementen();
+        view.berekenGridGrootte(model.getRuimtes());
+        model.addverplichteElementen(view.getGridLengte(), view.getGridBreedte());
 
         // 2. View opbouwen
-        view.maakGrid(model.getGridBreedte(), model.getGridLengte(), model.getVakBreedte(), model.getVakHoogte(), model.getGrid());
+        view.maakGrid(view.getGridBreedte(), view.getGridLengte(), model.getVakBreedte(), model.getVakHoogte(), model.getGrid());
 
         // 3. Data tonen
         view.plaatsKamers(model.getRuimtes(), model.getVerplichteElementen()

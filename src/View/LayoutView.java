@@ -14,6 +14,9 @@ public class LayoutView {
 
     private HashMap<String, GridVakje> grid;
 
+    private int gridBreedte;
+    private int gridLengte;
+
     public void maakGrid(int gridBreedte, int gridLengte, int vakBreedte, int vakHoogte, HashMap<String, GridVakje> grid) {
 
         this.grid = grid;
@@ -33,6 +36,24 @@ public class LayoutView {
                 hotelPanel.add(vak.getVakjepanel()); // voeg het vakje toe aan de hotelpanel voor de layout
             }
         }
+    }
+
+    public void berekenGridGrootte(ArrayList<Ruimte> ruimtes) {
+
+        for (Ruimte ruimte : ruimtes) { // voor aantal ruimtes in de lijst
+
+            int right = ruimte.getPositionX() + ruimte.getDimensionW() - 1; // positie x plus hoe wijd de kamer is (-1 voor de x positie die al is meegerekend)
+            int bottom = ruimte.getPositionY() + ruimte.getDimensionH() - 1; // positie y plus hoe hoog de kamer is (-1 voor de y positie die al is meegerekend)
+
+            if (right > gridBreedte) { //zoek de meest rechtse positie+wijdte
+                gridBreedte = right; // dat is nu de breedte
+            }
+            if (bottom > gridLengte) { //zoek de meest onderste positie+hoogte
+                gridLengte = bottom; // dat is nu de lengte
+            }
+        }
+        gridBreedte = gridBreedte +2; // 2 extra kolommen voor de trap en liftschacht
+        gridLengte = gridLengte +1; // 1 extra rij voor de lobby
     }
 
     public void plaatsKamers( ArrayList<Ruimte> ruimtes, ArrayList<Ruimte> verplichteElementen) {
@@ -164,5 +185,13 @@ public class LayoutView {
 
     public JPanel getHotelPanel() {
         return hotelPanel;
+    }
+
+    public int getGridBreedte() {
+        return gridBreedte;
+    }
+
+    public int getGridLengte() {
+        return gridLengte;
     }
 }
