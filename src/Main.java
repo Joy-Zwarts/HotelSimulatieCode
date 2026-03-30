@@ -40,6 +40,7 @@ public class Main {
         // event systeem
         HotelEventManager manager = new HotelEventManager(1000);
         EventPrint printEvent = new EventPrint(manager);
+        OverzichtScherm scherm = new OverzichtScherm();
 
         // controller (doet alle layout logica)
         LayoutController controller = new LayoutController(model, view);
