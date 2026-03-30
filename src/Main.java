@@ -1,9 +1,12 @@
 import Controller.HotelEventManager;
 import Controller.LayoutController;
 import Controller.LayoutParser;
+import Model.GridVakje;
 import Model.LayoutModel;
 import View.EventPrint;
 import View.LayoutView;
+import View.LegendaView;
+import View.OverzichtScherm;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,6 +35,8 @@ public class Main {
         // view maken
         LayoutView view = new LayoutView();
 
+        LegendaView legendaView = new LegendaView();
+
         // event systeem
         HotelEventManager manager = new HotelEventManager(1000);
         EventPrint printEvent = new EventPrint(manager);
@@ -44,8 +49,12 @@ public class Main {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
 
+        JPanel hotelPanel = new JPanel(new BorderLayout());
+
         // layout + events toevoegen
-        frame.add(view.getHotelPanel(), BorderLayout.CENTER);
+        hotelPanel.add(view.getHotelPanel(), BorderLayout.CENTER);
+        hotelPanel.add(legendaView.getLegendaPanel(), BorderLayout.SOUTH);
+        frame.add(hotelPanel, BorderLayout.CENTER);
         frame.add(printEvent.getPanelRechts(), BorderLayout.EAST);
 
 

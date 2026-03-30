@@ -1,12 +1,31 @@
 package View;
 
+import Controller.HotelEventManager;
 import Model.Gast;
 
+import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 
 public class OverzichtScherm {
     private ArrayList<Gast> gasten;
     private int tijd;
+
+    private static JFrame pauseFrame;
+
+    public OverzichtScherm() {
+        this.pauseFrame = new JFrame();
+        pauseFrame.setSize(400, 200);
+
+        JPanel panel = new JPanel(new BorderLayout());
+        pauseFrame.add(panel);
+
+        JLabel pause = new JLabel("Gepauseerd");
+        pause.setHorizontalAlignment(JLabel.CENTER);
+        pause.setVerticalAlignment(JLabel.CENTER);
+
+        panel.add(pause, BorderLayout.CENTER);
+    }
 
     public OverzichtScherm(ArrayList<Gast> gasten, int tijd) {
         this.gasten = gasten;
@@ -28,4 +47,13 @@ public class OverzichtScherm {
     public void setTijd(int tijd) {
         this.tijd = tijd;
     }
+
+    public static void setVisible() {
+        pauseFrame.setVisible(true);
+    }
+
+    public static void setInvisible() {
+        pauseFrame.setVisible(false);
+    }
+
 }
