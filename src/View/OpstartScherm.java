@@ -69,10 +69,10 @@ public class OpstartScherm {
             if (resultaat == JFileChooser.APPROVE_OPTION) {
                 File gekozenBestand = fileChooser.getSelectedFile();
 
-                // 🔴 HIER voeg je de check toe
+                // Filter de non-JSON files eruit
                 if (!gekozenBestand.getName().toLowerCase().endsWith(".json")) {
                     JOptionPane.showMessageDialog(frame, "Alleen JSON bestanden zijn toegestaan!");
-                    return; // stopt de rest van de code
+                    return;
                 }
 
                 gekozenFile = gekozenBestand;

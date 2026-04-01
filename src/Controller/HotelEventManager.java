@@ -110,11 +110,9 @@ public class HotelEventManager {
             OverzichtScherm.setVisible();
         }
     }
-
-    public int getTime() {
+    public int getTime(){
         return time;
     }
-
     public void stop() { // stop de timer
         timer.stop();
     }
