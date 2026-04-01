@@ -1,10 +1,13 @@
 package Model;
 
+import java.util.ArrayList;
+
 public class Ruimte {
 
         private String areaType;
         private String position;
         private String dimension;
+        private ArrayList<Gast> gasten;
 
         // constructor
 
@@ -12,6 +15,7 @@ public class Ruimte {
             this.areaType = areaType; // zet areatype
             this.position = position; // zet position
             this.dimension = dimension; // zet dimension
+            this.gasten = new ArrayList<>();
         }
 
         //  print alle info over de kamer

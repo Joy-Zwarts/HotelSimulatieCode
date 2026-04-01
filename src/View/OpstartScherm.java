@@ -3,6 +3,7 @@ package View;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
+import java.util.Objects;
 
 public class OpstartScherm {
     private File gekozenFile;
@@ -19,7 +20,7 @@ public class OpstartScherm {
         frame.setLayout(new BorderLayout(10, 10)); // marges tussen componenten
 
         // header image
-        ImageIcon headerImage = new ImageIcon(getClass().getResource("/Res/HotelHeader.png"));
+        ImageIcon headerImage = new ImageIcon(Objects.requireNonNull(getClass().getResource("/Res/HotelHeader.png")));
         JLabel header = new JLabel(headerImage);
         header.setPreferredSize(new Dimension(250, 150));
         header.setHorizontalAlignment(JLabel.CENTER);
