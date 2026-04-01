@@ -61,18 +61,27 @@ public class HotelEventManager {
     private void generateEvent() {
         time += 1000; // tijd aanpassen
 
-        int kansOpRandomEvent = rand.nextInt(1,5); // kies een random getal tussen 1 en 5
+        int kansOpRandomEvent = rand.nextInt(1,500); // kies een random getal tussen 1 en 500
 
 
         HotelEventType[] values = HotelEventType.values(); // krijg de values van de enum (dan krijg je bijv 0 = NONE)
 
         HotelEventType gekozenEvent = null;
 
-        if (kansOpRandomEvent == 4){ // als het getal 4 is
-            gekozenEvent = values[rand.nextInt(values.length)]; // kies een random event
-            System.out.println("Random event gekozen!");
+        if (kansOpRandomEvent >= 400 && kansOpRandomEvent < 470){ // als het getal 4 is
+            gekozenEvent = values[rand.nextInt(values.length-4)]; // kies een random guest-only event 14% van de tijd
+            System.out.println("Random Gast event gekozen!");
+        } else if (kansOpRandomEvent >= 470 && kansOpRandomEvent < 485){
+            gekozenEvent = values[7]; // kies Start Cinema 3% van de tijd
+            System.out.println("Lager probability event gekozen!");
+        } else if (kansOpRandomEvent >= 485 && kansOpRandomEvent < 495){
+            gekozenEvent = values[8]; // kies Evacuate 2% van de tijd
+            System.out.println("Lager probability event gekozen!");
+        } else if (kansOpRandomEvent >= 495 && kansOpRandomEvent < 500){
+            gekozenEvent = values[9]; // kies Godzilla 1% van de tijd
+            System.out.println("Lager probability event gekozen!");
         } else {
-            gekozenEvent = values[0]; // kies NONE
+            gekozenEvent = values[0]; // kies NONE 80% van de tijd
             System.out.println("NONE event gekozen!");
         }
 
