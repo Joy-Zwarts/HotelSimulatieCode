@@ -16,7 +16,6 @@ public class HotelEventManager {
     private ArrayList<HotelEventListener> listeners;
     private int time = 0;
     private static boolean paused = false;
-
     private Random rand = new Random();
 
     // constructor
