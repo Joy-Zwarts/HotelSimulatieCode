@@ -31,4 +31,8 @@ public class HotelEvent{
     public int getData() {
        return data;
     }
+
+    public HotelEventType getType() {
+       return eventType;
+    }
 }

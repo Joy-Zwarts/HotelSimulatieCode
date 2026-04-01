@@ -99,8 +99,4 @@ public class OpstartScherm {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
-
-    public File getGekozenFile() {
-        return gekozenFile;
-    }
 }
