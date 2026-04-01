@@ -47,12 +47,7 @@ public class OverzichtScherm {
         this.tijd = tijd;
     }
 
-    public static void setVisible() {
-        pauseFrame.setVisible(true);
+    public static void setVisibility(boolean visible) {
+        pauseFrame.setVisible(visible);
     }
-
-    public static void setInvisible() {
-        pauseFrame.setVisible(false);
-    }
-
 }

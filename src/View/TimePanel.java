@@ -23,14 +23,6 @@ public class TimePanel implements HotelEventListener {
         timeLabel.setVerticalAlignment(SwingConstants.CENTER);
         timeLabel.setHorizontalAlignment(SwingConstants.LEFT);
 
-        JButton pause = new JButton(laadIcon("pause.png"));
-        pause.setPreferredSize(new Dimension(25, 25));
-        pause.setBackground(Color.WHITE);
-        pause.setBorder(BorderFactory.createEmptyBorder(0, 35, 0, 35));
-        pause.addActionListener(e -> {
-            manager.pauze();
-        });
-
         JButton normaleTijd = new JButton(laadIcon("play.png"));
         normaleTijd.setPreferredSize(new Dimension(25, 25));
         normaleTijd.setBackground(Color.WHITE);
@@ -56,7 +48,6 @@ public class TimePanel implements HotelEventListener {
         });
 
         panelTime.add(timeLabel);
-        panelTime.add(pause);
         panelTime.add(normaleTijd);
         panelTime.add(fastForwardTijd);
         panelTime.add(doubleFastForwardTijd);

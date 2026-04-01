@@ -2,16 +2,16 @@ package Controller;
 
 import Model.LayoutModel;
 import View.LayoutView;
+import hotelevents.HotelEventManager;
 
 public class LayoutController {
 
-    private LayoutModel model;
-    private LayoutView view;
+    private final LayoutModel model;
+    private final LayoutView view;
 
-    public LayoutController(LayoutModel model, LayoutView view) {
+    public LayoutController(LayoutModel model, LayoutView view, HotelEventManager manager) {
         this.model = model;
         this.view = view;
-
         init();
     }
 

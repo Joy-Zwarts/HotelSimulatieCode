@@ -17,23 +17,26 @@ public class Main {
                 LayoutParser parser = new LayoutParser();
                 LayoutModel model = parser.parse(file.getAbsolutePath());
 
-                LayoutView view = new LayoutView();
+                HotelEventManager manager = new HotelEventManager(false);
+
+                LayoutView view = new LayoutView(manager);
                 LegendaView legendaView = new LegendaView();
 
                 // 2️⃣ HotelEventManager (externe library)
                 // false = lokaal scenario-bestand gebruiken
-                HotelEventManager manager = new HotelEventManager(false);
 
                 // 3️⃣ Event listener koppelen (GUI update)
                 EventPrint printEvent = new EventPrint(manager);
 
                 // 4️⃣ Controller
-                LayoutController controller = new LayoutController(model, view);
+                LayoutController controller = new LayoutController(model, view, manager);
 
                 // 5️⃣ GUI bouwen
                 JFrame frame = new JFrame("Hotel Layout");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.setLayout(new java.awt.BorderLayout());
+
+                OverzichtScherm overzichtScherm = new OverzichtScherm();
 
                 JPanel hotelPanel = new JPanel(new java.awt.BorderLayout());
                 hotelPanel.add(view.getHotelPanel(), java.awt.BorderLayout.CENTER);

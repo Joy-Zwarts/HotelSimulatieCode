@@ -1,5 +1,6 @@
 package Model;
 
+import View.OverzichtScherm;
 import hotelevents.HotelEventManager;
 
 import javax.swing.*;
@@ -15,23 +16,27 @@ public class GridVakje {
     private JPanel Vakjepanel;
     private ImageIcon icon;
     private Ruimte ruimte;
-    private HotelEventManager manager;
+    private boolean paused;
 
     // constructor
-    public GridVakje(int x, int y, int breedte, int hoogte) {
+    public GridVakje(int x, int y, int breedte, int hoogte, HotelEventManager manager) {
         this.x = x;
         this.y = y;
-        this.manager = manager;
+        this.paused = false;
 
         Vakjepanel = new JPanel();
         Vakjepanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         Vakjepanel.setBackground(Color.WHITE);
         Vakjepanel.setBounds(x * breedte, y * hoogte, breedte, hoogte);
+
         Vakjepanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if(ruimte.getAreaType().equals("Lobby")){
+                if (manager != null && ruimte != null && ruimte.getAreaType().equals("Lobby")) {
+                    System.out.println("pause");
                     manager.pauze();
+                    paused = !paused;
+                    OverzichtScherm.setVisibility(paused);
                 }
                 System.out.println("Geklikt op vakje: " + ruimte);
             }
