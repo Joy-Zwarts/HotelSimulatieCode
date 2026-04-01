@@ -3,6 +3,7 @@ package View;
 import Model.GridVakje;
 import Model.LayoutModel;
 import Model.Ruimte;
+import hotelevents.HotelEventManager;
 
 import javax.swing.*;
 import java.awt.*;

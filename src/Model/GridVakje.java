@@ -1,6 +1,6 @@
 package Model;
 
-import Controller.HotelEventManager;
+import hotelevents.HotelEventManager;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -15,11 +15,13 @@ public class GridVakje {
     private JPanel Vakjepanel;
     private ImageIcon icon;
     private Ruimte ruimte;
+    private HotelEventManager manager;
 
     // constructor
     public GridVakje(int x, int y, int breedte, int hoogte) {
         this.x = x;
         this.y = y;
+        this.manager = manager;
 
         Vakjepanel = new JPanel();
         Vakjepanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -29,7 +31,7 @@ public class GridVakje {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if(ruimte.getAreaType().equals("Lobby")){
-                    HotelEventManager.pause();
+                    manager.pauze();
                 }
                 System.out.println("Geklikt op vakje: " + ruimte);
             }
@@ -126,10 +128,6 @@ public class GridVakje {
 
     public JPanel getVakjepanel() {
         return Vakjepanel;
-    }
-
-    public String getKey() {
-        return x + "," + y;
     }
 
     public void setRuimte(Ruimte ruimte) {

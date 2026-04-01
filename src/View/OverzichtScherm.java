@@ -1,6 +1,5 @@
 package View;
 
-import Controller.HotelEventManager;
 import Model.Gast;
 
 import javax.swing.*;

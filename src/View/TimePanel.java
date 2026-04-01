@@ -1,26 +1,24 @@
 package View;
 
-import Controller.HotelEventManager;
-import Model.HotelEvent;
-import Model.HotelEventListener;
-import Model.HotelEventType;
+import hotelevents.HotelEvent;
+import hotelevents.HotelEventListener;
+import hotelevents.HotelEventManager;
+import hotelevents.HotelEventType;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class TimePanel implements HotelEventListener {
-    private JPanel panel;         // contains event labels
-    private JPanel panelRechts;   // right-side panel
-    private JScrollPane scrollbar;
+    private JPanel panelTime;         // contains event labels
     private JLabel timeLabel;
     private HotelEventManager manager;
 
-    public TimePanel(HotelEventManager manager) {
+    public TimePanel(HotelEventManager manager, JPanel panelRechts) {
         this.manager = manager;
 
 
         // panel for tijd
-        JPanel panelTime = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        panelTime = new JPanel(new FlowLayout(FlowLayout.LEFT));
         timeLabel = new JLabel("Time: 00:00");
         timeLabel.setVerticalAlignment(SwingConstants.CENTER);
         timeLabel.setHorizontalAlignment(SwingConstants.LEFT);
@@ -30,7 +28,7 @@ public class TimePanel implements HotelEventListener {
         pause.setBackground(Color.WHITE);
         pause.setBorder(BorderFactory.createEmptyBorder(0, 35, 0, 35));
         pause.addActionListener(e -> {
-            manager.pause();
+            manager.pauze();
         });
 
         JButton normaleTijd = new JButton(laadIcon("play.png"));
@@ -65,25 +63,24 @@ public class TimePanel implements HotelEventListener {
         panelTime.setPreferredSize(new Dimension(525, 50));
 
         // hele panel rechts
-        panelRechts = new JPanel();
-        panelRechts.setLayout(new BorderLayout());
-        panelRechts.add(panelTime, BorderLayout.NORTH);
-        panelRechts.add(scrollbar, BorderLayout.CENTER);
+        panelRechts.add(panelTime);
 
         // register als listener
-        manager.registerListener(this);
-
+        manager.register(this);
     }
+
     @Override
-    public void onEvent(HotelEvent event) {
-        long totalSeconds = event.getTime() / 1000;
+    public void notify(HotelEvent event) {
+        long totalSeconds = event.getTime();
         int minutes = (int) (totalSeconds / 60);
         int seconds = (int) (totalSeconds % 60);
 
         timeLabel.setText(String.format("Time: %02d:%02d", minutes, seconds));
     }
 
-
+    public JPanel getTimePanel() {
+        return panelTime;
+    }
 
 private ImageIcon laadIcon(String bestand) {
     java.net.URL url = getClass().getResource("/Res/" + bestand);
