@@ -134,11 +134,18 @@ public class HotelSimulatieView extends JFrame {
 
     // 🔹 Methode om legenda te vervangen
     public void setLegendaView(JPanel legendaPanel) {
+        this.legendaPanel.removeAll(); // oude inhoud verwijderen
+
+        ImageIcon legendaIcon;
         if (darkMode.isDarkMode()) {
-            legenda = new ImageIcon(Objects.requireNonNull(getClass().getResource("/Res/LegendaDark.png")));
+            legendaIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("/Res/LegendaDark.png")));
         } else {
-            legenda = new ImageIcon(Objects.requireNonNull(getClass().getResource("/Res/Legenda.png")));
+            legendaIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("/Res/Legenda.png")));
         }
+
+        JLabel legendaLabel = new JLabel(legendaIcon);
+        this.legendaPanel.add(legendaLabel);
+
         this.legendaPanel.revalidate();
         this.legendaPanel.repaint();
     }
