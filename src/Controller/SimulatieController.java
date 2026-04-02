@@ -21,7 +21,7 @@ public class SimulatieController implements ActionListener {
     private DarkMode darkModeModel = new DarkMode();
 
     public SimulatieController() {
-        this.view = new HotelSimulatieView();
+        this.view = new HotelSimulatieView(darkModeModel);
         this.manager = new HotelEventManager(false);
         this.started = false;
         this.model = null;
@@ -84,7 +84,7 @@ public class SimulatieController implements ActionListener {
         JButton darkModeButton = new JButton("Toggle Dark Mode");
 
         darkModeButton.addActionListener(e -> {
-            darkModeModel.setDarkMode(); // 🔥 model aanpassen
+            darkModeModel.setDarkMode(true); // 🔥 model aanpassen
             applyTheme();                // 🔥 UI aanpassen
         });
 
@@ -108,6 +108,8 @@ public class SimulatieController implements ActionListener {
             UIManager.put("Label.foreground", Color.WHITE);
 
             UIManager.put("control", Color.BLACK); // 🔥 belangrijk voor veel Swing onderdelen
+
+            view.setLegendaView(view.getLegendaPanel());
 
         } else {
 
@@ -171,13 +173,12 @@ public class SimulatieController implements ActionListener {
             OverzichtScherm overzichtScherm = new OverzichtScherm();
 
             LayoutView layoutView = new LayoutView(manager);
-            LegendaView legendaView = new LegendaView();
             EventPrint eventPrint = new EventPrint(manager);
 
             LayoutController controller = new LayoutController(model, layoutView, manager);
 
             view.setLayoutView(layoutView.getHotelPanel());
-            view.setLegendaView(legendaView.getLegendaPanel());
+            view.setLegendaView(view.getLegendaPanel());
             view.setRightView(eventPrint.getPanelRechts());
         } catch (Exception ex) {
             ex.printStackTrace();
