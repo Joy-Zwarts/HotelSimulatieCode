@@ -10,10 +10,9 @@ public class OverzichtScherm {
     private ArrayList<Gast> gasten;
     private int tijd;
 
-    private static JFrame pauseFrame;
+    public static JFrame pauseFrame = new JFrame();
 
     public OverzichtScherm() {
-        pauseFrame = new JFrame();
         pauseFrame.setSize(400, 200);
 
         JPanel panel = new JPanel(new BorderLayout());

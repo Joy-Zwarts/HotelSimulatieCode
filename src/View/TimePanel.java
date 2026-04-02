@@ -73,6 +73,11 @@ public class TimePanel implements HotelEventListener {
         return panelTime;
     }
 
+    public void resetTime(){
+        timeLabel.setText("Time: 00:00");
+
+    }
+
 private ImageIcon laadIcon(String bestand) {
     java.net.URL url = getClass().getResource("/Res/" + bestand);
 
