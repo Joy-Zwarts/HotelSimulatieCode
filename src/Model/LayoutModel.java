@@ -59,11 +59,6 @@ public class LayoutModel {
         }
     }
 
-    public GridVakje getGridVakje(int x, int y) {
-        String coordinaten = x+","+y;
-        return grid.get(coordinaten);
-    }
-
     public int getVakBreedte() {
         return vakBreedte;
     }

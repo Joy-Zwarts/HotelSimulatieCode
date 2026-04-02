@@ -3,6 +3,7 @@ package View;
 import Model.GridVakje;
 import Model.LayoutModel;
 import Model.Ruimte;
+import hotelevents.HotelEventManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,9 +18,16 @@ public class LayoutView {
     private int gridBreedte;
     private int gridLengte;
 
+    private HotelEventManager manager;
+
+    public LayoutView(HotelEventManager manager) {
+        this.manager = manager;
+    }
+
     public void maakGrid(int gridBreedte, int gridLengte, int vakBreedte, int vakHoogte, HashMap<String, GridVakje> grid) {
 
         this.grid = grid;
+
 
         hotelPanel = new JPanel(null); // panel aanmaken voor de layout met een custom grid layout
         hotelPanel.setPreferredSize(new Dimension(gridBreedte * vakBreedte, gridLengte * vakHoogte)
@@ -29,7 +37,7 @@ public class LayoutView {
         for (int y = 0; y < gridLengte; y++) {
             for (int x = 0; x < gridBreedte; x++) {
 
-                GridVakje vak = new GridVakje(x, y, vakBreedte, vakHoogte); // maak een nieuw gridvakje aan per gecreëerde kolom en rij
+                GridVakje vak = new GridVakje(x, y, vakBreedte, vakHoogte, manager); // maak een nieuw gridvakje aan per gecreëerde kolom en rij
 
                 grid.put(x + "," + y, vak); // voeg deze toe aan de lijst met gridvakjes
 

@@ -1,6 +1,5 @@
 package View;
 
-import Controller.HotelEventManager;
 import Model.Gast;
 
 import javax.swing.*;
@@ -11,10 +10,9 @@ public class OverzichtScherm {
     private ArrayList<Gast> gasten;
     private int tijd;
 
-    private static JFrame pauseFrame;
+    public static JFrame pauseFrame = new JFrame();
 
     public OverzichtScherm() {
-        pauseFrame = new JFrame();
         pauseFrame.setSize(400, 200);
 
         JPanel panel = new JPanel(new BorderLayout());
@@ -48,12 +46,7 @@ public class OverzichtScherm {
         this.tijd = tijd;
     }
 
-    public static void setVisible() {
-        pauseFrame.setVisible(true);
+    public static void setVisibility(boolean visible) {
+        pauseFrame.setVisible(visible);
     }
-
-    public static void setInvisible() {
-        pauseFrame.setVisible(false);
-    }
-
 }
