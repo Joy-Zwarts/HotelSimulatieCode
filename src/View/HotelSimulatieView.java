@@ -42,6 +42,7 @@ public class HotelSimulatieView extends JFrame {
         topbar = new JPanel(new BorderLayout());
         setBackground(UIManager.getColor("Panel.background"));
         topbar.setPreferredSize(new Dimension(1500, 130));
+        topbar.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
         JLabel hotelLabel = new JLabel(
                 "Topbar, logo, tijd, settings en tijd management",
@@ -58,6 +59,7 @@ public class HotelSimulatieView extends JFrame {
         leftPanel.setPreferredSize(new Dimension(210, 670));
         setBackground(UIManager.getColor("Panel.background"));
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
+        leftPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
         loadScenarioButton = new JButton("Load Scenario");
         loadLayoutButton = new JButton("Load Layout");
@@ -82,6 +84,7 @@ public class HotelSimulatieView extends JFrame {
     private void initMiddlePanel() {
         middlePanel = new JPanel(new BorderLayout());
         setBackground(UIManager.getColor("Panel.background"));
+        middlePanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
         initLayoutPanel();
         initLegendaPanel();
@@ -91,6 +94,7 @@ public class HotelSimulatieView extends JFrame {
 
     private void initLayoutPanel() {
         layoutPanel = new JPanel(new BorderLayout());
+        layoutPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         setBackground(UIManager.getColor("Panel.background"));
         layoutPanel.setPreferredSize(new Dimension(960, 540));
 
@@ -103,6 +107,7 @@ public class HotelSimulatieView extends JFrame {
 
     private void initLegendaPanel() {
         legendaPanel = new JPanel(new FlowLayout());
+        legendaPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         setBackground(UIManager.getColor("Panel.background"));
         legendaPanel.setPreferredSize(new Dimension(960, 95));
 
@@ -114,6 +119,7 @@ public class HotelSimulatieView extends JFrame {
 
     private void initRightPanel() {
         rightPanel = new JPanel(new BorderLayout());
+        rightPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         rightPanel.setPreferredSize(new Dimension(330, 670));
         setBackground(UIManager.getColor("Panel.background"));
 
