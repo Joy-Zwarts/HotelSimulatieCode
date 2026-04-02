@@ -6,7 +6,7 @@ public class DarkMode {
     public boolean isDarkMode() {
         return darkMode;
     }
-    public void setDarkMode() {
-        darkMode = !darkMode;
+    public void setDarkMode(boolean darkmode) {
+        darkMode = darkmode;
     }
 }

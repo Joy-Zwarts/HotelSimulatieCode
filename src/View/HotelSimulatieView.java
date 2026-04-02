@@ -1,7 +1,10 @@
 package View;
 
+import Model.DarkMode;
+
 import javax.swing.*;
 import java.awt.*;
+import java.util.Objects;
 
 public class HotelSimulatieView extends JFrame {
     private JPanel leftPanel;
@@ -10,14 +13,17 @@ public class HotelSimulatieView extends JFrame {
     private JPanel layoutPanel;
     private JPanel rightPanel;
     private JPanel topbar;
+    private ImageIcon legenda;
 
     private JButton loadScenarioButton;
     private JButton loadLayoutButton;
     private JButton startSimulationButton;
     private JButton stopSimulationButton;
     private JButton settingsButton;
+    private DarkMode darkMode;
 
-    public HotelSimulatieView() {
+    public HotelSimulatieView(DarkMode darkMode) {
+        this.darkMode = darkMode;
         setTitle("Hotel Simulator - Sjohn Karma's Hotels");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1500, 800);
@@ -34,7 +40,7 @@ public class HotelSimulatieView extends JFrame {
 
     private void initTopbar() {
         topbar = new JPanel(new BorderLayout());
-        topbar.setBackground(Color.LIGHT_GRAY);
+        setBackground(UIManager.getColor("Panel.background"));
         topbar.setPreferredSize(new Dimension(1500, 130));
 
         JLabel hotelLabel = new JLabel(
@@ -50,7 +56,7 @@ public class HotelSimulatieView extends JFrame {
     private void initLeftPanel() {
         leftPanel = new JPanel();
         leftPanel.setPreferredSize(new Dimension(210, 670));
-        leftPanel.setBackground(Color.GRAY);
+        setBackground(UIManager.getColor("Panel.background"));
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
 
         loadScenarioButton = new JButton("Load Scenario");
@@ -75,7 +81,7 @@ public class HotelSimulatieView extends JFrame {
 
     private void initMiddlePanel() {
         middlePanel = new JPanel(new BorderLayout());
-        middlePanel.setBackground(Color.DARK_GRAY);
+        setBackground(UIManager.getColor("Panel.background"));
 
         initLayoutPanel();
         initLegendaPanel();
@@ -85,7 +91,7 @@ public class HotelSimulatieView extends JFrame {
 
     private void initLayoutPanel() {
         layoutPanel = new JPanel(new BorderLayout());
-        layoutPanel.setBackground(Color.WHITE);
+        setBackground(UIManager.getColor("Panel.background"));
         layoutPanel.setPreferredSize(new Dimension(960, 540));
 
         JLabel layoutLabel = new JLabel("Hotel Layout", SwingConstants.CENTER);
@@ -97,11 +103,10 @@ public class HotelSimulatieView extends JFrame {
 
     private void initLegendaPanel() {
         legendaPanel = new JPanel(new FlowLayout());
-        legendaPanel.setBackground(Color.LIGHT_GRAY);
+        setBackground(UIManager.getColor("Panel.background"));
         legendaPanel.setPreferredSize(new Dimension(960, 95));
 
-        JLabel legendaLabel = new JLabel("Legenda", SwingConstants.CENTER);
-        legendaLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        JLabel legendaLabel = new JLabel(legenda);
 
         legendaPanel.add(legendaLabel);
         middlePanel.add(legendaPanel, BorderLayout.SOUTH);
@@ -110,7 +115,7 @@ public class HotelSimulatieView extends JFrame {
     private void initRightPanel() {
         rightPanel = new JPanel(new BorderLayout());
         rightPanel.setPreferredSize(new Dimension(330, 670));
-        rightPanel.setBackground(Color.GRAY);
+        setBackground(UIManager.getColor("Panel.background"));
 
         JLabel label = new JLabel("Event weergave", SwingConstants.CENTER);
         label.setFont(new Font("Arial", Font.BOLD, 24));
@@ -128,11 +133,14 @@ public class HotelSimulatieView extends JFrame {
     }
 
     // 🔹 Methode om legenda te vervangen
-    public void setLegendaView(JPanel newLegenda) {
-        legendaPanel.removeAll();
-        legendaPanel.add(newLegenda);
-        legendaPanel.revalidate();
-        legendaPanel.repaint();
+    public void setLegendaView(JPanel legendaPanel) {
+        if (darkMode.isDarkMode()) {
+            legenda = new ImageIcon(Objects.requireNonNull(getClass().getResource("/Res/LegendaDark.png")));
+        } else {
+            legenda = new ImageIcon(Objects.requireNonNull(getClass().getResource("/Res/Legenda.png")));
+        }
+        this.legendaPanel.revalidate();
+        this.legendaPanel.repaint();
     }
 
     // 🔹 Methode om event panel rechts te vervangen
@@ -162,5 +170,9 @@ public class HotelSimulatieView extends JFrame {
 
     public JButton getStopSimulationButton() {
         return stopSimulationButton;
+    }
+
+    public JPanel getLegendaPanel() {
+        return legendaPanel;
     }
 }
