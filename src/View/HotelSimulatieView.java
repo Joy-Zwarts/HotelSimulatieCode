@@ -34,7 +34,7 @@ public class HotelSimulatieView extends JFrame {
 
     private void initTopbar() {
         topbar = new JPanel(new BorderLayout());
-        topbar.setBackground(Color.LIGHT_GRAY);
+        setBackground(UIManager.getColor("Panel.background"));
         topbar.setPreferredSize(new Dimension(1500, 130));
 
         JLabel hotelLabel = new JLabel(
@@ -50,7 +50,7 @@ public class HotelSimulatieView extends JFrame {
     private void initLeftPanel() {
         leftPanel = new JPanel();
         leftPanel.setPreferredSize(new Dimension(210, 670));
-        leftPanel.setBackground(Color.GRAY);
+        setBackground(UIManager.getColor("Panel.background"));
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
 
         loadScenarioButton = new JButton("Load Scenario");
@@ -75,7 +75,7 @@ public class HotelSimulatieView extends JFrame {
 
     private void initMiddlePanel() {
         middlePanel = new JPanel(new BorderLayout());
-        middlePanel.setBackground(Color.DARK_GRAY);
+        setBackground(UIManager.getColor("Panel.background"));
 
         initLayoutPanel();
         initLegendaPanel();
@@ -85,7 +85,7 @@ public class HotelSimulatieView extends JFrame {
 
     private void initLayoutPanel() {
         layoutPanel = new JPanel(new BorderLayout());
-        layoutPanel.setBackground(Color.WHITE);
+        setBackground(UIManager.getColor("Panel.background"));
         layoutPanel.setPreferredSize(new Dimension(960, 540));
 
         JLabel layoutLabel = new JLabel("Hotel Layout", SwingConstants.CENTER);
@@ -97,7 +97,7 @@ public class HotelSimulatieView extends JFrame {
 
     private void initLegendaPanel() {
         legendaPanel = new JPanel(new FlowLayout());
-        legendaPanel.setBackground(Color.LIGHT_GRAY);
+        setBackground(UIManager.getColor("Panel.background"));
         legendaPanel.setPreferredSize(new Dimension(960, 95));
 
         JLabel legendaLabel = new JLabel("Legenda", SwingConstants.CENTER);
@@ -110,7 +110,7 @@ public class HotelSimulatieView extends JFrame {
     private void initRightPanel() {
         rightPanel = new JPanel(new BorderLayout());
         rightPanel.setPreferredSize(new Dimension(330, 670));
-        rightPanel.setBackground(Color.GRAY);
+        setBackground(UIManager.getColor("Panel.background"));
 
         JLabel label = new JLabel("Event weergave", SwingConstants.CENTER);
         label.setFont(new Font("Arial", Font.BOLD, 24));

@@ -1,10 +1,12 @@
 package Controller;
 
+import Model.DarkMode;
 import Model.LayoutModel;
 import View.*;
 import hotelevents.HotelEventManager;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
@@ -16,6 +18,7 @@ public class SimulatieController implements ActionListener {
     private Boolean started;
     private HotelEventManager manager;
     private LayoutModel model;
+    private DarkMode darkModeModel = new DarkMode();
 
     public SimulatieController() {
         this.view = new HotelSimulatieView();
@@ -25,6 +28,8 @@ public class SimulatieController implements ActionListener {
         init();
     }
 
+
+
     private void init() {
         view.getLoadScenarioButton().addActionListener(this);
         view.getStartSimulationButton().addActionListener(this);
@@ -32,6 +37,7 @@ public class SimulatieController implements ActionListener {
         view.getLoadLayoutButton().addActionListener(this);
         view.getSettingsButton().addActionListener(this);
     }
+
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -57,7 +63,7 @@ public class SimulatieController implements ActionListener {
         }
 
         else if (source == view.getSettingsButton()) {
-            System.out.println("Open settings");
+            openSettingsFrame();
         }
 
         else if (source == view.getStopSimulationButton()) {
@@ -69,6 +75,58 @@ public class SimulatieController implements ActionListener {
             }
         }
     }
+
+    private void openSettingsFrame() {
+        JFrame settingsFrame = new JFrame("Settings");
+        settingsFrame.setSize(300, 200);
+        settingsFrame.setLayout(new FlowLayout());
+
+        JButton darkModeButton = new JButton("Toggle Dark Mode");
+
+        darkModeButton.addActionListener(e -> {
+            darkModeModel.setDarkMode(); // 🔥 model aanpassen
+            applyTheme();                // 🔥 UI aanpassen
+        });
+
+        settingsFrame.add(darkModeButton);
+
+        settingsFrame.setLocationRelativeTo(view);
+        settingsFrame.setVisible(true);
+    }
+
+
+    private void applyTheme() {
+        if (darkModeModel.isDarkMode()) {
+
+            UIManager.put("Panel.background", new Color (0x1e1f1f));
+            UIManager.put("Viewport.background", new Color(0x1e1f1f));
+            UIManager.put("ScrollPane.background", new Color(0x1e1f1f));
+
+            UIManager.put("Button.background", Color.WHITE);
+            UIManager.put("Button.foreground", new Color(0x1e1f1f));
+
+            UIManager.put("Label.foreground", Color.WHITE);
+
+            UIManager.put("control", Color.BLACK); // 🔥 belangrijk voor veel Swing onderdelen
+
+        } else {
+
+            UIManager.put("Panel.background", Color.WHITE);
+            UIManager.put("Viewport.background", Color.WHITE);
+            UIManager.put("ScrollPane.background", Color.WHITE);
+
+            UIManager.put("Button.background", new Color(0x1e1f1f));
+            UIManager.put("Button.foreground", Color.WHITE);
+
+            UIManager.put("Label.foreground", new Color(0x1e1f1f));
+
+            UIManager.put("control", Color.WHITE);
+        }
+
+        SwingUtilities.updateComponentTreeUI(view);
+    }
+
+
 
     private void loadLayout() {
         try {
