@@ -1,37 +1,27 @@
 package View;
 
-import Controller.HotelEventManager;
-import Model.HotelEvent;
-import Model.HotelEventListener;
-import Model.HotelEventType;
+import hotelevents.HotelEvent;
+import hotelevents.HotelEventListener;
+import hotelevents.HotelEventManager;
+import hotelevents.HotelEventType;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class TimePanel implements HotelEventListener {
-    private JPanel panel;         // contains event labels
-    private JPanel panelRechts;   // right-side panel
-    private JScrollPane scrollbar;
+    private JPanel panelTime;         // contains event labels
     private JLabel timeLabel;
     private HotelEventManager manager;
 
-    public TimePanel(HotelEventManager manager) {
+    public TimePanel(HotelEventManager manager, JPanel panelRechts) {
         this.manager = manager;
 
 
         // panel for tijd
-        JPanel panelTime = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        panelTime = new JPanel(new FlowLayout(FlowLayout.LEFT));
         timeLabel = new JLabel("Time: 00:00");
         timeLabel.setVerticalAlignment(SwingConstants.CENTER);
         timeLabel.setHorizontalAlignment(SwingConstants.LEFT);
-
-        JButton pause = new JButton(laadIcon("pause.png"));
-        pause.setPreferredSize(new Dimension(25, 25));
-        pause.setBackground(Color.WHITE);
-        pause.setBorder(BorderFactory.createEmptyBorder(0, 35, 0, 35));
-        pause.addActionListener(e -> {
-            manager.pause();
-        });
 
         JButton normaleTijd = new JButton(laadIcon("play.png"));
         normaleTijd.setPreferredSize(new Dimension(25, 25));
@@ -58,32 +48,35 @@ public class TimePanel implements HotelEventListener {
         });
 
         panelTime.add(timeLabel);
-        panelTime.add(pause);
         panelTime.add(normaleTijd);
         panelTime.add(fastForwardTijd);
         panelTime.add(doubleFastForwardTijd);
         panelTime.setPreferredSize(new Dimension(525, 50));
 
         // hele panel rechts
-        panelRechts = new JPanel();
-        panelRechts.setLayout(new BorderLayout());
-        panelRechts.add(panelTime, BorderLayout.NORTH);
-        panelRechts.add(scrollbar, BorderLayout.CENTER);
+        panelRechts.add(panelTime);
 
         // register als listener
-        manager.registerListener(this);
-
+        manager.register(this);
     }
+
     @Override
-    public void onEvent(HotelEvent event) {
-        long totalSeconds = event.getTime() / 1000;
+    public void notify(HotelEvent event) {
+        long totalSeconds = event.getTime();
         int minutes = (int) (totalSeconds / 60);
         int seconds = (int) (totalSeconds % 60);
 
         timeLabel.setText(String.format("Time: %02d:%02d", minutes, seconds));
     }
 
+    public JPanel getTimePanel() {
+        return panelTime;
+    }
 
+    public void resetTime(){
+        timeLabel.setText("Time: 00:00");
+
+    }
 
 private ImageIcon laadIcon(String bestand) {
     java.net.URL url = getClass().getResource("/Res/" + bestand);
