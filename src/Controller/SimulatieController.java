@@ -180,6 +180,7 @@ public class SimulatieController implements ActionListener {
             view.setLayoutView(layoutView.getHotelPanel());
             view.setLegendaView(view.getLegendaPanel());
             view.setRightView(eventPrint.getPanelRechts());
+            view.setLegendaView(view.getLegendaPanel());
         } catch (Exception ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(view, "Fout bij laden: " + ex.getMessage());
