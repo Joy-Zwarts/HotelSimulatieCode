@@ -32,10 +32,7 @@ public class EventPrint implements HotelEventListener {
         scrollbar.setPreferredSize(new Dimension(525, 500));
         scrollbar.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-        TimePanel timePanel = new TimePanel(manager, panelRechts);
-
         panelRechts.setLayout(new BorderLayout());
-        panelRechts.add(timePanel.getTimePanel(),  BorderLayout.NORTH);
         panelRechts.add(scrollbar, BorderLayout.CENTER);
 
         manager.register(this);
