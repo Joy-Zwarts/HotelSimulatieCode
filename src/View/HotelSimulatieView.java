@@ -1,6 +1,6 @@
 package View;
 
-import Model.DarkMode;
+import Model.DarkModeModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,6 +13,9 @@ public class HotelSimulatieView extends JFrame {
     private JPanel layoutPanel;
     private JPanel rightPanel;
     private JPanel topbar;
+    private JPanel timePanel;
+    private JPanel logoPanel;
+    private JPanel timeManagementPanel;
     private ImageIcon legenda;
 
     private JButton loadScenarioButton;
@@ -20,9 +23,9 @@ public class HotelSimulatieView extends JFrame {
     private JButton startSimulationButton;
     private JButton stopSimulationButton;
     private JButton settingsButton;
-    private DarkMode darkMode;
+    private DarkModeModel darkMode;
 
-    public HotelSimulatieView(DarkMode darkMode) {
+    public HotelSimulatieView(DarkModeModel darkMode) {
         this.darkMode = darkMode;
         setTitle("Hotel Simulator - Sjohn Karma's Hotels");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -39,18 +42,34 @@ public class HotelSimulatieView extends JFrame {
     }
 
     private void initTopbar() {
-        topbar = new JPanel(new BorderLayout());
-        setBackground(UIManager.getColor("Panel.background"));
+        topbar = new JPanel();
+        topbar.setLayout(new BoxLayout(topbar, BoxLayout.X_AXIS)); // horizontale rij
+        topbar.setBackground(UIManager.getColor("Panel.background"));
         topbar.setPreferredSize(new Dimension(1500, 130));
         topbar.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
-        JLabel hotelLabel = new JLabel(
-                "Topbar, logo, tijd, settings en tijd management",
-                SwingConstants.CENTER
-        );
-        hotelLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        // Tijd panel
+        timePanel = new JPanel(new GridBagLayout()); // label perfect centreren
+        timePanel.setPreferredSize(new Dimension(495, 130));
 
-        topbar.add(hotelLabel, BorderLayout.CENTER);
+        // Logo panel
+        logoPanel = new JPanel(new GridBagLayout());
+        logoPanel.setPreferredSize(new Dimension(495, 130));
+
+        // Time management knoppen panel
+        timeManagementPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 35));
+        timeManagementPanel.setPreferredSize(new Dimension(495, 130));
+
+        // Logo toevoegen
+        ImageIcon hotelLogo = new ImageIcon(Objects.requireNonNull(getClass().getResource("/Res/Logo.png")));
+        JLabel hotelLogoLabel = new JLabel(hotelLogo);
+        logoPanel.add(hotelLogoLabel);
+
+        // Panels toevoegen aan topbar
+        topbar.add(timePanel);
+        topbar.add(logoPanel);
+        topbar.add(timeManagementPanel);
+
         add(topbar, BorderLayout.NORTH);
     }
 
@@ -94,11 +113,12 @@ public class HotelSimulatieView extends JFrame {
 
     private void initLayoutPanel() {
         layoutPanel = new JPanel(new BorderLayout());
+        layoutPanel.putClientProperty("noTheme", true);
         layoutPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         setBackground(UIManager.getColor("Panel.background"));
         layoutPanel.setPreferredSize(new Dimension(960, 540));
 
-        JLabel layoutLabel = new JLabel("Hotel Layout", SwingConstants.CENTER);
+        JLabel layoutLabel = new JLabel("Hier komt de hotel Layout", SwingConstants.CENTER);
         layoutLabel.setFont(new Font("Arial", Font.BOLD, 24));
 
         layoutPanel.add(layoutLabel, BorderLayout.CENTER);
@@ -136,6 +156,24 @@ public class HotelSimulatieView extends JFrame {
         layoutPanel.add(newLayout, BorderLayout.CENTER);
         layoutPanel.revalidate();
         layoutPanel.repaint();
+    }
+
+    public void setTopbar(TimePanel timePanelObj, TimeManagementPanel timeManagementPanelObj) {
+
+        JLabel timeLabel = timePanelObj.getTimeLabel();
+        this.timePanel.removeAll();
+        this.timePanel.setLayout(new GridBagLayout());
+        this.timePanel.add(timeLabel);
+
+
+        JPanel managementPanel = timeManagementPanelObj.getTimeManagementPanel();
+        this.timeManagementPanel.removeAll();
+        this.timeManagementPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 35));
+        this.timeManagementPanel.add(managementPanel);
+
+
+        topbar.revalidate();
+        topbar.repaint();
     }
 
     // 🔹 Methode om legenda te vervangen
@@ -187,5 +225,9 @@ public class HotelSimulatieView extends JFrame {
 
     public JPanel getLegendaPanel() {
         return legendaPanel;
+    }
+
+    public JPanel getTopBar() {
+        return topbar;
     }
 }

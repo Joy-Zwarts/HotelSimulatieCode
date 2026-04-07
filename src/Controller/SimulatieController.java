@@ -1,6 +1,6 @@
 package Controller;
 
-import Model.DarkMode;
+import Model.DarkModeModel;
 import Model.LayoutModel;
 import View.*;
 import hotelevents.HotelEventManager;
@@ -18,17 +18,28 @@ public class SimulatieController implements ActionListener {
     private Boolean started;
     private HotelEventManager manager;
     private LayoutModel model;
-    private DarkMode darkModeModel = new DarkMode();
+    private DarkModeController darkModeController;
+    private TimePanel timePanel;
+    private TimeManagementPanel timeManagementPanel;
 
     public SimulatieController() {
+        DarkModeModel darkModeModel = new DarkModeModel();
+
         this.view = new HotelSimulatieView(darkModeModel);
+        this.darkModeController = new DarkModeController(view, darkModeModel);
+
         this.manager = new HotelEventManager(false);
         this.started = false;
         this.model = null;
+
+        this.timePanel = new TimePanel(manager, view.getTopBar());
+        this.timeManagementPanel = new TimeManagementPanel(manager, view.getTopBar(), darkModeModel, started);
+        view.setTopbar(timePanel, timeManagementPanel);
+
+        darkModeController.applyTheme();
+
         init();
     }
-
-
 
     private void init() {
         view.getLoadScenarioButton().addActionListener(this);
@@ -84,8 +95,8 @@ public class SimulatieController implements ActionListener {
         JButton darkModeButton = new JButton("Toggle Dark Mode");
 
         darkModeButton.addActionListener(e -> {
-            darkModeModel.setDarkMode(true); // 🔥 model aanpassen
-            applyTheme();                // 🔥 UI aanpassen
+            darkModeController.toggleDarkMode();
+            timeManagementPanel.changeIcons();
         });
 
         settingsFrame.add(darkModeButton);
@@ -93,42 +104,6 @@ public class SimulatieController implements ActionListener {
         settingsFrame.setLocationRelativeTo(view);
         settingsFrame.setVisible(true);
     }
-
-
-    private void applyTheme() {
-        if (darkModeModel.isDarkMode()) {
-
-            UIManager.put("Panel.background", new Color (0x1e1f1f));
-            UIManager.put("Viewport.background", new Color(0x1e1f1f));
-            UIManager.put("ScrollPane.background", new Color(0x1e1f1f));
-
-            UIManager.put("Button.background", Color.WHITE);
-            UIManager.put("Button.foreground", new Color(0x1e1f1f));
-
-            UIManager.put("Label.foreground", Color.WHITE);
-
-            UIManager.put("control", Color.BLACK); // 🔥 belangrijk voor veel Swing onderdelen
-
-            view.setLegendaView(view.getLegendaPanel());
-
-        } else {
-
-            UIManager.put("Panel.background", Color.WHITE);
-            UIManager.put("Viewport.background", Color.WHITE);
-            UIManager.put("ScrollPane.background", Color.WHITE);
-
-            UIManager.put("Button.background", new Color(0x1e1f1f));
-            UIManager.put("Button.foreground", Color.WHITE);
-
-            UIManager.put("Label.foreground", new Color(0x1e1f1f));
-
-            UIManager.put("control", Color.WHITE);
-        }
-
-        SwingUtilities.updateComponentTreeUI(view);
-    }
-
-
 
     private void loadLayout() {
         try {
