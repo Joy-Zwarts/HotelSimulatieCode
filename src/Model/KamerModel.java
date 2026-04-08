@@ -1,9 +1,9 @@
 package Model;
 
-public class Kamer extends Ruimte {
+public class KamerModel extends RuimteModel {
     private RoomClassificatie classification;
 
-    public Kamer(String areaType, String position, String dimension, RoomClassificatie classification) {
+    public KamerModel(String areaType, String position, String dimension, RoomClassificatie classification) {
         super(areaType, position, dimension);
         this.classification = classification;
     }

@@ -1,19 +1,19 @@
 package Model;
 
-public class Gast extends Persoon {
+public class GastModel extends PersoonModel {
     private RoomClassificatie wensen;
-    private Kamer kamer;
+    private KamerModel kamer;
 
-    public Gast(String locatie, String targetLocatie, RoomClassificatie wensen, Kamer kamer) {
+    public GastModel(String locatie, String targetLocatie, RoomClassificatie wensen, KamerModel kamer) {
         super(locatie, targetLocatie);
         this.wensen = wensen;
         this.kamer = kamer;
     }
 
-    public void inchecken(Kamer kamer) {
+    public void inchecken(KamerModel kamer) {
     }
 
-    public void uitchecken(Kamer kamer) {
+    public void uitchecken(KamerModel kamer) {
     }
 
     public void gebruikFitness() {
@@ -34,11 +34,11 @@ public class Gast extends Persoon {
     public void gebruikLift() {
     }
 
-    public Kamer getKamer() {
+    public KamerModel getKamer() {
         return this.kamer;
     }
 
-    public void setKamer(Kamer kamer) {
+    public void setKamer(KamerModel kamer) {
         this.kamer = kamer;
     }
 

@@ -1,8 +1,7 @@
 package View;
 
-import Model.GridVakje;
-import Model.LayoutModel;
-import Model.Ruimte;
+import Controller.GridVakjeController;
+import Model.RuimteModel;
 import hotelevents.HotelEventManager;
 
 import javax.swing.*;
@@ -11,185 +10,112 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class LayoutView {
-    private JPanel hotelPanel;
 
-    private HashMap<String, GridVakje> grid;
+    // attributen
+
+    private JPanel hotelPanel;
+    private HashMap<String, GridVakjeController> grid;
 
     private int gridBreedte;
     private int gridLengte;
 
-    private HotelEventManager manager;
+    private final HotelEventManager manager;
 
+    // constructor
     public LayoutView(HotelEventManager manager) {
         this.manager = manager;
     }
 
-    public void maakGrid(int gridBreedte, int gridLengte, int vakBreedte, int vakHoogte, HashMap<String, GridVakje> grid) {
+    // maak de gridlayout aan van de hotelweergave
+    public void maakGrid(int gridBreedte, int gridLengte, int vakBreedte, int vakHoogte, HashMap<String, GridVakjeController> grid) {
 
         this.grid = grid;
 
-
-        hotelPanel = new JPanel(null); // panel aanmaken voor de layout met een custom grid layout
-        hotelPanel.setPreferredSize(new Dimension(gridBreedte * vakBreedte, gridLengte * vakHoogte)
-                // bepaal aantal rijen (breedte) en hoe wijd die zijn (vakbreedte) en bepaal het aantal kolommen (lengte) en hoe hoog die zijn (vakhoogte)
+        hotelPanel = new JPanel(null);
+        hotelPanel.setPreferredSize(
+                new Dimension(gridBreedte * vakBreedte, gridLengte * vakHoogte)
         );
 
         for (int y = 0; y < gridLengte; y++) {
             for (int x = 0; x < gridBreedte; x++) {
 
-                GridVakje vak = new GridVakje(x, y, vakBreedte, vakHoogte, manager); // maak een nieuw gridvakje aan per gecreëerde kolom en rij
+                // maak een grid vakje per cel
+                GridVakjeController controller = new GridVakjeController(
+                        new Model.GridVakjeModel(x, y, vakBreedte, vakHoogte),
+                        new GridVakjeView(x, y, vakBreedte, vakHoogte),
+                        manager
+                );
 
-                grid.put(x + "," + y, vak); // voeg deze toe aan de lijst met gridvakjes
+                grid.put(x + "," + y, controller);
 
-                hotelPanel.add(vak.getVakjepanel()); // voeg het vakje toe aan de hotelpanel voor de layout
+                // voeg een nieuw panel toe
+                hotelPanel.add(controller.getView().getVakjePanel());
             }
         }
     }
 
-    public void berekenGridGrootte(ArrayList<Ruimte> ruimtes) {
+    // bereken hoe groot het hotel moet zijn
+    public void berekenGridGrootte(ArrayList<RuimteModel> ruimtes) {
 
-        for (Ruimte ruimte : ruimtes) { // voor aantal ruimtes in de lijst
+        for (RuimteModel ruimte : ruimtes) {
 
-            int right = ruimte.getPositionX() + ruimte.getDimensionW() - 1; // positie x plus hoe wijd de kamer is (-1 voor de x positie die al is meegerekend)
-            int bottom = ruimte.getPositionY() + ruimte.getDimensionH() - 1; // positie y plus hoe hoog de kamer is (-1 voor de y positie die al is meegerekend)
+            int right = ruimte.getPositionX() + ruimte.getDimensionW() - 1;
+            int bottom = ruimte.getPositionY() + ruimte.getDimensionH() - 1;
 
-            if (right > gridBreedte) { //zoek de meest rechtse positie+wijdte
-                gridBreedte = right; // dat is nu de breedte
-            }
-            if (bottom > gridLengte) { //zoek de meest onderste positie+hoogte
-                gridLengte = bottom; // dat is nu de lengte
-            }
+            if (right > gridBreedte) gridBreedte = right;
+            if (bottom > gridLengte) gridLengte = bottom;
         }
-        gridBreedte = gridBreedte +2; // 2 extra kolommen voor de trap en liftschacht
-        gridLengte = gridLengte +1; // 1 extra rij voor de lobby
+
+        gridBreedte += 2;
+        gridLengte += 1;
     }
 
-    public void plaatsKamers( ArrayList<Ruimte> ruimtes, ArrayList<Ruimte> verplichteElementen) {
-        for (Ruimte ruimte : ruimtes) { // voor elke ruimte in de lijst van ruimtes
-            int startX = ruimte.getPositionX(); // get de X positie -1 (de lift zit al op 0,0 dus we doen geen -1)
-            int startY = ruimte.getPositionY() - 1; // get de Y positie -1 (posities beginnen vanaf 1 dus -1)
+    // plaats ruimten en verplichte elementen
+    public void plaatsKamers(ArrayList<RuimteModel> ruimtes, ArrayList<RuimteModel> verplichteElementen) {
+        plaatsRuimteLijst(ruimtes, false);
+        plaatsRuimteLijst(verplichteElementen, true);
+    }
 
-            int w = ruimte.getDimensionW(); // get de wijdte
-            int h = ruimte.getDimensionH(); // get de lengte
+    // plaats alles
+    private void plaatsRuimteLijst(ArrayList<RuimteModel> lijst, boolean isVerplicht) {
 
-            for (int y = startY; y < startY + h; y++) { // startTimer bij de y positie, voor elke stap die kleiner is dan y + de hoogte
-                for (int x = startX; x < startX + w; x++) { // startTimer bij de x positie, voor elke stap die kleiner is dan x + de breedte
+        for (RuimteModel ruimte : lijst) {
 
-                    GridVakje vak = grid.get(x + "," + y); // get het gridvakje die bij die coordinaten hoort
+            int startX = isVerplicht ? ruimte.getPositionX() - 1 : ruimte.getPositionX();
+            int startY = ruimte.getPositionY() - 1;
 
-                    if (vak != null) { // als die bestaat
+            int w = ruimte.getDimensionW();
+            int h = ruimte.getDimensionH();
 
-                        vak.zetInhoud(ruimte);
+            for (int y = startY; y < startY + h; y++) {
+                for (int x = startX; x < startX + w; x++) {
 
-                        if (x == startX && y == startY) {
-                            vak.zetInhoud(ruimte); // alleen label in linkerbovenhoek
-                        } else {
-                            vak.clearInhoud(); // alle andere vakjes van dit gebied leegmaken
-                        }
+                    GridVakjeController vak = grid.get(x + "," + y);
 
-                        // bepaal of dit vakje een top-rand moet hebben
-                        boolean top;
-                        if (y == startY) { // als de y hetzelfde is als de y van de gegeven positie (linksboven)
-                            top = true; // topborder moet er komen want dit is de bovenrand
-                        } else {
-                            top = false; // anders niet
-                        }
+                    if (vak != null) {
 
-                        // bepaal of dit vakje een bottom-rand moet hebben
-                        boolean bottom;
-                        if (y == startY + h - 1) { // startTimer y + hoogte - 1 omdat de y al een van de hoogte vakjes bevat
-                            bottom = true;
-                        } else {
-                            bottom = false;
-                        }
+                        // zet per vakje wat voor ruimte er in zit
+                        vak.getModel().setRuimte(ruimte);
 
-                        // bepaal of dit vakje een left-rand moet hebben
-                        boolean left;
-                        if (x == startX) {
-                            left = true;
-                        } else {
-                            left = false;
-                        }
+                        vak.getModel().setlinksboven(x == startX && y == startY);
 
-                        // bepaal of dit vakje een right-rand moet hebben
-                        boolean right;
-                        if (x == startX + w - 1) {
-                            right = true;
-                        } else {
-                            right = false;
-                        }
+                        vak.getView().zetInhoud(ruimte, vak.getModel().islinksboven());
+                        vak.updateView();
 
-                        vak.setBorder(top, left, bottom, right);
-                    }
-                }
-            }
-        }
-        for (Ruimte element : verplichteElementen) { // voor elke element in de lijst van verplichte elementen
-            int startX = element.getPositionX() - 1; // get de Y positie -1 (posities beginnen vanaf 1 dus -1)
-            int startY = element.getPositionY() - 1; // get de Y positie -1 (posities beginnen vanaf 1 dus -1)
+                        // borders
+                        boolean top = (y == startY);
+                        boolean bottom = (y == startY + h - 1);
+                        boolean left = (x == startX);
+                        boolean right = (x == startX + w - 1);
 
-            int w = element.getDimensionW(); // get de wijdte
-            int h = element.getDimensionH(); // get de lengte
-
-            for (int y = startY; y < startY + h; y++) { // startTimer bij de y positie, voor elke stap die kleiner is dan y + de hoogte
-                for (int x = startX; x < startX + w; x++) { // startTimer bij de x positie, voor elke stap die kleiner is dan x + de breedte
-
-                    GridVakje vak = grid.get(x + "," + y); // get het gridvakje die bij die coordinaten hoort
-
-                    if (vak != null) { // als die bestaat
-
-                        vak.zetInhoud(element);
-
-                        if (element.getAreaType().equals("Trappen")) {
-                            vak.zetInhoud(element); // zet de inhoud van het vakje en geef het type en de classificatie mee (aantal sterren)
-                        } else {
-                            if (vak != null) { // als die bestaat
-                                if (x == startX && y == startY) {
-                                    vak.zetInhoud(element); // alleen label in linkerbovenhoek
-                                } else {
-                                    vak.clearInhoud(); // alle andere vakjes van dit gebied leegmaken
-                                }
-                            }
-
-                            // bepaal of dit vakje een top-rand moet hebben
-                            boolean top;
-                            if (y == startY) { // als de y hetzelfde is als de y van de gegeven positie (linksboven)
-                                top = true; // topborder moet er komen want dit is de bovenrand
-                            } else {
-                                top = false; // anders niet
-                            }
-
-                            // bepaal of dit vakje een bottom-rand moet hebben
-                            boolean bottom;
-                            if (y == startY + h - 1) { // startTimer y + hoogte - 1 omdat de y al een van de hoogte vakjes bevat
-                                bottom = true;
-                            } else {
-                                bottom = false;
-                            }
-
-                            // bepaal of dit vakje een left-rand moet hebben
-                            boolean left;
-                            if (x == startX) {
-                                left = true;
-                            } else {
-                                left = false;
-                            }
-
-                            // bepaal of dit vakje een right-rand moet hebben
-                            boolean right;
-                            if (x == startX + w - 1) {
-                                right = true;
-                            } else {
-                                right = false;
-                            }
-
-                            vak.setBorder(top, left, bottom, right);
-                        }
+                        vak.getView().setBorder(top, left, bottom, right);
                     }
                 }
             }
         }
     }
+
+    // getters & setters
 
     public JPanel getHotelPanel() {
         return hotelPanel;

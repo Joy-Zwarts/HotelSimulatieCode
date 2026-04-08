@@ -9,13 +9,16 @@ import javax.swing.*;
 import java.awt.*;
 
 public class TimePanel implements HotelEventListener {
-    private JPanel panelTime;         // contains event labels
+
+    // attributen
+
+    private JPanel panelTime;
     private JLabel timeLabel;
     private HotelEventManager manager;
 
+    // constructor
     public TimePanel(HotelEventManager manager, JPanel panelRechts) {
         this.manager = manager;
-
 
         // panel for tijd
         panelTime = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -26,13 +29,13 @@ public class TimePanel implements HotelEventListener {
 
         panelTime.add(timeLabel);
 
-        // hele panel rechts
         panelRechts.add(panelTime);
 
-        // register als listener
+        // register zichzelf als listener van ticks
         manager.register(this);
     }
 
+    // per tick bereken de tijd opnieuw en pas het label aan
     @Override
     public void notify(HotelEvent event) {
         long totalSeconds = event.getTime();
@@ -41,6 +44,8 @@ public class TimePanel implements HotelEventListener {
 
         timeLabel.setText(String.format("%02d:%02d", minutes, seconds));
     }
+
+    // getters & setters
 
     public JPanel getTimePanel() {
         return panelTime;

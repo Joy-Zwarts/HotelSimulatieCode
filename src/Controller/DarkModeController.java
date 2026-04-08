@@ -2,52 +2,55 @@ package Controller;
 
 import Model.DarkModeModel;
 import View.HotelSimulatieView;
+import View.TimeManagementPanel;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class DarkModeController {
 
+    // attributen
+
     private final HotelSimulatieView view;
     private final DarkModeModel model;
+    private final TimeManagementPanel timeManagementPanel;
 
-    public DarkModeController(HotelSimulatieView view, DarkModeModel model) {
+    // constructor
+    public DarkModeController(HotelSimulatieView view, TimeManagementPanel panel, DarkModeModel darkModeModel) {
+        this.model = darkModeModel;
         this.view = view;
-        this.model = model;
+        this.timeManagementPanel = panel;
     }
 
+    // centrale functie om dark mode aan of uit te toggelen
     public void toggleDarkMode() {
         model.setDarkMode(!model.isDarkMode());
         applyTheme();
     }
 
+    // pas het thema toe aan alle componenten
     public void applyTheme() {
-        boolean darkMode = model.isDarkMode();
-
-        Color bg = darkMode ? new Color(0x1e1f1f) : Color.WHITE;
-        Color fg = darkMode ? Color.WHITE : new Color(0x1e1f1f);
-        Color buttonBg = darkMode ? Color.WHITE : new Color(0x1e1f1f);
-        Color buttonFg = darkMode ? new Color(0x1e1f1f) : Color.WHITE;
-
-        UIManager.put("Panel.background", bg);
-        UIManager.put("Viewport.background", bg);
-        UIManager.put("ScrollPane.background", bg);
-        UIManager.put("Label.foreground", fg);
-        UIManager.put("Button.background", buttonBg);
-        UIManager.put("Button.foreground", buttonFg);
-        UIManager.put("control", bg);
+        UIManager.put("Panel.background", model.getBackgroundColor());
+        UIManager.put("Label.foreground", model.getForegroundColor());
+        UIManager.put("Button.background", model.getButtonBackgroundColor());
+        UIManager.put("Button.foreground", model.getButtonFgColor());
 
         SwingUtilities.updateComponentTreeUI(view);
-        updateComponentColors(view, bg, fg);
+        updateComponentColors(view, model.getBackgroundColor(), model.getForegroundColor());
 
-        view.setLegendaView(view.getLegendaPanel());
+        timeManagementPanel.setTimeButtons(); // switch icons voor de time manager panel van light naar dark mode en vice versa
 
+        view.setLegendaView(view.getLegendaPanel()); // hetzelfde voor de legenda
+
+        // hertekenen
         view.revalidate();
         view.repaint();
     }
 
     private void updateComponentColors(Component comp, Color bg, Color fg) {
 
+
+        // als een element de key noTheme heeft switch daar de kleuren niet
         if (comp instanceof JComponent jc) {
             if (Boolean.TRUE.equals(jc.getClientProperty("noTheme"))) {
                 return;
@@ -68,6 +71,8 @@ public class DarkModeController {
             }
         }
     }
+
+    // getters & setters
 
     public DarkModeModel getModel() {
         return model;
