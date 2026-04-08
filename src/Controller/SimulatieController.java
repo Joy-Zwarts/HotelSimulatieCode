@@ -1,10 +1,12 @@
 package Controller;
 
+import Model.DarkModeModel;
 import Model.LayoutModel;
 import View.*;
 import hotelevents.HotelEventManager;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
@@ -16,12 +18,26 @@ public class SimulatieController implements ActionListener {
     private Boolean started;
     private HotelEventManager manager;
     private LayoutModel model;
+    private DarkModeController darkModeController;
+    private TimePanel timePanel;
+    private TimeManagementPanel timeManagementPanel;
 
     public SimulatieController() {
-        this.view = new HotelSimulatieView();
+        DarkModeModel darkModeModel = new DarkModeModel();
+
+        this.view = new HotelSimulatieView(darkModeModel);
+        this.darkModeController = new DarkModeController(view, darkModeModel);
+
         this.manager = new HotelEventManager(false);
         this.started = false;
         this.model = null;
+
+        this.timePanel = new TimePanel(manager, view.getTopBar());
+        this.timeManagementPanel = new TimeManagementPanel(manager, view.getTopBar(), darkModeModel, started);
+        view.setTopbar(timePanel, timeManagementPanel);
+
+        darkModeController.applyTheme();
+
         init();
     }
 
@@ -32,6 +48,7 @@ public class SimulatieController implements ActionListener {
         view.getLoadLayoutButton().addActionListener(this);
         view.getSettingsButton().addActionListener(this);
     }
+
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -57,7 +74,7 @@ public class SimulatieController implements ActionListener {
         }
 
         else if (source == view.getSettingsButton()) {
-            System.out.println("Open settings");
+            openSettingsFrame();
         }
 
         else if (source == view.getStopSimulationButton()) {
@@ -68,6 +85,24 @@ public class SimulatieController implements ActionListener {
                 JOptionPane.showMessageDialog(view, "De simulatie is nog niet gestart!", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
+    }
+
+    private void openSettingsFrame() {
+        JFrame settingsFrame = new JFrame("Settings");
+        settingsFrame.setSize(300, 200);
+        settingsFrame.setLayout(new FlowLayout());
+
+        JButton darkModeButton = new JButton("Toggle Dark Mode");
+
+        darkModeButton.addActionListener(e -> {
+            darkModeController.toggleDarkMode();
+            timeManagementPanel.changeIcons();
+        });
+
+        settingsFrame.add(darkModeButton);
+
+        settingsFrame.setLocationRelativeTo(view);
+        settingsFrame.setVisible(true);
     }
 
     private void loadLayout() {
@@ -113,14 +148,14 @@ public class SimulatieController implements ActionListener {
             OverzichtScherm overzichtScherm = new OverzichtScherm();
 
             LayoutView layoutView = new LayoutView(manager);
-            LegendaView legendaView = new LegendaView();
             EventPrint eventPrint = new EventPrint(manager);
 
             LayoutController controller = new LayoutController(model, layoutView, manager);
 
             view.setLayoutView(layoutView.getHotelPanel());
-            view.setLegendaView(legendaView.getLegendaPanel());
+            view.setLegendaView(view.getLegendaPanel());
             view.setRightView(eventPrint.getPanelRechts());
+            view.setLegendaView(view.getLegendaPanel());
         } catch (Exception ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(view, "Fout bij laden: " + ex.getMessage());
