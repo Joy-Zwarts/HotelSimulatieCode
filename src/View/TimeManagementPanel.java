@@ -1,5 +1,6 @@
 package View;
 
+import Controller.SimulatieController;
 import hotelevents.HotelEventManager;
 import Model.DarkModeModel;
 
@@ -13,13 +14,13 @@ public class TimeManagementPanel {
     private JButton doubleFastForwardTijd;
     private HotelEventManager manager;
     private DarkModeModel darkMode;
-    private boolean started;
     private HotelSimulatieView view;
+    private SimulatieController controller;
 
-    public TimeManagementPanel(HotelEventManager manager, JPanel panelRechts, DarkModeModel darkMode, Boolean started) {
+    public TimeManagementPanel(HotelEventManager manager, JPanel panelRechts, DarkModeModel darkMode, SimulatieController controller) {
         this.manager = manager;
         this.darkMode = darkMode;
-        this.started = started;
+        this.controller = controller;
 
         // panel instellen
         panelTimeManagement = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
@@ -33,7 +34,7 @@ public class TimeManagementPanel {
         normaleTijd.setContentAreaFilled(false);
         normaleTijd.setBorderPainted(false);
         normaleTijd.addActionListener(e -> {
-            if (started) {
+            if (controller.getStarted()) {
                 manager.setHte(1000);
             } else {
                 JOptionPane.showMessageDialog(view,
@@ -48,8 +49,8 @@ public class TimeManagementPanel {
         fastForwardTijd.setContentAreaFilled(false);
         fastForwardTijd.setBorderPainted(false);
         fastForwardTijd.addActionListener(e -> {
-            if (started) {
-                manager.setHte(1000);
+            if (controller.getStarted()) {
+                manager.setHte(600);
             } else {
                 JOptionPane.showMessageDialog(view,
                         "De simulatie is nog niet gestart!",
@@ -64,8 +65,8 @@ public class TimeManagementPanel {
         doubleFastForwardTijd.setContentAreaFilled(false);
         doubleFastForwardTijd.setBorderPainted(false);
         doubleFastForwardTijd.addActionListener(e -> {
-            if (started) {
-                manager.setHte(1000);
+            if (controller.getStarted()) {
+                manager.setHte(250);
             } else {
                 JOptionPane.showMessageDialog(view,
                         "De simulatie is nog niet gestart!",

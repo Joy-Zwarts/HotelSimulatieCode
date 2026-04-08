@@ -33,7 +33,7 @@ public class SimulatieController implements ActionListener {
         this.model = null;
 
         this.timePanel = new TimePanel(manager, view.getTopBar());
-        this.timeManagementPanel = new TimeManagementPanel(manager, view.getTopBar(), darkModeModel, started);
+        this.timeManagementPanel = new TimeManagementPanel(manager, view.getTopBar(), darkModeModel, this);
         view.setTopbar(timePanel, timeManagementPanel);
 
         darkModeController.applyTheme();
@@ -160,5 +160,9 @@ public class SimulatieController implements ActionListener {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(view, "Fout bij laden: " + ex.getMessage());
         }
+    }
+
+    public boolean getStarted() {
+        return started;
     }
 }
