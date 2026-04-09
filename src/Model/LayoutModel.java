@@ -1,20 +1,17 @@
 package Model;
 
-import View.LayoutView;
+import Controller.GridVakjeController;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class LayoutModel {
 
-    private ArrayList<Ruimte> ruimtes;
+    // attributen
 
-    private  ArrayList<Ruimte> verplichteElementen;
-
-    private HashMap<String, GridVakje> grid;
-
-    private int vakHoogte = 60;
-    private int vakBreedte = 120;
+    private final ArrayList<RuimteModel> ruimtes;
+    private final ArrayList<RuimteModel> verplichteElementen;
+    private final HashMap<String, GridVakjeController> grid;
 
     //constructor
     public LayoutModel() {
@@ -23,10 +20,12 @@ public class LayoutModel {
         grid = new HashMap<>();
     }
 
-    public void addKamer(Ruimte ruimte) {
+    // voeg kamer toe aan lijst van kamers
+    public void addKamer(RuimteModel ruimte) {
         ruimtes.add(ruimte);
     }
 
+    // add verplichte elementen (schacht, lift, trappen & lobby)
     public void addverplichteElementen(int gridLengte, int gridBreedte) {
         String schachtDimension = "1," + gridLengte/2;
         addKamerBuitenJson("Schacht", "1,1", schachtDimension, gridLengte);
@@ -42,40 +41,43 @@ public class LayoutModel {
         addKamerBuitenJson("Lobby", lobbyPosition, lobbyDimension, gridLengte);
     }
 
+    // voeg toe aan de lijst
     public void addKamerBuitenJson(String AreaType, String position, String dimension, int gridLengte) {
         switch (AreaType) {
             case "Lift":
-                verplichteElementen.add(new Lift(AreaType, position, dimension, (gridLengte + 1) / 2, true));
+                verplichteElementen.add(new LiftModel(AreaType, position, dimension, (gridLengte + 1) / 2, true));
                 break;
             case "Schacht":
-                verplichteElementen.add(new Schacht(AreaType, position, dimension));
+                verplichteElementen.add(new SchachtModel(AreaType, position, dimension));
                 break;
             case "Trappen":
-                verplichteElementen.add(new Trappenhuis(AreaType, position, dimension));
+                verplichteElementen.add(new TrappenhuisModel(AreaType, position, dimension));
                 break;
             case "Lobby":
-                verplichteElementen.add(new Lobby(AreaType, position, dimension));
+                verplichteElementen.add(new LobbyModel(AreaType, position, dimension));
                 break;
         }
     }
 
+    // getters & setters
+
     public int getVakBreedte() {
-        return vakBreedte;
+        return 120; // voor nu nog hardcoded
     }
 
     public int getVakHoogte() {
-        return vakHoogte;
+        return 60; // voor nu nog hardcoded
     }
 
-    public HashMap<String, GridVakje> getGrid() {
+    public HashMap<String, GridVakjeController> getGrid() {
         return grid;
     }
 
-    public ArrayList<Ruimte> getRuimtes() {
+    public ArrayList<RuimteModel> getRuimtes() {
         return ruimtes;
     }
 
-    public ArrayList<Ruimte> getVerplichteElementen() {
+    public ArrayList<RuimteModel> getVerplichteElementen() {
         return verplichteElementen;
     }
 }

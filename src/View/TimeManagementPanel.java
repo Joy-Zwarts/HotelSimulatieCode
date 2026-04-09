@@ -1,25 +1,24 @@
 package View;
 
-import hotelevents.HotelEventManager;
 import Model.DarkModeModel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Objects;
 
 public class TimeManagementPanel {
+
+    // attributen
+
     private JPanel panelTimeManagement;
     private JButton normaleTijd;
     private JButton fastForwardTijd;
     private JButton doubleFastForwardTijd;
-    private HotelEventManager manager;
     private DarkModeModel darkMode;
-    private boolean started;
-    private HotelSimulatieView view;
 
-    public TimeManagementPanel(HotelEventManager manager, JPanel panelRechts, DarkModeModel darkMode, Boolean started) {
-        this.manager = manager;
+    // constructor
+    public TimeManagementPanel(JPanel panelRechts, DarkModeModel darkMode) {
         this.darkMode = darkMode;
-        this.started = started;
 
         // panel instellen
         panelTimeManagement = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
@@ -27,77 +26,30 @@ public class TimeManagementPanel {
         panelTimeManagement.setPreferredSize(new Dimension(525, 50));
 
         // buttons aanmaken
-
         normaleTijd = new JButton(laadIcon("play.png", 45, 45));
         normaleTijd.setOpaque(false);
         normaleTijd.setContentAreaFilled(false);
         normaleTijd.setBorderPainted(false);
-        normaleTijd.addActionListener(e -> {
-            if (started) {
-                manager.setHte(1000);
-            } else {
-                JOptionPane.showMessageDialog(view,
-                        "De simulatie is nog niet gestart!",
-                        "Error",
-                        JOptionPane.ERROR_MESSAGE
-                );
-            }
-        });
+
         fastForwardTijd = new JButton(laadIcon("fastForward.png", 68, 45));
         fastForwardTijd.setOpaque(false);
         fastForwardTijd.setContentAreaFilled(false);
         fastForwardTijd.setBorderPainted(false);
-        fastForwardTijd.addActionListener(e -> {
-            if (started) {
-                manager.setHte(1000);
-            } else {
-                JOptionPane.showMessageDialog(view,
-                        "De simulatie is nog niet gestart!",
-                        "Error",
-                        JOptionPane.ERROR_MESSAGE
-                );
-            }
-        });
 
         doubleFastForwardTijd = new JButton(laadIcon("doubleFastForward.png", 83, 45));
         doubleFastForwardTijd.setOpaque(false);
         doubleFastForwardTijd.setContentAreaFilled(false);
         doubleFastForwardTijd.setBorderPainted(false);
-        doubleFastForwardTijd.addActionListener(e -> {
-            if (started) {
-                manager.setHte(1000);
-            } else {
-                JOptionPane.showMessageDialog(view,
-                        "De simulatie is nog niet gestart!",
-                        "Error",
-                        JOptionPane.ERROR_MESSAGE
-                );
-            }
-        });
 
-        // Buttons toevoegen aan panel
+        // buttons toevoegen aan panel
         panelTimeManagement.add(normaleTijd);
         panelTimeManagement.add(fastForwardTijd);
         panelTimeManagement.add(doubleFastForwardTijd);
 
-        // Panel toevoegen aan parent
         panelRechts.add(panelTimeManagement);
     }
 
-    // Wissel icons voor dark/light mode
-    public void changeIcons() {
-        if (darkMode.isDarkMode()) {
-            normaleTijd.setIcon(laadIcon("playDarkMode.png", 45, 45));
-            fastForwardTijd.setIcon(laadIcon("fastForwardDarkMode.png", 68, 45));
-            doubleFastForwardTijd.setIcon(laadIcon("doubleFastForwardDarkMode.png", 83, 45));
-        } else {
-            normaleTijd.setIcon(laadIcon("play.png", 45, 45));
-            fastForwardTijd.setIcon(laadIcon("fastForward.png", 68, 45));
-            doubleFastForwardTijd.setIcon(laadIcon("doubleFastForward.png", 83, 45));
-        }
-    }
-
-    // Icon laden vanaf resources
+    // icon laden
     private ImageIcon laadIcon(String bestand, int width, int height) {
         java.net.URL url = getClass().getResource("/Res/" + bestand);
         if (url == null) {
@@ -109,8 +61,46 @@ public class TimeManagementPanel {
         return new ImageIcon(scaled);
     }
 
-    // Panel getter
+    // switch op dark / light mode
+    public void setTimeButtons() {
+        this.panelTimeManagement.removeAll(); // oude inhoud verwijderen
+
+        ImageIcon normaleTijdIcon;
+        ImageIcon fastForwardTijdIcon;
+        ImageIcon doubleFastForwardTijdIcon;
+        if (darkMode.isDarkMode()) {
+            normaleTijdIcon = new ImageIcon(Objects.requireNonNull(laadIcon("playDarkMode.png", 45, 45)).getImage());
+            fastForwardTijdIcon = new ImageIcon(Objects.requireNonNull(laadIcon("fastForwardDarkMode.png", 55, 45)).getImage());
+            doubleFastForwardTijdIcon = new ImageIcon(Objects.requireNonNull(laadIcon("doubleFastForwardDarkMode.png", 65, 45)).getImage());
+        } else {
+            normaleTijdIcon = new ImageIcon(Objects.requireNonNull(laadIcon("play.png", 45, 45)).getImage());
+            fastForwardTijdIcon = new ImageIcon(Objects.requireNonNull(laadIcon("fastForward.png", 55, 45)).getImage());
+            doubleFastForwardTijdIcon = new ImageIcon(Objects.requireNonNull(laadIcon("doubleFastForward.png", 65, 45)).getImage());
+        }
+
+        normaleTijd.setIcon(normaleTijdIcon);
+        fastForwardTijd.setIcon(fastForwardTijdIcon);
+        doubleFastForwardTijd.setIcon(doubleFastForwardTijdIcon);
+        this.panelTimeManagement.add(normaleTijd);
+        this.panelTimeManagement.add(fastForwardTijd);
+        this.panelTimeManagement.add(doubleFastForwardTijd);
+
+        this.panelTimeManagement.revalidate();
+        this.panelTimeManagement.repaint();
+    }
+
+    // getters & setters
+
     public JPanel getTimeManagementPanel() {
         return panelTimeManagement;
+    }
+    public JButton getNormaleTijd() {
+        return normaleTijd;
+    }
+    public JButton getFastForwardTijd() {
+        return fastForwardTijd;
+    }
+    public JButton getDoubleFastForwardTijd() {
+        return doubleFastForwardTijd;
     }
 }

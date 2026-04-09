@@ -1,10 +1,10 @@
 package Model;
 
-public class Lift extends Ruimte {
+public class LiftModel extends RuimteModel {
     private int verdieping;
     private boolean beschikbaar;
 
-    public Lift(String areaType, String position, String dimension, int verdieping, boolean beschikbaar) {
+    public LiftModel(String areaType, String position, String dimension, int verdieping, boolean beschikbaar) {
         super(areaType, position, dimension);
         this.verdieping = verdieping;
         this.beschikbaar = beschikbaar;

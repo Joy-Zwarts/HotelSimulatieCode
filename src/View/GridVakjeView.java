@@ -1,0 +1,129 @@
+package View;
+
+import Model.KamerModel;
+import Model.RoomClassificatie;
+import Model.RuimteModel;
+
+import javax.swing.*;
+import javax.swing.border.Border;
+import java.awt.*;
+
+public class GridVakjeView {
+
+    // attributen
+    private final JPanel vakjePanel;
+
+    // constructor
+    public GridVakjeView(int x, int y, int breedte, int hoogte) {
+        vakjePanel = new JPanel();
+        vakjePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        vakjePanel.setBackground(Color.WHITE);
+        vakjePanel.setBounds(x * breedte, y * hoogte, breedte, hoogte);
+    }
+
+    // zet icoontjes links boven
+    public void zetInhoud(RuimteModel ruimte, boolean isLinksboven) {
+
+        setColor(ruimte);
+
+        boolean toonIcon = "Trappen".equals(ruimte.getAreaType()) || isLinksboven;
+
+        if (toonIcon) {
+            ImageIcon icon = null;
+
+            if ("Room".equals(ruimte.getAreaType())) {
+                icon = bepaalSterrenIcon(((KamerModel) ruimte).getClassification());
+            } else {
+                icon = bepaalIcon(ruimte.getAreaType());
+            }
+
+            vakjePanel.removeAll(); // oude iconen verwijderen
+
+            if (icon != null) {
+                JLabel iconLabel = new JLabel(icon);
+                vakjePanel.setLayout(new BorderLayout());
+                vakjePanel.add(iconLabel, BorderLayout.NORTH);
+            }
+
+            vakjePanel.revalidate();
+            vakjePanel.repaint();
+        }
+    }
+
+    public void clearInhoud() {
+        vakjePanel.removeAll();
+        vakjePanel.repaint();
+    }
+
+    // zet de border om de kamers heen
+    public void setBorder(boolean top, boolean left, boolean bottom, boolean right) {
+        int topDikte = top ? 1 : 0;
+        int leftDikte = left ? 1 : 0;
+        int bottomDikte = bottom ? 1 : 0;
+        int rightDikte = right ? 1 : 0;
+
+        Border vakjeRand = BorderFactory.createMatteBorder(
+                topDikte, leftDikte, bottomDikte, rightDikte, Color.BLACK);
+
+        vakjePanel.setBorder(vakjeRand);
+    }
+
+    // kleur het vakje in gebaseerd op de inhoud
+    private void setColor(RuimteModel ruimte) {
+        switch (ruimte.getAreaType()) {
+            case "Room": vakjePanel.setBackground(new Color(0xD4C2A8)); break;
+            case "Lift": vakjePanel.setBackground(new Color(0x8EA570)); break;
+            case "Lobby": vakjePanel.setBackground(new Color(0xCDA12D)); break;
+            case "Restaurant": vakjePanel.setBackground(new Color(0xC1864F)); break;
+            case "Fitness": vakjePanel.setBackground(new Color(0xC1864F)); break;
+            case "Cinema": vakjePanel.setBackground(new Color(0xC1864F)); break;
+            case "Schacht": vakjePanel.setBackground(Color.DARK_GRAY); break;
+            case "Trappen": vakjePanel.setBackground(new Color(0x759DB6)); break;
+            default: vakjePanel.setBackground(Color.WHITE); break;
+        }
+    }
+
+    private ImageIcon laadIcon(String bestand) {
+        java.net.URL url = getClass().getResource("/Res/" + bestand);
+
+        if (url == null) {
+            System.out.println("Niet gevonden: " + bestand);
+            return null;
+        }
+
+        return new ImageIcon(url);
+    }
+
+    // bepaal welk icoon er geplaatst moet worden in het vakje
+    private ImageIcon bepaalIcon(String areaType) {
+        switch (areaType) {
+            case "Cinema": return laadIcon("Cinema.png");
+            case "Fitness": return laadIcon("Fitness.png");
+            case "Lift": return laadIcon("Lift.png");
+            case "Trappen": return laadIcon("Trap.png");
+            case "Restaurant": return laadIcon("Restaurant.png");
+            case "Lobby": return laadIcon("Lobby.png");
+            default: return null;
+        }
+    }
+
+    // als het een kamer is moet het een icoon kiezen gebaseerd op het aantal sterren van een kamer
+    private ImageIcon bepaalSterrenIcon(RoomClassificatie classificatie) {
+        if (classificatie == null) return null;
+
+        switch (classificatie) {
+            case eenSter: return laadIcon("eenSter.png");
+            case tweeSterren: return laadIcon("tweeSter.png");
+            case drieSterren: return laadIcon("drieSter.png");
+            case vierSterren: return laadIcon("vierSter.png");
+            case vijfSterren: return laadIcon("vijfSter.png");
+            default: return null;
+        }
+    }
+
+    // getters & setters
+
+    public JPanel getVakjePanel() {
+        return vakjePanel;
+    }
+}

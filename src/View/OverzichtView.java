@@ -1,18 +1,21 @@
 package View;
 
-import Model.Gast;
+import Model.GastModel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class OverzichtScherm {
-    private ArrayList<Gast> gasten;
-    private int tijd;
+public class OverzichtView {
 
+    // attributen
+
+    private ArrayList<GastModel> gasten;
+    private int tijd;
     public static JFrame pauseFrame = new JFrame();
 
-    public OverzichtScherm() {
+    // constructor
+    public OverzichtView() {
         pauseFrame.setSize(400, 200);
 
         JPanel panel = new JPanel(new BorderLayout());
@@ -25,16 +28,13 @@ public class OverzichtScherm {
         panel.add(pause, BorderLayout.CENTER);
     }
 
-    public OverzichtScherm(ArrayList<Gast> gasten, int tijd) {
-        this.gasten = gasten;
-        this.tijd = tijd;
-    }
+    // getters & setters
 
-    public ArrayList<Gast> getGasten() {
+    public ArrayList<GastModel> getGasten() {
         return this.gasten;
     }
 
-    public void addGasten(ArrayList<Gast> gasten) {
+    public void addGasten(ArrayList<GastModel> gasten) {
         this.gasten = gasten;
     }
 

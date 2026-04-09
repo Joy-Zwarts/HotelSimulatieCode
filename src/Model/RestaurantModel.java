@@ -1,9 +1,9 @@
 package Model;
 
-public class Restaurant extends Ruimte {
+public class RestaurantModel extends RuimteModel {
     private long capacity;
 
-    public Restaurant(String areaType, String position, String dimension, long capacity) {
+    public RestaurantModel(String areaType, String position, String dimension, long capacity) {
         super(areaType, position, dimension);
         this.capacity = capacity;
     }

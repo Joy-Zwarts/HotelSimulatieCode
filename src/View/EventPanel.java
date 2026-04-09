@@ -8,38 +8,35 @@ import hotelevents.HotelEventListener;
 import hotelevents.HotelEventManager;
 import hotelevents.HotelEventType;
 
-public class EventPrint implements HotelEventListener {
+public class EventPanel implements HotelEventListener {
 
-    private JPanel panel;          // panel met event labels
-    private JPanel panelRechts;    // rechter panel
+    private JPanel container;
+    private JPanel content;
     private JScrollPane scrollbar;
-    private JLabel timeLabel;
+
     private HotelEventManager manager;
     private int time;
 
-    public EventPrint(HotelEventManager manager) {
+    public EventPanel(HotelEventManager manager) {
         this.manager = manager;
-        time = 0;
+        this.time = 0;
 
-        panelRechts = new JPanel();
+        content = new JPanel();
+        content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
 
-        // panel voor events
-        panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-
-        // scroll bar voor events
-        scrollbar = new JScrollPane(panel);
-        scrollbar.setPreferredSize(new Dimension(525, 500));
+        // scrollbar
+        scrollbar = new JScrollPane(content);
         scrollbar.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-        panelRechts.setLayout(new BorderLayout());
-        panelRechts.add(scrollbar, BorderLayout.CENTER);
+        container = new JPanel(new BorderLayout());
+        container.setPreferredSize(new Dimension(300, 600));
+        container.add(scrollbar, BorderLayout.CENTER);
 
         manager.register(this);
     }
 
     public JPanel getPanelRechts() {
-        return panelRechts;
+        return container;
     }
 
     @Override
@@ -50,17 +47,20 @@ public class EventPrint implements HotelEventListener {
 
     public void printEvent(HotelEvent hotelEvent) {
         if (hotelEvent.getEventType() != HotelEventType.NONE) {
+
             JLabel label = new JLabel(
                     "Time: " + hotelEvent.getTime() +
                             " | Type: " + hotelEvent.getEventType() +
                             " | GuestID: " + hotelEvent.getGuestId() +
                             " | Data: " + hotelEvent.getData()
             );
-            label.setAlignmentX(Component.LEFT_ALIGNMENT);
-            panel.add(label);
 
-            panel.revalidate();
-            panel.repaint();
+            label.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+            content.add(label);
+
+            content.revalidate();
+            content.repaint();
 
             JScrollBar vertical = scrollbar.getVerticalScrollBar();
             vertical.setValue(vertical.getMaximum());

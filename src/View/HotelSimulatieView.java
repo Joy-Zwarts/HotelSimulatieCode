@@ -7,6 +7,9 @@ import java.awt.*;
 import java.util.Objects;
 
 public class HotelSimulatieView extends JFrame {
+
+    // attributen
+
     private JPanel leftPanel;
     private JPanel middlePanel;
     private JPanel legendaPanel;
@@ -17,7 +20,6 @@ public class HotelSimulatieView extends JFrame {
     private JPanel logoPanel;
     private JPanel timeManagementPanel;
     private ImageIcon legenda;
-
     private JButton loadScenarioButton;
     private JButton loadLayoutButton;
     private JButton startSimulationButton;
@@ -25,6 +27,8 @@ public class HotelSimulatieView extends JFrame {
     private JButton settingsButton;
     private DarkModeModel darkMode;
 
+
+    // constructor
     public HotelSimulatieView(DarkModeModel darkMode) {
         this.darkMode = darkMode;
         setTitle("Hotel Simulator - Sjohn Karma's Hotels");
@@ -41,6 +45,7 @@ public class HotelSimulatieView extends JFrame {
         setVisible(true);
     }
 
+    // maak topbar aan
     private void initTopbar() {
         topbar = new JPanel();
         topbar.setLayout(new BoxLayout(topbar, BoxLayout.X_AXIS)); // horizontale rij
@@ -48,24 +53,24 @@ public class HotelSimulatieView extends JFrame {
         topbar.setPreferredSize(new Dimension(1500, 130));
         topbar.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
-        // Tijd panel
+        // tijd panel
         timePanel = new JPanel(new GridBagLayout()); // label perfect centreren
         timePanel.setPreferredSize(new Dimension(495, 130));
 
-        // Logo panel
+        // logo panel
         logoPanel = new JPanel(new GridBagLayout());
         logoPanel.setPreferredSize(new Dimension(495, 130));
 
-        // Time management knoppen panel
+        // time management knoppen panel
         timeManagementPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 35));
         timeManagementPanel.setPreferredSize(new Dimension(495, 130));
 
-        // Logo toevoegen
+        // logo toevoegen
         ImageIcon hotelLogo = new ImageIcon(Objects.requireNonNull(getClass().getResource("/Res/Logo.png")));
         JLabel hotelLogoLabel = new JLabel(hotelLogo);
         logoPanel.add(hotelLogoLabel);
 
-        // Panels toevoegen aan topbar
+        // panels toevoegen aan topbar
         topbar.add(timePanel);
         topbar.add(logoPanel);
         topbar.add(timeManagementPanel);
@@ -73,6 +78,7 @@ public class HotelSimulatieView extends JFrame {
         add(topbar, BorderLayout.NORTH);
     }
 
+    // maak liker panel aan
     private void initLeftPanel() {
         leftPanel = new JPanel();
         leftPanel.setPreferredSize(new Dimension(210, 670));
@@ -80,11 +86,15 @@ public class HotelSimulatieView extends JFrame {
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
         leftPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
+        // verschillende buttons
+
         loadScenarioButton = new JButton("Load Scenario");
         loadLayoutButton = new JButton("Load Layout");
         startSimulationButton = new JButton("Start Simulation");
         stopSimulationButton = new JButton("Stop Simulation");
         settingsButton = new JButton("Settings");
+
+        // voeg toe aan het linker panel met spacing tussen de knoppen
 
         leftPanel.add(Box.createVerticalStrut(20));
         leftPanel.add(loadScenarioButton);
@@ -100,6 +110,7 @@ public class HotelSimulatieView extends JFrame {
         add(leftPanel, BorderLayout.WEST);
     }
 
+    // maak panel in het midden
     private void initMiddlePanel() {
         middlePanel = new JPanel(new BorderLayout());
         setBackground(UIManager.getColor("Panel.background"));
@@ -111,9 +122,10 @@ public class HotelSimulatieView extends JFrame {
         add(middlePanel, BorderLayout.CENTER);
     }
 
+    // maak panel aan voor de layout in het midden
     private void initLayoutPanel() {
         layoutPanel = new JPanel(new BorderLayout());
-        layoutPanel.putClientProperty("noTheme", true);
+        layoutPanel.putClientProperty("noTheme", true); // pas geen dark mode toggle toe aan deze panel
         layoutPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         setBackground(UIManager.getColor("Panel.background"));
         layoutPanel.setPreferredSize(new Dimension(960, 540));
@@ -125,6 +137,7 @@ public class HotelSimulatieView extends JFrame {
         middlePanel.add(layoutPanel, BorderLayout.CENTER);
     }
 
+    // maak panel aan voor de legenda in het midden
     private void initLegendaPanel() {
         legendaPanel = new JPanel(new FlowLayout());
         legendaPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
@@ -137,6 +150,7 @@ public class HotelSimulatieView extends JFrame {
         middlePanel.add(legendaPanel, BorderLayout.SOUTH);
     }
 
+    // maak rechter panel aan
     private void initRightPanel() {
         rightPanel = new JPanel(new BorderLayout());
         rightPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
@@ -150,7 +164,7 @@ public class HotelSimulatieView extends JFrame {
         add(rightPanel, BorderLayout.EAST);
     }
 
-    // 🔹 Methode om layout dynamisch te vervangen
+    // vervang de inhoud van de panels
     public void setLayoutView(JPanel newLayout) {
         layoutPanel.removeAll();
         layoutPanel.add(newLayout, BorderLayout.CENTER);
@@ -165,21 +179,19 @@ public class HotelSimulatieView extends JFrame {
         this.timePanel.setLayout(new GridBagLayout());
         this.timePanel.add(timeLabel);
 
-
         JPanel managementPanel = timeManagementPanelObj.getTimeManagementPanel();
         this.timeManagementPanel.removeAll();
         this.timeManagementPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 35));
         this.timeManagementPanel.add(managementPanel);
 
-
         topbar.revalidate();
         topbar.repaint();
     }
 
-    // 🔹 Methode om legenda te vervangen
     public void setLegendaView(JPanel legendaPanel) {
-        this.legendaPanel.removeAll(); // oude inhoud verwijderen
+        this.legendaPanel.removeAll();
 
+        // kies legenda gebaseerd op de dark mode
         ImageIcon legendaIcon;
         if (darkMode.isDarkMode()) {
             legendaIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("/Res/LegendaDark.png")));
@@ -194,7 +206,6 @@ public class HotelSimulatieView extends JFrame {
         this.legendaPanel.repaint();
     }
 
-    // 🔹 Methode om event panel rechts te vervangen
     public void setRightView(JPanel newRightPanel) {
         rightPanel.removeAll();
         rightPanel.add(newRightPanel, BorderLayout.CENTER);
@@ -202,7 +213,8 @@ public class HotelSimulatieView extends JFrame {
         rightPanel.repaint();
     }
 
-    // 🔹 Getters voor controller
+    // getters & setters
+
     public JButton getLoadScenarioButton() {
         return loadScenarioButton;
     }
