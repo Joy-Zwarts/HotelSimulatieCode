@@ -130,7 +130,7 @@ public class HotelSimulatieView extends JFrame {
         setBackground(UIManager.getColor("Panel.background"));
         layoutPanel.setPreferredSize(new Dimension(960, 540));
 
-        JLabel layoutLabel = new JLabel("Hier komt de hotel Layout", SwingConstants.CENTER);
+        JLabel layoutLabel = new JLabel("Klik op load layout om een layout te selecteren", SwingConstants.CENTER);
         layoutLabel.setFont(new Font("Arial", Font.BOLD, 24));
 
         layoutPanel.add(layoutLabel, BorderLayout.CENTER);
@@ -212,6 +212,8 @@ public class HotelSimulatieView extends JFrame {
         rightPanel.revalidate();
         rightPanel.repaint();
     }
+
+
 
     // getters & setters
 

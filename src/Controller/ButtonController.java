@@ -1,6 +1,7 @@
 package Controller;
 
 import Model.LayoutModel;
+import View.EventPanel;
 import View.HotelSimulatieView;
 import hotelevents.HotelEventManager;
 
@@ -18,6 +19,7 @@ public class ButtonController implements ActionListener {
     private final LayoutLoader layoutLoader;
     private LayoutModel model;
     private final SettingsController settingsController;
+    private EventPanel eventPanel;
 
     // constructor
 
@@ -61,9 +63,13 @@ public class ButtonController implements ActionListener {
         else if (source == view.getStartSimulationButton()) {
             if (model == null) { // als er nog geen layout is geupload
                 JOptionPane.showMessageDialog(view, "Load eerst een layout bestand", "Error", JOptionPane.ERROR_MESSAGE);
+
             } else if (!(simulatieManager.getStarted())) { // als het niet al is gestart
+                eventPanel = new EventPanel(eventManager);
+                view.setRightView(eventPanel.getPanelRechts());
                 eventManager.start(simulatieManager.getScenario()); // start het gekozen scenario
                 simulatieManager.setStarted(true);
+
             } else if (simulatieManager.getStarted()) { // als het al is gestart
                 JOptionPane.showMessageDialog(view, "De simulatie is al gestart!", "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -77,7 +83,7 @@ public class ButtonController implements ActionListener {
         // stop simulation button
         else if (source == view.getStopSimulationButton()) {
             if (simulatieManager.getStarted()) { // als de simulatie wel al is gestart
-                eventManager.stop(); // stop simulatie
+                eventManager.stop();// stop simulatie
                 simulatieManager.setStarted(false);
             } else if (!(simulatieManager.getStarted())) { // als de simulatie niet al is gestart
                 JOptionPane.showMessageDialog(view, "De simulatie is nog niet gestart!", "Error", JOptionPane.ERROR_MESSAGE);
