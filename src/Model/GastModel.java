@@ -1,11 +1,13 @@
 package Model;
 
 public class GastModel extends PersoonModel {
-    private RoomClassificatie wensen;
+    private final RoomClassificatie wensen;
     private KamerModel kamer;
+    private int gastID;
 
-    public GastModel(String locatie, String targetLocatie, RoomClassificatie wensen, KamerModel kamer) {
+    public GastModel(int gastId, String locatie, String targetLocatie, RoomClassificatie wensen, KamerModel kamer) {
         super(locatie, targetLocatie);
+        this.gastID = gastId;
         this.wensen = wensen;
         this.kamer = kamer;
     }
@@ -44,5 +46,9 @@ public class GastModel extends PersoonModel {
 
     public RoomClassificatie getWensen() {
         return this.wensen;
+    }
+
+    public int getGastID() {
+        return this.gastID;
     }
 }

@@ -1,5 +1,7 @@
 package Model;
 
+import java.util.ArrayList;
+
 public class PersoonModel {
     private String targetLocatie;
     private String locatie;
@@ -10,5 +12,18 @@ public class PersoonModel {
     }
 
     public void bewegen() {
+    }
+
+    public String getTargetLocatie() {
+        return targetLocatie;
+    }
+    public void setTargetLocatie(String targetLocatie) {
+        this.targetLocatie = targetLocatie;
+    }
+    public String getLocatie() {
+        return locatie;
+    }
+    public void setLocatie(String locatie) {
+        this.locatie = locatie;
     }
 }

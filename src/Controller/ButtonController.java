@@ -19,16 +19,17 @@ public class ButtonController implements ActionListener {
     private final LayoutLoader layoutLoader;
     private LayoutModel model;
     private final SettingsController settingsController;
-    private EventPanel eventPanel;
+    private final PauseController pauseController;
 
     // constructor
 
-    public ButtonController(HotelSimulatieView hotelView, SimulatieController hotelSimulatieManager, HotelEventManager hotelEventManager, LayoutLoader layoutLoader, SettingsController SettingsController) {
+    public ButtonController(HotelSimulatieView hotelView, SimulatieController hotelSimulatieManager, HotelEventManager hotelEventManager, LayoutLoader layoutLoader, SettingsController SettingsController, PauseController PauseController) {
         this.simulatieManager = hotelSimulatieManager;
         this.eventManager = hotelEventManager;
         this.view = hotelView;
         this.layoutLoader = layoutLoader;
         this.settingsController = SettingsController;
+        this.pauseController = PauseController;
         init();
     }
 
@@ -65,7 +66,7 @@ public class ButtonController implements ActionListener {
                 JOptionPane.showMessageDialog(view, "Load eerst een layout bestand", "Error", JOptionPane.ERROR_MESSAGE);
 
             } else if (!(simulatieManager.getStarted())) { // als het niet al is gestart
-                eventPanel = new EventPanel(eventManager);
+                EventPanel eventPanel = new EventPanel(eventManager);
                 view.setRightView(eventPanel.getPanelRechts());
                 eventManager.start(simulatieManager.getScenario()); // start het gekozen scenario
                 simulatieManager.setStarted(true);

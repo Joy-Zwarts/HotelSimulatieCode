@@ -27,7 +27,15 @@ public class SimulatieController {
 
         LayoutModel model = null;
 
-        LayoutLoader layoutLoader = new LayoutLoader(manager, view, model);
+        PauseController pauseController = new PauseController(manager, null);
+
+        OverzichtView overzichtView = new OverzichtView(view, pauseController);
+
+        pauseController.setView(overzichtView);
+
+        PersoonController persoonController = new PersoonController(manager, overzichtView);
+
+        LayoutLoader layoutLoader = new LayoutLoader(manager, view, model, pauseController, view);
 
         TimePanel timePanel = new TimePanel(manager, view.getTopBar());
 
@@ -39,7 +47,7 @@ public class SimulatieController {
 
         view.setTopbar(timePanel, timeManagementPanel);
 
-        ButtonController buttonManager = new ButtonController(view, this, manager, layoutLoader, settingsController);
+        ButtonController buttonManager = new ButtonController(view, this, manager, layoutLoader, settingsController, pauseController);
     }
 
     // getters & setters

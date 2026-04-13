@@ -3,9 +3,10 @@ package Controller;
 import Model.GridVakjeModel;
 import Model.RuimteModel;
 import View.GridVakjeView;
-import View.OverzichtView;
+import View.HotelSimulatieView;
 import hotelevents.HotelEventManager;
 
+import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -14,22 +15,29 @@ public class GridVakjeController {
     // attributen
 
     private GridVakjeModel model;
-    private GridVakjeView view;
+    private GridVakjeView gridView;
     private HotelEventManager manager;
+    private PauseController pauseController;
+    private HotelSimulatieView simulatieView;
 
-    // constructor
-    public GridVakjeController(GridVakjeModel model, GridVakjeView view, HotelEventManager manager) {
+    public GridVakjeController(GridVakjeModel model,
+                               GridVakjeView view,
+                               HotelEventManager manager,
+                               PauseController pauseController,
+                               HotelSimulatieView SimulatieView) {
+
         this.model = model;
-        this.view = view;
+        this.gridView = view;
         this.manager = manager;
-        OverzichtView overzichtView = new OverzichtView();
+        this.pauseController = pauseController;
+        this.simulatieView = SimulatieView;
 
         init();
     }
 
     // als er op het vakje wordt geklikt roep handle click aan
     private void init() {
-        view.getVakjePanel().addMouseListener(new MouseAdapter() {
+        gridView.getVakjePanel().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 handleClick();
@@ -41,15 +49,15 @@ public class GridVakjeController {
     private void handleClick() {
         RuimteModel ruimte = model.getRuimte();
 
-        if (ruimte != null && ruimte.getAreaType().equals("Lobby")) {
-            System.out.println("pause");
-
-            manager.pauze();
-
-            boolean paused = !model.isPaused();
-            model.setPaused(paused);
-
-            OverzichtView.setVisibility(paused); // laat het overzicht scherm zien
+        if (pauseController.isPaused()) {
+            JOptionPane.showMessageDialog(simulatieView, "Hervat de simulatie eerst", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            if (ruimte != null && "Lobby".equals(ruimte.getAreaType())) {
+                System.out.println("pause toggle");
+                SwingUtilities.invokeLater(() -> {
+                    pauseController.pause();
+                });
+            }
         }
 
         System.out.println("Geklikt op vakje: " + ruimte);
@@ -61,11 +69,11 @@ public class GridVakjeController {
         return  model;
     }
 
-    public GridVakjeView getView() {
-        return view;
+    public GridVakjeView getGridView() {
+        return gridView;
     }
 
     public void updateView() {
-        view.getVakjePanel().repaint();
+        gridView.getVakjePanel().repaint();
     }
 }

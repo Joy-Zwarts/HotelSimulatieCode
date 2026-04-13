@@ -1,6 +1,8 @@
 package View;
 
 import Controller.GridVakjeController;
+import Controller.PauseController;
+import Model.GridVakjeModel;
 import Model.RuimteModel;
 import hotelevents.HotelEventManager;
 
@@ -15,15 +17,18 @@ public class LayoutView {
 
     private JPanel hotelPanel;
     private HashMap<String, GridVakjeController> grid;
-
     private int gridBreedte;
     private int gridLengte;
-
     private final HotelEventManager manager;
+    private final PauseController pauseController;
+    private HotelSimulatieView simulatieView;
 
     // constructor
-    public LayoutView(HotelEventManager manager) {
+
+    public LayoutView(HotelEventManager manager, PauseController pauseController, HotelSimulatieView SimulatieView) {
         this.manager = manager;
+        this.pauseController = pauseController;
+        this.simulatieView = SimulatieView;
     }
 
     // maak de gridlayout aan van de hotelweergave
@@ -40,16 +45,12 @@ public class LayoutView {
             for (int x = 0; x < gridBreedte; x++) {
 
                 // maak een grid vakje per cel
-                GridVakjeController controller = new GridVakjeController(
-                        new Model.GridVakjeModel(x, y, vakBreedte, vakHoogte),
-                        new GridVakjeView(x, y, vakBreedte, vakHoogte),
-                        manager
-                );
+                GridVakjeController controller = new GridVakjeController(new GridVakjeModel(x, y, vakBreedte, vakHoogte), new GridVakjeView(x, y, vakBreedte, vakHoogte), manager, pauseController, simulatieView);
 
                 grid.put(x + "," + y, controller);
 
                 // voeg een nieuw panel toe
-                hotelPanel.add(controller.getView().getVakjePanel());
+                hotelPanel.add(controller.getGridView().getVakjePanel());
             }
         }
     }
@@ -99,7 +100,7 @@ public class LayoutView {
 
                         vak.getModel().setlinksboven(x == startX && y == startY);
 
-                        vak.getView().zetInhoud(ruimte, vak.getModel().islinksboven());
+                        vak.getGridView().zetInhoud(ruimte, vak.getModel().islinksboven());
                         vak.updateView();
 
                         // borders
@@ -108,7 +109,7 @@ public class LayoutView {
                         boolean left = (x == startX);
                         boolean right = (x == startX + w - 1);
 
-                        vak.getView().setBorder(top, left, bottom, right);
+                        vak.getGridView().setBorder(top, left, bottom, right);
                     }
                 }
             }
