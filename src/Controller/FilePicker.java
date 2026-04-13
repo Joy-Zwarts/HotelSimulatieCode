@@ -1,5 +1,7 @@
 package Controller;
 
+import Model.FilePickerFilter;
+
 import javax.swing.*;
 import java.io.File;
 
@@ -14,14 +16,17 @@ public class FilePicker {
         //kijk of er een bestand is gekozen
         if (resultaat == JFileChooser.APPROVE_OPTION) {
             File file = chooser.getSelectedFile();
-            //filter op non json files
-            if ( !file.getName().toLowerCase().endsWith(".json")) {
-            System.out.println("kies een ander bestand.");
-            //JOptionPane.showMessageDialog(view, "Alleen Json files toegestaan", "Error", JOptionPane.ERROR_MESSAGE);
-            return null;
+
+            // gebruik je filter methode
+            File gefilterd = FilePickerFilter.filterJsonFile(file);
+
+            if (gefilterd == null) {
+                System.out.println("Kies een ander bestand.");
+                return null;
             }
-            System.out.println("Gekozen bestand: " + file.getAbsolutePath());
-            return file;
+            System.out.println("Gekozen bestand: " + gefilterd.getAbsolutePath());
+            return gefilterd;
+
         } else {
             System.out.println("Geen bestand gekozen.");
             return null;
