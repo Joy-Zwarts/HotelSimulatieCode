@@ -12,16 +12,19 @@ import java.io.File;
 public class LayoutLoader {
 
     // attributen
-
-    HotelEventManager manager;
-    HotelSimulatieView view;
-    LayoutModel model;
+    private final HotelEventManager manager;
+    private final HotelSimulatieView view;
+    private LayoutModel model;
+    private final PauseController pauseController;
+    private HotelSimulatieView simulatieView;
 
     // constructor
-    public LayoutLoader(HotelEventManager manager, HotelSimulatieView view, LayoutModel model) {
+    public LayoutLoader(HotelEventManager manager, HotelSimulatieView view, LayoutModel model, PauseController pauseController, HotelSimulatieView SimulatieView) {
         this.manager = manager;
         this.view = view;
         this.model = model;
+        this.pauseController = pauseController;
+        this.simulatieView = SimulatieView;
     }
 
     // load de layout (basically wat eerst in main stond)
@@ -32,9 +35,8 @@ public class LayoutLoader {
 
             LayoutParser parser = new LayoutParser();
             this.model = parser.parse(gekozenBestand.getAbsolutePath()); // parse de gekozen file
-            LayoutModel model = this.model;
 
-            LayoutView layoutView = new LayoutView(manager);
+            LayoutView layoutView = new LayoutView(manager, pauseController, simulatieView);
             EventPanel eventPrint = new EventPanel(manager);
 
             new LayoutController(model, layoutView);

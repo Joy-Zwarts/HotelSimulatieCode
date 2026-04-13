@@ -7,7 +7,6 @@ public class GridVakjeModel {
     private final int x;
     private final int y;
     private RuimteModel ruimte;
-    private boolean paused;
     private final int breedte;
     private final int hoogte;
     private boolean linksboven = false;
@@ -18,7 +17,6 @@ public class GridVakjeModel {
         this.y = y;
         this.breedte = breedte;
         this.hoogte = hoogte;
-        this.paused = false;
     }
 
     // getters & setters
@@ -29,14 +27,6 @@ public class GridVakjeModel {
 
     public RuimteModel getRuimte() {
         return ruimte;
-    }
-
-    public boolean isPaused() {
-        return paused;
-    }
-
-    public void setPaused(boolean paused) {
-        this.paused = paused;
     }
 
     public int getX() {

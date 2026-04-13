@@ -16,6 +16,7 @@ public class ScenarioPicker implements ActionListener {
     public ScenarioPicker() {
         scenarioPickerView = new ScenarioPickerView();
         scenarioPickerView.getConfirmButton().addActionListener(this);
+        selected = "Scenario 1";
     }
 
     // als er wordt geklikt op de confirm button, registreer het gekozen scenario
@@ -23,7 +24,11 @@ public class ScenarioPicker implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         selected = (String) scenarioPickerView.getComboBox().getSelectedItem();
         System.out.println("Selected scenario: " + selected);
-        scenarioPickerView.close(); // close de frame na confirm
+
+        int scenarioNumber = getSelected();
+        System.out.println("Scenario number: " + scenarioNumber);
+
+        scenarioPickerView.close(); // close frame na de keuze
     }
 
     // geef het nummer van het scenario door
