@@ -5,6 +5,8 @@ import Model.LayoutModel;
 import View.*;
 import hotelevents.HotelEventManager;
 
+import java.util.ArrayList;
+
 public class SimulatieController {
 
     // attributen
@@ -34,6 +36,8 @@ public class SimulatieController {
         pauseController.setView(overzichtView);
 
         PersoonController persoonController = new PersoonController(manager, overzichtView);
+
+        ReceptieController receptieController = new ReceptieController();
 
         LayoutLoader layoutLoader = new LayoutLoader(manager, view, model, pauseController, view);
 

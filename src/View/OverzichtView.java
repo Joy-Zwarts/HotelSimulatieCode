@@ -17,7 +17,7 @@ public class OverzichtView {
     public OverzichtView(HotelSimulatieView view, PauseController pauseController) {
 
         pauseFrame = new JFrame("Pauze");
-        pauseFrame.setSize(600, 400);
+        pauseFrame.setSize(1500, 800);
         pauseFrame.setLocationRelativeTo(view);
         pauseFrame.setAlwaysOnTop(true);
 
