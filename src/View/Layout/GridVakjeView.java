@@ -1,9 +1,6 @@
 package View.Layout;
 
-import Model.Ruimtes.KamerModel;
-import Model.Ruimtes.KamerType;
-import Model.Ruimtes.RoomClassificatie;
-import Model.Ruimtes.RuimteModel;
+import Model.Ruimtes.*;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -51,20 +48,36 @@ public class GridVakjeView {
         }
     }
 
-    public void zetKamerNummer(KamerModel kamer, boolean isLinksboven) {
+    public void zetKamerNummer(RuimteModel ruimte, boolean isLinksboven) {
         if (isLinksboven) {
-            if (kamer.getDimension().equals("2, 2")) {
-                JLabel kamerNummer = new JLabel(String.valueOf(kamer.getRoomNumber()));
+            if (ruimte.getDimension().equals("2, 2")) {
+                if (ruimte.getAreaType().equals(KamerType.ROOM)) {
+                    JLabel kamerNummer = new JLabel(String.valueOf(((KamerModel) ruimte).getRoomNumber()));
+                    vakjePanel.setLayout(null);
 
-                vakjePanel.setLayout(null);
+                    kamerNummer.setBounds(2, vakjePanel.getHeight() - 15, 30, 15);
 
-                kamerNummer.setBounds(2, vakjePanel.getHeight() - 15, 30, 15);
+                    vakjePanel.add(kamerNummer);
+                } else if (ruimte.getAreaType().equals(KamerType.CINEMA)) {
+                    JLabel kamerNummer = new JLabel(String.valueOf(((BioscoopModel)ruimte).getId()));
+                    vakjePanel.setLayout(null);
 
-                vakjePanel.add(kamerNummer);
+                    kamerNummer.setBounds(2, vakjePanel.getHeight() - 15, 30, 15);
+
+                    vakjePanel.add(kamerNummer);
+                }
                 vakjePanel.repaint();
             } else {
-                JLabel kamerNummer = new JLabel(String.valueOf(kamer.getRoomNumber()));
-                vakjePanel.add(kamerNummer, BorderLayout.WEST);
+                if (ruimte.getAreaType().equals(KamerType.ROOM)) {
+                    JLabel kamerNummer = new JLabel(String.valueOf(((KamerModel)ruimte).getRoomNumber()));
+                    vakjePanel.add(kamerNummer, BorderLayout.WEST);
+                } else if (ruimte.getAreaType().equals(KamerType.RESTAURANT)) {
+                    JLabel kamerNummer = new JLabel(String.valueOf(((RestaurantModel)ruimte).getID()));
+                    vakjePanel.add(kamerNummer, BorderLayout.WEST);
+                } else  if (ruimte.getAreaType().equals(KamerType.FITNESS)) {
+                    JLabel kamerNummer = new JLabel(String.valueOf(((FitnessModel)ruimte).getId()));
+                    vakjePanel.add(kamerNummer, BorderLayout.WEST);
+                }
                 vakjePanel.repaint();
             }
         }

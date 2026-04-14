@@ -103,10 +103,7 @@ public class LayoutView {
 
                         vak.getGridView().zetInhoud(ruimte, vak.getModel().islinksboven());
 
-                        if (ruimte.getAreaType().equals(KamerType.ROOM)){
-                            KamerModel kamer = (KamerModel)ruimte;
-                            vak.getGridView().zetKamerNummer(kamer, vak.getModel().islinksOnder());
-                        }
+                        vak.getGridView().zetKamerNummer(ruimte, vak.getModel().islinksOnder());
 
                         vak.updateView();
 

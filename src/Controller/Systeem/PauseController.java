@@ -4,7 +4,6 @@ import hotelevents.HotelEventManager;
 public class PauseController {
     private final HotelEventManager manager;
     private OverzichtView view;
-    private boolean paused = false;
 
     public PauseController(HotelEventManager manager, OverzichtView view) {
         this.manager = manager;
@@ -19,10 +18,6 @@ public class PauseController {
     public void resume() {
         manager.pauze();
         view.hide();
-    }
-
-    public boolean isPaused() {
-        return paused;
     }
 
     public void setView(OverzichtView overzichtView) {

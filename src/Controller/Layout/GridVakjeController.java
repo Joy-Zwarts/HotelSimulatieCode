@@ -18,7 +18,6 @@ public class GridVakjeController {
     private final GridVakjeModel model;
     private final GridVakjeView gridView;
     private final PauseController pauseController;
-    private final HotelSimulatieView simulatieView;
 
     public GridVakjeController(GridVakjeModel model,
                                GridVakjeView view,
@@ -28,7 +27,6 @@ public class GridVakjeController {
         this.model = model;
         this.gridView = view;
         this.pauseController = pauseController;
-        this.simulatieView = SimulatieView;
 
         init();
     }
@@ -47,14 +45,10 @@ public class GridVakjeController {
     private void handleClick() {
         RuimteModel ruimte = model.getRuimte();
 
-        if (pauseController.isPaused()) {
-            JOptionPane.showMessageDialog(simulatieView, "Hervat de simulatie eerst", "Error", JOptionPane.ERROR_MESSAGE);
-        } else {
             if (ruimte != null && KamerType.LOBBY.equals(ruimte.getAreaType())) {
                 System.out.println("pause toggle");
                 SwingUtilities.invokeLater(pauseController::pause);
             }
-        }
 
         System.out.println("Geklikt op vakje: " + ruimte);
     }

@@ -8,6 +8,6 @@ public class CinemaCreator extends RuimteFactory {
 
     @Override
     public RuimteModel createRuimte(String position, String dimension, long capacity, String classification) {
-        return new BioscoopModel(KamerType.FITNESS, position, dimension, 20);
+        return new BioscoopModel(KamerType.CINEMA, position, dimension, 20, "C");
     }
 }
