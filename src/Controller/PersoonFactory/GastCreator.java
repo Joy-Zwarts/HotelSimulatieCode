@@ -1,35 +1,31 @@
 package Controller.PersoonFactory;
 
 
-import Model.GastModel;
-import Model.PersoonModel;
-import Model.RoomClassificatie;
-
-import java.util.Random;
+import Model.Personen.GastModel;
+import Model.Personen.PersoonModel;
+import Model.Ruimtes.KamerType;
+import Model.Ruimtes.RoomClassificatie;
 
 public class GastCreator extends PersoonFactory {
-    Random rand = new Random();
-    RoomClassificatie wensen;
+
+    private RoomClassificatie wensen;
 
     @Override
-    public PersoonModel createPersoon(int gastId, String targetlocatie, String locatie) {
-
-        int randomNumber = rand.nextInt(5);
-
-        switch (randomNumber) {
-            case 0:
+    public PersoonModel createPersoon(int gastId, KamerType targetlocatie, KamerType locatie, int Wensen) {
+        switch (Wensen) {
+            case 1:
                 wensen = RoomClassificatie.eenSter;
                 break;
-            case 1:
+            case 2:
                 wensen = RoomClassificatie.tweeSterren;
                 break;
-            case 2:
+            case 3:
                 wensen = RoomClassificatie.drieSterren;
                 break;
-            case 3:
+            case 4:
                 wensen = RoomClassificatie.vierSterren;
                 break;
-            case 4:
+            case 5:
                 wensen = RoomClassificatie.vijfSterren;
                 break;
         }

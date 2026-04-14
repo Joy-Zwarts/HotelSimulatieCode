@@ -1,11 +1,19 @@
 package Controller;
 
-import Model.DarkModeModel;
-import Model.LayoutModel;
-import View.*;
+import Controller.KamerManagement.PersoonController;
+import Controller.KamerManagement.ReceptieController;
+import Controller.Layout.LayoutLoader;
+import Controller.Systeem.ButtonController;
+import Controller.Systeem.PauseController;
+import Controller.Systeem.SettingsController;
+import Controller.Systeem.TimeManagementController;
+import Model.Systeem.DarkModeModel;
+import Model.Layout.LayoutModel;
+import View.Systeem.HotelSimulatieView;
+import View.Systeem.OverzichtView;
+import View.Systeem.TimeManagementPanel;
+import View.Systeem.TimePanel;
 import hotelevents.HotelEventManager;
-
-import java.util.ArrayList;
 
 public class SimulatieController {
 
@@ -31,7 +39,7 @@ public class SimulatieController {
 
         PauseController pauseController = new PauseController(manager, null);
 
-        OverzichtView overzichtView = new OverzichtView(view, pauseController);
+        OverzichtView overzichtView = new OverzichtView(view, pauseController, manager);
 
         pauseController.setView(overzichtView);
 

@@ -1,7 +1,8 @@
 package Controller.RuimteFactory;
 
-import Model.RuimteModel;
+import Model.Ruimtes.RuimteModel;
 
 public abstract class RuimteFactory {
-    public abstract RuimteModel createRuimte(String areaType, String position, String dimension, long capacity, String classification);
+
+    public abstract RuimteModel createRuimte(String position, String dimension, long capacity, String classification);
 }

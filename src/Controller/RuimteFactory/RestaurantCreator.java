@@ -1,12 +1,13 @@
 package Controller.RuimteFactory;
 
-import Model.RestaurantModel;
-import Model.RuimteModel;
+import Model.Ruimtes.KamerType;
+import Model.Ruimtes.RestaurantModel;
+import Model.Ruimtes.RuimteModel;
 
 public class RestaurantCreator extends RuimteFactory {
 
     @Override
-    public RuimteModel createRuimte(String areaType, String position, String dimension, long capacity, String classification) {
-        return new RestaurantModel(areaType, position, dimension, capacity);
+    public RuimteModel createRuimte(String position, String dimension, long capacity, String classification) {
+        return new RestaurantModel(KamerType.RESTAURANT, position, dimension, capacity);
     }
 }
