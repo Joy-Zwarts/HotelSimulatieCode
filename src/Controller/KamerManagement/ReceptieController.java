@@ -2,10 +2,12 @@ package Controller.KamerManagement;
 
 import Model.Personen.GastModel;
 import Model.Ruimtes.KamerModel;
+import Model.Ruimtes.RuimteModel;
 
+import java.awt.event.ActionListener;
 import java.util.HashMap;
 
-public class ReceptieController {
+public class ReceptieController implements NewRoom, NewGuest {
     private final HashMap<Integer, KamerModel> kamers;
     private final HashMap<Integer, KamerModel> legeKamers;
     private final HashMap<Integer, GastModel> gasten;
@@ -52,5 +54,17 @@ public class ReceptieController {
 
     public void addGasten(GastModel gast) {
         this.gasten.put(gast.getGastID(), gast);
+    }
+
+    @Override
+    public void onNewRoom(RuimteModel kamer) {
+        addKamer((KamerModel) kamer);
+        System.out.println("New room has been created");
+    }
+
+    @Override
+    public void onGastAangemaakt(GastModel gast) {
+        addGasten(gast);
+        System.out.println("New Guest has been created");
     }
 }

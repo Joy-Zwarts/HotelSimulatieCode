@@ -15,6 +15,7 @@ public class PersoonController implements HotelEventListener {
     private final ArrayList<GastModel> gastenLijst;
     private final OverzichtView view;
     private final GastCreator factory;
+    private NewGuest newGuestListener;
 
     public PersoonController(HotelEventManager hotelEventManager,  OverzichtView overzichtView) {
         this.view = overzichtView;
@@ -31,12 +32,16 @@ public class PersoonController implements HotelEventListener {
 
             GastModel gast = (GastModel) factory.createPersoon(hotelEvent.getGuestId(), KamerType.LOBBY, null, hotelEvent.getData());
 
-            gastenLijst.add(gast);
+            addGastenLijst(gast);
+
+            newGuestListener.onGastAangemaakt(gast);
+
             view.tekenGastLijst(gastenLijst);
 
         } else if (hotelEvent.getEventType() == HotelEventType.CHECK_OUT) {
-
-            gastenLijst.removeIf(gast -> gast.getGastID() == hotelEvent.getGuestId());
+            if(getGastenLijst().contains(gastenLijst.get(hotelEvent.getGuestId()))) {
+                removeGastenLijst(gastenLijst.get(hotelEvent.getGuestId()));
+            }
             view.tekenGastLijst(gastenLijst);
         }
     }
@@ -49,5 +54,8 @@ public class PersoonController implements HotelEventListener {
     }
     public void removeGastenLijst(GastModel gast) {
         gastenLijst.remove(gast);
+    }
+    public void setNewGuestListener(NewGuest listener) {
+        this.newGuestListener = listener;
     }
 }

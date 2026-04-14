@@ -17,7 +17,7 @@ public class HotelSimulatieView extends JFrame {
     private JPanel topbar;
     private JPanel timePanel;
     private JPanel timeManagementPanel;
-    private final ImageIcon legenda;
+    private final ImageIcon legenda = null;
     private JButton loadScenarioButton;
     private JButton loadLayoutButton;
     private JButton startSimulationButton;
@@ -27,8 +27,7 @@ public class HotelSimulatieView extends JFrame {
 
 
     // constructor
-    public HotelSimulatieView(ImageIcon legenda, DarkModeModel darkMode) {
-        this.legenda = legenda;
+    public HotelSimulatieView(DarkModeModel darkMode) {
         this.darkMode = darkMode;
         setTitle("Hotel Simulator - Sjohn Karma's Hotels");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

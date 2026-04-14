@@ -49,6 +49,10 @@ public class SimulatieController {
 
         LayoutLoader layoutLoader = new LayoutLoader(manager, view, model, pauseController, view);
 
+        layoutLoader.setNewRoomListener(receptieController);
+
+        persoonController.setNewGuestListener(receptieController);
+
         TimePanel timePanel = new TimePanel(manager, view.getTopBar());
 
         TimeManagementPanel timeManagementPanel = new TimeManagementPanel(view.getTopBar(), darkModeModel);

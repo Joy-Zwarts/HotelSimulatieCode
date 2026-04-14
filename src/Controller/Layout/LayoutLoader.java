@@ -1,9 +1,12 @@
 package Controller.Layout;
 
+import Controller.KamerManagement.NewGuest;
+import Controller.KamerManagement.NewRoom;
 import Controller.RuimteFactory.*;
 import Controller.Systeem.FilePicker;
 import Controller.Systeem.PauseController;
 import Model.Layout.LayoutModel;
+import Model.Ruimtes.KamerType;
 import Model.Ruimtes.RuimteData;
 import Model.Ruimtes.RuimteModel;
 import View.Layout.LayoutView;
@@ -12,6 +15,7 @@ import View.Systeem.HotelSimulatieView;
 import hotelevents.HotelEventManager;
 
 import javax.swing.*;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.List;
 
@@ -22,6 +26,7 @@ public class LayoutLoader {
     private LayoutModel model;
     private final PauseController pauseController;
     private final HotelSimulatieView simulatieView;
+    private NewRoom newRoomListener;
 
     public LayoutLoader(HotelEventManager manager,
                         HotelSimulatieView view,
@@ -104,5 +109,13 @@ public class LayoutLoader {
         );
 
         model.addKamer(ruimte);
+
+        if (ruimte.getAreaType().equals(KamerType.ROOM) && newRoomListener != null) {
+            newRoomListener.onNewRoom(ruimte);
+        }
+    }
+
+    public void setNewRoomListener(NewRoom listener) {
+        this.newRoomListener = listener;
     }
 }
