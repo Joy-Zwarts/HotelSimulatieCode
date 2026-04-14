@@ -4,17 +4,12 @@ import Model.Personen.GastModel;
 import Model.Ruimtes.KamerModel;
 import Model.Ruimtes.RoomClassificatie;
 
-import java.util.HashMap;
-
-public class RoomAssign implements NewGuest{
+public class RoomAssign implements NewGuest {
 
     private final ReceptieController controller;
-    private RoomClassificatie wensen;
-    private HashMap<Integer, KamerModel> mogelijkeKamers;
 
     public RoomAssign(ReceptieController receptieController) {
         this.controller = receptieController;
-        this.mogelijkeKamers = new HashMap<>();
     }
 
     @Override
@@ -23,41 +18,49 @@ public class RoomAssign implements NewGuest{
     }
 
     public void assignRoom(GastModel gast) {
-        mogelijkeKamers.clear();
-        wensen = gast.getWensen();
 
-        for (KamerModel kamer : controller.getLegeKamers().values()){
-            if (kamer.getClassification().equals(wensen)){
-                mogelijkeKamers.put(kamer.getRoomNumber(), kamer);
-            }
-        }
+        if (gast == null || gast.getWensen() == null) return;
 
-        boolean kamerGevonden = false;
+        RoomClassificatie wensen = gast.getWensen();
 
-        for (KamerModel mogelijkeKamer : mogelijkeKamers.values()){
-            if (!mogelijkeKamer.isBezet() && mogelijkeKamer.getVerblijvende() == null){
-                gast.setKamer(mogelijkeKamer);
-                mogelijkeKamer.setBezet(true);
-                mogelijkeKamer.setVerblijvende(gast);
-                controller.setKamerVol(mogelijkeKamer);
+        for (KamerModel kamer : controller.getKamers().values()) {
+
+            if (kamer == null) continue;
+
+            if (kamer.isBezet()) continue;
+
+            if (kamer.getClassification() == wensen) {
+
+                gast.setKamer(kamer);
+
+                kamer.setBezet(true);
+                kamer.setVerblijvende(gast);
+
+                controller.setKamerVol(kamer);
+
                 controller.refreshView();
-                kamerGevonden = true;
-                break;
+
+                return;
             }
         }
 
-        if (!kamerGevonden) {
-            System.out.println("Geen beschikbare " + wensen + " kamer voor gast " + gast.getGastID());
-        }
+        System.out.println("Geen kamer beschikbaar voor gast " + gast.getGastID());
     }
 
     @Override
     public void onGastVertrokken(int gastID) {
+
         GastModel gast = controller.getGast(gastID);
 
-        gast.getKamer().setBezet(false);
-        gast.getKamer().setVerblijvende(gast);
-        controller.setKamerVol(gast.getKamer());
-        controller.refreshView();
+        if (gast == null || gast.getKamer() == null) return;
+
+        KamerModel kamer = gast.getKamer();
+
+        kamer.setBezet(false);
+        kamer.setVerblijvende(null);
+
+
+
+        controller.setKamerLeeg(kamer);
     }
 }

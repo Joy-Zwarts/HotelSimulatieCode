@@ -12,20 +12,13 @@ public class PauseController {
     }
 
     public void pause() {
-        if (!paused) {
-            manager.pauze();
-            view.show();
-            paused = true;
-        }
+        manager.pauze();
+        view.show();
     }
 
     public void resume() {
-        if (paused) {
-            manager.pauze();
-            manager.setHte(1000);
-            view.hide();
-            paused = false;
-        }
+        manager.pauze();
+        view.hide();
     }
 
     public boolean isPaused() {

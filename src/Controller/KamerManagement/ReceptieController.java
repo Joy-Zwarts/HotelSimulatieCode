@@ -8,54 +8,59 @@ import View.Systeem.OverzichtView;
 import java.util.HashMap;
 
 public class ReceptieController implements NewRoom, NewGuest {
+    private final HashMap<Integer, KamerModel> kamers;
     private final HashMap<Integer, KamerModel> legeKamers;
     private final HashMap<Integer, KamerModel> volleKamers;
+
     private final HashMap<Integer, GastModel> gasten;
+
     private final OverzichtView view;
 
-    public ReceptieController(OverzichtView View) {
+    public ReceptieController(OverzichtView view) {
+        this.kamers = new HashMap<>();
         this.legeKamers = new HashMap<>();
         this.volleKamers = new HashMap<>();
         this.gasten = new HashMap<>();
-        this.view = View;
-    }
-
-    public void gastCheckIn() {
-    }
-
-    public void gastCheckOut() {
-    }
-
-    public HashMap<Integer, KamerModel> getVolleKamers() {
-        return this.volleKamers;
+        this.view = view;
     }
 
     public void setKamerLeeg(KamerModel kamer) {
-        kamer.setBezet(false);
-        volleKamers.put(kamer.getRoomNumber(), kamer);
-        legeKamers.remove(kamer.getRoomNumber());
-    }
+        if (kamer == null) return;
 
-    public void setKamerVol(KamerModel kamer) {
-        kamer.setBezet(true);
+        kamer.setBezet(false);
+        kamer.setVerblijvende(null);
+
         legeKamers.put(kamer.getRoomNumber(), kamer);
         volleKamers.remove(kamer.getRoomNumber());
     }
 
-    public HashMap<Integer, KamerModel> getLegeKamers() {
-        return this.legeKamers;
+    public void setKamerVol(KamerModel kamer) {
+        if (kamer == null) return;
+
+        kamer.setBezet(true);
+
+        volleKamers.put(kamer.getRoomNumber(), kamer);
+        legeKamers.remove(kamer.getRoomNumber());
     }
 
-    public void addKamer(KamerModel kamer) {
-        legeKamers.put(kamer.getRoomNumber(), kamer);
+    public HashMap<Integer, KamerModel> getLegeKamers() {
+        return legeKamers;
+    }
+
+    public HashMap<Integer, KamerModel> getVolleKamers() {
+        return volleKamers;
+    }
+
+    public HashMap<Integer, KamerModel> getKamers() {
+        return kamers;
     }
 
     public HashMap<Integer, GastModel> getGasten() {
-        return this.gasten;
+        return gasten;
     }
 
     public GastModel getGast(int gastID) {
-        return this.gasten.get(gastID);
+        return gasten.get(gastID);
     }
 
     public void addGast(GastModel gast) {
@@ -68,29 +73,50 @@ public class ReceptieController implements NewRoom, NewGuest {
         refreshView();
     }
 
-    public void refreshView() {
-        view.tekenGastLijst(gasten);
-        view.tekenKamerLijst(legeKamers);
-    }
-
     @Override
     public void onNewRoom(RuimteModel kamer) {
-        addKamer((KamerModel) kamer);
+        KamerModel k = (KamerModel) kamer;
+
+        kamers.put(k.getRoomNumber(), k);
+
+        setKamerLeeg(k); // initieel leeg
+
         System.out.println("New room has been created");
-        view.tekenKamerLijst(legeKamers);
+
+        refreshView();
     }
 
     @Override
     public void onGastAangemaakt(GastModel gast) {
         addGast(gast);
+
         System.out.println("New Guest has been created");
-        view.tekenGastLijst(gasten);
     }
 
     @Override
     public void onGastVertrokken(int gastID) {
+
+        GastModel gast = gasten.get(gastID);
+
+        if (gast != null && gast.getKamer() != null) {
+            KamerModel kamer = gast.getKamer();
+
+            kamer.setBezet(false);
+            kamer.setVerblijvende(null);
+
+            setKamerLeeg(kamer);
+
+            gast.setKamer(null);
+        }
+
         removeGast(gastID);
+
         System.out.println("Guest has left");
+    }
+
+    public void refreshView() {
         view.tekenGastLijst(gasten);
+
+        view.tekenKamerLijst(kamers);
     }
 }

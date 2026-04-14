@@ -90,20 +90,19 @@ public class OverzichtView {
             guestContent.add(new JLabel("Geen gasten"));
         } else {
             for (GastModel gast : gasten.values()) {
-                String gastKamer;
 
-                if (gast.getKamer() == null) {
-                    gastKamer = "null";
-                } else {
-                    gastKamer = String.valueOf(gast.getKamer().getRoomNumber());
-                }
+                KamerModel kamer = gast.getKamer();
+
+                String kamerInfo = (kamer == null)
+                        ? "null"
+                        : String.valueOf(kamer.getRoomNumber());
 
                 guestContent.add(new JLabel(
                         "Gast " + gast.getGastID() +
                                 "   |   Locatie nu: " + gast.getLocatie() +
                                 "   |   Target Locatie: " + gast.getTargetLocatie() +
                                 "   |   Kamer Wensen: " + gast.getWensen() +
-                                "   |   Kamer: " + gastKamer
+                                "   |   Kamer: " + kamerInfo
                 ));
             }
         }
@@ -120,13 +119,11 @@ public class OverzichtView {
             roomContent.add(new JLabel("Geen kamers"));
         } else {
             for (KamerModel kamer : kamers.values()) {
-                String verblijvende;
 
-                if (kamer.getVerblijvende() == null) {
-                    verblijvende = "null";
-                } else {
-                    verblijvende = String.valueOf(kamer.getVerblijvende().getGastID());
-                }
+                String verblijvende =
+                        (kamer.getVerblijvende() == null)
+                                ? "null"
+                                : String.valueOf(kamer.getVerblijvende().getGastID());
 
                 roomContent.add(new JLabel(
                         "Kamernummer:  " + kamer.getRoomNumber() +

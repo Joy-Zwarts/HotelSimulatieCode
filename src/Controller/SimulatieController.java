@@ -50,11 +50,13 @@ public class SimulatieController {
 
         RoomAssign roomAssign = new RoomAssign(receptieController);
 
+
         LayoutLoader layoutLoader = new LayoutLoader(manager, view, model, pauseController, view);
 
         layoutLoader.setNewRoomListener(receptieController);
 
         persoonController.setNewGuestListener(receptieController);
+        
 
         persoonController.setNewGuestListener(roomAssign);
 
