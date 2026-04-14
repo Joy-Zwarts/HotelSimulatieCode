@@ -3,6 +3,8 @@ package View.Layout;
 import Controller.Layout.GridVakjeController;
 import Controller.Systeem.PauseController;
 import Model.Layout.GridVakjeModel;
+import Model.Ruimtes.KamerModel;
+import Model.Ruimtes.KamerType;
 import Model.Ruimtes.RuimteModel;
 import View.Systeem.HotelSimulatieView;
 
@@ -92,13 +94,20 @@ public class LayoutView {
                     GridVakjeController vak = grid.get(x + "," + y);
 
                     if (vak != null) {
-
                         // zet per vakje wat voor ruimte er in zit
                         vak.getModel().setRuimte(ruimte);
 
                         vak.getModel().setlinksboven(x == startX && y == startY);
 
+                        vak.getModel().setLinksonder(x == startX && y == startY + h -1);
+
                         vak.getGridView().zetInhoud(ruimte, vak.getModel().islinksboven());
+
+                        if (ruimte.getAreaType().equals(KamerType.ROOM)){
+                            KamerModel kamer = (KamerModel)ruimte;
+                            vak.getGridView().zetKamerNummer(kamer, vak.getModel().islinksOnder());
+                        }
+
                         vak.updateView();
 
                         // borders

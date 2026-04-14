@@ -14,12 +14,13 @@ import java.util.ArrayList;
 public class PersoonController implements HotelEventListener {
     private final OverzichtView view;
     private final GastCreator factory;
-    private NewGuest newGuestListener;
+    private ArrayList<NewGuest> listeners;
     private final ReceptieController receptie;
 
     public PersoonController(HotelEventManager hotelEventManager, OverzichtView overzichtView, ReceptieController receptieController) {
         this.view = overzichtView;
         this.receptie = receptieController;
+        this.listeners = new ArrayList<>();
         hotelEventManager.register(this);
 
         factory = new GastCreator();
@@ -37,18 +38,22 @@ public class PersoonController implements HotelEventListener {
                     hotelEvent.getData()
             );
 
-            if (newGuestListener != null) {
-                newGuestListener.onGastAangemaakt(gast);
+            if (listeners != null) {
+                for (NewGuest listener : listeners) {
+                    listener.onGastAangemaakt(gast);
+                }
             }
 
         } else if (hotelEvent.getEventType() == HotelEventType.CHECK_OUT) {
 
-            if (newGuestListener != null) {
-                newGuestListener.onGastVertrokken(hotelEvent.getGuestId());
+            if (listeners != null) {
+                for (NewGuest listener : listeners) {
+                    listener.onGastVertrokken(hotelEvent.getGuestId());
+                }
             }
         }
     }
     public void setNewGuestListener(NewGuest listener) {
-        this.newGuestListener = listener;
+        listeners.add(listener);
     }
 }

@@ -5,18 +5,17 @@ import Model.Ruimtes.KamerModel;
 import Model.Ruimtes.RuimteModel;
 import View.Systeem.OverzichtView;
 
-import java.awt.event.ActionListener;
 import java.util.HashMap;
 
 public class ReceptieController implements NewRoom, NewGuest {
-    private final HashMap<Integer, KamerModel> kamers;
     private final HashMap<Integer, KamerModel> legeKamers;
+    private final HashMap<Integer, KamerModel> volleKamers;
     private final HashMap<Integer, GastModel> gasten;
     private final OverzichtView view;
 
     public ReceptieController(OverzichtView View) {
-        this.kamers = new HashMap<>();
         this.legeKamers = new HashMap<>();
+        this.volleKamers = new HashMap<>();
         this.gasten = new HashMap<>();
         this.view = View;
     }
@@ -27,28 +26,28 @@ public class ReceptieController implements NewRoom, NewGuest {
     public void gastCheckOut() {
     }
 
-    public HashMap<Integer, KamerModel> getLegeKamers() {
-        return this.legeKamers;
+    public HashMap<Integer, KamerModel> getVolleKamers() {
+        return this.volleKamers;
     }
 
     public void setKamerLeeg(KamerModel kamer) {
         kamer.setBezet(false);
-        legeKamers.put(kamer.getRoomNumber(), kamer);
-        kamers.remove(kamer.getRoomNumber());
+        volleKamers.put(kamer.getRoomNumber(), kamer);
+        legeKamers.remove(kamer.getRoomNumber());
     }
 
     public void setKamerVol(KamerModel kamer) {
         kamer.setBezet(true);
-        kamers.put(kamer.getRoomNumber(), kamer);
-        legeKamers.remove(kamer.getRoomNumber());
+        legeKamers.put(kamer.getRoomNumber(), kamer);
+        volleKamers.remove(kamer.getRoomNumber());
     }
 
-    public HashMap<Integer, KamerModel> getKamers() {
-        return this.kamers;
+    public HashMap<Integer, KamerModel> getLegeKamers() {
+        return this.legeKamers;
     }
 
     public void addKamer(KamerModel kamer) {
-        kamers.put(kamer.getRoomNumber(), kamer);
+        legeKamers.put(kamer.getRoomNumber(), kamer);
     }
 
     public HashMap<Integer, GastModel> getGasten() {
@@ -69,15 +68,16 @@ public class ReceptieController implements NewRoom, NewGuest {
         refreshView();
     }
 
-    private void refreshView() {
+    public void refreshView() {
         view.tekenGastLijst(gasten);
+        view.tekenKamerLijst(legeKamers);
     }
 
     @Override
     public void onNewRoom(RuimteModel kamer) {
         addKamer((KamerModel) kamer);
         System.out.println("New room has been created");
-        view.tekenKamerLijst(kamers);
+        view.tekenKamerLijst(legeKamers);
     }
 
     @Override

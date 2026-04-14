@@ -51,6 +51,25 @@ public class GridVakjeView {
         }
     }
 
+    public void zetKamerNummer(KamerModel kamer, boolean isLinksboven) {
+        if (isLinksboven) {
+            if (kamer.getDimension().equals("2, 2")) {
+                JLabel kamerNummer = new JLabel(String.valueOf(kamer.getRoomNumber()));
+
+                vakjePanel.setLayout(null);
+
+                kamerNummer.setBounds(2, vakjePanel.getHeight() - 15, 30, 15);
+
+                vakjePanel.add(kamerNummer);
+                vakjePanel.repaint();
+            } else {
+                JLabel kamerNummer = new JLabel(String.valueOf(kamer.getRoomNumber()));
+                vakjePanel.add(kamerNummer, BorderLayout.WEST);
+                vakjePanel.repaint();
+            }
+        }
+    }
+
     public void clearInhoud() {
         vakjePanel.removeAll();
         vakjePanel.repaint();

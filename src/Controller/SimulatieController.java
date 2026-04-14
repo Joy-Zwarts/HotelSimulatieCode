@@ -2,6 +2,7 @@ package Controller;
 
 import Controller.KamerManagement.PersoonController;
 import Controller.KamerManagement.ReceptieController;
+import Controller.KamerManagement.RoomAssign;
 import Controller.Layout.LayoutLoader;
 import Controller.Systeem.ButtonController;
 import Controller.Systeem.PauseController;
@@ -47,11 +48,15 @@ public class SimulatieController {
 
         PersoonController persoonController = new PersoonController(manager, overzichtView, receptieController);
 
+        RoomAssign roomAssign = new RoomAssign(receptieController);
+
         LayoutLoader layoutLoader = new LayoutLoader(manager, view, model, pauseController, view);
 
         layoutLoader.setNewRoomListener(receptieController);
 
         persoonController.setNewGuestListener(receptieController);
+
+        persoonController.setNewGuestListener(roomAssign);
 
         TimePanel timePanel = new TimePanel(manager, view.getTopBar());
 

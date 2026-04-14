@@ -64,6 +64,7 @@ public class OverzichtView {
             public void windowClosing(java.awt.event.WindowEvent e) {
                 manager.pauze();   // unpause
                 pauseFrame.dispose(); // frame sluiten
+
             }
         });
 
@@ -89,12 +90,20 @@ public class OverzichtView {
             guestContent.add(new JLabel("Geen gasten"));
         } else {
             for (GastModel gast : gasten.values()) {
+                String gastKamer;
+
+                if (gast.getKamer() == null) {
+                    gastKamer = "null";
+                } else {
+                    gastKamer = String.valueOf(gast.getKamer().getRoomNumber());
+                }
+
                 guestContent.add(new JLabel(
                         "Gast " + gast.getGastID() +
                                 "   |   Locatie nu: " + gast.getLocatie() +
                                 "   |   Target Locatie: " + gast.getTargetLocatie() +
                                 "   |   Kamer Wensen: " + gast.getWensen() +
-                                "   |   Kamer: " + gast.getKamer()
+                                "   |   Kamer: " + gastKamer
                 ));
             }
         }
@@ -111,12 +120,20 @@ public class OverzichtView {
             roomContent.add(new JLabel("Geen kamers"));
         } else {
             for (KamerModel kamer : kamers.values()) {
+                String verblijvende;
+
+                if (kamer.getVerblijvende() == null) {
+                    verblijvende = "null";
+                } else {
+                    verblijvende = String.valueOf(kamer.getVerblijvende().getGastID());
+                }
+
                 roomContent.add(new JLabel(
                         "Kamernummer:  " + kamer.getRoomNumber() +
                                 "    |    Aantal sterren: " + kamer.getClassification() +
                                 "    |    Positie:  " + kamer.getPosition() +
                                 "    |    Grootte:  " + kamer.getDimension() +
-                                "    |    Verblijvende gast:  " + kamer.getVerblijvende()
+                                "    |    Verblijvende :  gast " + verblijvende
                 ));
             }
         }
