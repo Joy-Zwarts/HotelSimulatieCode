@@ -12,14 +12,14 @@ import hotelevents.HotelEventType;
 import java.util.ArrayList;
 
 public class PersoonController implements HotelEventListener {
-    private final ArrayList<GastModel> gastenLijst;
     private final OverzichtView view;
     private final GastCreator factory;
     private NewGuest newGuestListener;
+    private final ReceptieController receptie;
 
-    public PersoonController(HotelEventManager hotelEventManager,  OverzichtView overzichtView) {
+    public PersoonController(HotelEventManager hotelEventManager, OverzichtView overzichtView, ReceptieController receptieController) {
         this.view = overzichtView;
-        gastenLijst = new ArrayList<>();
+        this.receptie = receptieController;
         hotelEventManager.register(this);
 
         factory = new GastCreator();
@@ -30,30 +30,23 @@ public class PersoonController implements HotelEventListener {
 
         if (hotelEvent.getEventType() == HotelEventType.CHECK_IN) {
 
-            GastModel gast = (GastModel) factory.createPersoon(hotelEvent.getGuestId(), KamerType.LOBBY, null, hotelEvent.getData());
+            GastModel gast = (GastModel) factory.createPersoon(
+                    hotelEvent.getGuestId(),
+                    KamerType.LOBBY,
+                    null,
+                    hotelEvent.getData()
+            );
 
-            addGastenLijst(gast);
-
-            newGuestListener.onGastAangemaakt(gast);
-
-            view.tekenGastLijst(gastenLijst);
+            if (newGuestListener != null) {
+                newGuestListener.onGastAangemaakt(gast);
+            }
 
         } else if (hotelEvent.getEventType() == HotelEventType.CHECK_OUT) {
-            if(getGastenLijst().contains(gastenLijst.get(hotelEvent.getGuestId()))) {
-                removeGastenLijst(gastenLijst.get(hotelEvent.getGuestId()));
-            }
-            view.tekenGastLijst(gastenLijst);
-        }
-    }
 
-    public ArrayList<GastModel> getGastenLijst() {
-        return gastenLijst;
-    }
-    public void addGastenLijst(GastModel gast) {
-        gastenLijst.add(gast);
-    }
-    public void removeGastenLijst(GastModel gast) {
-        gastenLijst.remove(gast);
+            if (newGuestListener != null) {
+                newGuestListener.onGastVertrokken(hotelEvent.getGuestId());
+            }
+        }
     }
     public void setNewGuestListener(NewGuest listener) {
         this.newGuestListener = listener;

@@ -1,15 +1,21 @@
 package Model.Ruimtes;
 
+import Model.Personen.GastModel;
+
 public class KamerModel extends RuimteModel {
     private RoomClassificatie classification;
     private final int roomNumber;
     private boolean bezet;
+    private GastModel verblijvende;
+    private static int counter = 0;
 
-    public KamerModel(KamerType areaType, String position, String dimension, RoomClassificatie classification, int RoomNumber, boolean Bezet) {
+
+    public KamerModel(KamerType areaType, String position, String dimension, RoomClassificatie classification, boolean Bezet) {
         super(areaType, position, dimension);
         this.classification = classification;
-        this.roomNumber = RoomNumber;
+        this.roomNumber = ++counter;
         this.bezet = Bezet;
+        this.verblijvende = null;
     }
 
     public RoomClassificatie getClassification() {
@@ -27,5 +33,11 @@ public class KamerModel extends RuimteModel {
     }
     public boolean isBezet() {
         return this.bezet;
+    }
+    public GastModel getVerblijvende() {
+        return this.verblijvende;
+    }
+    public void setVerblijvende(GastModel verblijvende) {
+        this.verblijvende = verblijvende;
     }
 }

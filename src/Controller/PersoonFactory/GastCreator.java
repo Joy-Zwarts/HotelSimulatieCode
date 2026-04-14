@@ -3,6 +3,7 @@ package Controller.PersoonFactory;
 
 import Model.Personen.GastModel;
 import Model.Personen.PersoonModel;
+import Model.Ruimtes.KamerModel;
 import Model.Ruimtes.KamerType;
 import Model.Ruimtes.RoomClassificatie;
 

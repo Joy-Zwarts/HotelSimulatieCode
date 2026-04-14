@@ -43,9 +43,9 @@ public class SimulatieController {
 
         pauseController.setView(overzichtView);
 
-        PersoonController persoonController = new PersoonController(manager, overzichtView);
+        ReceptieController receptieController = new ReceptieController(overzichtView);
 
-        ReceptieController receptieController = new ReceptieController();
+        PersoonController persoonController = new PersoonController(manager, overzichtView, receptieController);
 
         LayoutLoader layoutLoader = new LayoutLoader(manager, view, model, pauseController, view);
 

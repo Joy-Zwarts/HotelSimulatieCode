@@ -27,7 +27,6 @@ public class LayoutLoader {
     private final PauseController pauseController;
     private final HotelSimulatieView simulatieView;
     private NewRoom newRoomListener;
-
     public LayoutLoader(HotelEventManager manager,
                         HotelSimulatieView view,
                         LayoutModel model,
@@ -81,7 +80,6 @@ public class LayoutLoader {
     }
 
     private void maakKamer(RuimteData data) {
-
         RuimteFactory factory;
 
         switch (data.areaType) {

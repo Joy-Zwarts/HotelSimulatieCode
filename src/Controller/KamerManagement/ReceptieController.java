@@ -3,6 +3,7 @@ package Controller.KamerManagement;
 import Model.Personen.GastModel;
 import Model.Ruimtes.KamerModel;
 import Model.Ruimtes.RuimteModel;
+import View.Systeem.OverzichtView;
 
 import java.awt.event.ActionListener;
 import java.util.HashMap;
@@ -11,11 +12,13 @@ public class ReceptieController implements NewRoom, NewGuest {
     private final HashMap<Integer, KamerModel> kamers;
     private final HashMap<Integer, KamerModel> legeKamers;
     private final HashMap<Integer, GastModel> gasten;
+    private final OverzichtView view;
 
-    public ReceptieController() {
+    public ReceptieController(OverzichtView View) {
         this.kamers = new HashMap<>();
         this.legeKamers = new HashMap<>();
         this.gasten = new HashMap<>();
+        this.view = View;
     }
 
     public void gastCheckIn() {
@@ -52,19 +55,42 @@ public class ReceptieController implements NewRoom, NewGuest {
         return this.gasten;
     }
 
-    public void addGasten(GastModel gast) {
-        this.gasten.put(gast.getGastID(), gast);
+    public GastModel getGast(int gastID) {
+        return this.gasten.get(gastID);
+    }
+
+    public void addGast(GastModel gast) {
+        gasten.put(gast.getGastID(), gast);
+        refreshView();
+    }
+
+    public void removeGast(int gastId) {
+        gasten.remove(gastId);
+        refreshView();
+    }
+
+    private void refreshView() {
+        view.tekenGastLijst(gasten);
     }
 
     @Override
     public void onNewRoom(RuimteModel kamer) {
         addKamer((KamerModel) kamer);
         System.out.println("New room has been created");
+        view.tekenKamerLijst(kamers);
     }
 
     @Override
     public void onGastAangemaakt(GastModel gast) {
-        addGasten(gast);
+        addGast(gast);
         System.out.println("New Guest has been created");
+        view.tekenGastLijst(gasten);
+    }
+
+    @Override
+    public void onGastVertrokken(int gastID) {
+        removeGast(gastID);
+        System.out.println("Guest has left");
+        view.tekenGastLijst(gasten);
     }
 }
