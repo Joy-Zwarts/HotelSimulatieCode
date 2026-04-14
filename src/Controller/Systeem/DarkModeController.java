@@ -40,7 +40,7 @@ public class DarkModeController {
 
         timeManagementPanel.setTimeButtons(); // switch icons voor de time manager panel van light naar dark mode en vice versa
 
-        view.setLegendaView(view.getLegendaPanel()); // hetzelfde voor de legenda
+        view.setLegendaView(); // hetzelfde voor de legenda
 
         // hertekenen
         view.revalidate();

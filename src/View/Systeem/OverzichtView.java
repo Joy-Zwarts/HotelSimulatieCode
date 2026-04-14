@@ -6,8 +6,6 @@ import hotelevents.HotelEventManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class OverzichtView {
@@ -39,12 +37,7 @@ public class OverzichtView {
         pauseFrame.add(scrollPane, BorderLayout.CENTER);
 
         JButton resumeButton = new JButton("Hervat simulatie");
-        resumeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                pauseController.resume();
-            }
-        });
+        resumeButton.addActionListener(_ -> pauseController.resume());
 
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         bottomPanel.add(resumeButton);

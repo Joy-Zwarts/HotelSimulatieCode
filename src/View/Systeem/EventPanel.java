@@ -10,15 +10,13 @@ import hotelevents.HotelEventType;
 
 public class EventPanel implements HotelEventListener {
 
-    private JPanel container;
-    private JPanel content;
-    private JScrollPane scrollbar;
+    private final JPanel container;
+    private final JPanel content;
+    private final JScrollPane scrollbar;
 
-    private HotelEventManager manager;
     private int time;
 
     public EventPanel(HotelEventManager manager) {
-        this.manager = manager;
         this.time = 0;
 
         content = new JPanel();

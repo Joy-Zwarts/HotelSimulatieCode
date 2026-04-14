@@ -27,7 +27,7 @@ public class TimeManagementController implements ActionListener {
         this.controller = Controller;
         this.view = View;
 
-        // initialiseer de time-management buttons en registreert zichzelf als listener
+        // initialiseer de time-managementbuttons en registreert zichzelf als listener
         this.normal = Panel.getNormaleTijd();
         normal.addActionListener(this);
         this.fastForward = Panel.getFastForwardTijd();

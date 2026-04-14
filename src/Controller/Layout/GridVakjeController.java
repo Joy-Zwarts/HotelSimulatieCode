@@ -6,7 +6,6 @@ import Model.Ruimtes.KamerType;
 import Model.Ruimtes.RuimteModel;
 import View.Layout.GridVakjeView;
 import View.Systeem.HotelSimulatieView;
-import hotelevents.HotelEventManager;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
@@ -16,21 +15,18 @@ public class GridVakjeController {
 
     // attributen
 
-    private GridVakjeModel model;
-    private GridVakjeView gridView;
-    private HotelEventManager manager;
-    private PauseController pauseController;
-    private HotelSimulatieView simulatieView;
+    private final GridVakjeModel model;
+    private final GridVakjeView gridView;
+    private final PauseController pauseController;
+    private final HotelSimulatieView simulatieView;
 
     public GridVakjeController(GridVakjeModel model,
                                GridVakjeView view,
-                               HotelEventManager manager,
                                PauseController pauseController,
                                HotelSimulatieView SimulatieView) {
 
         this.model = model;
         this.gridView = view;
-        this.manager = manager;
         this.pauseController = pauseController;
         this.simulatieView = SimulatieView;
 
@@ -56,9 +52,7 @@ public class GridVakjeController {
         } else {
             if (ruimte != null && KamerType.LOBBY.equals(ruimte.getAreaType())) {
                 System.out.println("pause toggle");
-                SwingUtilities.invokeLater(() -> {
-                    pauseController.pause();
-                });
+                SwingUtilities.invokeLater(pauseController::pause);
             }
         }
 

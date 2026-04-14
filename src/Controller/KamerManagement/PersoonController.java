@@ -1,7 +1,6 @@
 package Controller.KamerManagement;
 
 import Controller.PersoonFactory.GastCreator;
-import Controller.PersoonFactory.PersoonFactory;
 import Model.Personen.GastModel;
 import Model.Ruimtes.KamerType;
 import View.Systeem.OverzichtView;
@@ -13,8 +12,6 @@ import hotelevents.HotelEventType;
 import java.util.ArrayList;
 
 public class PersoonController implements HotelEventListener {
-
-    private PersoonFactory persoonFactory;
     private final ArrayList<GastModel> gastenLijst;
     private final OverzichtView view;
     private final GastCreator factory;

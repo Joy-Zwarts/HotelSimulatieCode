@@ -7,7 +7,7 @@ import Model.Ruimtes.RoomClassificatie;
 public class GastModel extends PersoonModel {
     private final RoomClassificatie wensen;
     private KamerModel kamer;
-    private int gastID;
+    private final int gastID;
 
     public GastModel(int gastId, KamerType locatie, KamerType targetLocatie, RoomClassificatie wensen, KamerModel kamer) {
         super(locatie, targetLocatie);

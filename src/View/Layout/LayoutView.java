@@ -5,7 +5,6 @@ import Controller.Systeem.PauseController;
 import Model.Layout.GridVakjeModel;
 import Model.Ruimtes.RuimteModel;
 import View.Systeem.HotelSimulatieView;
-import hotelevents.HotelEventManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,14 +19,12 @@ public class LayoutView {
     private HashMap<String, GridVakjeController> grid;
     private int gridBreedte;
     private int gridLengte;
-    private final HotelEventManager manager;
     private final PauseController pauseController;
-    private HotelSimulatieView simulatieView;
+    private final HotelSimulatieView simulatieView;
 
     // constructor
 
-    public LayoutView(HotelEventManager manager, PauseController pauseController, HotelSimulatieView SimulatieView) {
-        this.manager = manager;
+    public LayoutView(PauseController pauseController, HotelSimulatieView SimulatieView) {
         this.pauseController = pauseController;
         this.simulatieView = SimulatieView;
     }
@@ -46,7 +43,7 @@ public class LayoutView {
             for (int x = 0; x < gridBreedte; x++) {
 
                 // maak een grid vakje per cel
-                GridVakjeController controller = new GridVakjeController(new GridVakjeModel(x, y, vakBreedte, vakHoogte), new GridVakjeView(x, y, vakBreedte, vakHoogte), manager, pauseController, simulatieView);
+                GridVakjeController controller = new GridVakjeController(new GridVakjeModel(x, y, vakBreedte, vakHoogte), new GridVakjeView(x, y, vakBreedte, vakHoogte), pauseController, simulatieView);
 
                 grid.put(x + "," + y, controller);
 

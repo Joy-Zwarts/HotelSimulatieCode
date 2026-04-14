@@ -13,7 +13,7 @@ public class ScenarioPickerView {
     // constructor
     public ScenarioPickerView() {
         frame = new JFrame("Scenario Picker");
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // safer if you open multiple
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(400, 200);
         frame.setLayout(null);
 

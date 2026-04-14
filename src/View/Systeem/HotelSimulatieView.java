@@ -10,26 +10,25 @@ public class HotelSimulatieView extends JFrame {
 
     // attributen
 
-    private JPanel leftPanel;
     private JPanel middlePanel;
     private JPanel legendaPanel;
     private JPanel layoutPanel;
     private JPanel rightPanel;
     private JPanel topbar;
     private JPanel timePanel;
-    private JPanel logoPanel;
     private JPanel timeManagementPanel;
-    private ImageIcon legenda;
+    private final ImageIcon legenda;
     private JButton loadScenarioButton;
     private JButton loadLayoutButton;
     private JButton startSimulationButton;
     private JButton stopSimulationButton;
     private JButton settingsButton;
-    private DarkModeModel darkMode;
+    private final DarkModeModel darkMode;
 
 
     // constructor
-    public HotelSimulatieView(DarkModeModel darkMode) {
+    public HotelSimulatieView(ImageIcon legenda, DarkModeModel darkMode) {
+        this.legenda = legenda;
         this.darkMode = darkMode;
         setTitle("Hotel Simulator - Sjohn Karma's Hotels");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -58,7 +57,7 @@ public class HotelSimulatieView extends JFrame {
         timePanel.setPreferredSize(new Dimension(495, 130));
 
         // logo panel
-        logoPanel = new JPanel(new GridBagLayout());
+        JPanel logoPanel = new JPanel(new GridBagLayout());
         logoPanel.setPreferredSize(new Dimension(495, 130));
 
         // time management knoppen panel
@@ -80,7 +79,7 @@ public class HotelSimulatieView extends JFrame {
 
     // maak liker panel aan
     private void initLeftPanel() {
-        leftPanel = new JPanel();
+        JPanel leftPanel = new JPanel();
         leftPanel.setPreferredSize(new Dimension(210, 670));
         setBackground(UIManager.getColor("Panel.background"));
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
@@ -188,7 +187,7 @@ public class HotelSimulatieView extends JFrame {
         topbar.repaint();
     }
 
-    public void setLegendaView(JPanel legendaPanel) {
+    public void setLegendaView() {
         this.legendaPanel.removeAll();
 
         // kies legenda gebaseerd op de dark mode
@@ -233,10 +232,6 @@ public class HotelSimulatieView extends JFrame {
 
     public JButton getStopSimulationButton() {
         return stopSimulationButton;
-    }
-
-    public JPanel getLegendaPanel() {
-        return legendaPanel;
     }
 
     public JPanel getTopBar() {

@@ -7,17 +7,16 @@ import java.util.ArrayList;
 public class RuimteModel {
 
     // attributen
-    private KamerType areaType;
+    private final KamerType areaType;
     private String position;
-    private String dimension;
-    private ArrayList<GastModel> gasten;
+    private final String dimension;
 
     // constructor
     public RuimteModel(KamerType areaType, String position, String dimension) {
         this.areaType = areaType;
         this.position = position;
         this.dimension = dimension;
-        this.gasten = new ArrayList<>();
+        ArrayList<GastModel> gasten = new ArrayList<>();
     }
 
     // getters en setters

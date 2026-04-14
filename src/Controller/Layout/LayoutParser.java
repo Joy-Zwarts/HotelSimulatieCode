@@ -1,4 +1,4 @@
-package Controller;
+package Controller.Layout;
 
 import Model.Ruimtes.RuimteData;
 import org.json.simple.JSONArray;

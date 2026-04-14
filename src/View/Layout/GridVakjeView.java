@@ -30,7 +30,7 @@ public class GridVakjeView {
         boolean toonIcon = KamerType.TRAPPEN.equals(ruimte.getAreaType()) || isLinksboven;
 
         if (toonIcon) {
-            ImageIcon icon = null;
+            ImageIcon icon;
 
             if (KamerType.ROOM.equals(ruimte.getAreaType())) {
                 icon = bepaalSterrenIcon(((KamerModel) ruimte).getClassification());

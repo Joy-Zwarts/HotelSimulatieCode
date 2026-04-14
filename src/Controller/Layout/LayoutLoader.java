@@ -46,7 +46,7 @@ public class LayoutLoader {
                 return null;
             }
 
-            Controller.LayoutParser parser = new Controller.LayoutParser();
+            Controller.Layout.LayoutParser parser = new Controller.Layout.LayoutParser();
             List<RuimteData> ruimtes = parser.parse(gekozenBestand.getAbsolutePath());
 
             // nieuw model maken
@@ -57,13 +57,13 @@ public class LayoutLoader {
                 maakKamer(data);
             }
 
-            LayoutView layoutView = new LayoutView(manager, pauseController, simulatieView);
+            LayoutView layoutView = new LayoutView(pauseController, simulatieView);
             EventPanel eventPrint = new EventPanel(manager);
 
             new LayoutController(model, layoutView);
 
             view.setLayoutView(layoutView.getHotelPanel());
-            view.setLegendaView(view.getLegendaPanel());
+            view.setLegendaView();
             view.setRightView(eventPrint.getPanelRechts());
 
             return model;

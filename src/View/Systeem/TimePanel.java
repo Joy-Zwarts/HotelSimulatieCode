@@ -11,16 +11,13 @@ public class TimePanel implements HotelEventListener {
 
     // attributen
 
-    private JPanel panelTime;
-    private JLabel timeLabel;
-    private HotelEventManager manager;
+    private final JLabel timeLabel;
 
     // constructor
     public TimePanel(HotelEventManager manager, JPanel panelRechts) {
-        this.manager = manager;
 
         // panel for tijd
-        panelTime = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel panelTime = new JPanel(new FlowLayout(FlowLayout.LEFT));
         timeLabel = new JLabel("00:00");
         timeLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 35));
         timeLabel.setVerticalAlignment(SwingConstants.CENTER);
@@ -45,10 +42,6 @@ public class TimePanel implements HotelEventListener {
     }
 
     // getters & setters
-
-    public JPanel getTimePanel() {
-        return panelTime;
-    }
 
     public JLabel getTimeLabel() {
         return timeLabel;

@@ -21,7 +21,6 @@ public class ButtonController implements ActionListener {
     private final LayoutLoader layoutLoader;
     private LayoutModel model;
     private final SettingsController settingsController;
-    private final PauseController pauseController;
 
     // constructor
 
@@ -31,11 +30,10 @@ public class ButtonController implements ActionListener {
         this.view = hotelView;
         this.layoutLoader = layoutLoader;
         this.settingsController = SettingsController;
-        this.pauseController = PauseController;
         init();
     }
 
-    // registreert zichtzelf als listener bij alle buttons van de view
+    // registreert zichzelf als listener bij alle buttons van de view
     private void init() {
         view.getLoadScenarioButton().addActionListener(this);
         view.getStartSimulationButton().addActionListener(this);

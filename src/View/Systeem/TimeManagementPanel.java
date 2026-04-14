@@ -10,11 +10,11 @@ public class TimeManagementPanel {
 
     // attributen
 
-    private JPanel panelTimeManagement;
-    private JButton normaleTijd;
-    private JButton fastForwardTijd;
-    private JButton doubleFastForwardTijd;
-    private DarkModeModel darkMode;
+    private final JPanel panelTimeManagement;
+    private final JButton normaleTijd;
+    private final JButton fastForwardTijd;
+    private final JButton doubleFastForwardTijd;
+    private final DarkModeModel darkMode;
 
     // constructor
     public TimeManagementPanel(JPanel panelRechts, DarkModeModel darkMode) {

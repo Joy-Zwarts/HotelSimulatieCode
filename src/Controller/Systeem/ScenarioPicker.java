@@ -36,7 +36,6 @@ public class ScenarioPicker implements ActionListener {
         int selectedNumber = 1;
         switch (selected) {
             case "Scenario 1":
-                selectedNumber = 1;
                 break;
             case "Scenario 2":
                 selectedNumber = 2;
