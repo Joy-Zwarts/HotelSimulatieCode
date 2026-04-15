@@ -101,9 +101,11 @@ public class LayoutView {
 
                         vak.getModel().setLinksonder(x == startX && y == startY + h -1);
 
-                        vak.getGridView().zetInhoud(ruimte, vak.getModel().islinksboven());
+                        vak.getModel().setRechtsboven(x == startX + w - 1 && y == startY);
 
-                        vak.getGridView().zetKamerNummer(ruimte, vak.getModel().islinksOnder());
+                        vak.getGridView().zetInhoud(ruimte, vak.getModel().islinksboven(), vak.getModel().islinksOnder());
+
+                        vak.getGridView().zetPersonenAantal(ruimte, vak.getModel().isRechtsboven());
 
                         vak.updateView();
 

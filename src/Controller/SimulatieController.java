@@ -1,8 +1,8 @@
 package Controller;
 
-import Controller.KamerManagement.PersoonController;
-import Controller.KamerManagement.ReceptieController;
-import Controller.KamerManagement.RoomAssign;
+import Controller.GastManagement.PersoonController;
+import Controller.GastManagement.ReceptieController;
+import Controller.GastManagement.RoomAssign;
 import Controller.Layout.LayoutLoader;
 import Controller.Systeem.ButtonController;
 import Controller.Systeem.PauseController;

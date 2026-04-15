@@ -1,4 +1,4 @@
-package Controller.KamerManagement;
+package Controller.GastManagement;
 
 import Controller.PersoonFactory.GastCreator;
 import Model.Personen.GastModel;

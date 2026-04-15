@@ -1,7 +1,6 @@
 package Controller.Layout;
 
-import Controller.KamerManagement.NewGuest;
-import Controller.KamerManagement.NewRoom;
+import Controller.GastManagement.NewRoom;
 import Controller.RuimteFactory.*;
 import Controller.Systeem.FilePicker;
 import Controller.Systeem.PauseController;
@@ -15,7 +14,6 @@ import View.Systeem.HotelSimulatieView;
 import hotelevents.HotelEventManager;
 
 import javax.swing.*;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.List;
 
