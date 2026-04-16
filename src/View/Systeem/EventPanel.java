@@ -44,7 +44,7 @@ public class EventPanel implements HotelEventListener {
     }
 
     public void printEvent(HotelEvent hotelEvent) {
-        if (hotelEvent.getEventType() != HotelEventType.NONE) {
+       if (hotelEvent.getEventType() != HotelEventType.NONE) {
 
             JLabel label = new JLabel(
                     "Time: " + hotelEvent.getTime() +

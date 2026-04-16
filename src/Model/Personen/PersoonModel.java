@@ -3,10 +3,10 @@ package Model.Personen;
 import Model.Ruimtes.KamerType;
 
 public class PersoonModel {
-    private KamerType targetLocatie;
-    private KamerType locatie;
+    private String targetLocatie;
+    private String locatie;
 
-    public PersoonModel(KamerType targetLocatie, KamerType locatie) {
+    public PersoonModel(String targetLocatie, String locatie) {
         this.targetLocatie = targetLocatie;
         this.locatie = locatie;
     }
@@ -14,16 +14,16 @@ public class PersoonModel {
     public void bewegen() {
     }
 
-    public KamerType getTargetLocatie() {
+    public String getTargetLocatie() {
         return targetLocatie;
     }
-    public void setTargetLocatie(KamerType targetLocatie) {
+    public void setTargetLocatie(String targetLocatie) {
         this.targetLocatie = targetLocatie;
     }
-    public KamerType getLocatie() {
+    public String getLocatie() {
         return locatie;
     }
-    public void setLocatie(KamerType locatie) {
+    public void setLocatie(String locatie) {
         this.locatie = locatie;
     }
 }

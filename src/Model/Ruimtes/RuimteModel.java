@@ -10,6 +10,7 @@ public class RuimteModel {
     private final KamerType areaType;
     private String position;
     private final String dimension;
+    private int aantalGasten = 0;
 
     // constructor
     public RuimteModel(KamerType areaType, String position, String dimension) {
@@ -36,9 +37,13 @@ public class RuimteModel {
         return y;
     }
     public void setPositionY(int y) {
-        String newpositionY = getPositionX() + "," + y;
-        this.position = newpositionY;
+        this.position = getPositionX() + "," + y;
     }
+
+    public void setPositionX(int x) {
+        this.position = x + "," + getPositionY();
+    }
+
     public int getDimensionW() {
         String[] dim = dimension.split(",");
         int w = Integer.parseInt(dim[0].trim());
@@ -54,5 +59,17 @@ public class RuimteModel {
     }
     public String getPosition() {
         return position;
+    }
+
+    public int getAantalGasten() {
+        return aantalGasten;
+    }
+
+    public void setAantalGasten(int aantalGasten) {
+        this.aantalGasten = aantalGasten;
+    }
+
+    public void setPosition(int x, int y) {
+        this.position = x + ", " + y;
     }
 }

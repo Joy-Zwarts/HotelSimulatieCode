@@ -1,7 +1,7 @@
 package Controller.Layout;
 
-import Controller.KamerManagement.NewGuest;
-import Controller.KamerManagement.NewRoom;
+import Controller.GastManagement.NewGuest;
+import Controller.GastManagement.NewRoom;
 import Controller.RuimteFactory.*;
 import Controller.Systeem.FilePicker;
 import Controller.Systeem.PauseController;
@@ -15,8 +15,8 @@ import View.Systeem.HotelSimulatieView;
 import hotelevents.HotelEventManager;
 
 import javax.swing.*;
-import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 public class LayoutLoader {
@@ -24,9 +24,11 @@ public class LayoutLoader {
     private final HotelEventManager manager;
     private final HotelSimulatieView view;
     private LayoutModel model;
+    private LayoutController controller;
     private final PauseController pauseController;
     private final HotelSimulatieView simulatieView;
     private NewRoom newRoomListener;
+    private final ArrayList<LayoutGeladen> listeners;
     public LayoutLoader(HotelEventManager manager,
                         HotelSimulatieView view,
                         LayoutModel model,
@@ -38,6 +40,7 @@ public class LayoutLoader {
         this.model = model;
         this.pauseController = pauseController;
         this.simulatieView = simulatieView;
+        this.listeners = new ArrayList<>();
     }
 
     public LayoutModel loadLayout() {
@@ -64,11 +67,17 @@ public class LayoutLoader {
             LayoutView layoutView = new LayoutView(pauseController, simulatieView);
             EventPanel eventPrint = new EventPanel(manager);
 
-            new LayoutController(model, layoutView);
+            controller = new LayoutController(model, layoutView);
 
             view.setLayoutView(layoutView.getHotelPanel());
             view.setLegendaView();
             view.setRightView(eventPrint.getPanelRechts());
+
+            if (listeners != null) {
+                for (LayoutGeladen listener : listeners) {
+                    listener.onLayoutGeladen(controller);
+                }
+            }
 
             return model;
 
@@ -115,5 +124,12 @@ public class LayoutLoader {
 
     public void setNewRoomListener(NewRoom listener) {
         this.newRoomListener = listener;
+    }
+
+    public LayoutController getController() {
+        return controller;
+    }
+    public void setNewLayoutListener(LayoutGeladen listener) {
+        listeners.add(listener);
     }
 }

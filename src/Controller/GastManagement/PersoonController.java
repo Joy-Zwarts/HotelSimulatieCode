@@ -1,4 +1,4 @@
-package Controller.KamerManagement;
+package Controller.GastManagement;
 
 import Controller.PersoonFactory.GastCreator;
 import Model.Personen.GastModel;
@@ -33,7 +33,7 @@ public class PersoonController implements HotelEventListener {
 
             GastModel gast = (GastModel) factory.createPersoon(
                     hotelEvent.getGuestId(),
-                    KamerType.LOBBY,
+                    "0,0",
                     null,
                     hotelEvent.getData()
             );

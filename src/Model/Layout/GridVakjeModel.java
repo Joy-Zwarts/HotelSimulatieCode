@@ -13,6 +13,7 @@ public class GridVakjeModel {
     private final int hoogte;
     private boolean linksboven = false;
     private boolean linksonder = false;
+    private boolean rechtsboven = false;
 
     // constructor
     public GridVakjeModel(int x, int y, int breedte, int hoogte) {
@@ -58,5 +59,12 @@ public class GridVakjeModel {
 
     public void setLinksonder(boolean trueOrFalse) {
         this.linksonder = trueOrFalse;
+    }
+
+    public boolean isRechtsboven() {
+        return rechtsboven;
+    }
+    public void setRechtsboven(boolean trueOrFalse) {
+        this.rechtsboven = trueOrFalse;
     }
 }

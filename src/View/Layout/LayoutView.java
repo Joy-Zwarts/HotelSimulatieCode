@@ -47,7 +47,7 @@ public class LayoutView {
                 // maak een grid vakje per cel
                 GridVakjeController controller = new GridVakjeController(new GridVakjeModel(x, y, vakBreedte, vakHoogte), new GridVakjeView(x, y, vakBreedte, vakHoogte), pauseController, simulatieView);
 
-                grid.put(x + "," + y, controller);
+                grid.put(x + ", " + y, controller);
 
                 // voeg een nieuw panel toe
                 hotelPanel.add(controller.getGridView().getVakjePanel());
@@ -91,7 +91,7 @@ public class LayoutView {
             for (int y = startY; y < startY + h; y++) {
                 for (int x = startX; x < startX + w; x++) {
 
-                    GridVakjeController vak = grid.get(x + "," + y);
+                    GridVakjeController vak = grid.get(x + ", " + y);
 
                     if (vak != null) {
                         // zet per vakje wat voor ruimte er in zit
@@ -101,9 +101,11 @@ public class LayoutView {
 
                         vak.getModel().setLinksonder(x == startX && y == startY + h -1);
 
-                        vak.getGridView().zetInhoud(ruimte, vak.getModel().islinksboven());
+                        vak.getModel().setRechtsboven(x == startX + w - 1 && y == startY);
 
-                        vak.getGridView().zetKamerNummer(ruimte, vak.getModel().islinksOnder());
+                        vak.getGridView().zetInhoud(ruimte, vak.getModel().islinksboven(), vak.getModel().islinksOnder());
+
+                        vak.getGridView().zetPersonenAantal(ruimte, vak.getModel().isRechtsboven());
 
                         vak.updateView();
 
@@ -132,5 +134,9 @@ public class LayoutView {
 
     public int getGridLengte() {
         return gridLengte;
+    }
+
+    public HashMap<String, GridVakjeController> getGrid() {
+        return grid;
     }
 }

@@ -1,7 +1,6 @@
-package Controller.KamerManagement;
+package Controller.GastManagement;
 
 import Model.Personen.GastModel;
-import hotelevents.HotelEvent;
 
 public interface NewGuest {
     void onGastAangemaakt(GastModel gast);
