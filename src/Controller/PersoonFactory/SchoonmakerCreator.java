@@ -6,7 +6,7 @@ import Model.Ruimtes.KamerType;
 
 public class SchoonmakerCreator extends PersoonFactory {
     @Override
-    public PersoonModel createPersoon(int gastId, KamerType targetlocatie, KamerType locatie, int wensen) {
+    public PersoonModel createPersoon(int gastId, String targetlocatie, String locatie, int wensen) {
         return new SchoonmakerModel(null, null, null);
     }
 }

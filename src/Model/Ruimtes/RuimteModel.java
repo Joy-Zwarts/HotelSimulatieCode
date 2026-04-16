@@ -37,9 +37,13 @@ public class RuimteModel {
         return y;
     }
     public void setPositionY(int y) {
-        String newpositionY = getPositionX() + "," + y;
-        this.position = newpositionY;
+        this.position = getPositionX() + "," + y;
     }
+
+    public void setPositionX(int x) {
+        this.position = x + "," + getPositionY();
+    }
+
     public int getDimensionW() {
         String[] dim = dimension.split(",");
         int w = Integer.parseInt(dim[0].trim());
@@ -63,5 +67,9 @@ public class RuimteModel {
 
     public void setAantalGasten(int aantalGasten) {
         this.aantalGasten = aantalGasten;
+    }
+
+    public void setPosition(int x, int y) {
+        this.position = x + ", " + y;
     }
 }

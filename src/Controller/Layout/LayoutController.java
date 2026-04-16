@@ -27,4 +27,11 @@ public class LayoutController {
         view.plaatsKamers(model.getRuimtes(), model.getVerplichteElementen()
         );
     }
+
+    public LayoutModel getModel() {
+        return model;
+    }
+    public LayoutView getView() {
+        return view;
+    }
 }

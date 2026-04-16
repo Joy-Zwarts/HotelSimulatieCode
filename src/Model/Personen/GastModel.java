@@ -5,11 +5,11 @@ import Model.Ruimtes.KamerType;
 import Model.Ruimtes.RoomClassificatie;
 
 public class GastModel extends PersoonModel {
-    private final RoomClassificatie wensen;
+    private RoomClassificatie wensen;
     private KamerModel kamer;
-    private final int gastID;
+    private int gastID;
 
-    public GastModel(int gastId, KamerType locatie, KamerType targetLocatie, RoomClassificatie wensen, KamerModel kamer) {
+    public GastModel(int gastId, String locatie, String targetLocatie, RoomClassificatie wensen, KamerModel kamer) {
         super(locatie, targetLocatie);
         this.gastID = gastId;
         this.wensen = wensen;
@@ -44,6 +44,10 @@ public class GastModel extends PersoonModel {
         return this.kamer;
     }
 
+    public void setGastID(int gastid) {
+        this.gastID = gastid;
+    }
+
     public void setKamer(KamerModel kamer) {
         this.kamer = kamer;
     }
@@ -52,7 +56,12 @@ public class GastModel extends PersoonModel {
         return this.wensen;
     }
 
+    public void setWensen(RoomClassificatie wens) {
+        this.wensen = wens;
+    }
+
     public int getGastID() {
         return this.gastID;
     }
+
 }

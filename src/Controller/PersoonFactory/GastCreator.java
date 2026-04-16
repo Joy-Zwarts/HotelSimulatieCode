@@ -12,7 +12,7 @@ public class GastCreator extends PersoonFactory {
     private RoomClassificatie wensen;
 
     @Override
-    public PersoonModel createPersoon(int gastId, KamerType targetlocatie, KamerType locatie, int Wensen) {
+    public PersoonModel createPersoon(int gastId, String targetlocatie, String locatie, int Wensen) {
         switch (Wensen) {
             case 1:
                 wensen = RoomClassificatie.eenSter;

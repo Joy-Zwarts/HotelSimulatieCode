@@ -1,5 +1,6 @@
 package Controller;
 
+import Controller.GastManagement.GastPlaatser;
 import Controller.GastManagement.PersoonController;
 import Controller.GastManagement.ReceptieController;
 import Controller.GastManagement.RoomAssign;
@@ -16,7 +17,7 @@ import View.Systeem.TimeManagementPanel;
 import View.Systeem.TimePanel;
 import hotelevents.HotelEventManager;
 
-public class SimulatieController {
+public abstract class SimulatieController {
 
     // attributen
 
@@ -50,15 +51,19 @@ public class SimulatieController {
 
         RoomAssign roomAssign = new RoomAssign(receptieController);
 
-
         LayoutLoader layoutLoader = new LayoutLoader(manager, view, model, pauseController, view);
+
+        GastPlaatser gastPlaatser = new GastPlaatser(null);
+
+        layoutLoader.setNewLayoutListener(gastPlaatser);
 
         layoutLoader.setNewRoomListener(receptieController);
 
-        persoonController.setNewGuestListener(receptieController);
-        
-
         persoonController.setNewGuestListener(roomAssign);
+
+        persoonController.setNewGuestListener(gastPlaatser);
+
+        persoonController.setNewGuestListener(receptieController);
 
         TimePanel timePanel = new TimePanel(manager, view.getTopBar());
 
@@ -84,6 +89,9 @@ public class SimulatieController {
     public int getScenario() {
         return scenario;
     }
+
+    public abstract void setStarted(boolean val);
+
     public void setScenario(int scenario) {
         this.scenario = scenario;
     }

@@ -1,15 +1,20 @@
 package View.Layout;
 
+import Controller.Layout.GridVakjeController;
+import Controller.Layout.LayoutController;
+import Controller.Layout.LayoutGeladen;
 import Model.Ruimtes.*;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 public class GridVakjeView {
 
     // attributen
     private final JPanel vakjePanel;
+    private JLabel aantalMensen;
 
     // constructor
     public GridVakjeView(int x, int y, int breedte, int hoogte) {
@@ -82,52 +87,59 @@ public class GridVakjeView {
 
     public void zetPersonenAantal(RuimteModel ruimte, boolean isRechtsBoven){
 
-        if ((ruimte.getAreaType().equals(KamerType.SCHACHT)) || (ruimte.getAreaType().equals(KamerType.LOBBY))|| (ruimte.getAreaType().equals(KamerType.TRAPPEN))) {
+        if ((ruimte.getAreaType().equals(KamerType.SCHACHT)) ||
+                (ruimte.getAreaType().equals(KamerType.LOBBY)) ||
+                (ruimte.getAreaType().equals(KamerType.TRAPPEN))) {
             return;
         }
 
-        if(isRechtsBoven){
+        if(!isRechtsBoven) return;
 
-            vakjePanel.setLayout(null);
+        vakjePanel.setLayout(null);
 
-            ImageIcon icon = laadIcon("gast.png");
-
-            JLabel iconLabel = null;
-            int iconSize = 12;
-
-            if (icon != null) {
-                Image img = icon.getImage();
-                Image scaled = img.getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH);
-                icon = new ImageIcon(scaled);
-
-                iconLabel = new JLabel(icon);
+        Component[] components = vakjePanel.getComponents();
+        for (Component c : components) {
+            if (c instanceof JLabel && "GAST_LABEL".equals(c.getName())) {
+                vakjePanel.remove(c);
             }
-
-            JLabel aantalMensen = new JLabel(String.valueOf(ruimte.getAantalGasten()));
-            aantalMensen.setFont(new Font("Arial", Font.BOLD, 12));
-
-            int x = vakjePanel.getWidth() - 2;
-            int y = 2;
-
-            int spacing = 2;
-
-            aantalMensen.setSize(aantalMensen.getPreferredSize());
-
-            int totalWidth = aantalMensen.getWidth() + iconSize + spacing;
-
-            int startX = vakjePanel.getWidth() - totalWidth - 2;
-
-            // 👤 icon positie
-            if (iconLabel != null) {
-                iconLabel.setBounds(startX, y, iconSize, iconSize);
-                vakjePanel.add(iconLabel);
-            }
-
-            aantalMensen.setLocation(startX + iconSize + spacing, y);
-
-            vakjePanel.add(aantalMensen);
-            vakjePanel.repaint();
         }
+
+        ImageIcon icon = laadIcon("gast.png");
+
+        int iconSize = 12;
+
+        JLabel iconLabel = null;
+
+        if (icon != null) {
+            Image img = icon.getImage();
+            Image scaled = img.getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH);
+            icon = new ImageIcon(scaled);
+
+            iconLabel = new JLabel(icon);
+        }
+
+        aantalMensen = new JLabel(String.valueOf(ruimte.getAantalGasten()));
+        aantalMensen.setFont(new Font("Arial", Font.BOLD, 12));
+        aantalMensen.setName("GAST_LABEL"); // 🔥 key voor cleanup
+
+        aantalMensen.setSize(aantalMensen.getPreferredSize());
+
+        int spacing = 2;
+        int totalWidth = aantalMensen.getWidth() + iconSize + spacing;
+
+        int startX = vakjePanel.getWidth() - totalWidth - 2;
+        int y = 2;
+
+        if (iconLabel != null) {
+            iconLabel.setBounds(startX, y, iconSize, iconSize);
+            vakjePanel.add(iconLabel);
+        }
+
+        aantalMensen.setLocation(startX + iconSize + spacing, y);
+        vakjePanel.add(aantalMensen);
+
+        vakjePanel.revalidate();
+        vakjePanel.repaint();
     }
 
     public void clearInhoud() {
