@@ -1,2 +1,2 @@
-public class TestDarkmode {
+public class TestDarkMode {
 }
