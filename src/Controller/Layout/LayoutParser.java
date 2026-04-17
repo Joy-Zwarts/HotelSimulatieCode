@@ -1,6 +1,6 @@
 package Controller.Layout;
 
-import Model.Ruimtes.RuimteData;
+import Model.Layout.RuimteData;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -13,6 +13,7 @@ public class LayoutParser {
 
     private static final long DEFAULT_CAPACITY = 9999;
 
+    // parsed de json file en maakt data aan gebaseerd op de waarden uit de file en slaat deze op in een array
     public List<RuimteData> parse(String file) throws Exception {
 
         List<RuimteData> ruimtes = new ArrayList<>();
@@ -27,7 +28,16 @@ public class LayoutParser {
             RuimteData data = new RuimteData();
 
             data.areaType = (String) ruimte.get("AreaType");
-            data.position = (String) ruimte.get("Position");
+            String position = (String) ruimte.get("Position");
+
+            String[] xPos = position.split(",");
+            int x = Integer.parseInt(xPos[0].trim());
+
+            String[] yPos = position.split(",");
+            int y = Integer.parseInt(yPos[1].trim());
+
+            data.position = new Locatie(x, y);
+
             data.dimension = (String) ruimte.get("Dimension");
 
             Object capObj = ruimte.get("Capacity");
@@ -40,6 +50,6 @@ public class LayoutParser {
             ruimtes.add(data);
         }
 
-        return ruimtes;
+        return ruimtes; // returned al de gemaakte ruimtes uit de array als hij klaar is
     }
 }

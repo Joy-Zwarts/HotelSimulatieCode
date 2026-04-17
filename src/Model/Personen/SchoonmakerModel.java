@@ -1,9 +1,11 @@
 package Model.Personen;
 
-import Model.Ruimtes.KamerType;
+import Controller.Layout.Locatie;
 
 public class SchoonmakerModel extends PersoonModel {
-    public SchoonmakerModel(String locatie, String targetLocatie, String schoonmaakSpot) {
+
+    // constructor
+    public SchoonmakerModel(Locatie locatie, Locatie targetLocatie) {
         super(locatie, targetLocatie);
     }
 

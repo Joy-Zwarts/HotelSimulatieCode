@@ -1,8 +1,10 @@
 package Controller.RuimteFactory;
 
+import Controller.Layout.Locatie;
 import Model.Ruimtes.RuimteModel;
 
 public abstract class RuimteFactory {
 
-    public abstract RuimteModel createRuimte(String position, String dimension, long capacity, String classification);
+    // factory voor alle ruimtes
+    public abstract RuimteModel createRuimte(Locatie position, String dimension, long capacity, String classification);
 }

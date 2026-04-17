@@ -17,7 +17,7 @@ import View.Systeem.TimeManagementPanel;
 import View.Systeem.TimePanel;
 import hotelevents.HotelEventManager;
 
-public abstract class SimulatieController {
+public class SimulatieController {
 
     // attributen
 
@@ -75,7 +75,7 @@ public abstract class SimulatieController {
 
         view.setTopbar(timePanel, timeManagementPanel);
 
-        ButtonController buttonManager = new ButtonController(view, this, manager, layoutLoader, settingsController, pauseController);
+        ButtonController buttonManager = new ButtonController(view, this, manager, layoutLoader, settingsController);
     }
 
     // getters & setters
@@ -89,9 +89,9 @@ public abstract class SimulatieController {
     public int getScenario() {
         return scenario;
     }
-
-    public abstract void setStarted(boolean val);
-
+    public void setStarted(boolean started) {
+        this.started = started;
+    }
     public void setScenario(int scenario) {
         this.scenario = scenario;
     }

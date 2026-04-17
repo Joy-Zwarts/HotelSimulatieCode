@@ -1,7 +1,10 @@
 package Model.Ruimtes;
 
+import Controller.Layout.Locatie;
+
 public class TrappenhuisModel extends RuimteModel {
-    public TrappenhuisModel(KamerType areaType, String position, String dimension) {
+    // constructor
+    public TrappenhuisModel(KamerType areaType, Locatie position, String dimension) {
         super(areaType, position, dimension);
     }
 }

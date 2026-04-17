@@ -1,51 +1,81 @@
 package Model.Personen;
 
+import Controller.Layout.Locatie;
 import Model.Ruimtes.KamerModel;
-import Model.Ruimtes.KamerType;
 import Model.Ruimtes.RoomClassificatie;
 
+import javax.swing.*;
+import java.awt.*;
+
 public class GastModel extends PersoonModel {
+    // attributen
+
     private RoomClassificatie wensen;
     private KamerModel kamer;
-    private int gastID;
+    private final int gastID;
+    private JLabel gastLabel;
 
-    public GastModel(int gastId, String locatie, String targetLocatie, RoomClassificatie wensen, KamerModel kamer) {
+    // constructor
+    public GastModel(int gastId, Locatie locatie, Locatie targetLocatie, RoomClassificatie wensen, KamerModel kamer) {
         super(locatie, targetLocatie);
         this.gastID = gastId;
         this.wensen = wensen;
         this.kamer = kamer;
+        initGastLabel();
     }
 
-    public void inchecken(KamerModel kamer) {
+    // maak een rond gasten icoon label met de gastID in het midden
+    private void initGastLabel() {
+        this.gastLabel = new JLabel(String.valueOf(gastID), SwingConstants.CENTER) {
+            @Override
+            public void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g;
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                g2.setColor(new Color(36, 104, 181));
+                g2.fillOval(0, 0, getWidth() - 1, getHeight() - 1);
+
+                g2.setColor(Color.WHITE);
+                g2.drawOval(0, 0, getWidth() - 1, getHeight() - 1);
+
+                super.paintComponent(g);
+            }
+        };
+
+        this.gastLabel.setPreferredSize(new Dimension(20, 20));
+        this.gastLabel.setSize(new Dimension(20, 20));
+        this.gastLabel.setForeground(Color.WHITE);
+        this.gastLabel.setFont(new Font("Arial", Font.BOLD, 11));
     }
 
-    public void uitchecken(KamerModel kamer) {
-    }
+    // voor later
 
-    public void gebruikFitness() {
-    }
+//    public void gebruikFitness() {
+//    }
+//
+//    public void gebruikKamer() {
+//    }
+//
+//    public void gebruikBios() {
+//    }
+//
+//    public void gebruikTrap() {
+//    }
+//
+//    public void callLift() {
+//    }
+//
+//    public void gebruikLift() {
+//    }
 
-    public void gebruikKamer() {
-    }
-
-    public void gebruikBios() {
-    }
-
-    public void gebruikTrap() {
-    }
-
-    public void callLift() {
-    }
-
-    public void gebruikLift() {
+    // getters en setters
+    public JLabel getGastLabel() {
+        if (gastLabel == null) initGastLabel();
+        return gastLabel;
     }
 
     public KamerModel getKamer() {
         return this.kamer;
-    }
-
-    public void setGastID(int gastid) {
-        this.gastID = gastid;
     }
 
     public void setKamer(KamerModel kamer) {

@@ -24,7 +24,7 @@ public class ButtonController implements ActionListener {
 
     // constructor
 
-    public ButtonController(HotelSimulatieView hotelView, SimulatieController hotelSimulatieManager, HotelEventManager hotelEventManager, LayoutLoader layoutLoader, SettingsController SettingsController, PauseController PauseController) {
+    public ButtonController(HotelSimulatieView hotelView, SimulatieController hotelSimulatieManager, HotelEventManager hotelEventManager, LayoutLoader layoutLoader, SettingsController SettingsController) {
         this.simulatieManager = hotelSimulatieManager;
         this.eventManager = hotelEventManager;
         this.view = hotelView;
@@ -62,7 +62,7 @@ public class ButtonController implements ActionListener {
 
         // start simulation button
         else if (source == view.getStartSimulationButton()) {
-            if (model == null) { // als er nog geen layout is geupload
+            if (model == null) { // als er nog geen layout is geüpload
                 JOptionPane.showMessageDialog(view, "Load eerst een layout bestand", "Error", JOptionPane.ERROR_MESSAGE);
 
             } else if (!(simulatieManager.getStarted())) { // als het niet al is gestart

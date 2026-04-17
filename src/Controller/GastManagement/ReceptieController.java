@@ -8,6 +8,8 @@ import View.Systeem.OverzichtView;
 import java.util.HashMap;
 
 public class ReceptieController implements NewRoom, NewGuest {
+
+    // attributen
     private final HashMap<Integer, KamerModel> kamers;
     private final HashMap<Integer, KamerModel> legeKamers;
     private final HashMap<Integer, KamerModel> volleKamers;
@@ -15,6 +17,8 @@ public class ReceptieController implements NewRoom, NewGuest {
     private final HashMap<Integer, GastModel> gasten;
 
     private final OverzichtView view;
+
+    // constructor
 
     public ReceptieController(OverzichtView view) {
         this.kamers = new HashMap<>();
@@ -24,6 +28,7 @@ public class ReceptieController implements NewRoom, NewGuest {
         this.view = view;
     }
 
+    // zet een kamer op leeg en haalt deze uit de volle kamer lijst en stopt deze in de lege kamer lijst
     public void setKamerLeeg(KamerModel kamer) {
         if (kamer == null) return;
 
@@ -34,6 +39,7 @@ public class ReceptieController implements NewRoom, NewGuest {
         volleKamers.remove(kamer.getRoomNumber());
     }
 
+    // zet een kamer op vol en haalt deze uit de lege kamer lijst en stopt deze in de volle kamer lijst
     public void setKamerVol(KamerModel kamer) {
         if (kamer == null) return;
 
@@ -43,20 +49,10 @@ public class ReceptieController implements NewRoom, NewGuest {
         legeKamers.remove(kamer.getRoomNumber());
     }
 
-    public HashMap<Integer, KamerModel> getLegeKamers() {
-        return legeKamers;
-    }
-
-    public HashMap<Integer, KamerModel> getVolleKamers() {
-        return volleKamers;
-    }
+    // getters en setters
 
     public HashMap<Integer, KamerModel> getKamers() {
         return kamers;
-    }
-
-    public HashMap<Integer, GastModel> getGasten() {
-        return gasten;
     }
 
     public GastModel getGast(int gastID) {
@@ -73,6 +69,9 @@ public class ReceptieController implements NewRoom, NewGuest {
         refreshView();
     }
 
+    // reacties op events
+
+    // zet de nieuwe kamer in de lijst met kamers en print een confirmation message
     @Override
     public void onNewRoom(RuimteModel kamer) {
         KamerModel k = (KamerModel) kamer;
@@ -86,6 +85,7 @@ public class ReceptieController implements NewRoom, NewGuest {
         refreshView();
     }
 
+    // zet de nieuwe gast in de lijst met gasten en print een confirmation message
     @Override
     public void onGastAangemaakt(GastModel gast) {
         addGast(gast);
@@ -93,10 +93,9 @@ public class ReceptieController implements NewRoom, NewGuest {
         System.out.println("New Guest has been created");
     }
 
+    // zet de kamer weer op leeg en haal de gast uit de lijst met gasten en print een confirmation message
     @Override
-    public void onGastVertrokken(int gastID) {
-
-        GastModel gast = gasten.get(gastID);
+    public void onGastVertrokken(GastModel gast) {
 
         if (gast != null && gast.getKamer() != null) {
             KamerModel kamer = gast.getKamer();
@@ -109,7 +108,9 @@ public class ReceptieController implements NewRoom, NewGuest {
             gast.setKamer(null);
         }
 
-        removeGast(gastID);
+        if (gast != null) {
+            removeGast(gast.getGastID());
+        }
 
         System.out.println("Guest has left");
     }

@@ -1,7 +1,10 @@
 package Model.Ruimtes;
 
+import Controller.Layout.Locatie;
+
 public class LobbyModel extends RuimteModel {
-    public LobbyModel(KamerType areaType, String position, String dimension) {
+    // constructor
+    public LobbyModel(KamerType areaType, Locatie position, String dimension) {
         super(areaType, position, dimension);
     }
 }

@@ -1,8 +1,8 @@
 package Controller.GastManagement;
 
+import Controller.Layout.Locatie;
 import Controller.PersoonFactory.GastCreator;
 import Model.Personen.GastModel;
-import Model.Ruimtes.KamerType;
 import View.Systeem.OverzichtView;
 import hotelevents.HotelEvent;
 import hotelevents.HotelEventListener;
@@ -12,11 +12,14 @@ import hotelevents.HotelEventType;
 import java.util.ArrayList;
 
 public class PersoonController implements HotelEventListener {
+
+    // attributen
     private final OverzichtView view;
     private final GastCreator factory;
-    private ArrayList<NewGuest> listeners;
+    private final ArrayList<NewGuest> listeners;
     private final ReceptieController receptie;
 
+    // constructor
     public PersoonController(HotelEventManager hotelEventManager, OverzichtView overzichtView, ReceptieController receptieController) {
         this.view = overzichtView;
         this.receptie = receptieController;
@@ -26,33 +29,48 @@ public class PersoonController implements HotelEventListener {
         factory = new GastCreator();
     }
 
+    // reacties op events
+
+    // bij een check-in event wordt er een nieuwe gast aan gemaakt en worden de listeners ge-notified hierover
     @Override
     public void notify(HotelEvent hotelEvent) {
 
         if (hotelEvent.getEventType() == HotelEventType.CHECK_IN) {
 
+            // maak nieuwe locatie klassen aan voor current locatie en target locatie
+            Locatie locatie = new Locatie(0,0);
+            Locatie targetLocatie = new Locatie(0,0);
+
             GastModel gast = (GastModel) factory.createPersoon(
                     hotelEvent.getGuestId(),
-                    "0,0",
-                    null,
+                    locatie,
+                    targetLocatie,
                     hotelEvent.getData()
             );
 
+            // notify de listeners dat er een nieuwe gast is aangemaakt
             if (listeners != null) {
                 for (NewGuest listener : listeners) {
                     listener.onGastAangemaakt(gast);
                 }
             }
 
-        } else if (hotelEvent.getEventType() == HotelEventType.CHECK_OUT) {
+        } else if (hotelEvent.getEventType() == HotelEventType.CHECK_OUT) { // bij een checkout event
 
+            GastModel gast = receptie.getGast(hotelEvent.getGuestId());
+
+            // notify listeners dat de gast is weggegaan
             if (listeners != null) {
                 for (NewGuest listener : listeners) {
-                    listener.onGastVertrokken(hotelEvent.getGuestId());
+                    listener.onGastVertrokken(gast);
                 }
             }
         }
     }
+
+    // getters en setters
+
+    // zet een listener voor de gast-events
     public void setNewGuestListener(NewGuest listener) {
         listeners.add(listener);
     }

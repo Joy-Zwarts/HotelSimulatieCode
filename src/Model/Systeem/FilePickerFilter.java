@@ -3,7 +3,6 @@ package Model.Systeem;
 import java.io.File;
 
 public class FilePickerFilter {
-
     public static File filterJsonFile(File file) {
         if (file == null) {
             return null;

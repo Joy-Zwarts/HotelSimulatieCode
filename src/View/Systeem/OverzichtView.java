@@ -10,6 +10,7 @@ import java.awt.*;
 import java.util.HashMap;
 
 public class OverzichtView {
+    // attributen
 
     private final JFrame pauseFrame;
 
@@ -17,6 +18,7 @@ public class OverzichtView {
     private final JPanel roomContent;
     private final HotelEventManager manager;
 
+    // constructor
     public OverzichtView(HotelSimulatieView view, PauseController pauseController, HotelEventManager hotelEventManager) {
         this.manager = hotelEventManager;
 
@@ -59,6 +61,7 @@ public class OverzichtView {
 
         pauseFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
+        // als je het frame sluit in plaats van op hervatten drukken
         pauseFrame.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent e) {
@@ -73,15 +76,18 @@ public class OverzichtView {
         pauseFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
     }
 
+    // laat frame zien
     public void show() {
         pauseFrame.setVisible(true);
         pauseFrame.toFront();
     }
 
+    // hide de frame
     public void hide() {
         pauseFrame.setVisible(false);
     }
 
+    // herteken de gasten lijst (laat alle gasten in het hotel op dat moment en hun belangrijke data zien)
     public void tekenGastLijst(HashMap<Integer, GastModel> gasten) {
 
         guestContent.removeAll();
@@ -111,6 +117,7 @@ public class OverzichtView {
         guestContent.repaint();
     }
 
+    // herteken de kamer lijst (laat alle kamers in het hotel en hun belangrijke data zien)
     public void tekenKamerLijst(HashMap<Integer, KamerModel> kamers) {
 
         roomContent.removeAll();
@@ -128,7 +135,7 @@ public class OverzichtView {
                 roomContent.add(new JLabel(
                         "Kamernummer:  " + kamer.getRoomNumber() +
                                 "    |    Aantal sterren: " + kamer.getClassification() +
-                                "    |    Positie:  " + kamer.getPosition() +
+                                "    |    Positie:  " + kamer.getPositionString() +
                                 "    |    Grootte:  " + kamer.getDimension() +
                                 "    |    Verblijvende :  gast " + verblijvende
                 ));

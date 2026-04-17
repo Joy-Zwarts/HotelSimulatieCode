@@ -1,6 +1,7 @@
 package Model.Layout;
 
 import Controller.Layout.GridVakjeController;
+import Controller.Layout.Locatie;
 import Model.Ruimtes.*;
 
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ public class LayoutModel {
 
     private final ArrayList<RuimteModel> ruimtes;
     private final ArrayList<RuimteModel> verplichteElementen;
-    private final HashMap<String, GridVakjeController> grid;
+    private final HashMap<Locatie, GridVakjeController> grid;
 
     //constructor
     public LayoutModel() {
@@ -27,23 +28,26 @@ public class LayoutModel {
     }
 
     // add verplichte elementen (schacht, lift, trappen & lobby)
-    public void addverplichteElementen(int gridLengte, int gridBreedte) {
+    public void addVerplichteElementen(int gridLengte, int gridBreedte) {
         String schachtDimension = "1," + gridLengte/2;
-        addKamerBuitenJson(KamerType.SCHACHT, "1,1", schachtDimension, gridLengte);
-        String verdiepingLift = "1," + (gridLengte+1)/2;
-        addKamerBuitenJson(KamerType.LIFT, verdiepingLift, "1,1", gridLengte);
-        String schachtStart = "1," + (gridLengte/2 + 2);
-        addKamerBuitenJson(KamerType.SCHACHT, schachtStart, schachtDimension, gridLengte);
-        String trappenPosition = gridBreedte + ",1";
+        Locatie schacht1Pos = new Locatie(1,1);
+        addKamerBuitenJson(KamerType.SCHACHT, schacht1Pos, schachtDimension, gridLengte);
+        int verdiepingLiftY = (gridLengte+1)/2;
+        Locatie liftPos = new Locatie(1,verdiepingLiftY);
+        addKamerBuitenJson(KamerType.LIFT, liftPos, "1,1", gridLengte);
+        int schachtStart = (gridLengte/2 + 2);
+        Locatie schacht2Pos = new Locatie(1,schachtStart);
+        addKamerBuitenJson(KamerType.SCHACHT, schacht2Pos, schachtDimension, gridLengte);
         String trappenDimension = "1," + gridLengte;
-        addKamerBuitenJson(KamerType.TRAPPEN, trappenPosition, trappenDimension, gridLengte);
-        String lobbyPosition = "2," + gridLengte;
+        Locatie trappenPos = new Locatie(gridBreedte,1);
+        addKamerBuitenJson(KamerType.TRAPPEN, trappenPos, trappenDimension, gridLengte);
         String lobbyDimension = gridLengte-3 + ",1";
-        addKamerBuitenJson(KamerType.LOBBY, lobbyPosition, lobbyDimension, gridLengte);
+        Locatie lobbyPos = new Locatie(2,gridLengte);
+        addKamerBuitenJson(KamerType.LOBBY, lobbyPos, lobbyDimension, gridLengte);
     }
 
     // voeg toe aan de lijst
-    public void addKamerBuitenJson(KamerType kamerType, String position, String dimension, int gridLengte) {
+    public void addKamerBuitenJson(KamerType kamerType, Locatie position, String dimension, int gridLengte) {
         switch (kamerType) {
             case KamerType.LIFT:
                 verplichteElementen.add(new LiftModel(kamerType, position, dimension, (gridLengte + 1) / 2, true));
@@ -70,7 +74,7 @@ public class LayoutModel {
         return 60; // voor nu nog hardcoded
     }
 
-    public HashMap<String, GridVakjeController> getGrid() {
+    public HashMap<Locatie, GridVakjeController> getGrid() {
         return grid;
     }
 

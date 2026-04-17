@@ -1,9 +1,10 @@
 package Controller.PersoonFactory;
 
+import Controller.Layout.Locatie;
 import Model.Personen.PersoonModel;
-import Model.Ruimtes.KamerType;
 
 public abstract class PersoonFactory {
 
-    public abstract PersoonModel createPersoon(int gastId, String targetlocatie, String locatie, int wensen);
+    // factory voor alle personen
+    public abstract PersoonModel createPersoon(int gastId, Locatie locatie,Locatie targetLocatie, int wensen);
 }

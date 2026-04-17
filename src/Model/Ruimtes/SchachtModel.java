@@ -1,7 +1,10 @@
 package Model.Ruimtes;
 
+import Controller.Layout.Locatie;
+
 public class SchachtModel extends RuimteModel {
-    public SchachtModel(KamerType areaType, String position, String dimension) {
+    // constructor
+    public SchachtModel(KamerType areaType, Locatie position, String dimension) {
         super(areaType, position, dimension);
     }
 }

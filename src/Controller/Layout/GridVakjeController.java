@@ -5,7 +5,6 @@ import Model.Layout.GridVakjeModel;
 import Model.Ruimtes.KamerType;
 import Model.Ruimtes.RuimteModel;
 import View.Layout.GridVakjeView;
-import View.Systeem.HotelSimulatieView;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
@@ -21,8 +20,7 @@ public class GridVakjeController {
 
     public GridVakjeController(GridVakjeModel model,
                                GridVakjeView view,
-                               PauseController pauseController,
-                               HotelSimulatieView SimulatieView) {
+                               PauseController pauseController) {
 
         this.model = model;
         this.gridView = view;
