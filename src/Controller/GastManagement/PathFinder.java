@@ -5,11 +5,13 @@ import Controller.Layout.Locatie;
 import java.util.LinkedList;
 
 public class PathFinder {
+    // attributen
     private final LinkedList<Locatie> walkQueue;
     private final LayoutController layoutController;
     private Locatie currentLocatie;
     private final Locatie targetLocatie;
 
+    // constructor
     public PathFinder(Locatie start, Locatie target, LayoutController controller) {
         this.currentLocatie = start;
         this.targetLocatie = target;
@@ -19,35 +21,36 @@ public class PathFinder {
         berekenRoute();
     }
 
+    // bereken de route van de locatie nu naar de target locatie
     public void berekenRoute() {
         walkQueue.clear();
 
-        // Stap 1: Check of we naar een andere verdieping moeten
+        // check of we naar een andere verdieping moeten
         if (currentLocatie.getY() != targetLocatie.getY()) {
 
-            // De trap is altijd het meest rechter vakje.
-            // We halen de breedte op uit de controller/view.
+
+            // locatie van de trap ophalen
             int trapX = layoutController.getView().getGridBreedte() - 1;
 
             Locatie trapHuidigeVerdieping = new Locatie(trapX, currentLocatie.getY());
             Locatie trapTargetVerdieping = new Locatie(trapX, targetLocatie.getY());
 
-            // 1a. Loop horizontaal naar de trap op de huidige verdieping
+            // loop horizontaal naar de trap op de current verdieping
             planHorizontaalPad(currentLocatie, trapHuidigeVerdieping);
 
-            // 1b. Ga verticaal (met de trap) naar de target verdieping
+            // ga verticaal (met de trap) naar de target verdieping
             planVerticaalPad(trapHuidigeVerdieping, trapTargetVerdieping);
 
-            // 1c. Loop vanaf de trap op de nieuwe verdieping naar de target kamer
+            // loop vanaf de trap op de nieuwe verdieping naar de target kamer
             planHorizontaalPad(trapTargetVerdieping, targetLocatie);
 
         } else {
-            // We zijn al op de juiste verdieping, loop direct horizontaal
+            // als je al op de juiste verdieping bent loop direct horizontaal naar de target kamer
             planHorizontaalPad(currentLocatie, targetLocatie);
         }
     }
 
-
+    // plan het horizontale pad stap voor stap van de beginlocatie naar de eindlocatie
     private void planHorizontaalPad(Locatie start, Locatie eind) {
         int tempX = start.getX();
         int y = start.getY();
@@ -59,6 +62,7 @@ public class PathFinder {
         }
     }
 
+    // plan het verticale pad stap voor stap van de beginlocatie naar de eindlocatie
     private void planVerticaalPad(Locatie start, Locatie eind) {
         int x = start.getX();
         int tempY = start.getY();
@@ -70,10 +74,13 @@ public class PathFinder {
         }
     }
 
+    // getters & setters
+
+    // krijg de eerstvolgende stap in de walk queue
     public Locatie getNextStep() {
         if (walkQueue.isEmpty()) return null;
 
-        // Update de huidige locatie naar de stap die we nu gaan zetten
+        // update de huidige locatie naar de stap die we nu gaan zetten
         this.currentLocatie = walkQueue.poll();
         return currentLocatie;
     }

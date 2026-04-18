@@ -9,6 +9,7 @@ import Model.Ruimtes.RuimteModel;
 import View.Layout.LayoutView;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.HashMap;
 
 public class GastPlaatser implements NewGuest, LayoutGeladen {
@@ -71,7 +72,7 @@ public class GastPlaatser implements NewGuest, LayoutGeladen {
         }
     }
 
-    // reacties of events
+    // reacties op events
 
     // verwijder gast-icoon uit kamer en verlaag het gastenaantal label
     @Override
@@ -101,22 +102,38 @@ public class GastPlaatser implements NewGuest, LayoutGeladen {
 
     @Override
     public void onGastVerplaatst(GastModel gast, Locatie oudeLocatie) {
-        // 1. Verwijder uit oude vakje
+        if (oudeLocatie != null && oudeLocatie.equals(gast.getLocatie())) return;
+
+        // het oude vakje opschonen
         GridVakjeController oudVak = grid.get(oudeLocatie);
         if (oudVak != null) {
-            oudVak.getGridView().getGuestPanel().remove(gast.getGastLabel());
-            // Forceer een volledige refresh van het hele vakje
-            oudVak.getGridView().getVakjePanel().revalidate();
-            oudVak.getGridView().getVakjePanel().repaint();
+            JPanel container = oudVak.getGridView().getGuestPanel();
+            container.remove(gast.getGastLabel());
+
+            // gebruik de layeredPane voor de repaint
+            JComponent vakje = oudVak.getGridView().getVakjePanel();
+            vakje.revalidate();
+            vakje.repaint();
         }
 
-        // 2. Voeg toe aan nieuwe vakje
+        // nieuw vakje vullen
         GridVakjeController nieuwVak = grid.get(gast.getLocatie());
         if (nieuwVak != null) {
-            nieuwVak.getGridView().getGuestPanel().add(gast.getGastLabel());
-            // Belangrijk: revalidate op de container en repaint op het geheel
-            nieuwVak.getGridView().getGuestPanel().revalidate();
-            nieuwVak.getGridView().getVakjePanel().repaint();
+            JPanel container = nieuwVak.getGridView().getGuestPanel();
+
+            // controleer of de gast er niet al per ongeluk in zit
+            boolean alAanwezig = false;
+            for (Component c : container.getComponents()) {
+                if (c == gast.getGastLabel()) { alAanwezig = true; break; }
+            }
+
+            if (!alAanwezig) {
+                container.add(gast.getGastLabel());
+            }
+
+            JComponent vakje = nieuwVak.getGridView().getVakjePanel();
+            container.revalidate();
+            vakje.repaint();
         }
     }
 

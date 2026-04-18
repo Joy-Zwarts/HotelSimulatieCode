@@ -126,14 +126,4 @@ public class ReceptieController implements NewRoom, NewGuest {
 
         view.tekenKamerLijst(kamers);
     }
-
-    public KamerModel getKamerVoorGast(int guestId) {
-        // Zoek de gast op in de lijst van de receptie
-        GastModel gast = gasten.get(guestId);
-
-        if (gast != null) {
-            return gast.getKamer();
-        }
-        return null;
-    }
 }
