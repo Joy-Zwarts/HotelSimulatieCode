@@ -123,7 +123,6 @@ public class ReceptieController implements NewRoom, NewGuest {
 
     public void refreshView() {
         view.tekenGastLijst(gasten);
-
         view.tekenKamerLijst(kamers);
     }
 }

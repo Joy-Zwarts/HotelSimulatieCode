@@ -45,16 +45,6 @@ public class PersoonController implements HotelEventListener, LayoutGeladen {
         bewegingsTimer.start();
     }
 
-    // snelheid aan passen als de hte in de simulatie verandert
-    public void updateSnelheid(int nieuweSnelheid) {
-        this.hteSnelheid = nieuweSnelheid;
-        if (bewegingsTimer != null) {
-            bewegingsTimer.setInitialDelay(0);
-            bewegingsTimer.setDelay(hteSnelheid);
-            bewegingsTimer.restart();
-        }
-    }
-
     // beweeg de gast met hulp van de pathfinder
     private void moveGasten() {
         int vertraging = 0;
@@ -76,7 +66,7 @@ public class PersoonController implements HotelEventListener, LayoutGeladen {
                         // render elke gast apart anders blijven gasten hangen op vakjes(is nog een beetje lelijk)
                         SwingUtilities.invokeLater(() -> {
                             for (NewGuest listener : listeners) {
-                                listener.onGastVerplaatst(gast, oudeLocatie);
+                                listener.onGastVerplaatst(gast, oudeLocatie); // notify listeners
                             }
                         });
                     } else {
@@ -87,7 +77,7 @@ public class PersoonController implements HotelEventListener, LayoutGeladen {
                 delayTimer.setRepeats(false);
                 delayTimer.start();
 
-                vertraging += 10; // elke volgende gast beweegt 20ms later
+                vertraging += 10; // elke volgende gast beweegt 10ms later zodat ze niet clashen
             }
         }
     }
