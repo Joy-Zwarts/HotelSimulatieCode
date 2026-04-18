@@ -67,11 +67,11 @@ public class LayoutModel {
     // getters & setters
 
     public int getVakBreedte() {
-        return 120; // voor nu nog hardcoded
+        return 118; // voor nu nog hardcoded
     }
 
     public int getVakHoogte() {
-        return 60; // voor nu nog hardcoded
+        return 59; // voor nu nog hardcoded
     }
 
     public HashMap<Locatie, GridVakjeController> getGrid() {

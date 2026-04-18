@@ -1,11 +1,13 @@
 package Model.Personen;
 
+import Controller.Layout.LayoutController;
+import Controller.Layout.LayoutGeladen;
 import Controller.Layout.Locatie;
-import Model.Ruimtes.KamerModel;
-import Model.Ruimtes.RoomClassificatie;
+import Model.Ruimtes.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 public class GastModel extends PersoonModel {
     // attributen
@@ -93,5 +95,4 @@ public class GastModel extends PersoonModel {
     public int getGastID() {
         return this.gastID;
     }
-
 }

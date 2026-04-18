@@ -1,8 +1,13 @@
 package Controller.GastManagement;
 
+import Controller.Layout.LayoutController;
+import Controller.Layout.LayoutGeladen;
 import Controller.Layout.Locatie;
 import Controller.PersoonFactory.GastCreator;
 import Model.Personen.GastModel;
+import Model.Ruimtes.KamerType;
+import Model.Ruimtes.LobbyModel;
+import Model.Ruimtes.RuimteModel;
 import View.Systeem.OverzichtView;
 import hotelevents.HotelEvent;
 import hotelevents.HotelEventListener;
@@ -11,13 +16,14 @@ import hotelevents.HotelEventType;
 
 import java.util.ArrayList;
 
-public class PersoonController implements HotelEventListener {
+public class PersoonController implements HotelEventListener, LayoutGeladen {
 
     // attributen
     private final OverzichtView view;
     private final GastCreator factory;
     private final ArrayList<NewGuest> listeners;
     private final ReceptieController receptie;
+    private Locatie startLocatie;
 
     // constructor
     public PersoonController(HotelEventManager hotelEventManager, OverzichtView overzichtView, ReceptieController receptieController) {
@@ -38,7 +44,7 @@ public class PersoonController implements HotelEventListener {
         if (hotelEvent.getEventType() == HotelEventType.CHECK_IN) {
 
             // maak nieuwe locatie klassen aan voor current locatie en target locatie
-            Locatie locatie = new Locatie(0,0);
+            Locatie locatie = startLocatie;
             Locatie targetLocatie = new Locatie(0,0);
 
             GastModel gast = (GastModel) factory.createPersoon(
@@ -73,5 +79,12 @@ public class PersoonController implements HotelEventListener {
     // zet een listener voor de gast-events
     public void setNewGuestListener(NewGuest listener) {
         listeners.add(listener);
+    }
+
+    @Override
+    public void onLayoutGeladen(LayoutController layoutController) {
+        int x = layoutController.getView().getGridBreedte()/2;
+        int y = layoutController.getView().getGridLengte() -1 ;
+        startLocatie = new Locatie(x,y);
     }
 }

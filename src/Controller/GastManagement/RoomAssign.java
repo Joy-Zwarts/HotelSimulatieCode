@@ -31,8 +31,8 @@ public class RoomAssign implements NewGuest {
                 controller.setKamerVol(kamer);
                 controller.refreshView();
 
-                gast.getLocatie().setX(kamer.getPosition().getX());
-                gast.getLocatie().setY(kamer.getPosition().getY() -1);
+                gast.getTargetLocatie().setX(kamer.getPosition().getX());
+                gast.getTargetLocatie().setY(kamer.getPosition().getY() -1);
 
                 return;
             }

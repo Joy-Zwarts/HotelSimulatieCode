@@ -59,6 +59,8 @@ public class SimulatieController {
 
         layoutLoader.setNewRoomListener(receptieController);
 
+        layoutLoader.setNewLayoutListener(persoonController);
+
         persoonController.setNewGuestListener(roomAssign);
 
         persoonController.setNewGuestListener(gastPlaatser);
