@@ -1,5 +1,6 @@
 package Controller.GastManagement;
 
+import Controller.Layout.Locatie;
 import Model.Personen.GastModel;
 import Model.Ruimtes.KamerModel;
 import Model.Ruimtes.RuimteModel;
@@ -115,9 +116,24 @@ public class ReceptieController implements NewRoom, NewGuest {
         System.out.println("Guest has left");
     }
 
+    @Override
+    public void onGastVerplaatst(GastModel gast, Locatie oudeLocatie) {
+
+    }
+
     public void refreshView() {
         view.tekenGastLijst(gasten);
 
         view.tekenKamerLijst(kamers);
+    }
+
+    public KamerModel getKamerVoorGast(int guestId) {
+        // Zoek de gast op in de lijst van de receptie
+        GastModel gast = gasten.get(guestId);
+
+        if (gast != null) {
+            return gast.getKamer();
+        }
+        return null;
     }
 }

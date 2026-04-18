@@ -1,5 +1,6 @@
 package Controller.GastManagement;
 
+import Controller.Layout.Locatie;
 import Model.Personen.GastModel;
 import Model.Ruimtes.KamerModel;
 import Model.Ruimtes.RoomClassificatie;
@@ -87,5 +88,10 @@ public class RoomAssign implements NewGuest {
         kamer.setVerblijvende(null);
 
         controller.setKamerLeeg(kamer);
+    }
+
+    @Override
+    public void onGastVerplaatst(GastModel gast, Locatie oudeLocatie) {
+
     }
 }

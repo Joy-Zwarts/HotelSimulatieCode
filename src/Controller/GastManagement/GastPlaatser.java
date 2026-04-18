@@ -99,6 +99,27 @@ public class GastPlaatser implements NewGuest, LayoutGeladen {
         }
     }
 
+    @Override
+    public void onGastVerplaatst(GastModel gast, Locatie oudeLocatie) {
+        // 1. Verwijder uit oude vakje
+        GridVakjeController oudVak = grid.get(oudeLocatie);
+        if (oudVak != null) {
+            oudVak.getGridView().getGuestPanel().remove(gast.getGastLabel());
+            // Forceer een volledige refresh van het hele vakje
+            oudVak.getGridView().getVakjePanel().revalidate();
+            oudVak.getGridView().getVakjePanel().repaint();
+        }
+
+        // 2. Voeg toe aan nieuwe vakje
+        GridVakjeController nieuwVak = grid.get(gast.getLocatie());
+        if (nieuwVak != null) {
+            nieuwVak.getGridView().getGuestPanel().add(gast.getGastLabel());
+            // Belangrijk: revalidate op de container en repaint op het geheel
+            nieuwVak.getGridView().getGuestPanel().revalidate();
+            nieuwVak.getGridView().getVakjePanel().repaint();
+        }
+    }
+
     // krijg layout controller na het aanmaken van de layout
     @Override
     public void onLayoutGeladen(LayoutController layoutController) {

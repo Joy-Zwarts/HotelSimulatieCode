@@ -24,19 +24,23 @@ public class GridVakjeView {
         backgroundPanel.setBounds(0, 0, breedte, hoogte);
         backgroundPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-        // front layer
+        // front layer (Panel dat over de achtergrond ligt)
         JPanel guestPanel = new JPanel();
         guestPanel.setOpaque(false);
         guestPanel.setBounds(0, 0, breedte, hoogte);
-
         guestPanel.setLayout(new BorderLayout());
 
+        // De container voor de gasten (het blauwe gedeelte onderin)
         gastenContainer = new JPanel();
         gastenContainer.setOpaque(false);
 
-        gastenContainer.setLayout(new FlowLayout(FlowLayout.CENTER, 2, 0));
+        // FIX: Zet de hgap en vgap op 0 of 1 om ruimte te besparen
+        // FlowLayout.CENTER zorgt dat ze netjes in het midden staan en niet tegen de wand
+        gastenContainer.setLayout(new FlowLayout(FlowLayout.CENTER, 1, 0));
 
-        guestPanel.add(gastenContainer, BorderLayout.SOUTH);
+        // Belangrijk: Zorg dat de guestPanel (de BorderLayout container)
+        // niet groter kan zijn dan het vakje zelf
+        guestPanel.add(gastenContainer, BorderLayout.SOUTH);;
 
         // voeg ze toe aan de layeredPane
         layeredPane.add(backgroundPanel, Integer.valueOf(0));
