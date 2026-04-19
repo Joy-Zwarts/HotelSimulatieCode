@@ -27,6 +27,7 @@ public class PersoonController implements HotelEventListener, LayoutGeladen {
     private final Map<Integer, GastModel> actieveGasten;
     private Timer bewegingsTimer;
     private int hteSnelheid = 1000;
+    private Locatie behaaldeLocatie;
 
     // constructor
     public PersoonController(HotelEventManager hotelEventManager, OverzichtView overzichtView, ReceptieController receptieController) {
@@ -47,50 +48,45 @@ public class PersoonController implements HotelEventListener, LayoutGeladen {
 
     // beweeg de gast met hulp van de pathfinder
     private void moveGasten() {
-        int vertraging = 0;
         for (Integer gastId : new ArrayList<>(actieveRoutes.keySet())) {
             GastModel gast = actieveGasten.get(gastId);
             PathFinder pf = actieveRoutes.get(gastId);
 
             if (gast != null && pf != null) {
-                // gebruik een kleine vertraging per gast
-                final int finalDelay = vertraging;
-                Timer delayTimer = new Timer(finalDelay, event -> {
-                    if (!pf.isBestemmingBereikt()) {
-                        Locatie oudeLocatie = new Locatie(gast.getLocatie().getX(), gast.getLocatie().getY());
-                        Locatie volgendeStap = pf.getNextStep();
+                if (!pf.isBestemmingBereikt()) {
+                    Locatie oudeLocatie = new Locatie(gast.getLocatie().getX(), gast.getLocatie().getY());
+                    Locatie volgendeStap = pf.getNextStep();
 
-                        gast.getLocatie().setX(volgendeStap.getX());
-                        gast.getLocatie().setY(volgendeStap.getY());
+                    gast.getLocatie().setX(volgendeStap.getX());
+                    gast.getLocatie().setY(volgendeStap.getY());
 
-                        // render elke gast apart anders blijven gasten hangen op vakjes(is nog een beetje lelijk)
-                        SwingUtilities.invokeLater(() -> {
-                            for (NewGuest listener : listeners) {
-                                listener.onGastVerplaatst(gast, oudeLocatie); // notify listeners
-                            }
-                        });
-                    } else {
-                        actieveRoutes.remove(gastId);
-                        afhandelenAankomst(gast);
-                    }
-                });
-                delayTimer.setRepeats(false);
-                delayTimer.start();
-
-                vertraging += 10; // elke volgende gast beweegt 10ms later zodat ze niet clashen
+                    //  icoontje verplaatsen
+                    SwingUtilities.invokeLater(() -> {
+                        for (NewGuest listener : listeners) {
+                            listener.onGastVerplaatst(gast, oudeLocatie);
+                        }
+                    });
+                } else {
+                    actieveRoutes.remove(gastId);
+                    afhandelenAankomst(gast);
+                }
             }
         }
     }
 
     private void afhandelenAankomst(GastModel gast) {
-        // check of de gast bij de ingang/uitgang is
         if (gast.getLocatie().equals(startLocatie)) {
+            // gast verlaat het hotel
             for (NewGuest listener : listeners) {
                 listener.onGastVertrokken(gast);
             }
             actieveGasten.remove(gast.getGastID());
         } else {
-            System.out.println("Gast " + gast.getGastID() + " is aangekomen in kamer.");
+            // gast is in zijn target kamer aangekomen
+            for (NewGuest listener : listeners) {
+                listener.onGastAangekomenInKamer(gast, gast.getLocatie());
+            }
+            System.out.println("Gast " + gast.getGastID() + " is op bestemming. Teller +1.");
         }
     }
 
