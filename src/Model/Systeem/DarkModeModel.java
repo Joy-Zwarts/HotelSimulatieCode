@@ -31,7 +31,7 @@ public class DarkModeModel {
     public Color getButtonBackgroundColor() {
         return darkMode ? Color.WHITE : new Color(0x1e1f1f);
     }
-    public Color getButtonFgColor() {
+    public Color getButtonForegroundColor() {
         return darkMode ? new Color(0x1e1f1f) : Color.WHITE;
     }
 }

@@ -204,7 +204,7 @@ public class HotelSimulatieView extends JFrame {
         this.legendaPanel.repaint();
     }
 
-    public void setRightView(JPanel newRightPanel) {
+        public void setRightView(JPanel newRightPanel) {
         rightPanel.removeAll();
         rightPanel.add(newRightPanel, BorderLayout.CENTER);
         rightPanel.revalidate();

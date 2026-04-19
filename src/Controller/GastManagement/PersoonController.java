@@ -2,7 +2,7 @@ package Controller.GastManagement;
 
 import Controller.Layout.LayoutController;
 import Controller.Layout.LayoutGeladen;
-import Controller.Layout.Locatie;
+import Model.Layout.Locatie;
 import Controller.PersoonFactory.GastCreator;
 import Model.Personen.GastModel;
 import View.Systeem.OverzichtView;

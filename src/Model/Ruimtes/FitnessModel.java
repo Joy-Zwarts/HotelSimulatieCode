@@ -1,6 +1,6 @@
 package Model.Ruimtes;
 
-import Controller.Layout.Locatie;
+import Model.Layout.Locatie;
 
 public class FitnessModel extends RuimteModel {
     // attributen

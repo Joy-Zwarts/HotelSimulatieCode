@@ -126,13 +126,6 @@ public class GridVakjeView {
         return type == KamerType.SCHACHT || type == KamerType.LOBBY || type == KamerType.TRAPPEN;
     }
 
-    // remove en repaint de layout
-    public void clearInhoud() {
-        backgroundPanel.removeAll();
-        gastenContainer.removeAll();
-        layeredPane.repaint();
-    }
-
     // zet de border om een vakje heen met de gegeven bepaalde waarden
     public void setBorder(boolean top, boolean left, boolean bottom, boolean right) {
         int t = top ? 1 : 0;

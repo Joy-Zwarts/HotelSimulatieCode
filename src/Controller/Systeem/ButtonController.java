@@ -67,7 +67,7 @@ public class ButtonController implements ActionListener {
 
             } else if (!(simulatieManager.getStarted())) { // als het niet al is gestart
                 EventPanel eventPanel = new EventPanel(eventManager);
-                view.setRightView(eventPanel.getPanelRechts());
+                view.setRightView(eventPanel.getContainer());
                 eventManager.start(simulatieManager.getScenario()); // start het gekozen scenario
                 simulatieManager.setStarted(true);
 

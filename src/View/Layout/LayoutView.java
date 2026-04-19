@@ -1,7 +1,7 @@
 package View.Layout;
 
 import Controller.Layout.GridVakjeController;
-import Controller.Layout.Locatie;
+import Model.Layout.Locatie;
 import Controller.Systeem.PauseController;
 import Model.Layout.GridVakjeModel;
 import Model.Ruimtes.RuimteModel;
@@ -21,13 +21,11 @@ public class LayoutView {
     private int gridBreedte;
     private int gridLengte;
     private final PauseController pauseController;
-    private final HotelSimulatieView simulatieView;
 
     // constructor
 
     public LayoutView(PauseController pauseController, HotelSimulatieView SimulatieView) {
         this.pauseController = pauseController;
-        this.simulatieView = SimulatieView;
     }
 
     // maak de gridlayout aan van de hotelweergave met een nieuw grid vakje object per cel in de grid

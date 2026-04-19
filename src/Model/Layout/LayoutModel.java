@@ -1,7 +1,6 @@
 package Model.Layout;
 
 import Controller.Layout.GridVakjeController;
-import Controller.Layout.Locatie;
 import Model.Ruimtes.*;
 
 import java.util.ArrayList;

@@ -1,5 +1,6 @@
 package Controller.Layout;
 
+import Model.Layout.Locatie;
 import Model.Layout.RuimteData;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -7,16 +8,15 @@ import org.json.simple.parser.JSONParser;
 
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.List;
 
 public class LayoutParser {
 
     private static final long DEFAULT_CAPACITY = 9999;
 
     // parsed de json file en maakt data aan gebaseerd op de waarden uit de file en slaat deze op in een array
-    public List<RuimteData> parse(String file) throws Exception {
+    public ArrayList<RuimteData> parse(String file) throws Exception {
 
-        List<RuimteData> ruimtes = new ArrayList<>();
+        ArrayList<RuimteData> ruimtes = new ArrayList<>();
 
         JSONParser parser = new JSONParser();
         JSONArray layoutArray = (JSONArray) parser.parse(new FileReader(file));

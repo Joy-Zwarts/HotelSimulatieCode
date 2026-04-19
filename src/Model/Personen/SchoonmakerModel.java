@@ -1,6 +1,6 @@
 package Model.Personen;
 
-import Controller.Layout.Locatie;
+import Model.Layout.Locatie;
 
 public class SchoonmakerModel extends PersoonModel {
 

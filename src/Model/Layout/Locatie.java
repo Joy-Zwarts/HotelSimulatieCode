@@ -1,4 +1,4 @@
-package Controller.Layout;
+package Model.Layout;
 
 import java.util.Objects;
 

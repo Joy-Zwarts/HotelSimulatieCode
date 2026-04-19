@@ -1,6 +1,6 @@
 package Model.Personen;
 
-import Controller.Layout.Locatie;
+import Model.Layout.Locatie;
 
 public class PersoonModel {
     // attributen
@@ -12,7 +12,6 @@ public class PersoonModel {
         this.targetLocatie = targetLocatie;
         this.locatie = locatie;
     }
-    public void bewegen() {}
 
     // getters en setters
 
