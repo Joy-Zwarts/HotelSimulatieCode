@@ -121,6 +121,16 @@ public class ReceptieController implements NewRoom, NewGuest {
 
     }
 
+    @Override
+    public void onGastAangekomenInKamer(GastModel gast, Locatie behaaldeLocatie) {
+
+    }
+
+    @Override
+    public void onGastGaatWegUitKamer(GastModel gast, Locatie oudeLocatie) {
+
+    }
+
     public void refreshView() {
         view.tekenGastLijst(gasten);
         view.tekenKamerLijst(kamers);

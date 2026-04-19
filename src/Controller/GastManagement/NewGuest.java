@@ -8,4 +8,6 @@ public interface NewGuest {
     void onGastAangemaakt(GastModel gast);
     void onGastVertrokken(GastModel gast);
     void onGastVerplaatst(GastModel gast, Locatie oudeLocatie);
+    void onGastAangekomenInKamer(GastModel gast, Locatie behaaldeLocatie);
+    void onGastGaatWegUitKamer(GastModel gast, Locatie oudeLocatie);
 }

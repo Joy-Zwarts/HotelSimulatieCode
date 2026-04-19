@@ -94,4 +94,14 @@ public class RoomAssign implements NewGuest {
     public void onGastVerplaatst(GastModel gast, Locatie oudeLocatie) {
 
     }
+
+    @Override
+    public void onGastAangekomenInKamer(GastModel gast, Locatie behaaldeLocatie) {
+
+    }
+
+    @Override
+    public void onGastGaatWegUitKamer(GastModel gast, Locatie oudeLocatie) {
+
+    }
 }
