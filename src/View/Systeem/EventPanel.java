@@ -14,10 +14,7 @@ public class EventPanel implements HotelEventListener {
     private final JPanel content;
     private final JScrollPane scrollbar;
 
-    private int time;
-
     public EventPanel(HotelEventManager manager) {
-        this.time = 0;
 
         content = new JPanel();
         content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
@@ -39,7 +36,6 @@ public class EventPanel implements HotelEventListener {
 
     @Override
     public void notify(HotelEvent hotelEvent) {
-        time = hotelEvent.getTime() + 1000;
         printEvent(hotelEvent);
     }
 

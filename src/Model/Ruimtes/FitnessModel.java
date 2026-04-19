@@ -1,16 +1,20 @@
 package Model.Ruimtes;
 
+import Controller.Layout.Locatie;
+
 public class FitnessModel extends RuimteModel {
-
+    // attributen
     private static int counter = 0;
-    private String id;
+    private final String id;
 
-    public FitnessModel(KamerType areaType, String position, String dimension, String ID) {
+    // constructor
+    public FitnessModel(KamerType areaType, Locatie position, String dimension, String ID) {
         super(areaType, position, dimension);
         counter++;
         this.id = ID+counter;
     }
 
+    // getters en setters
     public String getId() {
         return id;
     }

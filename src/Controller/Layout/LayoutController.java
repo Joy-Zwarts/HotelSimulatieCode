@@ -20,7 +20,7 @@ public class LayoutController {
     // maak de layout stap voor stap
     private void init() {
         view.berekenGridGrootte(model.getRuimtes());
-        model.addverplichteElementen(view.getGridLengte(), view.getGridBreedte());
+        model.addVerplichteElementen(view.getGridLengte(), view.getGridBreedte());
 
         view.maakGrid(view.getGridBreedte(), view.getGridLengte(), model.getVakBreedte(), model.getVakHoogte(), model.getGrid());
 

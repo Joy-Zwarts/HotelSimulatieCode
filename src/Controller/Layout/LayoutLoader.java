@@ -1,13 +1,12 @@
 package Controller.Layout;
 
-import Controller.GastManagement.NewGuest;
 import Controller.GastManagement.NewRoom;
 import Controller.RuimteFactory.*;
 import Controller.Systeem.FilePicker;
 import Controller.Systeem.PauseController;
 import Model.Layout.LayoutModel;
 import Model.Ruimtes.KamerType;
-import Model.Ruimtes.RuimteData;
+import Model.Layout.RuimteData;
 import Model.Ruimtes.RuimteModel;
 import View.Layout.LayoutView;
 import View.Systeem.EventPanel;
@@ -20,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LayoutLoader {
+    // attributen
 
     private final HotelEventManager manager;
     private final HotelSimulatieView view;
@@ -29,12 +29,9 @@ public class LayoutLoader {
     private final HotelSimulatieView simulatieView;
     private NewRoom newRoomListener;
     private final ArrayList<LayoutGeladen> listeners;
-    public LayoutLoader(HotelEventManager manager,
-                        HotelSimulatieView view,
-                        LayoutModel model,
-                        PauseController pauseController,
-                        HotelSimulatieView simulatieView) {
 
+    // constructor
+    public LayoutLoader(HotelEventManager manager, HotelSimulatieView view, LayoutModel model, PauseController pauseController, HotelSimulatieView simulatieView) {
         this.manager = manager;
         this.view = view;
         this.model = model;
@@ -43,6 +40,7 @@ public class LayoutLoader {
         this.listeners = new ArrayList<>();
     }
 
+    // maakt een nieuwe file picker klasse aan, krijgt daarvan een bestand en laad de layout daarvan en notified de listeners daarover
     public LayoutModel loadLayout() {
         try {
             FilePicker picker = new FilePicker();
@@ -73,10 +71,10 @@ public class LayoutLoader {
             view.setLegendaView();
             view.setRightView(eventPrint.getPanelRechts());
 
-            if (listeners != null) {
-                for (LayoutGeladen listener : listeners) {
-                    listener.onLayoutGeladen(controller);
-                }
+            // notify de listeners dat de layout is geladen
+
+            for (LayoutGeladen listener : listeners) {
+                listener.onLayoutGeladen(controller);
             }
 
             return model;
@@ -88,6 +86,7 @@ public class LayoutLoader {
         }
     }
 
+    // kiest wat voor type kamer er moet worden gemaakt en kiest de juiste factory daarvoor, maakt een nieuw ruimtemodel aan met de opgehaalde data uit de json
     private void maakKamer(RuimteData data) {
         RuimteFactory factory;
 
@@ -108,6 +107,8 @@ public class LayoutLoader {
                 throw new IllegalArgumentException("Unknown type: " + data.areaType);
         }
 
+        // maak een nieuw ruimtemodel aan met de data en de bijbehorende factory
+
         RuimteModel ruimte = factory.createRuimte(
                 data.position,
                 data.dimension,
@@ -115,13 +116,16 @@ public class LayoutLoader {
                 data.classification
         );
 
+        // voeg de ruimte toe aan het layout model
         model.addKamer(ruimte);
 
+        // notify de listeners dat er een nieuwe kamer is aangemaakt als het type ruimte ROOM is
         if (ruimte.getAreaType().equals(KamerType.ROOM) && newRoomListener != null) {
             newRoomListener.onNewRoom(ruimte);
         }
     }
 
+    // set een nieuwe listener voor als er een kamer wordt aangemaakt
     public void setNewRoomListener(NewRoom listener) {
         this.newRoomListener = listener;
     }
@@ -129,6 +133,8 @@ public class LayoutLoader {
     public LayoutController getController() {
         return controller;
     }
+
+    // set een nieuwe listener als de layout is geladen
     public void setNewLayoutListener(LayoutGeladen listener) {
         listeners.add(listener);
     }

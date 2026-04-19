@@ -1,16 +1,18 @@
 package Model.Ruimtes;
 
+import Controller.Layout.Locatie;
 import Model.Personen.GastModel;
 
 public class KamerModel extends RuimteModel {
-    private RoomClassificatie classification;
+    // attributen
+    private final RoomClassificatie classification;
     private final int roomNumber;
     private boolean bezet;
     private GastModel verblijvende;
     private static int counter = 0;
 
-
-    public KamerModel(KamerType areaType, String position, String dimension, RoomClassificatie classification, boolean Bezet) {
+    // constructor
+    public KamerModel(KamerType areaType, Locatie position, String dimension, RoomClassificatie classification, boolean Bezet) {
         super(areaType, position, dimension);
         this.classification = classification;
         this.roomNumber = ++counter;
@@ -18,15 +20,13 @@ public class KamerModel extends RuimteModel {
         this.verblijvende = null;
     }
 
+    // getters en setters
+
     public RoomClassificatie getClassification() {
         return this.classification;
     }
     public int getRoomNumber() {
         return this.roomNumber;
-    }
-
-    public void setClassification(RoomClassificatie classification) {
-        this.classification = classification;
     }
     public void setBezet(boolean bezet) {
         this.bezet = bezet;

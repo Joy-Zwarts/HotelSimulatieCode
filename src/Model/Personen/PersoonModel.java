@@ -1,29 +1,26 @@
 package Model.Personen;
 
-import Model.Ruimtes.KamerType;
+import Controller.Layout.Locatie;
 
 public class PersoonModel {
-    private String targetLocatie;
-    private String locatie;
+    // attributen
+    private final Locatie targetLocatie;
+    private final Locatie locatie;
 
-    public PersoonModel(String targetLocatie, String locatie) {
+    // constructor
+    public PersoonModel(Locatie targetLocatie, Locatie locatie) {
         this.targetLocatie = targetLocatie;
         this.locatie = locatie;
     }
+    public void bewegen() {}
 
-    public void bewegen() {
-    }
+    // getters en setters
 
-    public String getTargetLocatie() {
+    public Locatie getTargetLocatie() {
         return targetLocatie;
     }
-    public void setTargetLocatie(String targetLocatie) {
-        this.targetLocatie = targetLocatie;
-    }
-    public String getLocatie() {
+
+    public Locatie getLocatie() {
         return locatie;
-    }
-    public void setLocatie(String locatie) {
-        this.locatie = locatie;
     }
 }

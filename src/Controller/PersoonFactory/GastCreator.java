@@ -1,18 +1,17 @@
 package Controller.PersoonFactory;
 
 
+import Controller.Layout.Locatie;
 import Model.Personen.GastModel;
 import Model.Personen.PersoonModel;
-import Model.Ruimtes.KamerModel;
-import Model.Ruimtes.KamerType;
 import Model.Ruimtes.RoomClassificatie;
 
 public class GastCreator extends PersoonFactory {
-
     private RoomClassificatie wensen;
 
+    // maakt gast aan gebaseerd op de meegekregen data
     @Override
-    public PersoonModel createPersoon(int gastId, String targetlocatie, String locatie, int Wensen) {
+    public PersoonModel createPersoon(int gastId, Locatie targetlocatie, Locatie locatie, int Wensen) {
         switch (Wensen) {
             case 1:
                 wensen = RoomClassificatie.eenSter;
@@ -31,6 +30,7 @@ public class GastCreator extends PersoonFactory {
                 break;
         }
 
-        return new GastModel(gastId, null,null, wensen, null);
+        // return de nieuwe gast
+        return new GastModel(gastId, locatie, targetlocatie, wensen, null);
     }
 }

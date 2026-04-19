@@ -1,12 +1,13 @@
 package Controller.PersoonFactory;
 
+import Controller.Layout.Locatie;
 import Model.Personen.PersoonModel;
 import Model.Personen.SchoonmakerModel;
-import Model.Ruimtes.KamerType;
 
+// maakt schoonmaker aan gebaseerd op de meegekregen data
 public class SchoonmakerCreator extends PersoonFactory {
     @Override
-    public PersoonModel createPersoon(int gastId, String targetlocatie, String locatie, int wensen) {
-        return new SchoonmakerModel(null, null, null);
+    public PersoonModel createPersoon(int gastId, Locatie locatie, Locatie targetLocatie, int wensen) {
+        return new SchoonmakerModel(locatie, targetLocatie);
     }
 }

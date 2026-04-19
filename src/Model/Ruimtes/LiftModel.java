@@ -1,10 +1,14 @@
 package Model.Ruimtes;
 
+import Controller.Layout.Locatie;
+
 public class LiftModel extends RuimteModel {
+    // attributen
     private int verdieping;
     private boolean beschikbaar;
 
-    public LiftModel(KamerType areaType, String position, String dimension, int verdieping, boolean beschikbaar) {
+    // constructors
+    public LiftModel(KamerType areaType, Locatie position, String dimension, int verdieping, boolean beschikbaar) {
         super(areaType, position, dimension);
         this.verdieping = verdieping;
         this.beschikbaar = beschikbaar;
@@ -12,17 +16,18 @@ public class LiftModel extends RuimteModel {
 
     public void liftOmhoog() {
         --this.verdieping;
-        this.setPositionY(this.verdieping);
+        this.getPosition().setY(this.verdieping);
     }
 
     public void liftOmlaag() {
         ++this.verdieping;
-        this.setPositionY(this.verdieping);
+        this.getPosition().setY(this.verdieping);
     }
 
     public void liftCalled() {
     }
 
+    // getters en setters
     public int getVerdieping() {
         return this.verdieping;
     }
