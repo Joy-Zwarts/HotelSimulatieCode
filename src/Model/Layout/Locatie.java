@@ -15,8 +15,10 @@ public class Locatie {
     }
 
     // getters en setters
-    public int getX() { return x; }
-    public int getY() { return y; }
+    public int getX() {return x;}
+    public int getY() {
+        return y;
+    }
     public void setX(int X) { this.x = X; }
     public void setY(int Y) { this.y = Y; }
 

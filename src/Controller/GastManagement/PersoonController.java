@@ -1,22 +1,26 @@
 package Controller.GastManagement;
 
+import Controller.Events.needFoodEvent;
 import Controller.Layout.LayoutController;
 import Controller.Layout.LayoutGeladen;
+import Controller.Events.checkInEvent;
+import Controller.Events.checkOutEvent;
+import Controller.Systeem.onTimeChange;
 import Model.Layout.Locatie;
 import Controller.PersoonFactory.GastCreator;
 import Model.Personen.GastModel;
+import Model.Ruimtes.KamerType;
+import Model.Ruimtes.RuimteModel;
 import View.Systeem.OverzichtView;
 import hotelevents.HotelEvent;
-import hotelevents.HotelEventListener;
 import hotelevents.HotelEventManager;
-import hotelevents.HotelEventType;
 
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PersoonController implements HotelEventListener, LayoutGeladen {
+public class PersoonController implements LayoutGeladen, checkInEvent, checkOutEvent, onTimeChange, needFoodEvent {
 
     // attributen
     private final GastCreator factory;
@@ -26,17 +30,19 @@ public class PersoonController implements HotelEventListener, LayoutGeladen {
     private final Map<Integer, PathFinder> actieveRoutes;
     private final Map<Integer, GastModel> actieveGasten;
     private Timer bewegingsTimer;
-    private int hteSnelheid = 1000;
-    private Locatie behaaldeLocatie;
+    private int hteSnelheid;
+    private ArrayList<RuimteModel> ruimtes;
+    private ReceptieController receptieController;
 
     // constructor
-    public PersoonController(HotelEventManager hotelEventManager, OverzichtView overzichtView, ReceptieController receptieController) {
+    public PersoonController(HotelEventManager hotelEventManager, OverzichtView overzichtView, ReceptieController ReceptieController) {
         this.listeners = new ArrayList<>();
         this.actieveRoutes = new HashMap<>();
         this.actieveGasten = new HashMap<>();
+        this.hteSnelheid = 1000;
+        this.receptieController = ReceptieController;
 
         this.factory = new GastCreator();
-        hotelEventManager.register(this);
 
         initBewegingsTimer();
     }
@@ -90,17 +96,24 @@ public class PersoonController implements HotelEventListener, LayoutGeladen {
         }
     }
 
-    // per tick bij handle check in bij een check in event en vice versa met een check out event
-    @Override
-    public void notify(HotelEvent hotelEvent) {
-        if (hotelEvent.getEventType() == HotelEventType.CHECK_IN) {
-            handleCheckIn(hotelEvent);
-        } else if (hotelEvent.getEventType() == HotelEventType.CHECK_OUT) {
-            handleCheckOut(hotelEvent);
-        }
+    // zet een nieuwe listener als er een gast wordt aangemaakt
+    public void setNewGuestListener(NewGuest listener) {
+        listeners.add(listener);
     }
 
-    private void handleCheckIn(HotelEvent hotelEvent) {
+
+    @Override
+    public void onLayoutGeladen(LayoutController layoutController) {
+        this.layoutController = layoutController;
+        // onder midden van de grid (waar de lobby is)
+        int x = layoutController.getView().getGridBreedte() / 2;
+        int y = layoutController.getView().getGridLengte() - 1;
+        startLocatie = new Locatie(x, y);
+        ruimtes = layoutController.getModel().getRuimtes();
+    }
+
+    @Override
+    public void checkInEvent(HotelEvent hotelEvent) {
         // maak de gast aan op startlocatie
         GastModel gast = (GastModel) factory.createPersoon(
                 hotelEvent.getGuestId(),
@@ -124,7 +137,8 @@ public class PersoonController implements HotelEventListener, LayoutGeladen {
     }
 
     // maakt een nieuwe route naar de uitgang
-    private void handleCheckOut(HotelEvent hotelEvent) {
+    @Override
+    public void checkOutEvent(HotelEvent hotelEvent) {
         GastModel gast = actieveGasten.get(hotelEvent.getGuestId());
 
         if (gast != null) {
@@ -137,18 +151,18 @@ public class PersoonController implements HotelEventListener, LayoutGeladen {
         }
     }
 
-    // zet een nieuwe listener als er een gast wordt aangemaakt
-    public void setNewGuestListener(NewGuest listener) {
-        listeners.add(listener);
+    // als de snelheid veranderd, zet dit als de hte waarop de gasten bewegen
+    @Override
+    public void timeChange(int HTE) {
+        this.hteSnelheid = HTE;
+
+        if (bewegingsTimer != null) {
+            bewegingsTimer.setDelay(hteSnelheid);
+        }
     }
 
-
     @Override
-    public void onLayoutGeladen(LayoutController layoutController) {
-        this.layoutController = layoutController;
-        // onder midden van de grid (waar de lobby is)
-        int x = layoutController.getView().getGridBreedte() / 2;
-        int y = layoutController.getView().getGridLengte() - 1;
-        startLocatie = new Locatie(x, y);
+    public void needFoodEvent(HotelEvent hotelEvent) {
+
     }
 }

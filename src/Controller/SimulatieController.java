@@ -1,14 +1,12 @@
 package Controller;
 
+import Controller.Events.EventHandler;
 import Controller.GastManagement.GastPlaatser;
 import Controller.GastManagement.PersoonController;
 import Controller.GastManagement.ReceptieController;
 import Controller.GastManagement.RoomAssign;
 import Controller.Layout.LayoutLoader;
-import Controller.Systeem.ButtonController;
-import Controller.Systeem.PauseController;
-import Controller.Systeem.SettingsController;
-import Controller.Systeem.TimeManagementController;
+import Controller.Systeem.*;
 import Model.Systeem.DarkModeModel;
 import Model.Layout.LayoutModel;
 import View.Systeem.HotelSimulatieView;
@@ -37,6 +35,8 @@ public class SimulatieController {
 
         HotelEventManager manager = new HotelEventManager(false);
 
+        EventHandler eventHandler = new EventHandler(manager);
+
         LayoutModel model = null;
 
         PauseController pauseController = new PauseController(manager, null);
@@ -48,6 +48,10 @@ public class SimulatieController {
         ReceptieController receptieController = new ReceptieController(overzichtView);
 
         PersoonController persoonController = new PersoonController(manager, overzichtView, receptieController);
+
+        eventHandler.setEventListenerCheckIn(persoonController);
+
+        eventHandler.setEventListenerCheckOut(persoonController);
 
         RoomAssign roomAssign = new RoomAssign(receptieController);
 
@@ -69,9 +73,13 @@ public class SimulatieController {
 
         TimePanel timePanel = new TimePanel(manager, view.getTopBar());
 
+        eventHandler.setEventListenerNoneEvent(timePanel);
+
         TimeManagementPanel timeManagementPanel = new TimeManagementPanel(view.getTopBar(), darkModeModel);
 
-        TimeManagementController timeManagementListener = new TimeManagementController(manager, this, view, timeManagementPanel);
+        TimeManagementController timeManagement = new TimeManagementController(manager, this, view, timeManagementPanel);
+
+        timeManagement.setListener(persoonController);
 
         SettingsController settingsController = new SettingsController(view, timeManagementPanel, darkModeModel);
 
