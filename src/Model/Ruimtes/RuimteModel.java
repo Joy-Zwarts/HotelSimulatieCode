@@ -49,4 +49,6 @@ public class RuimteModel {
     public Locatie getPosition() {
         return position;
     }
+
+
 }

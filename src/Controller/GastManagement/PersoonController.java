@@ -1,10 +1,8 @@
 package Controller.GastManagement;
 
-import Controller.Events.needFoodEvent;
+import Controller.Events.*;
 import Controller.Layout.LayoutController;
 import Controller.Layout.LayoutGeladen;
-import Controller.Events.checkInEvent;
-import Controller.Events.checkOutEvent;
 import Controller.Systeem.onTimeChange;
 import Model.Layout.Locatie;
 import Controller.PersoonFactory.GastCreator;
@@ -20,7 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PersoonController implements LayoutGeladen, checkInEvent, checkOutEvent, onTimeChange, needFoodEvent {
+public class PersoonController implements LayoutGeladen, checkInEvent, checkOutEvent, onTimeChange, needFoodEvent, fitnessEvent, cinemaEvent, GastBeweeg.MovementListener {
 
     // attributen
     private final GastCreator factory;
@@ -33,6 +31,7 @@ public class PersoonController implements LayoutGeladen, checkInEvent, checkOutE
     private int hteSnelheid;
     private ArrayList<RuimteModel> ruimtes;
     private ReceptieController receptieController;
+    private GastBeweeg movementEngine;
 
     // constructor
     public PersoonController(HotelEventManager hotelEventManager, OverzichtView overzichtView, ReceptieController ReceptieController) {
@@ -41,43 +40,10 @@ public class PersoonController implements LayoutGeladen, checkInEvent, checkOutE
         this.actieveGasten = new HashMap<>();
         this.hteSnelheid = 1000;
         this.receptieController = ReceptieController;
+        this.movementEngine = new GastBeweeg(1000, this);
+        this.movementEngine.start();
 
         this.factory = new GastCreator();
-
-        initBewegingsTimer();
-    }
-
-    private void initBewegingsTimer() {
-        bewegingsTimer = new Timer(hteSnelheid, e -> moveGasten());
-        bewegingsTimer.start();
-    }
-
-    // beweeg de gast met hulp van de pathfinder
-    private void moveGasten() {
-        for (Integer gastId : new ArrayList<>(actieveRoutes.keySet())) {
-            GastModel gast = actieveGasten.get(gastId);
-            PathFinder pf = actieveRoutes.get(gastId);
-
-            if (gast != null && pf != null) {
-                if (!pf.isBestemmingBereikt()) {
-                    Locatie oudeLocatie = new Locatie(gast.getLocatie().getX(), gast.getLocatie().getY());
-                    Locatie volgendeStap = pf.getNextStep();
-
-                    gast.getLocatie().setX(volgendeStap.getX());
-                    gast.getLocatie().setY(volgendeStap.getY());
-
-                    //  icoontje verplaatsen
-                    SwingUtilities.invokeLater(() -> {
-                        for (NewGuest listener : listeners) {
-                            listener.onGastVerplaatst(gast, oudeLocatie);
-                        }
-                    });
-                } else {
-                    actieveRoutes.remove(gastId);
-                    afhandelenAankomst(gast);
-                }
-            }
-        }
     }
 
     private void afhandelenAankomst(GastModel gast) {
@@ -132,7 +98,7 @@ public class PersoonController implements LayoutGeladen, checkInEvent, checkOutE
         // bereken de route naar hun kamer
         if (gast.getTargetLocatie() != null) {
             PathFinder pf = new PathFinder(gast.getLocatie(), gast.getTargetLocatie(), layoutController);
-            actieveRoutes.put(gast.getGastID(), pf);
+            movementEngine.voegRouteToe(gast, pf);
         }
     }
 
@@ -142,12 +108,9 @@ public class PersoonController implements LayoutGeladen, checkInEvent, checkOutE
         GastModel gast = actieveGasten.get(hotelEvent.getGuestId());
 
         if (gast != null) {
-            // zet target naar de uitgang (startLocatie)
-            gast.getTargetLocatie().setX(startLocatie.getX());
-            gast.getTargetLocatie().setY(startLocatie.getY());
-
             PathFinder pf = new PathFinder(gast.getLocatie(), startLocatie, layoutController);
-            actieveRoutes.put(gast.getGastID(), pf);
+            // Gebruik de engine in plaats van de lokale actieveRoutes map!
+            movementEngine.voegRouteToe(gast, pf);
         }
     }
 
@@ -156,13 +119,94 @@ public class PersoonController implements LayoutGeladen, checkInEvent, checkOutE
     public void timeChange(int HTE) {
         this.hteSnelheid = HTE;
 
-        if (bewegingsTimer != null) {
-            bewegingsTimer.setDelay(hteSnelheid);
+        // vertel de engine dat de snelheid is veranderd
+        if (movementEngine != null) {
+            movementEngine.setSpeed(HTE);
         }
     }
 
     @Override
     public void needFoodEvent(HotelEvent hotelEvent) {
+        GastModel gast = actieveGasten.get(hotelEvent.getGuestId());
+
+        if (gast != null) {
+            // zoek een restaurant locatie
+            Locatie restaurantLocatie = layoutController.vindLocatie(KamerType.RESTAURANT);
+
+            if (restaurantLocatie != null) {
+                // maak een nieuwe Pathfinder naar het restaurant
+                PathFinder pf = new PathFinder(gast.getLocatie(), restaurantLocatie, layoutController);
+
+                // geef de route aan de engine (deze overschrijft de oude route)
+                movementEngine.voegRouteToe(gast, pf);
+
+                System.out.println("Gast " + gast.getGastID() + " heeft honger en loopt naar het restaurant.");
+            } else {
+                System.out.println("Geen restaurant gevonden in het hotel!");
+            }
+        }
+    }
+
+    @Override
+    public void onStepTaken(GastModel gast, Locatie oudeLocatie) {
+        SwingUtilities.invokeLater(() -> {
+            for (NewGuest listener : listeners) {
+                listener.onGastVerplaatst(gast, oudeLocatie);
+            }
+        });
+    }
+
+    @Override
+    public void onDestinationReached(GastModel gast) {
+        afhandelenAankomst(gast);
+    }
+
+    @Override
+    public void goToFitnessEvent(HotelEvent hotelEvent) {
+        GastModel gast = actieveGasten.get(hotelEvent.getGuestId());
+
+        if (gast != null) {
+            // zoek een restaurant locatie
+            Locatie fitnessLocatie = layoutController.vindLocatie(KamerType.FITNESS);
+
+            if (fitnessLocatie != null) {
+                // maak een nieuwe Pathfinder naar het restaurant
+                PathFinder pf = new PathFinder(gast.getLocatie(), fitnessLocatie, layoutController);
+
+                // geef de route aan de engine (deze overschrijft de oude route)
+                movementEngine.voegRouteToe(gast, pf);
+
+                System.out.println("Gast " + gast.getGastID() + " wilt sporten en loopt naar de gym.");
+            } else {
+                System.out.println("Geen gym gevonden in het hotel!");
+            }
+        }
+    }
+
+    @Override
+    public void goToCinemaEvent(HotelEvent hotelEvent) {
+        GastModel gast = actieveGasten.get(hotelEvent.getGuestId());
+
+        if (gast != null) {
+            // zoek een restaurant locatie
+            Locatie bioscoopLocatie = layoutController.vindLocatie(KamerType.CINEMA);
+
+            if (bioscoopLocatie != null) {
+                // maak een nieuwe Pathfinder naar het restaurant
+                PathFinder pf = new PathFinder(gast.getLocatie(), bioscoopLocatie, layoutController);
+
+                // geef de route aan de engine (deze overschrijft de oude route)
+                movementEngine.voegRouteToe(gast, pf);
+
+                System.out.println("Gast " + gast.getGastID() + " wilt film kijken en loopt naar de bioscoop.");
+            } else {
+                System.out.println("Geen bioscoop gevonden in het hotel!");
+            }
+        }
+    }
+
+    @Override
+    public void startCinemaEvent(HotelEvent hotelEvent) {
 
     }
 }

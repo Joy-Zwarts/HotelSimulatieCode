@@ -53,6 +53,12 @@ public class SimulatieController {
 
         eventHandler.setEventListenerCheckOut(persoonController);
 
+        eventHandler.setEventListenerFood(persoonController);
+
+        eventHandler.setEventListenerCinema(persoonController);
+
+        eventHandler.setEventListenerFitness(persoonController);
+
         RoomAssign roomAssign = new RoomAssign(receptieController);
 
         LayoutLoader layoutLoader = new LayoutLoader(manager, view, model, pauseController, view);
