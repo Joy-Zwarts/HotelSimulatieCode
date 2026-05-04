@@ -25,21 +25,13 @@ public class PersoonController implements LayoutGeladen, checkInEvent, checkOutE
     private final ArrayList<NewGuest> listeners;
     private Locatie startLocatie;
     private LayoutController layoutController;
-    private final Map<Integer, PathFinder> actieveRoutes;
     private final Map<Integer, GastModel> actieveGasten;
-    private Timer bewegingsTimer;
-    private int hteSnelheid;
-    private ArrayList<RuimteModel> ruimtes;
-    private ReceptieController receptieController;
     private GastBeweeg movementEngine;
 
     // constructor
     public PersoonController(HotelEventManager hotelEventManager, OverzichtView overzichtView, ReceptieController ReceptieController) {
         this.listeners = new ArrayList<>();
-        this.actieveRoutes = new HashMap<>();
         this.actieveGasten = new HashMap<>();
-        this.hteSnelheid = 1000;
-        this.receptieController = ReceptieController;
         this.movementEngine = new GastBeweeg(1000, this);
         this.movementEngine.start();
 
@@ -54,6 +46,7 @@ public class PersoonController implements LayoutGeladen, checkInEvent, checkOutE
             }
             actieveGasten.remove(gast.getGastID());
         } else {
+            gast.setVorigeLocatie(new Locatie(gast.getLocatie().getX(), gast.getLocatie().getY()));
             // gast is in zijn target kamer aangekomen
             for (NewGuest listener : listeners) {
                 listener.onGastAangekomenInKamer(gast, gast.getLocatie());
@@ -75,7 +68,6 @@ public class PersoonController implements LayoutGeladen, checkInEvent, checkOutE
         int x = layoutController.getView().getGridBreedte() / 2;
         int y = layoutController.getView().getGridLengte() - 1;
         startLocatie = new Locatie(x, y);
-        ruimtes = layoutController.getModel().getRuimtes();
     }
 
     @Override
@@ -117,8 +109,6 @@ public class PersoonController implements LayoutGeladen, checkInEvent, checkOutE
     // als de snelheid veranderd, zet dit als de hte waarop de gasten bewegen
     @Override
     public void timeChange(int HTE) {
-        this.hteSnelheid = HTE;
-
         // vertel de engine dat de snelheid is veranderd
         if (movementEngine != null) {
             movementEngine.setSpeed(HTE);
@@ -154,6 +144,13 @@ public class PersoonController implements LayoutGeladen, checkInEvent, checkOutE
                 listener.onGastVerplaatst(gast, oudeLocatie);
             }
         });
+        if (gast.getVorigeLocatie() != null) {
+            if (gast.getVorigeLocatie().equals(oudeLocatie)) {
+                for (NewGuest listener : listeners) {
+                    listener.onGastGaatWegUitKamer(gast, oudeLocatie);
+                }
+            }
+        }
     }
 
     @Override

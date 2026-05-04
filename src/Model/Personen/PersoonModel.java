@@ -6,10 +6,12 @@ public class PersoonModel {
     // attributen
     private Locatie targetLocatie;
     private final Locatie locatie;
+    private Locatie vorigeLocatie;
 
     // constructor
     public PersoonModel(Locatie targetLocatie, Locatie locatie) {
         this.targetLocatie = targetLocatie;
+        this.vorigeLocatie = null;
         this.locatie = locatie;
     }
 
@@ -22,8 +24,11 @@ public class PersoonModel {
     public Locatie getLocatie() {
         return locatie;
     }
+    public Locatie getVorigeLocatie() {
+        return vorigeLocatie;
+    }
 
-    public void setTargetLocatie(Locatie target) {
-        this.targetLocatie = target;
+    public void setVorigeLocatie(Locatie locatie) {
+        this.vorigeLocatie = locatie;
     }
 }
