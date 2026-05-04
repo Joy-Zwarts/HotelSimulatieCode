@@ -1,6 +1,6 @@
 package Model.Ruimtes;
 
-import Controller.Layout.Locatie;
+import Model.Layout.Locatie;
 import Model.Personen.GastModel;
 
 public class KamerModel extends RuimteModel {

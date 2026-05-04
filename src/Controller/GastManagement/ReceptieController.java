@@ -1,6 +1,6 @@
 package Controller.GastManagement;
 
-import Controller.Layout.Locatie;
+import Model.Layout.Locatie;
 import Model.Personen.GastModel;
 import Model.Ruimtes.KamerModel;
 import Model.Ruimtes.RuimteModel;

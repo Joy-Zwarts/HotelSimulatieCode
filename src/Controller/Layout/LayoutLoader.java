@@ -26,7 +26,6 @@ public class LayoutLoader {
     private LayoutModel model;
     private LayoutController controller;
     private final PauseController pauseController;
-    private final HotelSimulatieView simulatieView;
     private NewRoom newRoomListener;
     private final ArrayList<LayoutGeladen> listeners;
 
@@ -36,7 +35,6 @@ public class LayoutLoader {
         this.view = view;
         this.model = model;
         this.pauseController = pauseController;
-        this.simulatieView = simulatieView;
         this.listeners = new ArrayList<>();
     }
 
@@ -62,14 +60,14 @@ public class LayoutLoader {
                 maakKamer(data);
             }
 
-            LayoutView layoutView = new LayoutView(pauseController, simulatieView);
+            LayoutView layoutView = new LayoutView(pauseController, view);
             EventPanel eventPrint = new EventPanel(manager);
 
             controller = new LayoutController(model, layoutView);
 
             view.setLayoutView(layoutView.getHotelPanel());
             view.setLegendaView();
-            view.setRightView(eventPrint.getPanelRechts());
+            view.setRightView(eventPrint.getContainer());
 
             // notify de listeners dat de layout is geladen
 

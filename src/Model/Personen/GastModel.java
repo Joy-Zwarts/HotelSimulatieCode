@@ -1,13 +1,10 @@
 package Model.Personen;
 
-import Controller.Layout.LayoutController;
-import Controller.Layout.LayoutGeladen;
-import Controller.Layout.Locatie;
+import Model.Layout.Locatie;
 import Model.Ruimtes.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
 
 public class GastModel extends PersoonModel {
     // attributen

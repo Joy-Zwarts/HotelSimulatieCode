@@ -1,6 +1,6 @@
 package Controller.GastManagement;
 
-import Controller.Layout.Locatie;
+import Model.Layout.Locatie;
 import Model.Personen.GastModel;
 
 // notified listener als er een gast is aangemaakt

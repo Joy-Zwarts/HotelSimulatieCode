@@ -3,7 +3,7 @@
     import Controller.Layout.GridVakjeController;
     import Controller.Layout.LayoutController;
     import Controller.Layout.LayoutGeladen;
-    import Controller.Layout.Locatie;
+    import Model.Layout.Locatie;
     import Model.Personen.GastModel;
     import Model.Ruimtes.RuimteModel;
     import View.Layout.LayoutView;

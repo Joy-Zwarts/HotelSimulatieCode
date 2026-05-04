@@ -1,7 +1,7 @@
 package Controller.GastManagement;
 
 import Controller.Layout.LayoutController;
-import Controller.Layout.Locatie;
+import Model.Layout.Locatie;
 import java.util.LinkedList;
 
 public class PathFinder {

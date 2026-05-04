@@ -1,4 +1,3 @@
-
 import Model.Systeem.FilePickerFilter;
 import org.junit.jupiter.api.Test;
 

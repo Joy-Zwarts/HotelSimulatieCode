@@ -8,6 +8,7 @@ import hotelevents.HotelEventManager;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class TimeManagementController implements ActionListener {
 
@@ -16,16 +17,18 @@ public class TimeManagementController implements ActionListener {
     private final HotelEventManager manager;
     private final HotelSimulatieView view;
     private final SimulatieController controller;
-
     private final JButton normal;
     private final JButton fastForward;
     private final JButton doubleFastForward;
+    private ArrayList<onTimeChange> timeChangeListeners;
 
     // constructor
     public TimeManagementController(HotelEventManager Manager, SimulatieController Controller, HotelSimulatieView View, TimeManagementPanel Panel) {
         this.manager = Manager;
         this.controller = Controller;
         this.view = View;
+
+        this.timeChangeListeners = new ArrayList<>();
 
         // initialiseer de time-managementbuttons en registreert zichzelf als listener
         this.normal = Panel.getNormaleTijd();
@@ -45,6 +48,9 @@ public class TimeManagementController implements ActionListener {
         if (source == normal) {
             if (controller.getStarted()) { // als de simulatie is gestart
                 manager.setHte(1000); // zet speed op 1 tick per sec
+                for (onTimeChange listener : timeChangeListeners) {
+                    listener.timeChange(1000);
+                }
             } else {
                 JOptionPane.showMessageDialog(view, "De simulatie is nog niet gestart!", "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -54,6 +60,9 @@ public class TimeManagementController implements ActionListener {
         else if (source == fastForward) {
             if (controller.getStarted()) { // als de simulatie is gestart
                 manager.setHte(600); // zet speed op 1 tick per 0.6 sec
+                for (onTimeChange listener : timeChangeListeners) {
+                    listener.timeChange(600);
+                }
             } else {
                 JOptionPane.showMessageDialog(view,
                         "De simulatie is nog niet gestart!",
@@ -67,6 +76,9 @@ public class TimeManagementController implements ActionListener {
         else if (source == doubleFastForward) {
             if (controller.getStarted()) { // als de simulatie is gestart
                 manager.setHte(250); // zet speed op 1 tick per 0.25 sec
+                for (onTimeChange listener : timeChangeListeners) {
+                    listener.timeChange(250);
+                }
             } else {
                 JOptionPane.showMessageDialog(view,
                         "De simulatie is nog niet gestart!",
@@ -75,5 +87,9 @@ public class TimeManagementController implements ActionListener {
                 );
             }
         }
+    }
+
+    public void setListener(onTimeChange listener) {
+        timeChangeListeners.add(listener);
     }
 }

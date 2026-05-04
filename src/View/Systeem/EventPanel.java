@@ -30,7 +30,7 @@ public class EventPanel implements HotelEventListener {
         manager.register(this);
     }
 
-    public JPanel getPanelRechts() {
+    public JPanel getContainer() {
         return container;
     }
 

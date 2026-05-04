@@ -1,6 +1,5 @@
-package View.Systeem;
-
 import Model.Systeem.DarkModeModel;
+import View.Systeem.TimeManagementPanel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -33,7 +33,7 @@ public class DarkModeController {
         UIManager.put("Panel.background", model.getBackgroundColor());
         UIManager.put("Label.foreground", model.getForegroundColor());
         UIManager.put("Button.background", model.getButtonBackgroundColor());
-        UIManager.put("Button.foreground", model.getButtonFgColor());
+        UIManager.put("Button.foreground", model.getButtonForegroundColor());
 
         SwingUtilities.updateComponentTreeUI(view);
         updateComponentColors(view, model.getBackgroundColor(), model.getForegroundColor());

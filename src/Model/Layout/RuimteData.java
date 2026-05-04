@@ -1,7 +1,5 @@
 package Model.Layout;
 
-import Controller.Layout.Locatie;
-
 public class RuimteData {
     // alle data die een ruimte mee kan krijgen vanuit de json file wordt hier opgeslagen
     public String areaType;

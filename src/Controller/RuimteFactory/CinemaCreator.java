@@ -1,6 +1,6 @@
 package Controller.RuimteFactory;
 
-import Controller.Layout.Locatie;
+import Model.Layout.Locatie;
 import Model.Ruimtes.BioscoopModel;
 import Model.Ruimtes.KamerType;
 import Model.Ruimtes.RuimteModel;

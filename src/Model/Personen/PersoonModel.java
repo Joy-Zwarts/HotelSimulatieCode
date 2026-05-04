@@ -1,10 +1,10 @@
 package Model.Personen;
 
-import Controller.Layout.Locatie;
+import Model.Layout.Locatie;
 
 public class PersoonModel {
     // attributen
-    private final Locatie targetLocatie;
+    private Locatie targetLocatie;
     private final Locatie locatie;
 
     // constructor
@@ -12,7 +12,6 @@ public class PersoonModel {
         this.targetLocatie = targetLocatie;
         this.locatie = locatie;
     }
-    public void bewegen() {}
 
     // getters en setters
 
@@ -22,5 +21,9 @@ public class PersoonModel {
 
     public Locatie getLocatie() {
         return locatie;
+    }
+
+    public void setTargetLocatie(Locatie target) {
+        this.targetLocatie = target;
     }
 }

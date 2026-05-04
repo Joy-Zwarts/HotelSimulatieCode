@@ -1,6 +1,6 @@
 package Controller.PersoonFactory;
 
-import Controller.Layout.Locatie;
+import Model.Layout.Locatie;
 import Model.Personen.PersoonModel;
 
 public abstract class PersoonFactory {
