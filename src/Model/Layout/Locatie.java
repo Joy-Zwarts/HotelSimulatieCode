@@ -28,7 +28,7 @@ public class Locatie {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Locatie locatie = (Locatie) o;
-        return x == locatie.x && y == locatie.y;
+        return (x == locatie.x && y == locatie.y);
     }
 
     @Override
