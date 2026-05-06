@@ -1,6 +1,6 @@
 package Model.Ruimtes;
 
-public enum RoomClassificatie {
+public enum KamerClassificatie {
     // aantal sterren per kamer
     eenSter,
     tweeSterren,

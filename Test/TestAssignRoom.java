@@ -1,4 +1,4 @@
-import Controller.GastManagement.RoomAssign;
+import Controller.GastManagement.KamerAssign;
 import Controller.GastManagement.ReceptieController;
 import Model.Layout.Locatie;
 import Model.Personen.GastModel;
@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 
-import static Model.Ruimtes.RoomClassificatie.*;
+import static Model.Ruimtes.KamerClassificatie.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TestGuestAssignRoom {
@@ -34,7 +34,7 @@ class TestGuestAssignRoom {
             @Override public void refreshView() {}
         };
 
-        RoomAssign roomAssign = new RoomAssign(controller);
+        KamerAssign roomAssign = new KamerAssign(controller);
 
         // Gast die een 4 sterren kamer wil
 
@@ -43,7 +43,7 @@ class TestGuestAssignRoom {
         );
 
         // Act
-        roomAssign.assignRoom(gast);
+        roomAssign.assignKamer(gast);
 
         // Assert
         assertNotNull(gast.getKamer());

@@ -3,23 +3,23 @@ package Controller.GastManagement;
 import Model.Layout.Locatie;
 import Model.Personen.GastModel;
 import Model.Ruimtes.KamerModel;
-import Model.Ruimtes.RoomClassificatie;
+import Model.Ruimtes.KamerClassificatie;
 
-public class RoomAssign implements NewGuest {
+public class KamerAssign implements NewGast {
 
     // attributen
     private final ReceptieController controller;
 
     // contructor
-    public RoomAssign(ReceptieController receptieController) {
+    public KamerAssign(ReceptieController receptieController) {
         this.controller = receptieController;
     }
 
     // get de wensen van een gast en get een kamer die aan deze voldoet
-    public void assignRoom(GastModel gast) {
+    public void assignKamer(GastModel gast) {
         if (gast == null || gast.getWensen() == null) return;
 
-        RoomClassificatie wensen = gast.getWensen();
+        KamerClassificatie wensen = gast.getWensen();
 
         for (KamerModel kamer : controller.getKamers().values()) {
             if (kamer == null || kamer.isBezet()) continue;
@@ -46,23 +46,23 @@ public class RoomAssign implements NewGuest {
         // kamer downgraden als eer geen kamer is met de wensen van de gast
 
         switch(gast.getWensen()) {
-            case RoomClassificatie.vijfSterren:
-                gast.setWensen(RoomClassificatie.vierSterren);
-                assignRoom(gast);
+            case KamerClassificatie.vijfSterren:
+                gast.setWensen(KamerClassificatie.vierSterren);
+                assignKamer(gast);
                 break;
-            case RoomClassificatie.vierSterren:
-                gast.setWensen(RoomClassificatie.drieSterren);
-                assignRoom(gast);
+            case KamerClassificatie.vierSterren:
+                gast.setWensen(KamerClassificatie.drieSterren);
+                assignKamer(gast);
                 break;
-            case RoomClassificatie.drieSterren:
-                gast.setWensen(RoomClassificatie.tweeSterren);
-                assignRoom(gast);
+            case KamerClassificatie.drieSterren:
+                gast.setWensen(KamerClassificatie.tweeSterren);
+                assignKamer(gast);
                 break;
-            case RoomClassificatie.tweeSterren:
-                gast.setWensen(RoomClassificatie.eenSter);
-                assignRoom(gast);
+            case KamerClassificatie.tweeSterren:
+                gast.setWensen(KamerClassificatie.eenSter);
+                assignKamer(gast);
                 break;
-            case RoomClassificatie.eenSter:
+            case KamerClassificatie.eenSter:
                 break;
         }
         System.out.println("Kamer zoeken voor gast " + gast.getGastID() + " met de wensen " + gast.getWensen());
@@ -73,7 +73,7 @@ public class RoomAssign implements NewGuest {
     // elke nieuwe gast krijgt een kamer
     @Override
     public void onGastAangemaakt(GastModel gast) {
-        assignRoom(gast);
+        assignKamer(gast);
     }
 
     // als de gast is vertrokken wordt de kamer weer op vrij gezet

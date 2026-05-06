@@ -1,6 +1,6 @@
 package Controller.Layout;
 
-import Controller.GastManagement.NewRoom;
+import Controller.GastManagement.NewKamer;
 import Controller.RuimteFactory.*;
 import Controller.Systeem.FilePicker;
 import Controller.Systeem.PauseController;
@@ -26,7 +26,7 @@ public class LayoutLoader {
     private LayoutModel model;
     private LayoutController controller;
     private final PauseController pauseController;
-    private NewRoom newRoomListener;
+    private NewKamer newRoomListener;
     private final ArrayList<LayoutGeladen> listeners;
 
     // constructor
@@ -90,7 +90,7 @@ public class LayoutLoader {
 
         switch (data.areaType) {
             case "Room":
-                factory = new RoomCreator();
+                factory = new KamerCreator();
                 break;
             case "Restaurant":
                 factory = new RestaurantCreator();
@@ -99,7 +99,7 @@ public class LayoutLoader {
                 factory = new FitnessCreator();
                 break;
             case "Cinema":
-                factory = new CinemaCreator();
+                factory = new BioscoopCreator();
                 break;
             default:
                 throw new IllegalArgumentException("Unknown type: " + data.areaType);
@@ -119,12 +119,12 @@ public class LayoutLoader {
 
         // notify de listeners dat er een nieuwe kamer is aangemaakt als het type ruimte ROOM is
         if (ruimte.getAreaType().equals(KamerType.ROOM) && newRoomListener != null) {
-            newRoomListener.onNewRoom(ruimte);
+            newRoomListener.onNewKamer(ruimte);
         }
     }
 
     // set een nieuwe listener voor als er een kamer wordt aangemaakt
-    public void setNewRoomListener(NewRoom listener) {
+    public void setNewRoomListener(NewKamer listener) {
         this.newRoomListener = listener;
     }
 

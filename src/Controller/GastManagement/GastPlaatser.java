@@ -11,7 +11,7 @@
     import javax.swing.*;
     import java.util.HashMap;
 
-    public class GastPlaatser implements NewGuest, LayoutGeladen {
+    public class GastPlaatser implements NewGast, LayoutGeladen {
 
         // attributen
         private HashMap<Locatie, GridVakjeController> grid;

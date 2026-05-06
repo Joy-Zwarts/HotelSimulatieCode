@@ -22,7 +22,7 @@ public class PersoonController implements LayoutGeladen, checkInEvent, checkOutE
 
     // attributen
     private final GastCreator factory;
-    private final ArrayList<NewGuest> listeners;
+    private final ArrayList<NewGast> listeners;
     private Locatie startLocatie;
     private LayoutController layoutController;
     private final Map<Integer, GastModel> actieveGasten;
@@ -41,14 +41,14 @@ public class PersoonController implements LayoutGeladen, checkInEvent, checkOutE
     private void afhandelenAankomst(GastModel gast) {
         if (gast.getLocatie().equals(startLocatie)) {
             // gast verlaat het hotel
-            for (NewGuest listener : listeners) {
+            for (NewGast listener : listeners) {
                 listener.onGastVertrokken(gast);
             }
             actieveGasten.remove(gast.getGastID());
         } else {
             gast.setVorigeLocatie(new Locatie(gast.getLocatie().getX(), gast.getLocatie().getY()));
             // gast is in zijn target kamer aangekomen
-            for (NewGuest listener : listeners) {
+            for (NewGast listener : listeners) {
                 listener.onGastAangekomenInKamer(gast, gast.getLocatie());
             }
             System.out.println("Gast " + gast.getGastID() + " is op bestemming. Teller +1.");
@@ -56,7 +56,7 @@ public class PersoonController implements LayoutGeladen, checkInEvent, checkOutE
     }
 
     // zet een nieuwe listener als er een gast wordt aangemaakt
-    public void setNewGuestListener(NewGuest listener) {
+    public void setNewGuestListener(NewGast listener) {
         listeners.add(listener);
     }
 
@@ -83,7 +83,7 @@ public class PersoonController implements LayoutGeladen, checkInEvent, checkOutE
         actieveGasten.put(gast.getGastID(), gast);
 
         // notify de listener dat er een nieuwe gast is gemaakt
-        for (NewGuest listener : listeners) {
+        for (NewGast listener : listeners) {
             listener.onGastAangemaakt(gast);
         }
 
@@ -140,13 +140,13 @@ public class PersoonController implements LayoutGeladen, checkInEvent, checkOutE
     @Override
     public void onStepTaken(GastModel gast, Locatie oudeLocatie) {
         SwingUtilities.invokeLater(() -> {
-            for (NewGuest listener : listeners) {
+            for (NewGast listener : listeners) {
                 listener.onGastVerplaatst(gast, oudeLocatie);
             }
         });
         if (gast.getVorigeLocatie() != null) {
             if (gast.getVorigeLocatie().equals(oudeLocatie)) {
-                for (NewGuest listener : listeners) {
+                for (NewGast listener : listeners) {
                     listener.onGastGaatWegUitKamer(gast, oudeLocatie);
                 }
             }
