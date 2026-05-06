@@ -11,6 +11,7 @@ public class GridVakjeView {
     private final JLayeredPane layeredPane;
     private final JPanel backgroundPanel; // back Layer
     private final JPanel gastenContainer; // de container waar gasten in komen
+    private JLabel aantalMensen;
 
     // constructor
     public GridVakjeView(int x, int y, int breedte, int hoogte) {
@@ -89,7 +90,7 @@ public class GridVakjeView {
         int iconSize = 12;
         int spacing = 2;
 
-        JLabel aantalMensen = new JLabel(String.valueOf(ruimte.getAantalGasten()));
+        aantalMensen = new JLabel(String.valueOf(ruimte.getAantalGasten()));
         aantalMensen.setFont(new Font("Arial", Font.BOLD, 12));
         aantalMensen.setName("GAST_LABEL");
         aantalMensen.setSize(aantalMensen.getPreferredSize());
@@ -194,5 +195,9 @@ public class GridVakjeView {
 
     public JComponent getVakjePanel() {
         return layeredPane;
+    }
+
+    public JLabel getPersonenLabel() {
+        return aantalMensen;
     }
 }

@@ -52,6 +52,15 @@
                     // teller verhogen
                     ruimte.setAantalGasten(ruimte.getAantalGasten() + 1);
                     refreshRuimteVisueel(ruimte);
+
+                    // verwijder gast want die gaat naar binnen
+                    JPanel guestLayer = vak.getGridView().getGuestPanel();
+                    guestLayer.remove(gast.getGastLabel());
+
+                    refreshRuimteVisueel(ruimte);
+
+                    guestLayer.revalidate();
+                    guestLayer.repaint();
                 }
             }
         }
@@ -67,6 +76,14 @@
                     // teller verlagen
                     ruimte.setAantalGasten(ruimte.getAantalGasten() - 1);
                     refreshRuimteVisueel(ruimte);
+
+                    // plaats gast weer want die is nu weer uit de kamer
+                    GridVakjeController nieuwVak = grid.get(gast.getVorigeLocatie());
+                    JPanel nieuwPanel = nieuwVak.getGridView().getGuestPanel();
+                    nieuwPanel.add(gast.getGastLabel());
+
+                    nieuwPanel.revalidate();
+                    nieuwPanel.repaint();
                 }
             }
         }

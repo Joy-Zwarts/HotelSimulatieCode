@@ -34,11 +34,6 @@ public class GastBeweeg {
         actieveRoutes.put(gast.getGastID(), pf);
     }
 
-    public void verwijderGast(int gastId) {
-        actieveGasten.remove(gastId);
-        actieveRoutes.remove(gastId);
-    }
-
     private void processMovement() {
         for (Integer id : new ArrayList<>(actieveRoutes.keySet())) {
             GastModel gast = actieveGasten.get(id);
