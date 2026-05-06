@@ -6,7 +6,7 @@ import Model.Personen.GastModel;
 public class KamerModel extends RuimteModel {
     // attributen
     private final KamerClassificatie classification;
-    private final int roomNumber;
+    private int roomNumber;
     private boolean bezet;
     private GastModel verblijvende;
     private static int counter = 0;
@@ -39,5 +39,9 @@ public class KamerModel extends RuimteModel {
     }
     public void setVerblijvende(GastModel verblijvende) {
         this.verblijvende = verblijvende;
+    }
+
+    public void setRoomNumber(int i) {
+        roomNumber = i;
     }
 }

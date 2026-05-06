@@ -43,27 +43,19 @@ public class TestButtonController {
 
     @Test
     void testStartSimulationButtonZonderLayout() {
-        // Zorg dat de simulatie uit staat en er geen model is
         simulatieController.setStarted(false);
-        // We gaan ervan uit dat buttonController.model op dit moment null is
 
-        // Act: Simuleer een klik op de startknop
         view.getStartSimulationButton().doClick();
 
-        // Assert: De simulatie mag niet gestart zijn
         assertFalse(simulatieController.getStarted(),
                 "Simulatie mag niet starten zonder dat er een layout geladen is.");
     }
 
     @Test
     void testOpenWindow() {
-        // Act
         view.getSettingsButton().doClick();
 
-        // Assert: Check of het frame van de settingscontroller nu bestaat en zichtbaar is
-        // Je moet hiervoor wel een getter hebben in je ButtonController of SettingsController
         assertNotNull(view.getSettingsButton(), "Button moet aanwezig zijn");
-        // Je kunt hier controleren of de actie effect heeft gehad op het model of de view
     }
 
 
@@ -71,13 +63,11 @@ public class TestButtonController {
 
     @Test
     void TestStartStopFlow() throws InterruptedException {
-
-        // setup (objecten)
         DarkModeModel darkMode = new DarkModeModel();
         HotelSimulatieView view = new HotelSimulatieView(darkMode);
 
         SimulatieController simulatieController = new SimulatieController();
-        simulatieController.setStarted(false); // reset state
+        simulatieController.setStarted(false);
 
         HotelEventManager manager = new HotelEventManager(false);
 
@@ -93,7 +83,6 @@ public class TestButtonController {
         ButtonController controller =
                 new ButtonController(view, simulatieController, manager, layoutLoader, settingsController);
 
-        // delay Swing
         Thread.sleep(500);
 
         view.getStartSimulationButton().doClick();
@@ -118,30 +107,20 @@ public class TestButtonController {
     }
     @Test
     void testLoadScenarioButton_UpdatesManagerWithInt() {
-        // Arrange: Maak de controller met een overriden pickScenario
         ButtonController testController = new ButtonController(
                 view, simulatieController, manager, layoutLoader, settingsController
         ) {
             @Override
             protected int pickScenario() {
-                // We simuleren dat de gebruiker scenario 2 heeft gekozen
                 return 2;
             }
         };
 
-        // Act: Simuleer de klik op de knop
         testController.actionPerformed(new ActionEvent(view.getLoadScenarioButton(), 0, ""));
-
-        // Assert: Controleer of het getal 2 is aangekomen in de manager
-        // (Zorg dat getScenario() in je manager ook een int teruggeeft)
         assertEquals(2, simulatieController.getScenario(),
                 "De manager moet het scenario-nummer 2 hebben ontvangen.");
     }
-
-
-
-
-    }
+}
 
 
 

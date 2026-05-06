@@ -47,7 +47,7 @@ public class SimulatieController {
 
         ReceptieController receptieController = new ReceptieController(overzichtView);
 
-        PersoonController persoonController = new PersoonController(manager, overzichtView, receptieController);
+        PersoonController persoonController = new PersoonController();
 
         eventHandler.setEventListenerCheckIn(persoonController);
 

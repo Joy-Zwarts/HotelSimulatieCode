@@ -8,10 +8,7 @@ import Model.Layout.Locatie;
 import Controller.PersoonFactory.GastCreator;
 import Model.Personen.GastModel;
 import Model.Ruimtes.KamerType;
-import Model.Ruimtes.RuimteModel;
-import View.Systeem.OverzichtView;
 import hotelevents.HotelEvent;
-import hotelevents.HotelEventManager;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -26,10 +23,10 @@ public class PersoonController implements LayoutGeladen, checkInEvent, checkOutE
     private Locatie startLocatie;
     private LayoutController layoutController;
     private final Map<Integer, GastModel> actieveGasten;
-    private GastBeweeg movementEngine;
+    private final GastBeweeg movementEngine;
 
     // constructor
-    public PersoonController(HotelEventManager hotelEventManager, OverzichtView overzichtView, ReceptieController ReceptieController) {
+    public PersoonController() {
         this.listeners = new ArrayList<>();
         this.actieveGasten = new HashMap<>();
         this.movementEngine = new GastBeweeg(1000, this);
