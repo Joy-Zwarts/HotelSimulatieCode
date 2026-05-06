@@ -5,7 +5,7 @@ import Model.Layout.Locatie;
 public class PersoonModel {
     // attributen
     private Locatie targetLocatie;
-    private final Locatie locatie;
+    private Locatie locatie;
     private Locatie vorigeLocatie;
 
     // constructor
@@ -30,5 +30,9 @@ public class PersoonModel {
 
     public void setVorigeLocatie(Locatie locatie) {
         this.vorigeLocatie = locatie;
+    }
+
+    public void setLocatie(Locatie loc) {
+        this.locatie = loc;
     }
 }

@@ -139,4 +139,8 @@ public class LayoutView {
     public HashMap<Locatie, GridVakjeController> getGrid() {
         return grid;
     }
+
+    public void setGrid(HashMap<Locatie, GridVakjeController> newGrid) {
+        this.grid = newGrid;
+    }
 }

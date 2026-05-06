@@ -21,7 +21,7 @@ public class LayoutController {
     }
 
     // maak de layout stap voor stap
-    private void init() {
+    protected void init() {
         view.berekenGridGrootte(model.getRuimtes());
         model.addVerplichteElementen(view.getGridLengte(), view.getGridBreedte());
 
