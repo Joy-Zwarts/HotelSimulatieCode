@@ -4,7 +4,7 @@ import Controller.Events.EventHandler;
 import Controller.GastManagement.GastPlaatser;
 import Controller.GastManagement.PersoonController;
 import Controller.GastManagement.ReceptieController;
-import Controller.GastManagement.RoomAssign;
+import Controller.GastManagement.KamerAssign;
 import Controller.Layout.LayoutLoader;
 import Controller.Systeem.*;
 import Model.Systeem.DarkModeModel;
@@ -59,7 +59,7 @@ public class SimulatieController {
 
         eventHandler.setEventListenerFitness(persoonController);
 
-        RoomAssign roomAssign = new RoomAssign(receptieController);
+        KamerAssign roomAssign = new KamerAssign(receptieController);
 
         LayoutLoader layoutLoader = new LayoutLoader(manager, view, model, pauseController, view);
 

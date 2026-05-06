@@ -9,13 +9,13 @@ import java.awt.*;
 public class GastModel extends PersoonModel {
     // attributen
 
-    private RoomClassificatie wensen;
+    private KamerClassificatie wensen;
     private KamerModel kamer;
     private final int gastID;
     private JLabel gastLabel;
 
     // constructor
-    public GastModel(int gastId, Locatie locatie, Locatie targetLocatie, RoomClassificatie wensen, KamerModel kamer) {
+    public GastModel(int gastId, Locatie locatie, Locatie targetLocatie, KamerClassificatie wensen, KamerModel kamer) {
         super(locatie, targetLocatie);
         this.gastID = gastId;
         this.wensen = wensen;
@@ -81,11 +81,11 @@ public class GastModel extends PersoonModel {
         this.kamer = kamer;
     }
 
-    public RoomClassificatie getWensen() {
+    public KamerClassificatie getWensen() {
         return this.wensen;
     }
 
-    public void setWensen(RoomClassificatie wens) {
+    public void setWensen(KamerClassificatie wens) {
         this.wensen = wens;
     }
 

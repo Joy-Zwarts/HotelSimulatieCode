@@ -8,7 +8,7 @@ import View.Systeem.OverzichtView;
 
 import java.util.HashMap;
 
-public class ReceptieController implements NewRoom, NewGuest {
+public class ReceptieController implements NewKamer, NewGast {
 
     // attributen
     private final HashMap<Integer, KamerModel> kamers;
@@ -74,7 +74,7 @@ public class ReceptieController implements NewRoom, NewGuest {
 
     // zet de nieuwe kamer in de lijst met kamers en print een confirmation message
     @Override
-    public void onNewRoom(RuimteModel kamer) {
+    public void onNewKamer(RuimteModel kamer) {
         KamerModel k = (KamerModel) kamer;
 
         kamers.put(k.getRoomNumber(), k);

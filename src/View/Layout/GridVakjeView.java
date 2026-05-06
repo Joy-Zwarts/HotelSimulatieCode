@@ -171,7 +171,7 @@ public class GridVakjeView {
     }
 
     // bepaal welk icoon je moet gebruiken voor kamers gebaseerd op het aantal sterren van de kamer
-    private ImageIcon bepaalSterrenIcon(RoomClassificatie classificatie) {
+    private ImageIcon bepaalSterrenIcon(KamerClassificatie classificatie) {
         if (classificatie == null) return null;
         switch (classificatie) {
             case eenSter: return laadIcon("eenSter.png");

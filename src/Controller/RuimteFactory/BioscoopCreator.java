@@ -5,7 +5,7 @@ import Model.Ruimtes.BioscoopModel;
 import Model.Ruimtes.KamerType;
 import Model.Ruimtes.RuimteModel;
 
-public class CinemaCreator extends RuimteFactory {
+public class BioscoopCreator extends RuimteFactory {
 
     // maakt een nieuwe cinema aan gebaseerd op de meegekregen data
     @Override

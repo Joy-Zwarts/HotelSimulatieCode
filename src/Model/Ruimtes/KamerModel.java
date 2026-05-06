@@ -5,14 +5,14 @@ import Model.Personen.GastModel;
 
 public class KamerModel extends RuimteModel {
     // attributen
-    private final RoomClassificatie classification;
+    private final KamerClassificatie classification;
     private final int roomNumber;
     private boolean bezet;
     private GastModel verblijvende;
     private static int counter = 0;
 
     // constructor
-    public KamerModel(KamerType areaType, Locatie position, String dimension, RoomClassificatie classification, boolean Bezet) {
+    public KamerModel(KamerType areaType, Locatie position, String dimension, KamerClassificatie classification, boolean Bezet) {
         super(areaType, position, dimension);
         this.classification = classification;
         this.roomNumber = ++counter;
@@ -22,7 +22,7 @@ public class KamerModel extends RuimteModel {
 
     // getters en setters
 
-    public RoomClassificatie getClassification() {
+    public KamerClassificatie getClassification() {
         return this.classification;
     }
     public int getRoomNumber() {
