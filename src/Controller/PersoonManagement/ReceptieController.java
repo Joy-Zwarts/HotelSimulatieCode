@@ -1,4 +1,4 @@
-package Controller.GastManagement;
+package Controller.PersoonManagement;
 
 import Model.Layout.Locatie;
 import Model.Personen.GastModel;
@@ -51,7 +51,7 @@ public class ReceptieController implements NewKamer, NewGast {
     }
 
     public void addGast(GastModel gast) {
-        gasten.put(gast.getGastID(), gast);
+        gasten.put(gast.getID(), gast);
         refreshView();
     }
 
@@ -100,7 +100,7 @@ public class ReceptieController implements NewKamer, NewGast {
         }
 
         if (gast != null) {
-            removeGast(gast.getGastID());
+            removeGast(gast.getID());
         }
 
         System.out.println("Guest has left");

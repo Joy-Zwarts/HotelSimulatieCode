@@ -1,4 +1,4 @@
-package Controller.GastManagement;
+package Controller.PersoonManagement;
 
 import Model.Layout.Locatie;
 import Model.Personen.GastModel;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GastBeweeg {
+public class BeweegHelper {
     private final Map<Integer, PathFinder> actieveRoutes;
     private final Map<Integer, GastModel> actieveGasten;
     private final Timer bewegingsTimer;
@@ -19,7 +19,7 @@ public class GastBeweeg {
         void onDestinationReached(GastModel gast);
     }
 
-    public GastBeweeg(int hteSnelheid, MovementListener listener) {
+    public BeweegHelper(int hteSnelheid, MovementListener listener) {
         this.actieveRoutes = new HashMap<>();
         this.actieveGasten = new HashMap<>();
         this.listener = listener;
@@ -30,8 +30,8 @@ public class GastBeweeg {
     public void setSpeed(int speed) { bewegingsTimer.setDelay(speed); }
 
     public void voegRouteToe(GastModel gast, PathFinder pf) {
-        actieveGasten.put(gast.getGastID(), gast);
-        actieveRoutes.put(gast.getGastID(), pf);
+        actieveGasten.put(gast.getID(), gast);
+        actieveRoutes.put(gast.getID(), pf);
     }
 
     private void processMovement() {

@@ -1,4 +1,4 @@
-package Controller.GastManagement;
+package Controller.PersoonManagement;
 
 import Controller.Events.*;
 import Controller.Layout.LayoutController;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PersoonController implements LayoutGeladen, checkInEvent, checkOutEvent, onTimeChange, needFoodEvent, fitnessEvent, cinemaEvent, GastBeweeg.MovementListener {
+public class PersoonController implements LayoutGeladen, checkInEvent, checkOutEvent, onTimeChange, needFoodEvent, fitnessEvent, cinemaEvent, BeweegHelper.MovementListener {
 
     // attributen
     private final GastCreator factory;
@@ -23,13 +23,13 @@ public class PersoonController implements LayoutGeladen, checkInEvent, checkOutE
     private Locatie startLocatie;
     private LayoutController layoutController;
     private final Map<Integer, GastModel> actieveGasten;
-    private final GastBeweeg movementEngine;
+    private final BeweegHelper movementEngine;
 
     // constructor
     public PersoonController() {
         this.listeners = new ArrayList<>();
         this.actieveGasten = new HashMap<>();
-        this.movementEngine = new GastBeweeg(1000, this);
+        this.movementEngine = new BeweegHelper(1000, this);
         this.movementEngine.start();
 
         this.factory = new GastCreator();
@@ -41,14 +41,14 @@ public class PersoonController implements LayoutGeladen, checkInEvent, checkOutE
             for (NewGast listener : listeners) {
                 listener.onGastVertrokken(gast);
             }
-            actieveGasten.remove(gast.getGastID());
+            actieveGasten.remove(gast.getID());
         } else {
             gast.setVorigeLocatie(new Locatie(gast.getLocatie().getX(), gast.getLocatie().getY()));
             // gast is in zijn target kamer aangekomen
             for (NewGast listener : listeners) {
                 listener.onGastAangekomenInKamer(gast, gast.getLocatie());
             }
-            System.out.println("Gast " + gast.getGastID() + " is op bestemming. Teller +1.");
+            System.out.println("Gast " + gast.getID() + " is op bestemming. Teller +1.");
         }
     }
 
@@ -77,7 +77,7 @@ public class PersoonController implements LayoutGeladen, checkInEvent, checkOutE
                 hotelEvent.getData()
         );
 
-        actieveGasten.put(gast.getGastID(), gast);
+        actieveGasten.put(gast.getID(), gast);
 
         // notify de listener dat er een nieuwe gast is gemaakt
         for (NewGast listener : listeners) {
@@ -127,7 +127,7 @@ public class PersoonController implements LayoutGeladen, checkInEvent, checkOutE
                 // geef de route aan de engine (deze overschrijft de oude route)
                 movementEngine.voegRouteToe(gast, pf);
 
-                System.out.println("Gast " + gast.getGastID() + " heeft honger en loopt naar het restaurant.");
+                System.out.println("Gast " + gast.getID() + " heeft honger en loopt naar het restaurant.");
             } else {
                 System.out.println("Geen restaurant gevonden in het hotel!");
             }
@@ -170,7 +170,7 @@ public class PersoonController implements LayoutGeladen, checkInEvent, checkOutE
                 // geef de route aan de engine (deze overschrijft de oude route)
                 movementEngine.voegRouteToe(gast, pf);
 
-                System.out.println("Gast " + gast.getGastID() + " wilt sporten en loopt naar de gym.");
+                System.out.println("Gast " + gast.getID() + " wilt sporten en loopt naar de gym.");
             } else {
                 System.out.println("Geen gym gevonden in het hotel!");
             }
@@ -192,7 +192,7 @@ public class PersoonController implements LayoutGeladen, checkInEvent, checkOutE
                 // geef de route aan de engine (deze overschrijft de oude route)
                 movementEngine.voegRouteToe(gast, pf);
 
-                System.out.println("Gast " + gast.getGastID() + " wilt film kijken en loopt naar de bioscoop.");
+                System.out.println("Gast " + gast.getID() + " wilt film kijken en loopt naar de bioscoop.");
             } else {
                 System.out.println("Geen bioscoop gevonden in het hotel!");
             }

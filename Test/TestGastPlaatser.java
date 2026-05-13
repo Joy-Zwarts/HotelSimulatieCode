@@ -1,4 +1,4 @@
-import Controller.GastManagement.GastPlaatser;
+import Controller.PersoonManagement.PlaatsHelper;
 import Controller.Systeem.PauseController;
 import Model.Layout.Locatie;
 import Model.Personen.GastModel;
@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestGastPlaatser { // Klasse even op public gezet
 
-    private GastPlaatser gastPlaatser;
+    private PlaatsHelper gastPlaatser;
     private HashMap<Locatie, GridVakjeController> testGrid;
 
     // Test data velden
@@ -64,7 +64,7 @@ public class TestGastPlaatser { // Klasse even op public gezet
         testGrid.put(testLocatie, testVakController);
 
         // 4. GastPlaatser initialiseren en grid injecteren
-        gastPlaatser = new GastPlaatser(null);
+        gastPlaatser = new PlaatsHelper(null);
         injectGridIntoPlaatser(testGrid);
 
         // 5. GastModel aanmaken
@@ -72,15 +72,14 @@ public class TestGastPlaatser { // Klasse even op public gezet
         testGast = new GastModel(
                 1,
                 testLocatie,
-                new Locatie(1, 1),
+                new Locatie(1, 1), ,
                 sterren,
-                testKamer
-        );
+                testKamer);
     }
 
     private void injectGridIntoPlaatser(HashMap<Locatie, GridVakjeController> grid) {
         try {
-            java.lang.reflect.Field field = GastPlaatser.class.getDeclaredField("grid");
+            java.lang.reflect.Field field = PlaatsHelper.class.getDeclaredField("grid");
             field.setAccessible(true);
             field.set(this.gastPlaatser, grid);
         } catch (Exception e) {
@@ -182,7 +181,7 @@ public class TestGastPlaatser { // Klasse even op public gezet
     @Test
     void testOnGastVertrokken_MetNullLocatie_CrashtNiet() {
         // Setup: Maak een gast zonder locatie
-        GastModel spookGast = new GastModel(99, null, null, KamerClassificatie.eenSter, (KamerModel) testRuimte);
+        GastModel spookGast = new GastModel(99, null, null, , KamerClassificatie.eenSter, (KamerModel) testRuimte);
 
         // Actie & Assert
         assertDoesNotThrow(() -> gastPlaatser.onGastVertrokken(spookGast),

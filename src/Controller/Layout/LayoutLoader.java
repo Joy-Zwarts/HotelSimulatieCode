@@ -1,6 +1,6 @@
 package Controller.Layout;
 
-import Controller.GastManagement.NewKamer;
+import Controller.PersoonManagement.NewKamer;
 import Controller.RuimteFactory.*;
 import Controller.Systeem.FilePicker;
 import Controller.Systeem.PauseController;

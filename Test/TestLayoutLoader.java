@@ -1,7 +1,4 @@
-import Controller.Layout.LayoutGeladen;
 import Controller.Layout.LayoutLoader;
-import Controller.Layout.LayoutController;
-import Controller.GastManagement.NewKamer;
 import Model.Layout.LayoutModel;
 import Model.Layout.Locatie;
 import Model.Layout.RuimteData;

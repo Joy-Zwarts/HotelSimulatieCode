@@ -1,5 +1,5 @@
-import Controller.GastManagement.GastBeweeg;
-import Controller.GastManagement.PathFinder;
+import Controller.PersoonManagement.BeweegHelper;
+import Controller.PersoonManagement.PathFinder;
 import Controller.Layout.LayoutController;
 import Controller.Systeem.PauseController;
 import Model.Layout.LayoutModel;
@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Method;
 
-public class TestGastBeweeg implements GastBeweeg.MovementListener {
+public class TestGastBeweeg implements BeweegHelper.MovementListener {
 
     private boolean stepTakenCalled;
     private boolean destinationReachedCalled;
@@ -29,11 +29,11 @@ public class TestGastBeweeg implements GastBeweeg.MovementListener {
     @Test
     public void testSetSpeed() throws Exception {
 
-        GastBeweeg gastBeweeg = new GastBeweeg(100, this);
+        BeweegHelper gastBeweeg = new BeweegHelper(100, this);
 
         gastBeweeg.setSpeed(250);
 
-        java.lang.reflect.Field f = GastBeweeg.class.getDeclaredField("bewegingsTimer");
+        java.lang.reflect.Field f = BeweegHelper.class.getDeclaredField("bewegingsTimer");
         f.setAccessible(true);
 
         javax.swing.Timer timer = (javax.swing.Timer) f.get(gastBeweeg);
@@ -44,7 +44,7 @@ public class TestGastBeweeg implements GastBeweeg.MovementListener {
     @Test
     public void testStartDoesNotCrash() {
 
-        GastBeweeg gastBeweeg = new GastBeweeg(100, this);
+        BeweegHelper gastBeweeg = new BeweegHelper(100, this);
 
         gastBeweeg.start();
 
@@ -57,14 +57,14 @@ public class TestGastBeweeg implements GastBeweeg.MovementListener {
         Locatie start = new Locatie(0, 0);
         Locatie target = new Locatie(2, 0);
 
-        dummy = new GastModel(1, start, target, null, null);
+        dummy = new GastModel(1, start, target, , null, null);
 
-        GastBeweeg gb = new GastBeweeg(100, this);
+        BeweegHelper gb = new BeweegHelper(100, this);
         PathFinder pf = new PathFinder(start, target, null);
 
         gb.voegRouteToe(dummy, pf);
 
-        Method m = GastBeweeg.class.getDeclaredMethod("processMovement");
+        Method m = BeweegHelper.class.getDeclaredMethod("processMovement");
         m.setAccessible(true);
 
         m.invoke(gb);
@@ -81,14 +81,14 @@ public class TestGastBeweeg implements GastBeweeg.MovementListener {
 
         Locatie start = new Locatie(0, 0);
 
-        dummy = new GastModel(2, start, start, null, null);
+        dummy = new GastModel(2, start, start, , null, null);
 
-        GastBeweeg gb = new GastBeweeg(100, this);
+        BeweegHelper gb = new BeweegHelper(100, this);
         PathFinder pf = new PathFinder(start, start, null);
 
         gb.voegRouteToe(dummy, pf);
 
-        Method m = GastBeweeg.class.getDeclaredMethod("processMovement");
+        Method m = BeweegHelper.class.getDeclaredMethod("processMovement");
         m.setAccessible(true);
 
         m.invoke(gb);

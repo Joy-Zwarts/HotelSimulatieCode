@@ -1,10 +1,10 @@
 package Controller;
 
 import Controller.Events.EventHandler;
-import Controller.GastManagement.GastPlaatser;
-import Controller.GastManagement.PersoonController;
-import Controller.GastManagement.ReceptieController;
-import Controller.GastManagement.KamerAssign;
+import Controller.PersoonManagement.PlaatsHelper;
+import Controller.PersoonManagement.PersoonController;
+import Controller.PersoonManagement.ReceptieController;
+import Controller.PersoonManagement.KamerAssign;
 import Controller.Layout.LayoutLoader;
 import Controller.Systeem.*;
 import Model.Systeem.DarkModeModel;
@@ -63,7 +63,7 @@ public class SimulatieController {
 
         LayoutLoader layoutLoader = new LayoutLoader(manager, view, model, pauseController, view);
 
-        GastPlaatser gastPlaatser = new GastPlaatser(null);
+        PlaatsHelper gastPlaatser = new PlaatsHelper(null);
 
         layoutLoader.setNewLayoutListener(gastPlaatser);
 
