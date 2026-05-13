@@ -3,6 +3,8 @@ package Model.Personen;
 import Model.Layout.Locatie;
 import Model.Ruimtes.*;
 
+import java.awt.*;
+
 public class GastModel extends PersoonModel {
 
     private KamerClassificatie wensen;
@@ -14,7 +16,7 @@ public class GastModel extends PersoonModel {
                      KamerClassificatie wensen,
                      KamerModel kamer) {
 
-        super(ID, locatie, targetLocatie);
+        super(ID, locatie, targetLocatie, new Color(36, 104, 181));
 
         this.wensen = wensen;
         this.kamer = kamer;

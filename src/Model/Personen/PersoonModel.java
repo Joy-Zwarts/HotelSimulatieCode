@@ -12,13 +12,14 @@ public class PersoonModel {
     private Locatie locatie;
     private final Locatie targetLocatie;
     private Locatie vorigeLocatie;
-
+    private final Color kleur;
     private final JLabel persoonLabel;
 
-    public PersoonModel(int ID, Locatie locatie, Locatie targetLocatie) {
+    public PersoonModel(int ID, Locatie locatie, Locatie targetLocatie, Color bolletjeKleur) {
         this.ID = ID;
         this.locatie = locatie;
         this.targetLocatie = targetLocatie;
+        this.kleur = bolletjeKleur;
 
         this.persoonLabel = createLabel();
     }
@@ -33,7 +34,7 @@ public class PersoonModel {
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                         RenderingHints.VALUE_ANTIALIAS_ON);
 
-                g2.setColor(new Color(36, 104, 181));
+                g2.setColor(kleur);
                 g2.fillOval(0, 0, getWidth(), getHeight());
 
                 g2.setColor(Color.WHITE);

@@ -6,13 +6,14 @@
     import Model.Layout.Locatie;
     import Model.Personen.GastModel;
     import Model.Personen.PersoonModel;
+    import Model.Personen.SchoonmakerModel;
     import Model.Ruimtes.RuimteModel;
     import View.Layout.LayoutView;
 
     import javax.swing.*;
     import java.util.HashMap;
 
-    public class PlaatsHelper implements NewGast, LayoutGeladen {
+    public class PlaatsHelper implements NewGast, LayoutGeladen, NewSchoonmaker {
 
         // attributen
         private HashMap<Locatie, GridVakjeController> grid;
@@ -28,17 +29,12 @@
         // plaats de gast hun icoontje op locatie
         @Override
         public void onGastAangemaakt(GastModel gast) {
-            Locatie gastLoc = gast.getLocatie();
-            if (grid != null && gastLoc != null) {
-                GridVakjeController vak = grid.get(gastLoc);
-                if (vak != null) {
-                    JPanel guestLayer = vak.getGridView().getGuestPanel();
-                    guestLayer.add(gast.getPersoonLabel());
+            plaatsPersoon(gast);
+        }
 
-                    guestLayer.revalidate();
-                    guestLayer.repaint();
-                }
-            }
+        @Override
+        public void onSchoonmakerAangemaakt(SchoonmakerModel schoonmaker) {
+            plaatsPersoon(schoonmaker);
         }
 
         public void plaatsPersoon(PersoonModel persoon) {

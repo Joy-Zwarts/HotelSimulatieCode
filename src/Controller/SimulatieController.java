@@ -1,10 +1,7 @@
 package Controller;
 
 import Controller.Events.EventHandler;
-import Controller.PersoonManagement.PlaatsHelper;
-import Controller.PersoonManagement.PersoonController;
-import Controller.PersoonManagement.ReceptieController;
-import Controller.PersoonManagement.KamerAssign;
+import Controller.PersoonManagement.*;
 import Controller.Layout.LayoutLoader;
 import Controller.Systeem.*;
 import Model.Systeem.DarkModeModel;
@@ -49,6 +46,8 @@ public class SimulatieController {
 
         PersoonController persoonController = new PersoonController();
 
+        SchoonmakerController schoonmakerController = new SchoonmakerController();
+
         eventHandler.setEventListenerCheckIn(persoonController);
 
         eventHandler.setEventListenerCheckOut(persoonController);
@@ -58,6 +57,10 @@ public class SimulatieController {
         eventHandler.setEventListenerCinema(persoonController);
 
         eventHandler.setEventListenerFitness(persoonController);
+
+        eventHandler.setEventListenerCleaning(schoonmakerController);
+
+        persoonController.setNewGuestListener(schoonmakerController);
 
         KamerAssign roomAssign = new KamerAssign(receptieController);
 
@@ -71,9 +74,13 @@ public class SimulatieController {
 
         layoutLoader.setNewLayoutListener(persoonController);
 
+        layoutLoader.setNewLayoutListener(schoonmakerController);
+
         persoonController.setNewGuestListener(roomAssign);
 
         persoonController.setNewGuestListener(gastPlaatser);
+
+        schoonmakerController.setNewSchoonmakerListener(gastPlaatser);
 
         persoonController.setNewGuestListener(receptieController);
 
