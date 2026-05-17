@@ -5,6 +5,7 @@ import Controller.Systeem.PauseController;
 import Model.Layout.LayoutModel;
 import Model.Layout.Locatie;
 import Model.Personen.GastModel;
+import Model.Personen.PersoonModel;
 import View.Layout.LayoutView;
 import View.Systeem.HotelSimulatieView;
 import org.junit.jupiter.api.Assertions;
@@ -57,7 +58,7 @@ public class TestGastBeweeg implements BeweegHelper.MovementListener {
         Locatie start = new Locatie(0, 0);
         Locatie target = new Locatie(2, 0);
 
-        dummy = new GastModel(1, start, target, , null, null);
+        dummy = new GastModel(1, start, target, null, null);
 
         BeweegHelper gb = new BeweegHelper(100, this);
         PathFinder pf = new PathFinder(start, target, null);
@@ -81,7 +82,7 @@ public class TestGastBeweeg implements BeweegHelper.MovementListener {
 
         Locatie start = new Locatie(0, 0);
 
-        dummy = new GastModel(2, start, start, , null, null);
+        dummy = new GastModel(2, start, start, null, null);
 
         BeweegHelper gb = new BeweegHelper(100, this);
         PathFinder pf = new PathFinder(start, start, null);
@@ -147,12 +148,12 @@ public class TestGastBeweeg implements BeweegHelper.MovementListener {
     }
 
     @Override
-    public void onStepTaken(GastModel gast, Locatie oudeLocatie) {
-        stepTakenCalled = true;
+    public void onStepTaken(PersoonModel persoon, Locatie oudeLocatie) {
+
     }
 
     @Override
-    public void onDestinationReached(GastModel gast) {
-        destinationReachedCalled = true;
+    public void onDestinationReached(PersoonModel persoon) {
+
     }
 }

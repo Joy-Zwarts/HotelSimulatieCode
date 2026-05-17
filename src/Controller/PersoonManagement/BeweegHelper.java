@@ -2,6 +2,7 @@ package Controller.PersoonManagement;
 
 import Model.Layout.Locatie;
 import Model.Personen.GastModel;
+import Model.Personen.PersoonModel;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -10,18 +11,18 @@ import java.util.Map;
 
 public class BeweegHelper {
     private final Map<Integer, PathFinder> actieveRoutes;
-    private final Map<Integer, GastModel> actieveGasten;
+    private final Map<Integer, PersoonModel> actieveMensen;
     private final Timer bewegingsTimer;
     private final MovementListener listener;
 
     public interface MovementListener {
-        void onStepTaken(GastModel gast, Locatie oudeLocatie);
-        void onDestinationReached(GastModel gast);
+        void onStepTaken(PersoonModel persoon, Locatie oudeLocatie);
+        void onDestinationReached(PersoonModel persoon);
     }
 
     public BeweegHelper(int hteSnelheid, MovementListener listener) {
         this.actieveRoutes = new HashMap<>();
-        this.actieveGasten = new HashMap<>();
+        this.actieveMensen = new HashMap<>();
         this.listener = listener;
         this.bewegingsTimer = new Timer(hteSnelheid, e -> processMovement());
     }
@@ -29,26 +30,26 @@ public class BeweegHelper {
     public void start() { bewegingsTimer.start(); }
     public void setSpeed(int speed) { bewegingsTimer.setDelay(speed); }
 
-    public void voegRouteToe(GastModel gast, PathFinder pf) {
-        actieveGasten.put(gast.getID(), gast);
-        actieveRoutes.put(gast.getID(), pf);
+    public void voegRouteToe(PersoonModel persoon, PathFinder pf) {
+        actieveMensen.put(persoon.getID(), persoon);
+        actieveRoutes.put(persoon.getID(), pf);
     }
 
     private void processMovement() {
         for (Integer id : new ArrayList<>(actieveRoutes.keySet())) {
-            GastModel gast = actieveGasten.get(id);
+            PersoonModel persoon = actieveMensen.get(id);
             PathFinder pf = actieveRoutes.get(id);
 
             if (pf.isBestemmingBereikt()) {
-                listener.onDestinationReached(gast);
-                actieveRoutes.remove(id); // Stop met bewegen voor deze gast
+                listener.onDestinationReached(persoon);
+                actieveRoutes.remove(id); // stop met bewegen voor deze gast
             } else {
-                Locatie oudeLocatie = new Locatie(gast.getLocatie().getX(), gast.getLocatie().getY());
+                Locatie oudeLocatie = new Locatie(persoon.getLocatie().getX(), persoon.getLocatie().getY());
                 Locatie volgendeStap = pf.getNextStep();
-                gast.getLocatie().setX(volgendeStap.getX());
-                gast.getLocatie().setY(volgendeStap.getY());
+                persoon.getLocatie().setX(volgendeStap.getX());
+                persoon.getLocatie().setY(volgendeStap.getY());
 
-                listener.onStepTaken(gast, oudeLocatie);
+                listener.onStepTaken(persoon, oudeLocatie);
             }
         }
     }

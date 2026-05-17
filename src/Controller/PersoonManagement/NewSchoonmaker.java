@@ -1,8 +1,16 @@
 package Controller.PersoonManagement;
 
-import Model.Personen.GastModel;
+import Model.Layout.Locatie;
 import Model.Personen.SchoonmakerModel;
 
 public interface NewSchoonmaker {
-    void onSchoonmakerAangemaakt(SchoonmakerModel schoonmaker);
+
+    void onSchoonmakerAangemaakt(
+            SchoonmakerModel schoonmaker
+    );
+
+    void onSchoonmakerVerplaatst(
+            SchoonmakerModel schoonmaker,
+            Locatie oudeLocatie
+    );
 }

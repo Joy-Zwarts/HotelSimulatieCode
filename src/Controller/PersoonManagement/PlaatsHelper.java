@@ -51,6 +51,30 @@
             }
         }
 
+        // zet het schoonmaker-icoontje op de juiste plek na een stap
+        @Override
+        public void onSchoonmakerVerplaatst(SchoonmakerModel schoonmaker, Locatie oudeLocatie) {
+
+            if (oudeLocatie != null && oudeLocatie.equals(schoonmaker.getLocatie())) {return;}
+
+            GridVakjeController oudVak = grid.get(oudeLocatie);
+
+            if (oudVak != null) {JPanel oudPanel = oudVak.getGridView().getGuestPanel();
+                oudPanel.remove(schoonmaker.getPersoonLabel());
+                oudPanel.revalidate();
+                oudPanel.repaint();
+            }
+
+            GridVakjeController nieuwVak = grid.get(schoonmaker.getLocatie());
+
+            if (nieuwVak != null) {
+                JPanel nieuwPanel = nieuwVak.getGridView().getGuestPanel();
+                nieuwPanel.add(schoonmaker.getPersoonLabel());
+                nieuwPanel.revalidate();
+                nieuwPanel.repaint();
+            }
+        }
+
         // als de gast aangekomen is in de target locatie gaat hij er in en wordt het drukte label verhoogd
         @Override
         public void onGastAangekomenInKamer(GastModel gast, Locatie behaaldeLocatie) {
