@@ -1,6 +1,7 @@
 package Controller;
 
 import Controller.Events.EventHandler;
+import Controller.Faciliteiten.BioscoopController;
 import Controller.Layout.LayoutLoader;
 import Controller.PersoonManagement.*;
 import Controller.Systeem.*;
@@ -59,6 +60,8 @@ public class SimulatieController implements reset {
 
         KamerAssign kamerAssign = new KamerAssign(receptieController);
 
+        BioscoopController bioscoopController = new BioscoopController();
+
         // EVENT LISTENERS
 
         eventHandler.setEventListenerCheckIn(gastController);
@@ -76,6 +79,12 @@ public class SimulatieController implements reset {
         eventHandler.setEventListenerNoneEvent(schoonmakerController);
 
         eventHandler.setEventListenerCheckOut(schoonmakerController);
+
+        eventHandler.setEventListenerCinema(bioscoopController);
+
+        eventHandler.setEventListenerNoneEvent(bioscoopController);
+
+        bioscoopController.addlisteners(gastController);
 
         LayoutLoader layoutLoader = new LayoutLoader(manager, view, model, pauseController, view);
 

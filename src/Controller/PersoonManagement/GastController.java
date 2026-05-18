@@ -1,9 +1,9 @@
 package Controller.PersoonManagement;
 
 import Controller.Events.*;
+import Controller.Faciliteiten.bioscoopOver;
 import Controller.Layout.LayoutController;
 import Controller.Systeem.onTimeChange;
-import Controller.Systeem.reset;
 import Model.Layout.Locatie;
 import Controller.PersoonFactory.GastCreator;
 import Model.Personen.GastModel;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GastController extends PersoonController implements checkInEvent, checkOutEvent, onTimeChange, needFoodEvent, fitnessEvent, cinemaEvent, BeweegHelper.MovementListener {
+public class GastController extends PersoonController implements checkInEvent, checkOutEvent, onTimeChange, needFoodEvent, fitnessEvent, cinemaEvent, BeweegHelper.MovementListener, bioscoopOver {
 
     // attributen
     private final GastCreator factory;
@@ -206,9 +206,20 @@ public class GastController extends PersoonController implements checkInEvent, c
     public void startCinemaEvent(HotelEvent hotelEvent) {
 
     }
+
     public void reset() {
-        super.resetController(); // Reset actievePersonen en movementEngine
+        super.resetController();
         this.actieveGasten.clear();
-        // listeners laten we intact, anders gaan de koppelingen naar de UI/Receptie verloren
+    }
+
+    @Override
+    public void gaWegUitBioscoop(ArrayList<Integer> gastenInBios) {
+        for (int gastID : gastenInBios) {
+            GastModel gast = actieveGasten.get(gastID);
+            if (gast.getTargetLocatie() != null) {
+                PathFinder pf = new PathFinder(gast.getLocatie(), gast.getTargetLocatie(), layoutController);
+                movementEngine.voegRouteToe(gast, pf);
+            }
+        }
     }
 }

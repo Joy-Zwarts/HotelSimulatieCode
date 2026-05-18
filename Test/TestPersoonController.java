@@ -6,6 +6,7 @@ import Model.Layout.Locatie;
 import Model.Personen.GastModel;
 import Model.Personen.PersoonModel;
 import View.Layout.LayoutView;
+import View.Systeem.OverzichtView;
 import hotelevents.HotelEvent;
 import hotelevents.HotelEventType;
 import org.junit.jupiter.api.Assertions;
@@ -22,17 +23,7 @@ public class TestPersoonController {
 
     @BeforeEach
     public void setUp() {
-        gastController = new GastController() {
-            @Override
-            public void onStepTaken(PersoonModel persoon, Locatie oudeLocatie) {
-
-            }
-
-            @Override
-            public void onDestinationReached(PersoonModel persoon) {
-
-            }
-        };
+        gastController = new GastController(new OverzichtView(null, null, null));
 
         LayoutView view = new LayoutView(null, null);
         view.setGridBreedte(10);
