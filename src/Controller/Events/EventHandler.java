@@ -81,7 +81,11 @@ public class EventHandler implements HotelEventListener {
                 break;
             case NONE:
                 for (noneEvent listener : noneEventListeners) {
-                    listener.noneEvent(hotelEvent);
+                    try {
+                        listener.noneEvent(hotelEvent);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
                 break;
             default:
