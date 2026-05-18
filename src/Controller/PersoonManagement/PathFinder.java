@@ -28,6 +28,7 @@ public class PathFinder {
         // check of we naar een andere verdieping moeten
         if (currentLocatie.getY() != targetLocatie.getY()) {
 
+
             // locatie van de trap ophalen
             int trapX = layoutController.getView().getGridBreedte() - 1;
 

@@ -40,10 +40,10 @@ public class LayoutController {
 
     public Locatie vindLocatie(KamerType kamerType) {
         for (RuimteModel ruimte : model.getRuimtes()) {
-            // check of de ruimte een restaurant is (pas dit aan op jouw Enum/Model)
+            // Check of de ruimte een restaurant is (pas dit aan op jouw Enum/Model)
             if (ruimte.getAreaType() == kamerType) {
                 int x = ruimte.getPosition().getX();
-                int y = (ruimte.getEntryPoint().getY())-1;
+                int y = (ruimte.getPosition().getY())-1;
                 return new Locatie(x, y);
             }
         }

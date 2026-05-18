@@ -33,7 +33,7 @@ public class KamerAssign implements NewGast {
                 controller.refreshView();
 
                 gast.getTargetLocatie().setX(kamer.getPosition().getX());
-                gast.getTargetLocatie().setY(kamer.getEntryPoint().getY() -1);
+                gast.getTargetLocatie().setY(kamer.getPosition().getY() -1);
 
                 return;
             }

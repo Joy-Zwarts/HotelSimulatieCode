@@ -19,6 +19,11 @@ public class RestaurantController implements needFoodEvent, noneEvent {
     private final Map<Integer, Integer> gastEindTijd = new HashMap<>();
     private final Map<Integer, Integer> gastTimer = new HashMap<>();
     private final Random rand = new Random();
+    private OverzichtView overzichtView;
+
+    public RestaurantController(OverzichtView view) {
+        this.overzichtView = view;
+    }
 
     public void addlisteners(restaurantOver listener) {
         listeners.add(listener);
@@ -63,5 +68,12 @@ public class RestaurantController implements needFoodEvent, noneEvent {
             gastTimer.remove(gastId);
             gastEindTijd.remove(gastId);
         }
+    }
+    public Map<Integer, Integer> getGastTimer() {
+        return gastTimer;
+    }
+
+    public Map<Integer, Integer> getGastEindTijd() {
+        return gastEindTijd;
     }
 }

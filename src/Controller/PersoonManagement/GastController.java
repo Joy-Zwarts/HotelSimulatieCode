@@ -2,7 +2,6 @@ package Controller.PersoonManagement;
 
 import Controller.Events.*;
 import Controller.Faciliteiten.bioscoopOver;
-import Controller.Faciliteiten.fitnessOver;
 import Controller.Faciliteiten.restaurantOver;
 import Controller.Layout.LayoutController;
 import Controller.Systeem.onTimeChange;
@@ -18,7 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GastController extends PersoonController implements checkInEvent, checkOutEvent, onTimeChange, needFoodEvent, fitnessEvent, cinemaEvent, BeweegHelper.MovementListener, bioscoopOver, restaurantOver, fitnessOver {
+public class GastController extends PersoonController implements checkInEvent, checkOutEvent, onTimeChange, needFoodEvent, fitnessEvent, cinemaEvent, BeweegHelper.MovementListener, bioscoopOver, restaurantOver {
 
     // attributen
     private final GastCreator factory;
@@ -227,15 +226,6 @@ public class GastController extends PersoonController implements checkInEvent, c
 
     @Override
     public void gaWegUitRestaurant(int gastID) {
-        GastModel gast = actieveGasten.get(gastID);
-        if (gast.getTargetLocatie() != null) {
-            PathFinder pf = new PathFinder(gast.getLocatie(), gast.getTargetLocatie(), layoutController);
-            movementEngine.voegRouteToe(gast, pf);
-        }
-    }
-
-    @Override
-    public void gaWegUitGym(int gastID) {
         GastModel gast = actieveGasten.get(gastID);
         if (gast.getTargetLocatie() != null) {
             PathFinder pf = new PathFinder(gast.getLocatie(), gast.getTargetLocatie(), layoutController);

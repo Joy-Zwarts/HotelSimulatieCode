@@ -2,6 +2,7 @@ package Controller.PersoonManagement;
 
 import Controller.Layout.LayoutController;
 import Controller.Layout.LayoutGeladen;
+import Controller.Systeem.reset;
 import Model.Personen.PersoonModel;
 import View.Systeem.OverzichtView; // Import toevoegen
 
@@ -21,7 +22,7 @@ public abstract class PersoonController implements LayoutGeladen, BeweegHelper.M
     }
 
     // om de schoonmakers te tonen in de overzicht view
-    public void injectOverzichtView(OverzichtView overzichtView) {
+    public void injecteerOverzichtView(OverzichtView overzichtView) {
         if (this.movementEngine != null) {
             this.movementEngine.setOverzichtView(overzichtView);
         }
