@@ -3,6 +3,7 @@ package Controller.PersoonManagement;
 import Model.Layout.Locatie;
 import Model.Personen.GastModel;
 import Model.Personen.PersoonModel;
+import View.Systeem.OverzichtView; // Voeg deze import toe
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ public class BeweegHelper {
     private final Map<Integer, PersoonModel> actieveMensen;
     private final Timer bewegingsTimer;
     private final MovementListener listener;
+    private OverzichtView overzichtView;
 
     public interface MovementListener {
         void onStepTaken(PersoonModel persoon, Locatie oudeLocatie);
@@ -27,6 +29,10 @@ public class BeweegHelper {
         this.bewegingsTimer = new Timer(hteSnelheid, e -> processMovement());
     }
 
+    public void setOverzichtView(OverzichtView overzichtView) {
+        this.overzichtView = overzichtView;
+    }
+
     public void start() { bewegingsTimer.start(); }
     public void setSpeed(int speed) { bewegingsTimer.setDelay(speed); }
 
@@ -36,13 +42,18 @@ public class BeweegHelper {
     }
 
     private void processMovement() {
+        // als het overzicht open staat doe niks
+        if (overzichtView != null && overzichtView.isGepauzeerd()) {
+            return;
+        }
+
         for (Integer id : new ArrayList<>(actieveRoutes.keySet())) {
             PersoonModel persoon = actieveMensen.get(id);
             PathFinder pf = actieveRoutes.get(id);
 
             if (pf.isBestemmingBereikt()) {
                 listener.onDestinationReached(persoon);
-                actieveRoutes.remove(id); // stop met bewegen voor deze gast
+                actieveRoutes.remove(id);
             } else {
                 Locatie oudeLocatie = new Locatie(persoon.getLocatie().getX(), persoon.getLocatie().getY());
                 Locatie volgendeStap = pf.getNextStep();
@@ -54,4 +65,3 @@ public class BeweegHelper {
         }
     }
 }
-

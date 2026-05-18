@@ -26,11 +26,11 @@ public class TestFactories {
     public void testGastCreatie() {
         PersoonFactory factory = new GastCreator();
 
-        gasten.add((GastModel) factory.createPersoon(1, new Locatie(0,0), new Locatie(1,1), 1));
-        gasten.add((GastModel) factory.createPersoon(2, new Locatie(0,0), new Locatie(1,1), 2));
-        gasten.add((GastModel) factory.createPersoon(3, new Locatie(0,0), new Locatie(1,1), 3));
-        gasten.add((GastModel) factory.createPersoon(4, new Locatie(0,0), new Locatie(1,1), 4));
-        gasten.add((GastModel) factory.createPersoon(5, new Locatie(0,0), new Locatie(1,1), 5));
+        gasten.add((GastModel) factory.createPersoon(1, new Locatie(0,0), new Locatie(1,1), 1, null));
+        gasten.add((GastModel) factory.createPersoon(2, new Locatie(0,0), new Locatie(1,1), 2, null));
+        gasten.add((GastModel) factory.createPersoon(3, new Locatie(0,0), new Locatie(1,1), 3, null));
+        gasten.add((GastModel) factory.createPersoon(4, new Locatie(0,0), new Locatie(1,1), 4, null));
+        gasten.add((GastModel) factory.createPersoon(5, new Locatie(0,0), new Locatie(1,1), 5, null));
 
         Assertions.assertEquals(5, gasten.size());
         Assertions.assertEquals(KamerClassificatie.eenSter, gasten.get(0).getWensen());
@@ -46,7 +46,7 @@ public class TestFactories {
         Locatie loc = new Locatie(5, 5);
         Locatie target = new Locatie(10, 10);
 
-        SchoonmakerModel schoonmaker = (SchoonmakerModel) factory.createPersoon(99, loc, target, 0);
+        SchoonmakerModel schoonmaker = (SchoonmakerModel) factory.createPersoon(99, loc, target, 0, null);
 
         Assertions.assertNotNull(schoonmaker);
         Assertions.assertEquals(10, schoonmaker.getLocatie().getX());
@@ -56,7 +56,7 @@ public class TestFactories {
     @Test
     public void testGastInvalidWensen() {
         PersoonFactory factory = new GastCreator();
-        GastModel gast = (GastModel) factory.createPersoon(1, new Locatie(0,0), new Locatie(1,1), 99);
+        GastModel gast = (GastModel) factory.createPersoon(1, new Locatie(0,0), new Locatie(1,1), 99, null);
         Assertions.assertNull(gast.getWensen(), "Wensen kunnen alleen maar 1 tm 5 zijn niet 99");
     }
 

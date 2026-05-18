@@ -81,6 +81,11 @@
             Aangekomen(schoonmaker);
         }
 
+        @Override
+        public void onSchoonmakerVerlaatKamer(SchoonmakerModel schoonmaker, Locatie oudeLocatie) {
+            vertrokken(schoonmaker, oudeLocatie);
+        }
+
         // als de gast aangekomen is in de target locatie gaat hij er in en wordt het drukte label verhoogd
         @Override
         public void onGastAangekomenInKamer(GastModel gast, Locatie loc) {
@@ -118,22 +123,33 @@
         // als de gast weg is gegaan van de vorige target locatie wordt het drukte label verlaagt
         @Override
         public void onGastGaatWegUitKamer(GastModel gast, Locatie oudeLocatie) {
+            vertrokken(gast, oudeLocatie);
+        }
+
+        public void vertrokken(PersoonModel persoon, Locatie oudeLocatie) {
             GridVakjeController vak = grid.get(oudeLocatie);
 
             if (vak != null) {
                 RuimteModel ruimte = vak.getModel().getRuimte();
                 if (ruimte != null) {
-                    // teller verlagen
-                    ruimte.setAantalGasten(ruimte.getAantalGasten() - 1);
+
+                    // 1. Controleer wie er vertrekt en verlaag de juiste teller
+                    if (persoon instanceof GastModel) {
+                        ruimte.setAantalGasten(Math.max(0, ruimte.getAantalGasten() - 1));
+                    } else if (persoon instanceof SchoonmakerModel) {
+                        ruimte.setAantalSchoonmakers(Math.max(0, ruimte.getAantalSchoonmakers() - 1));
+                    }
+
+                    // 2. Visuele update van de kamer (bezem of gast-icoon updaten/verwijderen)
                     refreshRuimteVisueel(ruimte);
 
-                    // plaats gast weer want die is nu weer uit de kamer
-                    GridVakjeController nieuwVak = grid.get(gast.getVorigeLocatie());
-                    JPanel nieuwPanel = nieuwVak.getGridView().getGuestPanel();
-                    nieuwPanel.add(gast.getPersoonLabel());
+                    // 3. Zet het lopende stip-icoontje weer terug op het grid panel zodat hij kan gaan lopen
+                    // We pakken hier 'oudeLocatie' (de kamer waar hij NU uitstapt) in plaats van 'getVorigeLocatie'
+                    JPanel guestLayer = vak.getGridView().getGuestPanel();
+                    guestLayer.add(persoon.getPersoonLabel());
 
-                    nieuwPanel.revalidate();
-                    nieuwPanel.repaint();
+                    guestLayer.revalidate();
+                    guestLayer.repaint();
                 }
             }
         }

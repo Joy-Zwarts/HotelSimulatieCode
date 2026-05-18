@@ -48,7 +48,11 @@ public class SimulatieController {
 
         GastController gastController = new GastController();
 
-        SchoonmakerController schoonmakerController = new SchoonmakerController(receptieController);
+        SchoonmakerController schoonmakerController = new SchoonmakerController(receptieController, overzichtView);
+
+        gastController.injecteerOverzichtView(overzichtView);
+
+        schoonmakerController.injecteerOverzichtView(overzichtView);
 
         KamerAssign kamerAssign = new KamerAssign(receptieController);
 
@@ -65,6 +69,10 @@ public class SimulatieController {
         eventHandler.setEventListenerFitness(gastController);
 
         eventHandler.setEventListenerCleaning(schoonmakerController);
+
+        eventHandler.setEventListenerNoneEvent(schoonmakerController);
+
+        eventHandler.setEventListenerCheckOut(schoonmakerController);
 
         LayoutLoader layoutLoader = new LayoutLoader(manager, view, model, pauseController, view);
 
@@ -86,7 +94,6 @@ public class SimulatieController {
 
         schoonmakerController.setNewSchoonmakerListener(plaatsHelper);
 
-
         TimePanel timePanel = new TimePanel(manager, view.getTopBar());
 
         eventHandler.setEventListenerNoneEvent(timePanel);
@@ -96,6 +103,8 @@ public class SimulatieController {
         TimeManagementController timeManagement = new TimeManagementController(manager, this, view, timeManagementPanel);
 
         timeManagement.setListener(gastController);
+
+        timeManagement.setListener(schoonmakerController);
 
         SettingsController settingsController = new SettingsController(view, timeManagementPanel, darkModeModel);
 
