@@ -2,11 +2,13 @@ package Controller;
 
 import Controller.Events.EventHandler;
 import Controller.Faciliteiten.BioscoopController;
+import Controller.Faciliteiten.FitnessController;
 import Controller.Faciliteiten.RestaurantController;
 import Controller.Layout.LayoutLoader;
 import Controller.PersoonManagement.*;
 import Controller.Systeem.*;
 import Model.Layout.LayoutModel;
+import Model.Ruimtes.FitnessModel;
 import Model.Systeem.DarkModeModel;
 import View.Systeem.HotelSimulatieView;
 import View.Systeem.OverzichtView;
@@ -65,6 +67,8 @@ public class SimulatieController implements reset {
 
         RestaurantController restaurantController = new RestaurantController(overzichtView);
 
+        FitnessController fitnessController = new FitnessController();
+
         // EVENT LISTENERS
 
         eventHandler.setEventListenerCheckIn(gastController);
@@ -91,9 +95,15 @@ public class SimulatieController implements reset {
 
         eventHandler.setEventListenerNoneEvent(restaurantController);
 
+        eventHandler.setEventListenerFitness(fitnessController);
+
+        eventHandler.setEventListenerNoneEvent(fitnessController);
+
         bioscoopController.addlisteners(gastController);
 
         restaurantController.addlisteners(gastController);
+
+        fitnessController.addlisteners(gastController);
 
         LayoutLoader layoutLoader = new LayoutLoader(manager, view, model, pauseController, view);
 
