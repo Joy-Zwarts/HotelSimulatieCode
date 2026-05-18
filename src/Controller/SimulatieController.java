@@ -55,15 +55,15 @@ public class SimulatieController implements reset {
 
         schoonmakerController = new SchoonmakerController(receptieController, overzichtView);
 
-        gastController.injecteerOverzichtView(overzichtView);
+        gastController.injectOverzichtView(overzichtView);
 
-        schoonmakerController.injecteerOverzichtView(overzichtView);
+        schoonmakerController.injectOverzichtView(overzichtView);
 
         KamerAssign kamerAssign = new KamerAssign(receptieController);
 
         BioscoopController bioscoopController = new BioscoopController();
 
-        RestaurantController restaurantController = new RestaurantController(overzichtView);
+        RestaurantController restaurantController = new RestaurantController();
 
         // EVENT LISTENERS
 

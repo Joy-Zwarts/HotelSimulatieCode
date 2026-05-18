@@ -51,6 +51,14 @@ public class RuimteModel {
         return position;
     }
 
+    public Locatie getEntryPoint() {
+        Locatie entryPoint = position;
+        if (getDimensionH() > 1){
+            entryPoint = new Locatie(position.getX(), position.getY() + getDimensionH() - 1);
+        }
+        return entryPoint;
+    }
+
     public int getAantalSchoonmakers() {
         return this.aantalSchoonmakers;
     }
