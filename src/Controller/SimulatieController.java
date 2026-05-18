@@ -2,6 +2,7 @@ package Controller;
 
 import Controller.Events.EventHandler;
 import Controller.Faciliteiten.BioscoopController;
+import Controller.Faciliteiten.RestaurantController;
 import Controller.Layout.LayoutLoader;
 import Controller.PersoonManagement.*;
 import Controller.Systeem.*;
@@ -62,6 +63,8 @@ public class SimulatieController implements reset {
 
         BioscoopController bioscoopController = new BioscoopController();
 
+        RestaurantController restaurantController = new RestaurantController(overzichtView);
+
         // EVENT LISTENERS
 
         eventHandler.setEventListenerCheckIn(gastController);
@@ -84,7 +87,13 @@ public class SimulatieController implements reset {
 
         eventHandler.setEventListenerNoneEvent(bioscoopController);
 
+        eventHandler.setEventListenerFood(restaurantController);
+
+        eventHandler.setEventListenerNoneEvent(restaurantController);
+
         bioscoopController.addlisteners(gastController);
+
+        restaurantController.addlisteners(gastController);
 
         LayoutLoader layoutLoader = new LayoutLoader(manager, view, model, pauseController, view);
 

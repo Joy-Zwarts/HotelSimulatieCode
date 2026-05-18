@@ -23,7 +23,7 @@ public class TestPersoonController {
 
     @BeforeEach
     public void setUp() {
-        gastController = new GastController(new OverzichtView(null, null, null));
+        gastController = new GastController();
 
         LayoutView view = new LayoutView(null, null);
         view.setGridBreedte(10);
