@@ -1,6 +1,7 @@
 package Controller.Systeem;
 import View.Systeem.OverzichtView;
 import hotelevents.HotelEventManager;
+
 public class PauseController {
     private final HotelEventManager manager;
     private OverzichtView view;

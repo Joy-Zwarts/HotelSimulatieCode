@@ -72,7 +72,7 @@ public class TestGastPlaatser { // Klasse even op public gezet
         testGast = new GastModel(
                 1,
                 testLocatie,
-                new Locatie(1, 1), ,
+                new Locatie(1, 1),
                 sterren,
                 testKamer);
     }
@@ -101,7 +101,7 @@ public class TestGastPlaatser { // Klasse even op public gezet
     @Test
     public void testOnGastAangekomenInKamer() {
         JPanel panel = this.testVakController.getGridView().getGuestPanel();
-        panel.add(this.testGast.getGastLabel());
+        panel.add(this.testGast.getPersoonLabel());
         this.testRuimte.setAantalGasten(0);
 
         // Gebruik expliciet het veld testLocatie
@@ -123,7 +123,7 @@ public class TestGastPlaatser { // Klasse even op public gezet
 
         // Plaats de gast eerst op de oude locatie
         JPanel oudPanel = testVakController.getGridView().getGuestPanel();
-        oudPanel.add(testGast.getGastLabel());
+        oudPanel.add(testGast.getPersoonLabel());
 
         // Actie: Verplaats de gast in het model en roep de methode aan
         Locatie oudeLocatie = testLocatie;
@@ -139,7 +139,7 @@ public class TestGastPlaatser { // Klasse even op public gezet
     @Test
     public void testOnGastVerplaatst_ZelfdeLocatieDoetNiets() {
         JPanel panel = testVakController.getGridView().getGuestPanel();
-        panel.add(testGast.getGastLabel());
+        panel.add(testGast.getPersoonLabel());
 
         // We simuleren een verplaatsing naar de huidige locatie (1,1 naar 1,1)
         gastPlaatser.onGastVerplaatst(testGast, testLocatie);
@@ -166,7 +166,7 @@ public class TestGastPlaatser { // Klasse even op public gezet
     void testOnGastVertrokken_VerwijdertLabel() {
         // Setup: Voeg de gast handmatig toe aan het panel
         JPanel guestPanel = testVakController.getGridView().getGuestPanel();
-        guestPanel.add(testGast.getGastLabel());
+        guestPanel.add(testGast.getPersoonLabel());
         int initialCount = guestPanel.getComponentCount();
 
         // Actie
@@ -181,7 +181,7 @@ public class TestGastPlaatser { // Klasse even op public gezet
     @Test
     void testOnGastVertrokken_MetNullLocatie_CrashtNiet() {
         // Setup: Maak een gast zonder locatie
-        GastModel spookGast = new GastModel(99, null, null, , KamerClassificatie.eenSter, (KamerModel) testRuimte);
+        GastModel spookGast = new GastModel(99, null, null, KamerClassificatie.eenSter, (KamerModel) testRuimte);
 
         // Actie & Assert
         assertDoesNotThrow(() -> gastPlaatser.onGastVertrokken(spookGast),

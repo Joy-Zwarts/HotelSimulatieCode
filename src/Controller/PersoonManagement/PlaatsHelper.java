@@ -3,6 +3,7 @@
     import Controller.Layout.GridVakjeController;
     import Controller.Layout.LayoutController;
     import Controller.Layout.LayoutGeladen;
+    import Controller.Systeem.reset;
     import Model.Layout.Locatie;
     import Model.Personen.GastModel;
     import Model.Personen.PersoonModel;
@@ -13,7 +14,7 @@
     import javax.swing.*;
     import java.util.HashMap;
 
-    public class PlaatsHelper implements NewGast, LayoutGeladen, NewSchoonmaker {
+    public class PlaatsHelper implements NewGast, LayoutGeladen, NewSchoonmaker, reset {
 
         // attributen
         private HashMap<Locatie, GridVakjeController> grid;
@@ -225,5 +226,30 @@
         public void onLayoutGeladen(LayoutController layoutController) {
             layoutView = layoutController.getView();
             this.grid = layoutView.getGrid();
+        }
+
+        @Override
+        public void resetSimulatie() {
+            if (grid != null) {
+                for (GridVakjeController vak : grid.values()) {
+                    if (vak != null) {
+                        // 1. Verwijder alle lopende/aanwezige gasten JLabels uit het gridvakje
+                        JPanel guestLayer = vak.getGridView().getGuestPanel();
+                        guestLayer.removeAll();
+
+                        // 2. Zet de tellers van het kamer-model terug naar 0
+                        RuimteModel ruimte = vak.getModel().getRuimte();
+                        if (ruimte != null) {
+                            ruimte.setAantalGasten(0);
+                            ruimte.setAantalSchoonmakers(0);
+                            // Update de visuele cijfers en bezem-iconen van de ruimte
+                            refreshRuimteVisueel(ruimte);
+                        }
+
+                        guestLayer.revalidate();
+                        guestLayer.repaint();
+                    }
+                }
+            }
         }
     }

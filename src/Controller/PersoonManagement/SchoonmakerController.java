@@ -12,7 +12,6 @@ import Controller.PersoonFactory.SchoonmakerCreator;
 import Model.Ruimtes.KamerModel;
 import View.Systeem.OverzichtView;
 import hotelevents.HotelEvent;
-import hotelevents.HotelEventManager;
 
 import javax.swing.SwingUtilities;
 import java.util.*;
@@ -236,6 +235,55 @@ public class SchoonmakerController extends PersoonController implements cleaning
         if (overzichtView != null) {
             SwingUtilities.invokeLater(() -> overzichtView.tekenSchoonmakerStatus(this));
         }
+    }
+
+    public void reset() {
+        // 1. Reset de overgeërfde actievePersonen en de movementEngine
+        super.resetController();
+
+        // 2. Maak de taakwachtrijen en actieve klussen leeg
+        if (this.taakWachtrijen != null) {
+            for (Queue<KamerModel> queue : taakWachtrijen.values()) {
+                if (queue != null) queue.clear();
+            }
+        }
+        if (this.actieveKlussen != null) {
+            this.actieveKlussen.clear();
+        }
+
+        // 3. Reset de specifieke schoonmaker-modellen naar hun beginstatus
+        if (schoonmaker1 != null && schoonmaker2 != null) {
+            schoonmaker1.setCleaning(false);
+            schoonmaker1.setHuidigeSchoonmaakTijd(0);
+            schoonmaker1.setSchoonmaakTijd(0);
+
+            schoonmaker2.setCleaning(false);
+            schoonmaker2.setHuidigeSchoonmaakTijd(0);
+            schoonmaker2.setSchoonmaakTijd(0);
+
+            // Bewaar oude locaties voor de visuele transitie (PlaatsHelper)
+            Locatie oudeLoc1 = new Locatie(schoonmaker1.getLocatie().getX(), schoonmaker1.getLocatie().getY());
+            Locatie oudeLoc2 = new Locatie(schoonmaker2.getLocatie().getX(), schoonmaker2.getLocatie().getY());
+
+            // Zet de posities fysiek terug naar hun basisstation
+            schoonmaker1.setLocatie(new Locatie(schoonmaker1.getStation().getX(), schoonmaker1.getStation().getY()));
+            schoonmaker2.setLocatie(new Locatie(schoonmaker2.getStation().getX(), schoonmaker2.getStation().getY()));
+
+            // Voeg ze opnieuw toe aan de actieve personen map voor de volgende simulatie
+            actievePersonen.put(schoonmaker1.getID(), schoonmaker1);
+            actievePersonen.put(schoonmaker2.getID(), schoonmaker2);
+
+            // 4. Update de UI via de listeners zodat ze naar het station verspringen
+            SwingUtilities.invokeLater(() -> {
+                for (NewSchoonmaker listener : listeners) {
+                    listener.onSchoonmakerVerplaatst(schoonmaker1, oudeLoc1);
+                    listener.onSchoonmakerVerplaatst(schoonmaker2, oudeLoc2);
+                }
+            });
+        }
+
+        // 5. Update de overzichtlijst (statusbalken aan de rechterkant)
+        updateOverzichtView();
     }
 
     // getters & setters

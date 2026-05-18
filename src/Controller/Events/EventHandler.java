@@ -31,7 +31,6 @@ public class EventHandler implements HotelEventListener {
         cleaningListeners = new ArrayList<>();
         noneEventListeners = new ArrayList<>();
     }
-
     @Override
     public void notify(HotelEvent hotelEvent) {
         switch (hotelEvent.getEventType()) {
