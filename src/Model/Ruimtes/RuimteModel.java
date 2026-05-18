@@ -9,6 +9,7 @@ public class RuimteModel {
     private final Locatie position;
     private final String dimension;
     private int aantalGasten = 0;
+    private int aantalSchoonmakers = 0;
 
     // constructor
     public RuimteModel(KamerType areaType, Locatie position, String dimension) {
@@ -50,5 +51,11 @@ public class RuimteModel {
         return position;
     }
 
+    public int getAantalSchoonmakers() {
+        return this.aantalSchoonmakers;
+    }
 
+    public void setAantalSchoonmakers(int aantal) {
+        this.aantalSchoonmakers = aantal;
+    }
 }

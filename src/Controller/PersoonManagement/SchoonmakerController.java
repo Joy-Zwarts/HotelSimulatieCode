@@ -44,9 +44,9 @@ public class SchoonmakerController extends PersoonController implements cleaning
 
         int lengte = layoutController.getView().getGridLengte();
 
-        schoonmaker1 = (SchoonmakerModel) factory.createPersoon(1, new Locatie(breedte - 2, 0), null, 0);
+        schoonmaker1 = (SchoonmakerModel) factory.createPersoon(1, new Locatie(breedte / 2, 0), null, 0);
 
-        schoonmaker2 = (SchoonmakerModel) factory.createPersoon(2, new Locatie(breedte - 2, lengte / 2), null, 0);
+        schoonmaker2 = (SchoonmakerModel) factory.createPersoon(2, new Locatie(breedte / 2, lengte / 2), null, 0);
 
         actievePersonen.put(schoonmaker1.getID(), schoonmaker1);
         actievePersonen.put(schoonmaker2.getID(), schoonmaker2);
@@ -63,14 +63,14 @@ public class SchoonmakerController extends PersoonController implements cleaning
     public void cleaningEmergencyEvent(HotelEvent hotelEvent) {
 
         // zoek de locatie op voor de gast waarbij de cleaning emergency is gemeld
-        Locatie target = receptieController.getGast(hotelEvent.getGuestId()).getKamer().getPosition();
+        Locatie target = new Locatie(receptieController.getGast(hotelEvent.getGuestId()).getKamer().getPosition().getX(), receptieController.getGast(hotelEvent.getGuestId()).getKamer().getPosition().getY()-1);
 
         SchoonmakerModel gekozen;
 
         if (target.getX() < layoutController.getView().getGridBreedte() / 2) {
-            gekozen = schoonmaker1;
-        } else {
             gekozen = schoonmaker2;
+        } else {
+            gekozen = schoonmaker1;
         }
 
         PathFinder pf = new PathFinder(gekozen.getLocatie(), target, layoutController);
@@ -99,5 +99,9 @@ public class SchoonmakerController extends PersoonController implements cleaning
         System.out.println("Schoonmaker " + sm.getID() + " aangekomen.");
 
         sm.setCleaning(true);
+
+        for (NewSchoonmaker listener : listeners) {
+            listener.onSchoonmakerAangekomenInKamer(sm);
+        }
     }
 }

@@ -105,7 +105,7 @@ public class LayoutView {
 
                         vak.getGridView().zetInhoud(ruimte, vak.getModel().islinksboven(), vak.getModel().islinksOnder());
 
-                        vak.getGridView().zetPersonenAantal(ruimte, vak.getModel().isRechtsboven());
+                        vak.getGridView().zetPersonenAantal(ruimte, vak.getModel().isRechtsboven(), vak.getModel().islinksboven());
 
                         vak.updateView();
 

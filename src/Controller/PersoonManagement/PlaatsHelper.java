@@ -75,23 +75,38 @@
             }
         }
 
+        // als de schoonmaker aangekomen is in de target locatie gaat hij er in en wordt het drukte label verhoogd
+        @Override
+        public void onSchoonmakerAangekomenInKamer(SchoonmakerModel schoonmaker) {
+            Aangekomen(schoonmaker);
+        }
+
         // als de gast aangekomen is in de target locatie gaat hij er in en wordt het drukte label verhoogd
         @Override
-        public void onGastAangekomenInKamer(GastModel gast, Locatie behaaldeLocatie) {
-            Locatie gastLoc = gast.getLocatie();
-            GridVakjeController vak = grid.get(gastLoc);
+        public void onGastAangekomenInKamer(GastModel gast, Locatie loc) {
+            Aangekomen(gast);
+        }
+
+        public void Aangekomen(PersoonModel persoon) {
+            Locatie loc = persoon.getLocatie();
+            GridVakjeController vak = grid.get(loc);
 
             if (vak != null) {
                 RuimteModel ruimte = vak.getModel().getRuimte();
                 if (ruimte != null) {
-                    // teller verhogen
-                    ruimte.setAantalGasten(ruimte.getAantalGasten() + 1);
-                    refreshRuimteVisueel(ruimte);
 
-                    // verwijder gast want die gaat naar binnen
+                    // switch tussen gast en schoonmaker voor de tellers
+                    if (persoon instanceof GastModel) {
+                        ruimte.setAantalGasten(ruimte.getAantalGasten() + 1);
+                    } else if (persoon instanceof SchoonmakerModel) {
+                        ruimte.setAantalSchoonmakers(ruimte.getAantalSchoonmakers() + 1);
+                    }
+
+                    // verwijder het lopende icoon
                     JPanel guestLayer = vak.getGridView().getGuestPanel();
-                    guestLayer.remove(gast.getPersoonLabel());
+                    guestLayer.remove(persoon.getPersoonLabel());
 
+                    // UI verversen
                     refreshRuimteVisueel(ruimte);
 
                     guestLayer.revalidate();
@@ -129,7 +144,7 @@
                 if (vak.getModel().getRuimte().equals(ruimte)) {
                     // update de tellers en iconen
                     vak.getGridView().zetInhoud(ruimte, vak.getModel().islinksboven(), vak.getModel().islinksOnder());
-                    vak.getGridView().zetPersonenAantal(ruimte, vak.getModel().isRechtsboven());
+                    vak.getGridView().zetPersonenAantal(ruimte, vak.getModel().isRechtsboven(), vak.getModel().islinksboven());
                     vak.updateView();
                 }
             }

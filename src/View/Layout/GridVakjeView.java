@@ -77,36 +77,77 @@ public class GridVakjeView {
     }
 
     // maakt een label met het gast icoontje ernaast die laat zien hoeveel mensen er in die kamer zitten
-    public void zetPersonenAantal(RuimteModel ruimte, boolean isRechtsBoven) {
-        if (isNietTelbaar(ruimte) || !isRechtsBoven) return;
+    public void zetPersonenAantal(RuimteModel ruimte, boolean isRechtsboven, boolean isLinksboven) {
 
+        if (isNietTelbaar(ruimte)) {
+            return;
+        }
+
+        if (!isLinksboven && !isRechtsboven) {
+            return;
+        }
+
+        // verwijder oude labels/icons
         for (Component c : backgroundPanel.getComponents()) {
-            if (c instanceof JLabel && "GAST_LABEL".equals(c.getName())) {
-                backgroundPanel.remove(c);
+            if (c instanceof JLabel) {
+                if (isRechtsboven && ("GAST_LABEL".equals(c.getName()) || "GAST_ICON".equals(c.getName()))) {
+                    backgroundPanel.remove(c);
+                }
+                if (isLinksboven && ("SCHOONMAKER_LABEL".equals(c.getName()) || "SCHOONMAKER_ICON".equals(c.getName()))) {
+                    backgroundPanel.remove(c);
+                }
             }
         }
 
-        ImageIcon icon = laadIcon("gast.png");
         int iconSize = 12;
         int spacing = 2;
 
-        aantalMensen = new JLabel(String.valueOf(ruimte.getAantalGasten()));
-        aantalMensen.setFont(new Font("Arial", Font.BOLD, 12));
-        aantalMensen.setName("GAST_LABEL");
-        aantalMensen.setSize(aantalMensen.getPreferredSize());
+        // Schoonmakers
 
-        int totalWidth = aantalMensen.getWidth() + iconSize + spacing;
-        int startX = backgroundPanel.getWidth() - totalWidth - 2;
+        if (isLinksboven) {
+            ImageIcon schoonmakerIcon = laadIcon("Schoonmaker.png");
+            JLabel schoonmakerLabel = new JLabel(String.valueOf(ruimte.getAantalSchoonmakers()));
+            schoonmakerLabel.setFont(new Font("Arial", Font.BOLD, 12));
+            schoonmakerLabel.setName("SCHOONMAKER_LABEL");
+            schoonmakerLabel.setSize(schoonmakerLabel.getPreferredSize());
 
-        if (icon != null) {
-            Image scaled = icon.getImage().getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH);
-            JLabel iconLabel = new JLabel(new ImageIcon(scaled));
-            iconLabel.setBounds(startX, 2, iconSize, iconSize);
-            backgroundPanel.add(iconLabel);
+            int schoonmakerX = 2;
+
+            if (schoonmakerIcon != null) {
+                Image scaled = schoonmakerIcon.getImage().getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH);
+                JLabel iconLabel = new JLabel(new ImageIcon(scaled));
+                iconLabel.setName("SCHOONMAKER_ICON");
+                iconLabel.setBounds(schoonmakerX, 2, iconSize, iconSize);
+                backgroundPanel.add(iconLabel);
+            }
+
+            schoonmakerLabel.setLocation(schoonmakerX + iconSize + spacing, 2);
+            backgroundPanel.add(schoonmakerLabel);
         }
 
-        aantalMensen.setLocation(startX + iconSize + spacing, 2);
-        backgroundPanel.add(aantalMensen);
+        // Gasten
+
+        if (isRechtsboven) {
+            ImageIcon gastIcon = laadIcon("gast.png");
+            JLabel gastenLabel = new JLabel(String.valueOf(ruimte.getAantalGasten()));
+            gastenLabel.setFont(new Font("Arial", Font.BOLD, 12));
+            gastenLabel.setName("GAST_LABEL");
+            gastenLabel.setSize(gastenLabel.getPreferredSize());
+
+            int gastenBreedte = gastenLabel.getWidth() + iconSize + spacing;
+            int gastenX = backgroundPanel.getWidth() - gastenBreedte - 2;
+
+            if (gastIcon != null) {
+                Image scaled = gastIcon.getImage().getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH);
+                JLabel iconLabel = new JLabel(new ImageIcon(scaled));
+                iconLabel.setName("GAST_ICON");
+                iconLabel.setBounds(gastenX, 2, iconSize, iconSize);
+                backgroundPanel.add(iconLabel);
+            }
+
+            gastenLabel.setLocation(gastenX + iconSize + spacing, 2);
+            backgroundPanel.add(gastenLabel);
+        }
 
         backgroundPanel.revalidate();
         backgroundPanel.repaint();

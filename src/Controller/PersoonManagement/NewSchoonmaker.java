@@ -5,12 +5,7 @@ import Model.Personen.SchoonmakerModel;
 
 public interface NewSchoonmaker {
 
-    void onSchoonmakerAangemaakt(
-            SchoonmakerModel schoonmaker
-    );
-
-    void onSchoonmakerVerplaatst(
-            SchoonmakerModel schoonmaker,
-            Locatie oudeLocatie
-    );
+    void onSchoonmakerAangemaakt(SchoonmakerModel schoonmaker);
+    void onSchoonmakerVerplaatst(SchoonmakerModel schoonmaker, Locatie oudeLocatie);
+    void onSchoonmakerAangekomenInKamer(SchoonmakerModel schoonmaker);
 }
