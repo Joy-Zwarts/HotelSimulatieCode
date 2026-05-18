@@ -7,8 +7,8 @@ import Model.Systeem.DarkModeModel;
 import View.Systeem.HotelSimulatieView;
 import View.Systeem.OverzichtView;
 import View.Systeem.TimeManagementPanel;
-import hotelevents.HotelEventManager;
 
+import hotelevents.HotelEventManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

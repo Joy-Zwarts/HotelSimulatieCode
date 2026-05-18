@@ -3,6 +3,7 @@ package Controller.PersoonManagement;
 import Controller.Events.*;
 import Controller.Layout.LayoutController;
 import Controller.Systeem.onTimeChange;
+import Controller.Systeem.reset;
 import Model.Layout.Locatie;
 import Controller.PersoonFactory.GastCreator;
 import Model.Personen.GastModel;
@@ -65,6 +66,12 @@ public class GastController extends PersoonController implements checkInEvent, c
 
     @Override
     public void checkInEvent(HotelEvent hotelEvent) {
+
+        // failsafe als de gast al bestaat
+        if (actieveGasten.containsKey(hotelEvent.getGuestId())) {
+            return;
+        }
+
         // maak de gast aan op startlocatie
         GastModel gast = (GastModel) factory.createPersoon(
                 hotelEvent.getGuestId(),
@@ -198,5 +205,10 @@ public class GastController extends PersoonController implements checkInEvent, c
     @Override
     public void startCinemaEvent(HotelEvent hotelEvent) {
 
+    }
+    public void reset() {
+        super.resetController(); // Reset actievePersonen en movementEngine
+        this.actieveGasten.clear();
+        // listeners laten we intact, anders gaan de koppelingen naar de UI/Receptie verloren
     }
 }

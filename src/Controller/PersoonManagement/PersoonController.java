@@ -2,6 +2,7 @@ package Controller.PersoonManagement;
 
 import Controller.Layout.LayoutController;
 import Controller.Layout.LayoutGeladen;
+import Controller.Systeem.reset;
 import Model.Personen.PersoonModel;
 import View.Systeem.OverzichtView; // Import toevoegen
 
@@ -30,5 +31,12 @@ public abstract class PersoonController implements LayoutGeladen, BeweegHelper.M
     @Override
     public void onLayoutGeladen(LayoutController controller) {
         this.layoutController = controller;
+    }
+
+    public void resetController() {
+        this.actievePersonen.clear();
+        if (this.movementEngine != null) {
+            this.movementEngine.reset();
+        }
     }
 }

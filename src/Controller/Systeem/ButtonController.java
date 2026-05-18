@@ -10,6 +10,7 @@ import hotelevents.HotelEventManager;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class ButtonController implements ActionListener {
 
@@ -21,6 +22,7 @@ public class ButtonController implements ActionListener {
     private final LayoutLoader layoutLoader;
     private LayoutModel model;
     private final SettingsController settingsController;
+    private ArrayList<reset> listeners;
 
     // constructor
 
@@ -30,6 +32,7 @@ public class ButtonController implements ActionListener {
         this.view = hotelView;
         this.layoutLoader = layoutLoader;
         this.settingsController = SettingsController;
+        this.listeners = new ArrayList<>();
         init();
     }
 
@@ -86,6 +89,9 @@ public class ButtonController implements ActionListener {
         else if (source == view.getStopSimulationButton()) {
             if (simulatieManager.getStarted()) { // als de simulatie wel al is gestart
                 eventManager.stop();// stop simulatie
+                for (reset listener : listeners) {
+                    listener.resetSimulatie();
+                }
                 simulatieManager.setStarted(false);
             } else if (!(simulatieManager.getStarted())) { // als de simulatie niet al is gestart
                 JOptionPane.showMessageDialog(view, "De simulatie is nog niet gestart!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -99,5 +105,7 @@ public class ButtonController implements ActionListener {
         return scenarioPicker.getSelected(); // getSelected() geeft een String terug
     }
 
-
+    public void setListeners(reset listener) {
+        this.listeners.add(listener);
+    }
 }

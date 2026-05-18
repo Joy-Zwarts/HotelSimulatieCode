@@ -1,21 +1,30 @@
 package Controller.PersoonManagement;
 
+import Controller.Systeem.reset;
 import Model.Layout.Locatie;
 import Model.Personen.GastModel;
 import Model.Personen.PersoonModel;
 import View.Systeem.OverzichtView; // Voeg deze import toe
 
 import javax.swing.*;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BeweegHelper {
+public class BeweegHelper  {
     private final Map<Integer, PathFinder> actieveRoutes;
     private final Map<Integer, PersoonModel> actieveMensen;
     private final Timer bewegingsTimer;
     private final MovementListener listener;
     private OverzichtView overzichtView;
+
+    public void reset() {
+        bewegingsTimer.stop();
+        actieveRoutes.clear();
+        actieveMensen.clear();
+        bewegingsTimer.start(); // Start direct weer zodat een volgende simulatie direct loopt
+    }
 
     public interface MovementListener {
         void onStepTaken(PersoonModel persoon, Locatie oudeLocatie);
