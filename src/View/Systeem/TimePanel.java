@@ -38,16 +38,18 @@ public class TimePanel implements noneEvent{
 
     // per tick bereken de tijd opnieuw en pas het label aan
     @Override
-    public void noneEvent(HotelEvent event) throws InterruptedException {
+    public void noneEvent(HotelEvent event) {
         long totalSeconds = event.getTime();
         int minutes = (int) (totalSeconds / 60);
         int seconds = (int) (totalSeconds % 60);
 
-        timeLabel.setText(String.format("%02d:%02d", minutes, seconds));
+        SwingUtilities.invokeLater(() -> {
+            timeLabel.setText(String.format("%02d:%02d", minutes, seconds));
 
-        if (totalSeconds >= 501){
-            view.toonEindScherm();
-        }
+            if (totalSeconds >= 501) {
+                view.toonEindScherm();
+            }
+        });
     }
 }
 

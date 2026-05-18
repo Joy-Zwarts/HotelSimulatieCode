@@ -120,4 +120,17 @@ public class EventHandler implements HotelEventListener {
     public void setEventListenerNoneEvent(noneEvent listener) {
         noneEventListeners.add(listener);
     }
+
+    public void reset() {
+        checkinListeners.clear();
+        checkoutListeners.clear();
+        evacuateListeners.clear();
+        godzillaListeners.clear();
+        foodListeners.clear();
+        cinemaListeners.clear();
+        fitnessListeners.clear();
+        cleaningListeners.clear();
+        noneEventListeners.clear();
+        System.out.println("EventHandler listeners succesvol schoongemaakt voor de nieuwe run.");
+    }
 }

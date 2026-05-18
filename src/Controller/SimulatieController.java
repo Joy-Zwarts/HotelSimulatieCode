@@ -21,6 +21,7 @@ public class SimulatieController implements reset {
     private GastController gastController;
     private SchoonmakerController schoonmakerController;
     private ReceptieController receptieController;
+    private EventHandler eventHandler;
 
     // constructor
 
@@ -36,7 +37,7 @@ public class SimulatieController implements reset {
 
         HotelEventManager manager = new HotelEventManager(false);
 
-        EventHandler eventHandler = new EventHandler(manager);
+        eventHandler = new EventHandler(manager);
 
         LayoutModel model = null;
 
@@ -156,6 +157,10 @@ public class SimulatieController implements reset {
         // 3. Maak de receptie leeg en zet alle kamers op 'vrij'
         if (receptieController != null) {
             receptieController.reset();
+        }
+
+        if (eventHandler != null) {
+            eventHandler.reset();
         }
 
         System.out.println("Reset succesvol afgerond!");
