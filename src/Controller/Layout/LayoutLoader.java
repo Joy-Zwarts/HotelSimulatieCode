@@ -1,6 +1,6 @@
 package Controller.Layout;
 
-import Controller.GastManagement.NewKamer;
+import Controller.PersoonManagement.NewKamer;
 import Controller.RuimteFactory.*;
 import Controller.Systeem.FilePicker;
 import Controller.Systeem.PauseController;
@@ -42,10 +42,10 @@ public class LayoutLoader {
     public LayoutModel loadLayout() {
         try {
             FilePicker picker = new FilePicker();
-            File gekozenBestand = picker.kiesBestand();
+            File gekozenBestand = getFileFromPicker();
 
             if (gekozenBestand == null) {
-                JOptionPane.showMessageDialog(view, "Geen bestand geselecteerd.");
+                showMessage("Geen bestand geselecteerd.");
                 return null;
             }
 
@@ -79,7 +79,8 @@ public class LayoutLoader {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(view, "Fout bij laden: " + ex.getMessage());
+            // GEBRUIK DE METHODE HIER:
+            showMessage("Fout bij laden: " + ex.getMessage());
             return null;
         }
     }
@@ -135,5 +136,13 @@ public class LayoutLoader {
     // set een nieuwe listener als de layout is geladen
     public void setNewLayoutListener(LayoutGeladen listener) {
         listeners.add(listener);
+    }
+
+    protected File getFileFromPicker() {
+        return new FilePicker().kiesBestand();
+    }
+
+    protected void showMessage(String message) {
+        JOptionPane.showMessageDialog(view, message);
     }
 }

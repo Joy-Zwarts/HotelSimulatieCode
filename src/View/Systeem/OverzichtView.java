@@ -104,7 +104,7 @@ public class OverzichtView {
                         : String.valueOf(kamer.getRoomNumber());
 
                 guestContent.add(new JLabel(
-                        "Gast " + gast.getGastID() +
+                        "Gast " + gast.getID() +
                                 "   |   Locatie nu: " + gast.getLocatie() +
                                 "   |   Target Locatie: " + gast.getTargetLocatie() +
                                 "   |   Kamer Wensen: " + gast.getWensen() +
@@ -130,7 +130,7 @@ public class OverzichtView {
                 String verblijvende =
                         (kamer.getVerblijvende() == null)
                                 ? "null"
-                                : String.valueOf(kamer.getVerblijvende().getGastID());
+                                : String.valueOf(kamer.getVerblijvende().getID());
 
                 roomContent.add(new JLabel(
                         "Kamernummer:  " + kamer.getRoomNumber() +

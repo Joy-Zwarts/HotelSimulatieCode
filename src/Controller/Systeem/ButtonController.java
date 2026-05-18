@@ -50,9 +50,10 @@ public class ButtonController implements ActionListener {
 
         // load scenario button
         if (source == view.getLoadScenarioButton()) {
-            ScenarioPicker scenarioPicker = new ScenarioPicker(); // open het scenario picker venster
-            System.out.println("Selected item: " + scenarioPicker.getSelected());
-            simulatieManager.setScenario(scenarioPicker.getSelected()); // geef het gekozen scenario door aan de simulatie manager
+            // Vervang 'new ScenarioPicker()' door een methode-aanroep
+            int scenarioNummer = pickScenario();
+            System.out.println("Selected item: " + scenarioNummer);
+            simulatieManager.setScenario(scenarioNummer);
         }
 
         // load layout button
@@ -91,4 +92,12 @@ public class ButtonController implements ActionListener {
             }
         }
     }
+
+
+    protected int pickScenario() {
+        ScenarioPicker scenarioPicker = new ScenarioPicker();
+        return scenarioPicker.getSelected(); // getSelected() geeft een String terug
+    }
+
+
 }

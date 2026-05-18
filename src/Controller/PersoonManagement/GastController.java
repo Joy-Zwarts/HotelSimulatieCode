@@ -1,4 +1,4 @@
-package Controller.GastManagement;
+package Controller.PersoonManagement;
 
 import Controller.Events.*;
 import Controller.Layout.LayoutController;
@@ -7,34 +7,28 @@ import Controller.Systeem.onTimeChange;
 import Model.Layout.Locatie;
 import Controller.PersoonFactory.GastCreator;
 import Model.Personen.GastModel;
+import Model.Personen.PersoonModel;
 import Model.Ruimtes.KamerType;
-import Model.Ruimtes.RuimteModel;
-import View.Systeem.OverzichtView;
 import hotelevents.HotelEvent;
-import hotelevents.HotelEventManager;
 
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PersoonController implements LayoutGeladen, checkInEvent, checkOutEvent, onTimeChange, needFoodEvent, fitnessEvent, cinemaEvent, GastBeweeg.MovementListener {
+public class GastController extends PersoonController implements checkInEvent, checkOutEvent, onTimeChange, needFoodEvent, fitnessEvent, cinemaEvent, BeweegHelper.MovementListener {
 
     // attributen
     private final GastCreator factory;
     private final ArrayList<NewGast> listeners;
     private Locatie startLocatie;
-    private LayoutController layoutController;
     private final Map<Integer, GastModel> actieveGasten;
-    private GastBeweeg movementEngine;
 
     // constructor
-    public PersoonController(HotelEventManager hotelEventManager, OverzichtView overzichtView, ReceptieController ReceptieController) {
+    public GastController() {
+        super();
         this.listeners = new ArrayList<>();
         this.actieveGasten = new HashMap<>();
-        this.movementEngine = new GastBeweeg(1000, this);
-        this.movementEngine.start();
-
         this.factory = new GastCreator();
     }
 
@@ -44,14 +38,14 @@ public class PersoonController implements LayoutGeladen, checkInEvent, checkOutE
             for (NewGast listener : listeners) {
                 listener.onGastVertrokken(gast);
             }
-            actieveGasten.remove(gast.getGastID());
+            actieveGasten.remove(gast.getID());
         } else {
             gast.setVorigeLocatie(new Locatie(gast.getLocatie().getX(), gast.getLocatie().getY()));
             // gast is in zijn target kamer aangekomen
             for (NewGast listener : listeners) {
                 listener.onGastAangekomenInKamer(gast, gast.getLocatie());
             }
-            System.out.println("Gast " + gast.getGastID() + " is op bestemming. Teller +1.");
+            System.out.println("Gast " + gast.getID() + " is op bestemming. Teller +1.");
         }
     }
 
@@ -76,11 +70,11 @@ public class PersoonController implements LayoutGeladen, checkInEvent, checkOutE
         GastModel gast = (GastModel) factory.createPersoon(
                 hotelEvent.getGuestId(),
                 new Locatie(startLocatie.getX(), startLocatie.getY()),
-                new Locatie(0,0),
+                new Locatie(0, 0),
                 hotelEvent.getData()
         );
 
-        actieveGasten.put(gast.getGastID(), gast);
+        actieveGasten.put(gast.getID(), gast);
 
         // notify de listener dat er een nieuwe gast is gemaakt
         for (NewGast listener : listeners) {
@@ -130,7 +124,7 @@ public class PersoonController implements LayoutGeladen, checkInEvent, checkOutE
                 // geef de route aan de engine (deze overschrijft de oude route)
                 movementEngine.voegRouteToe(gast, pf);
 
-                System.out.println("Gast " + gast.getGastID() + " heeft honger en loopt naar het restaurant.");
+                System.out.println("Gast " + gast.getID() + " heeft honger en loopt naar het restaurant.");
             } else {
                 System.out.println("Geen restaurant gevonden in het hotel!");
             }
@@ -138,24 +132,28 @@ public class PersoonController implements LayoutGeladen, checkInEvent, checkOutE
     }
 
     @Override
-    public void onStepTaken(GastModel gast, Locatie oudeLocatie) {
+    public void onStepTaken(PersoonModel persoon, Locatie oudeLocatie) {
+
+        GastModel gast = (GastModel) persoon;
+
         SwingUtilities.invokeLater(() -> {
             for (NewGast listener : listeners) {
                 listener.onGastVerplaatst(gast, oudeLocatie);
             }
         });
-        if (gast.getVorigeLocatie() != null) {
-            if (gast.getVorigeLocatie().equals(oudeLocatie)) {
-                for (NewGast listener : listeners) {
-                    listener.onGastGaatWegUitKamer(gast, oudeLocatie);
-                }
+
+        if (gast.getVorigeLocatie() != null &&
+                gast.getVorigeLocatie().equals(oudeLocatie)) {
+
+            for (NewGast listener : listeners) {
+                listener.onGastGaatWegUitKamer(gast, oudeLocatie);
             }
         }
     }
 
     @Override
-    public void onDestinationReached(GastModel gast) {
-        afhandelenAankomst(gast);
+    public void onDestinationReached(PersoonModel persoon) {
+        afhandelenAankomst((GastModel) persoon);
     }
 
     @Override
@@ -173,7 +171,7 @@ public class PersoonController implements LayoutGeladen, checkInEvent, checkOutE
                 // geef de route aan de engine (deze overschrijft de oude route)
                 movementEngine.voegRouteToe(gast, pf);
 
-                System.out.println("Gast " + gast.getGastID() + " wilt sporten en loopt naar de gym.");
+                System.out.println("Gast " + gast.getID() + " wilt sporten en loopt naar de gym.");
             } else {
                 System.out.println("Geen gym gevonden in het hotel!");
             }
@@ -195,7 +193,7 @@ public class PersoonController implements LayoutGeladen, checkInEvent, checkOutE
                 // geef de route aan de engine (deze overschrijft de oude route)
                 movementEngine.voegRouteToe(gast, pf);
 
-                System.out.println("Gast " + gast.getGastID() + " wilt film kijken en loopt naar de bioscoop.");
+                System.out.println("Gast " + gast.getID() + " wilt film kijken en loopt naar de bioscoop.");
             } else {
                 System.out.println("Geen bioscoop gevonden in het hotel!");
             }

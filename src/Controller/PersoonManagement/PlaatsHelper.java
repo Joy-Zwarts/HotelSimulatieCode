@@ -1,17 +1,19 @@
-    package Controller.GastManagement;
+    package Controller.PersoonManagement;
 
     import Controller.Layout.GridVakjeController;
     import Controller.Layout.LayoutController;
     import Controller.Layout.LayoutGeladen;
     import Model.Layout.Locatie;
     import Model.Personen.GastModel;
+    import Model.Personen.PersoonModel;
+    import Model.Personen.SchoonmakerModel;
     import Model.Ruimtes.RuimteModel;
     import View.Layout.LayoutView;
 
     import javax.swing.*;
     import java.util.HashMap;
 
-    public class GastPlaatser implements NewGast, LayoutGeladen {
+    public class PlaatsHelper implements NewGast, LayoutGeladen, NewSchoonmaker {
 
         // attributen
         private HashMap<Locatie, GridVakjeController> grid;
@@ -19,7 +21,7 @@
         private LayoutView layoutView;
 
         // constructor
-        public GastPlaatser(LayoutView view) {
+        public PlaatsHelper(LayoutView view) {
             this.grid = null;
             this.layoutView = view;
         }
@@ -27,16 +29,49 @@
         // plaats de gast hun icoontje op locatie
         @Override
         public void onGastAangemaakt(GastModel gast) {
-            Locatie gastLoc = gast.getLocatie();
-            if (grid != null && gastLoc != null) {
-                GridVakjeController vak = grid.get(gastLoc);
+            plaatsPersoon(gast);
+        }
+
+        @Override
+        public void onSchoonmakerAangemaakt(SchoonmakerModel schoonmaker) {
+            plaatsPersoon(schoonmaker);
+        }
+
+        public void plaatsPersoon(PersoonModel persoon) {
+            Locatie Loc = persoon.getLocatie();
+            if (grid != null && Loc != null) {
+                GridVakjeController vak = grid.get(Loc);
                 if (vak != null) {
                     JPanel guestLayer = vak.getGridView().getGuestPanel();
-                    guestLayer.add(gast.getGastLabel());
+                    guestLayer.add(persoon.getPersoonLabel());
 
                     guestLayer.revalidate();
                     guestLayer.repaint();
                 }
+            }
+        }
+
+        // zet het schoonmaker-icoontje op de juiste plek na een stap
+        @Override
+        public void onSchoonmakerVerplaatst(SchoonmakerModel schoonmaker, Locatie oudeLocatie) {
+
+            if (oudeLocatie != null && oudeLocatie.equals(schoonmaker.getLocatie())) {return;}
+
+            GridVakjeController oudVak = grid.get(oudeLocatie);
+
+            if (oudVak != null) {JPanel oudPanel = oudVak.getGridView().getGuestPanel();
+                oudPanel.remove(schoonmaker.getPersoonLabel());
+                oudPanel.revalidate();
+                oudPanel.repaint();
+            }
+
+            GridVakjeController nieuwVak = grid.get(schoonmaker.getLocatie());
+
+            if (nieuwVak != null) {
+                JPanel nieuwPanel = nieuwVak.getGridView().getGuestPanel();
+                nieuwPanel.add(schoonmaker.getPersoonLabel());
+                nieuwPanel.revalidate();
+                nieuwPanel.repaint();
             }
         }
 
@@ -55,7 +90,7 @@
 
                     // verwijder gast want die gaat naar binnen
                     JPanel guestLayer = vak.getGridView().getGuestPanel();
-                    guestLayer.remove(gast.getGastLabel());
+                    guestLayer.remove(gast.getPersoonLabel());
 
                     refreshRuimteVisueel(ruimte);
 
@@ -80,7 +115,7 @@
                     // plaats gast weer want die is nu weer uit de kamer
                     GridVakjeController nieuwVak = grid.get(gast.getVorigeLocatie());
                     JPanel nieuwPanel = nieuwVak.getGridView().getGuestPanel();
-                    nieuwPanel.add(gast.getGastLabel());
+                    nieuwPanel.add(gast.getPersoonLabel());
 
                     nieuwPanel.revalidate();
                     nieuwPanel.repaint();
@@ -117,7 +152,7 @@
                     if (ruimte != null) {
                         // verwijder het specifieke label van de gast in de kamer
                         JPanel guestLayer = vak.getGridView().getGuestPanel();
-                        guestLayer.remove(gast.getGastLabel());
+                        guestLayer.remove(gast.getPersoonLabel());
 
                         refreshRuimteVisueel(ruimte);
 
@@ -137,7 +172,7 @@
             GridVakjeController oudVak = grid.get(oudeLocatie);
             if (oudVak != null) {
                 JPanel oudPanel = oudVak.getGridView().getGuestPanel();
-                oudPanel.remove(gast.getGastLabel());
+                oudPanel.remove(gast.getPersoonLabel());
 
                 oudPanel.revalidate();
                 oudPanel.repaint();
@@ -147,7 +182,7 @@
             GridVakjeController nieuwVak = grid.get(gast.getLocatie());
             if (nieuwVak != null) {
                 JPanel nieuwPanel = nieuwVak.getGridView().getGuestPanel();
-                nieuwPanel.add(gast.getGastLabel());
+                nieuwPanel.add(gast.getPersoonLabel());
 
                 nieuwPanel.revalidate();
                 nieuwPanel.repaint();

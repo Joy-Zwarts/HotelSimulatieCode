@@ -1,14 +1,11 @@
 package Controller;
 
 import Controller.Events.EventHandler;
-import Controller.GastManagement.GastPlaatser;
-import Controller.GastManagement.PersoonController;
-import Controller.GastManagement.ReceptieController;
-import Controller.GastManagement.KamerAssign;
 import Controller.Layout.LayoutLoader;
+import Controller.PersoonManagement.*;
 import Controller.Systeem.*;
-import Model.Systeem.DarkModeModel;
 import Model.Layout.LayoutModel;
+import Model.Systeem.DarkModeModel;
 import View.Systeem.HotelSimulatieView;
 import View.Systeem.OverzichtView;
 import View.Systeem.TimeManagementPanel;
@@ -19,15 +16,17 @@ public class SimulatieController {
 
     // attributen
 
-    private Boolean started;
+    private boolean started;
+
     private int scenario;
 
     // constructor
+
     public SimulatieController() {
-        this.scenario = 1; // default scenario is 1
+
         this.started = false;
 
-        // initialiseer alle klassen nodig in de simulatie
+        this.scenario = 1;
 
         DarkModeModel darkModeModel = new DarkModeModel();
 
@@ -47,35 +46,46 @@ public class SimulatieController {
 
         ReceptieController receptieController = new ReceptieController(overzichtView);
 
-        PersoonController persoonController = new PersoonController(manager, overzichtView, receptieController);
+        GastController gastController = new GastController();
 
-        eventHandler.setEventListenerCheckIn(persoonController);
+        SchoonmakerController schoonmakerController = new SchoonmakerController(receptieController);
 
-        eventHandler.setEventListenerCheckOut(persoonController);
+        KamerAssign kamerAssign = new KamerAssign(receptieController);
 
-        eventHandler.setEventListenerFood(persoonController);
+        // EVENT LISTENERS
 
-        eventHandler.setEventListenerCinema(persoonController);
+        eventHandler.setEventListenerCheckIn(gastController);
 
-        eventHandler.setEventListenerFitness(persoonController);
+        eventHandler.setEventListenerCheckOut(gastController);
 
-        KamerAssign roomAssign = new KamerAssign(receptieController);
+        eventHandler.setEventListenerFood(gastController);
+
+        eventHandler.setEventListenerCinema(gastController);
+
+        eventHandler.setEventListenerFitness(gastController);
+
+        eventHandler.setEventListenerCleaning(schoonmakerController);
 
         LayoutLoader layoutLoader = new LayoutLoader(manager, view, model, pauseController, view);
 
-        GastPlaatser gastPlaatser = new GastPlaatser(null);
+        PlaatsHelper plaatsHelper = new PlaatsHelper(null);
 
-        layoutLoader.setNewLayoutListener(gastPlaatser);
+        layoutLoader.setNewLayoutListener(plaatsHelper);
+
+        layoutLoader.setNewLayoutListener(gastController);
+
+        layoutLoader.setNewLayoutListener(schoonmakerController);
 
         layoutLoader.setNewRoomListener(receptieController);
 
-        layoutLoader.setNewLayoutListener(persoonController);
+        gastController.setNewGuestListener(kamerAssign);
 
-        persoonController.setNewGuestListener(roomAssign);
+        gastController.setNewGuestListener(plaatsHelper);
 
-        persoonController.setNewGuestListener(gastPlaatser);
+        gastController.setNewGuestListener(receptieController);
 
-        persoonController.setNewGuestListener(receptieController);
+        schoonmakerController.setNewSchoonmakerListener(plaatsHelper);
+
 
         TimePanel timePanel = new TimePanel(manager, view.getTopBar());
 
@@ -85,13 +95,13 @@ public class SimulatieController {
 
         TimeManagementController timeManagement = new TimeManagementController(manager, this, view, timeManagementPanel);
 
-        timeManagement.setListener(persoonController);
+        timeManagement.setListener(gastController);
 
         SettingsController settingsController = new SettingsController(view, timeManagementPanel, darkModeModel);
 
         view.setTopbar(timePanel, timeManagementPanel);
 
-        ButtonController buttonManager = new ButtonController(view, this, manager, layoutLoader, settingsController);
+        new ButtonController(view, this, manager, layoutLoader, settingsController);
     }
 
     // getters & setters
@@ -99,15 +109,15 @@ public class SimulatieController {
     public boolean getStarted() {
         return started;
     }
-    public void setStarted(Boolean started) {
-        this.started = started;
-    }
-    public int getScenario() {
-        return scenario;
-    }
+
     public void setStarted(boolean started) {
         this.started = started;
     }
+
+    public int getScenario() {
+        return scenario;
+    }
+
     public void setScenario(int scenario) {
         this.scenario = scenario;
     }

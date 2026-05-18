@@ -1,4 +1,4 @@
-package Controller.GastManagement;
+package Controller.PersoonManagement;
 
 import Model.Layout.Locatie;
 import Model.Personen.GastModel;
@@ -41,7 +41,7 @@ public class KamerAssign implements NewGast {
 
         // als er geen kamer meer over is met die specifieke classificaties wordt er gekeken of er een kamer over is met 1 ster minder totdat er geen kamers meer over zijn
 
-        System.out.println("Geen kamer beschikbaar voor gast " + gast.getGastID() + " met de wensen " + gast.getWensen());
+        System.out.println("Geen kamer beschikbaar voor gast " + gast.getID() + " met de wensen " + gast.getWensen());
 
         // kamer downgraden als eer geen kamer is met de wensen van de gast
 
@@ -65,7 +65,7 @@ public class KamerAssign implements NewGast {
             case KamerClassificatie.eenSter:
                 break;
         }
-        System.out.println("Kamer zoeken voor gast " + gast.getGastID() + " met de wensen " + gast.getWensen());
+        System.out.println("Kamer zoeken voor gast " + gast.getID() + " met de wensen " + gast.getWensen());
     }
 
     // reacties op events

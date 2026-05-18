@@ -1,4 +1,4 @@
-package Controller.GastManagement;
+package Controller.PersoonManagement;
 
 import Model.Layout.Locatie;
 import Model.Personen.GastModel;
@@ -12,8 +12,6 @@ public class ReceptieController implements NewKamer, NewGast {
 
     // attributen
     private final HashMap<Integer, KamerModel> kamers;
-    private final HashMap<Integer, KamerModel> legeKamers;
-    private final HashMap<Integer, KamerModel> volleKamers;
 
     private final HashMap<Integer, GastModel> gasten;
 
@@ -23,8 +21,6 @@ public class ReceptieController implements NewKamer, NewGast {
 
     public ReceptieController(OverzichtView view) {
         this.kamers = new HashMap<>();
-        this.legeKamers = new HashMap<>();
-        this.volleKamers = new HashMap<>();
         this.gasten = new HashMap<>();
         this.view = view;
     }
@@ -35,9 +31,6 @@ public class ReceptieController implements NewKamer, NewGast {
 
         kamer.setBezet(false);
         kamer.setVerblijvende(null);
-
-        legeKamers.put(kamer.getRoomNumber(), kamer);
-        volleKamers.remove(kamer.getRoomNumber());
     }
 
     // zet een kamer op vol en haalt deze uit de lege kamer lijst en stopt deze in de volle kamer lijst
@@ -45,9 +38,6 @@ public class ReceptieController implements NewKamer, NewGast {
         if (kamer == null) return;
 
         kamer.setBezet(true);
-
-        volleKamers.put(kamer.getRoomNumber(), kamer);
-        legeKamers.remove(kamer.getRoomNumber());
     }
 
     // getters en setters
@@ -61,7 +51,7 @@ public class ReceptieController implements NewKamer, NewGast {
     }
 
     public void addGast(GastModel gast) {
-        gasten.put(gast.getGastID(), gast);
+        gasten.put(gast.getID(), gast);
         refreshView();
     }
 
@@ -110,7 +100,7 @@ public class ReceptieController implements NewKamer, NewGast {
         }
 
         if (gast != null) {
-            removeGast(gast.getGastID());
+            removeGast(gast.getID());
         }
 
         System.out.println("Guest has left");

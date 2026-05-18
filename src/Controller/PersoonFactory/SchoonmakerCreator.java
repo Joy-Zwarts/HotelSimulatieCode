@@ -8,6 +8,6 @@ import Model.Personen.SchoonmakerModel;
 public class SchoonmakerCreator extends PersoonFactory {
     @Override
     public PersoonModel createPersoon(int gastId, Locatie locatie, Locatie targetLocatie, int wensen) {
-        return new SchoonmakerModel(locatie, targetLocatie);
+        return new SchoonmakerModel(gastId, locatie, targetLocatie);
     }
 }

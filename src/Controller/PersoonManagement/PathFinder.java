@@ -1,4 +1,4 @@
-package Controller.GastManagement;
+package Controller.PersoonManagement;
 
 import Controller.Layout.LayoutController;
 import Model.Layout.Locatie;

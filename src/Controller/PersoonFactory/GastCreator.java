@@ -11,26 +11,20 @@ public class GastCreator extends PersoonFactory {
 
     // maakt gast aan gebaseerd op de meegekregen data
     @Override
-    public PersoonModel createPersoon(int gastId, Locatie targetlocatie, Locatie locatie, int Wensen) {
-        switch (Wensen) {
-            case 1:
-                wensen = KamerClassificatie.eenSter;
-                break;
-            case 2:
-                wensen = KamerClassificatie.tweeSterren;
-                break;
-            case 3:
-                wensen = KamerClassificatie.drieSterren;
-                break;
-            case 4:
-                wensen = KamerClassificatie.vierSterren;
-                break;
-            case 5:
-                wensen = KamerClassificatie.vijfSterren;
-                break;
-        }
+    public PersoonModel createPersoon(int gastId,
+                                      Locatie locatie,
+                                      Locatie targetLocatie,
+                                      int wensen) {
 
-        // return de nieuwe gast
-        return new GastModel(gastId, locatie, targetlocatie, wensen, null);
+        KamerClassificatie wensEnum = switch (wensen) {
+            case 1 -> KamerClassificatie.eenSter;
+            case 2 -> KamerClassificatie.tweeSterren;
+            case 3 -> KamerClassificatie.drieSterren;
+            case 4 -> KamerClassificatie.vierSterren;
+            case 5 -> KamerClassificatie.vijfSterren;
+            default -> KamerClassificatie.eenSter;
+        };
+
+        return new GastModel(gastId, locatie, targetLocatie, wensEnum, null);
     }
 }

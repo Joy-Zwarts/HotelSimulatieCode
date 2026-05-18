@@ -143,4 +143,10 @@ public class LayoutView {
     public void setGrid(HashMap<Locatie, GridVakjeController> newGrid) {
         this.grid = newGrid;
     }
+    public void setGridBreedte(int i) {
+        gridBreedte = i;
+    }
+    public void setGridLengte(int i) {
+        gridLengte = i;
+    }
 }
