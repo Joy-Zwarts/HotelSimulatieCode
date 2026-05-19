@@ -1,9 +1,7 @@
 package View.Systeem;
 
-import Controller.Events.EventHandler;
 import Controller.Events.noneEvent;
 import hotelevents.HotelEvent;
-import hotelevents.HotelEventListener;
 import hotelevents.HotelEventManager;
 
 import javax.swing.*;
@@ -14,9 +12,11 @@ public class TimePanel implements noneEvent{
     // attributen
 
     private final JLabel timeLabel;
+    private final HotelSimulatieView view;
 
     // constructor
-    public TimePanel(HotelEventManager manager, JPanel panelRechts) {
+    public TimePanel(HotelEventManager manager, JPanel panelRechts, HotelSimulatieView hotelSimulatieView) {
+        this.view = hotelSimulatieView;
 
         // panel for tijd
         JPanel panelTime = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -43,7 +43,13 @@ public class TimePanel implements noneEvent{
         int minutes = (int) (totalSeconds / 60);
         int seconds = (int) (totalSeconds % 60);
 
-        timeLabel.setText(String.format("%02d:%02d", minutes, seconds));
+        SwingUtilities.invokeLater(() -> {
+            timeLabel.setText(String.format("%02d:%02d", minutes, seconds));
+
+            if (totalSeconds >= 501) {
+                view.toonEindScherm();
+            }
+        });
     }
 }
 

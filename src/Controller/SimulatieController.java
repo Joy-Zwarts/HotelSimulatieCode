@@ -1,10 +1,14 @@
 package Controller;
 
 import Controller.Events.EventHandler;
+import Controller.Faciliteiten.BioscoopController;
+import Controller.Faciliteiten.FitnessController;
+import Controller.Faciliteiten.RestaurantController;
 import Controller.Layout.LayoutLoader;
 import Controller.PersoonManagement.*;
 import Controller.Systeem.*;
 import Model.Layout.LayoutModel;
+import Model.Ruimtes.FitnessModel;
 import Model.Systeem.DarkModeModel;
 import View.Systeem.HotelSimulatieView;
 import View.Systeem.OverzichtView;
@@ -12,13 +16,16 @@ import View.Systeem.TimeManagementPanel;
 import View.Systeem.TimePanel;
 import hotelevents.HotelEventManager;
 
-public class SimulatieController {
+public class SimulatieController implements reset {
 
     // attributen
 
     private boolean started;
-
     private int scenario;
+    private GastController gastController;
+    private SchoonmakerController schoonmakerController;
+    private ReceptieController receptieController;
+    private EventHandler eventHandler;
 
     // constructor
 
@@ -34,7 +41,7 @@ public class SimulatieController {
 
         HotelEventManager manager = new HotelEventManager(false);
 
-        EventHandler eventHandler = new EventHandler(manager);
+        eventHandler = new EventHandler(manager);
 
         LayoutModel model = null;
 
@@ -44,13 +51,23 @@ public class SimulatieController {
 
         pauseController.setView(overzichtView);
 
-        ReceptieController receptieController = new ReceptieController(overzichtView);
+        receptieController = new ReceptieController(overzichtView);
 
-        GastController gastController = new GastController();
+        gastController = new GastController();
 
-        SchoonmakerController schoonmakerController = new SchoonmakerController(receptieController);
+        schoonmakerController = new SchoonmakerController(receptieController, overzichtView);
+
+        gastController.injecteerOverzichtView(overzichtView);
+
+        schoonmakerController.injecteerOverzichtView(overzichtView);
 
         KamerAssign kamerAssign = new KamerAssign(receptieController);
+
+        BioscoopController bioscoopController = new BioscoopController();
+
+        RestaurantController restaurantController = new RestaurantController(overzichtView);
+
+        FitnessController fitnessController = new FitnessController();
 
         // EVENT LISTENERS
 
@@ -65,6 +82,28 @@ public class SimulatieController {
         eventHandler.setEventListenerFitness(gastController);
 
         eventHandler.setEventListenerCleaning(schoonmakerController);
+
+        eventHandler.setEventListenerNoneEvent(schoonmakerController);
+
+        eventHandler.setEventListenerCheckOut(schoonmakerController);
+
+        eventHandler.setEventListenerCinema(bioscoopController);
+
+        eventHandler.setEventListenerNoneEvent(bioscoopController);
+
+        eventHandler.setEventListenerFood(restaurantController);
+
+        eventHandler.setEventListenerNoneEvent(restaurantController);
+
+        eventHandler.setEventListenerFitness(fitnessController);
+
+        eventHandler.setEventListenerNoneEvent(fitnessController);
+
+        bioscoopController.addlisteners(gastController);
+
+        restaurantController.addlisteners(gastController);
+
+        fitnessController.addlisteners(gastController);
 
         LayoutLoader layoutLoader = new LayoutLoader(manager, view, model, pauseController, view);
 
@@ -86,8 +125,7 @@ public class SimulatieController {
 
         schoonmakerController.setNewSchoonmakerListener(plaatsHelper);
 
-
-        TimePanel timePanel = new TimePanel(manager, view.getTopBar());
+        TimePanel timePanel = new TimePanel(manager, view.getTopBar(), view);
 
         eventHandler.setEventListenerNoneEvent(timePanel);
 
@@ -97,11 +135,16 @@ public class SimulatieController {
 
         timeManagement.setListener(gastController);
 
+        timeManagement.setListener(schoonmakerController);
+
         SettingsController settingsController = new SettingsController(view, timeManagementPanel, darkModeModel);
 
         view.setTopbar(timePanel, timeManagementPanel);
 
-        new ButtonController(view, this, manager, layoutLoader, settingsController);
+        ButtonController buttonController = new ButtonController(view, this, manager, layoutLoader, settingsController);
+
+        buttonController.setListeners(this);
+        buttonController.setListeners(plaatsHelper);
     }
 
     // getters & setters
@@ -120,5 +163,34 @@ public class SimulatieController {
 
     public void setScenario(int scenario) {
         this.scenario = scenario;
+    }
+
+    @Override
+    public void resetSimulatie() {
+        System.out.println("Simulatie wordt gereset...");
+
+        this.started = false;
+        this.scenario = 1;
+
+        // 1. Reset de gasten data en stopt hun bewegingstimer
+        if (gastController != null) {
+            gastController.reset();
+        }
+
+        // 2. Reset de schoonmakers, hun queues en zet ze terug op hun station
+        if (schoonmakerController != null) {
+            schoonmakerController.reset();
+        }
+
+        // 3. Maak de receptie leeg en zet alle kamers op 'vrij'
+        if (receptieController != null) {
+            receptieController.reset();
+        }
+
+        if (eventHandler != null) {
+            eventHandler.reset();
+        }
+
+        System.out.println("Reset succesvol afgerond!");
     }
 }

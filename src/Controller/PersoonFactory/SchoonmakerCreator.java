@@ -7,7 +7,7 @@ import Model.Personen.SchoonmakerModel;
 // maakt schoonmaker aan gebaseerd op de meegekregen data
 public class SchoonmakerCreator extends PersoonFactory {
     @Override
-    public PersoonModel createPersoon(int gastId, Locatie locatie, Locatie targetLocatie, int wensen) {
-        return new SchoonmakerModel(gastId, locatie, targetLocatie);
+    public PersoonModel createPersoon(int gastId, Locatie locatie, Locatie targetLocatie, int wensen, Locatie stationLocatie) {
+        return new SchoonmakerModel(gastId, locatie, targetLocatie, stationLocatie);
     }
 }

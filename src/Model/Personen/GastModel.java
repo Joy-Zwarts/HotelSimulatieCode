@@ -9,6 +9,8 @@ public class GastModel extends PersoonModel {
 
     private KamerClassificatie wensen;
     private KamerModel kamer;
+    private String activity;
+    private int ticksLeft;
 
     public GastModel(int ID,
                      Locatie locatie,
@@ -36,5 +38,18 @@ public class GastModel extends PersoonModel {
 
     public void setWensen(KamerClassificatie kamerClassificatie) {
         this.wensen = kamerClassificatie;
+    }
+
+    public String getActivity() {
+        return activity;
+    }
+    public int getTicksLeft() {
+        return ticksLeft;
+    }
+    public void setActivity(String activity) {
+        this.activity = activity;
+    }
+    public void setTicksLeft(int ticksLeft) {
+        this.ticksLeft = ticksLeft;
     }
 }

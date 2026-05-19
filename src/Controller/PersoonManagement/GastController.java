@@ -1,8 +1,10 @@
 package Controller.PersoonManagement;
 
 import Controller.Events.*;
+import Controller.Faciliteiten.bioscoopOver;
+import Controller.Faciliteiten.fitnessOver;
+import Controller.Faciliteiten.restaurantOver;
 import Controller.Layout.LayoutController;
-import Controller.Layout.LayoutGeladen;
 import Controller.Systeem.onTimeChange;
 import Model.Layout.Locatie;
 import Controller.PersoonFactory.GastCreator;
@@ -16,7 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GastController extends PersoonController implements checkInEvent, checkOutEvent, onTimeChange, needFoodEvent, fitnessEvent, cinemaEvent, BeweegHelper.MovementListener {
+public class GastController extends PersoonController implements checkInEvent, checkOutEvent, onTimeChange, needFoodEvent, fitnessEvent, cinemaEvent, BeweegHelper.MovementListener, bioscoopOver, restaurantOver, fitnessOver {
 
     // attributen
     private final GastCreator factory;
@@ -66,13 +68,19 @@ public class GastController extends PersoonController implements checkInEvent, c
 
     @Override
     public void checkInEvent(HotelEvent hotelEvent) {
+
+        // failsafe als de gast al bestaat
+        if (actieveGasten.containsKey(hotelEvent.getGuestId())) {
+            return;
+        }
+
         // maak de gast aan op startlocatie
         GastModel gast = (GastModel) factory.createPersoon(
                 hotelEvent.getGuestId(),
                 new Locatie(startLocatie.getX(), startLocatie.getY()),
                 new Locatie(0, 0),
-                hotelEvent.getData()
-        );
+                hotelEvent.getData(),
+                null);
 
         actieveGasten.put(gast.getID(), gast);
 
@@ -95,7 +103,6 @@ public class GastController extends PersoonController implements checkInEvent, c
 
         if (gast != null) {
             PathFinder pf = new PathFinder(gast.getLocatie(), startLocatie, layoutController);
-            // Gebruik de engine in plaats van de lokale actieveRoutes map!
             movementEngine.voegRouteToe(gast, pf);
         }
     }
@@ -133,7 +140,6 @@ public class GastController extends PersoonController implements checkInEvent, c
 
     @Override
     public void onStepTaken(PersoonModel persoon, Locatie oudeLocatie) {
-
         GastModel gast = (GastModel) persoon;
 
         SwingUtilities.invokeLater(() -> {
@@ -142,9 +148,7 @@ public class GastController extends PersoonController implements checkInEvent, c
             }
         });
 
-        if (gast.getVorigeLocatie() != null &&
-                gast.getVorigeLocatie().equals(oudeLocatie)) {
-
+        if (gast.getVorigeLocatie() != null && gast.getVorigeLocatie().equals(oudeLocatie)) {
             for (NewGast listener : listeners) {
                 listener.onGastGaatWegUitKamer(gast, oudeLocatie);
             }
@@ -203,5 +207,39 @@ public class GastController extends PersoonController implements checkInEvent, c
     @Override
     public void startCinemaEvent(HotelEvent hotelEvent) {
 
+    }
+
+    public void reset() {
+        super.resetController();
+        this.actieveGasten.clear();
+    }
+
+    @Override
+    public void gaWegUitBioscoop(ArrayList<Integer> gastenInBios) {
+        for (int gastID : gastenInBios) {
+            GastModel gast = actieveGasten.get(gastID);
+            if (gast.getTargetLocatie() != null) {
+                PathFinder pf = new PathFinder(gast.getLocatie(), gast.getTargetLocatie(), layoutController);
+                movementEngine.voegRouteToe(gast, pf);
+            }
+        }
+    }
+
+    @Override
+    public void gaWegUitRestaurant(int gastID) {
+        GastModel gast = actieveGasten.get(gastID);
+        if (gast.getTargetLocatie() != null) {
+            PathFinder pf = new PathFinder(gast.getLocatie(), gast.getTargetLocatie(), layoutController);
+            movementEngine.voegRouteToe(gast, pf);
+        }
+    }
+
+    @Override
+    public void gaWegUitGym(int gastID) {
+        GastModel gast = actieveGasten.get(gastID);
+        if (gast.getTargetLocatie() != null) {
+            PathFinder pf = new PathFinder(gast.getLocatie(), gast.getTargetLocatie(), layoutController);
+            movementEngine.voegRouteToe(gast, pf);
+        }
     }
 }

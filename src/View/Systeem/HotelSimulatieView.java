@@ -1,12 +1,15 @@
 package View.Systeem;
 
+import Controller.Systeem.reset;
 import Model.Systeem.DarkModeModel;
+import hotelevents.Main;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.util.Objects;
 
-public class HotelSimulatieView extends JFrame {
+public class HotelSimulatieView extends JFrame{
 
     // attributen
 
@@ -24,7 +27,7 @@ public class HotelSimulatieView extends JFrame {
     private JButton stopSimulationButton;
     private JButton settingsButton;
     private final DarkModeModel darkMode;
-
+    private EindeSimulatieView eindeOverlay;
 
     // constructor
     public HotelSimulatieView(DarkModeModel darkMode) {
@@ -33,6 +36,11 @@ public class HotelSimulatieView extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1500, 800);
         setLayout(new BorderLayout());
+
+        // initialiseer overlay
+        this.eindeOverlay = new EindeSimulatieView();
+        this.setGlassPane(eindeOverlay);
+        eindeOverlay.setVisible(false);
 
         initTopbar();
         initLeftPanel();
@@ -209,6 +217,15 @@ public class HotelSimulatieView extends JFrame {
         rightPanel.add(newRightPanel, BorderLayout.CENTER);
         rightPanel.revalidate();
         rightPanel.repaint();
+    }
+
+    public void toonEindScherm() {
+        eindeOverlay.setVisible(true);
+        eindeOverlay.repaint();
+    }
+
+    public void verbergEindScherm() {
+        eindeOverlay.setVisible(false);
     }
 
     // getters & setters

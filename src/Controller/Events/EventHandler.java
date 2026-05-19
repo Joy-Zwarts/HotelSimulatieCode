@@ -31,7 +31,6 @@ public class EventHandler implements HotelEventListener {
         cleaningListeners = new ArrayList<>();
         noneEventListeners = new ArrayList<>();
     }
-
     @Override
     public void notify(HotelEvent hotelEvent) {
         switch (hotelEvent.getEventType()) {
@@ -82,7 +81,11 @@ public class EventHandler implements HotelEventListener {
                 break;
             case NONE:
                 for (noneEvent listener : noneEventListeners) {
-                    listener.noneEvent(hotelEvent);
+                    try {
+                        listener.noneEvent(hotelEvent);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
                 break;
             default:
@@ -116,5 +119,18 @@ public class EventHandler implements HotelEventListener {
     }
     public void setEventListenerNoneEvent(noneEvent listener) {
         noneEventListeners.add(listener);
+    }
+
+    public void reset() {
+        checkinListeners.clear();
+        checkoutListeners.clear();
+        evacuateListeners.clear();
+        godzillaListeners.clear();
+        foodListeners.clear();
+        cinemaListeners.clear();
+        fitnessListeners.clear();
+        cleaningListeners.clear();
+        noneEventListeners.clear();
+        System.out.println("EventHandler listeners succesvol schoongemaakt voor de nieuwe run.");
     }
 }

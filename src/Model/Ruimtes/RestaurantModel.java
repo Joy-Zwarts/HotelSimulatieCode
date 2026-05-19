@@ -22,4 +22,12 @@ public class RestaurantModel extends RuimteModel {
     public String getID() {
         return id;
     }
+
+    public void setCapacity(long capacity) {
+        capacity = capacity;
+    }
+
+    public long getCapacity() {
+        return capacity;
+    }
 }

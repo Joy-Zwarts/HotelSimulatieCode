@@ -14,7 +14,7 @@ public class GastCreator extends PersoonFactory {
     public PersoonModel createPersoon(int gastId,
                                       Locatie locatie,
                                       Locatie targetLocatie,
-                                      int wensen) {
+                                      int wensen, Locatie stationLocatie) {
 
         KamerClassificatie wensEnum = switch (wensen) {
             case 1 -> KamerClassificatie.eenSter;

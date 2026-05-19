@@ -121,6 +121,19 @@ public class ReceptieController implements NewKamer, NewGast {
 
     }
 
+    public void reset() {
+        this.gasten.clear();
+
+        // Maak alle kamers in het hotel weer leeg en beschikbaar
+        for (KamerModel kamer : kamers.values()) {
+            if (kamer != null) {
+                setKamerLeeg(kamer);
+            }
+        }
+        // Teken de lege gasten- en kamerlijsten opnieuw op de JTables
+        refreshView();
+    }
+
     public void refreshView() {
         view.tekenGastLijst(gasten);
         view.tekenKamerLijst(kamers);

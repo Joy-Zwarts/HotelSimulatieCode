@@ -49,7 +49,7 @@ class TestReceptieController {
 
     @Test
     public void testOnGastAangemaakt() {
-        GastModel gast = new GastModel(1, null, null, , KamerClassificatie.eenSter, null);
+        GastModel gast = new GastModel(1, null, null, KamerClassificatie.eenSter, null);
         receptieController.onGastAangemaakt(gast);
 
         Assertions.assertEquals(gast, receptieController.getGast(1));
@@ -58,7 +58,7 @@ class TestReceptieController {
     @Test
     public void testOnGastVertrokkenFullCoverage() {
         // Setup: Gast met kamer
-        GastModel gast = new GastModel(1, null, null, , KamerClassificatie.eenSter, null);
+        GastModel gast = new GastModel(1, null, null, KamerClassificatie.eenSter, null);
         gast.setKamer(testKamer);
         testKamer.setBezet(true);
         receptieController.addGast(gast);
@@ -74,7 +74,7 @@ class TestReceptieController {
     public void testOnGastVertrokkenNullChecks() {
         receptieController.onGastVertrokken(null);
 
-        GastModel gastZonderKamer = new GastModel(2, null, null, , KamerClassificatie.tweeSterren, null);
+        GastModel gastZonderKamer = new GastModel(2, null, null, KamerClassificatie.tweeSterren, null);
         receptieController.addGast(gastZonderKamer);
         receptieController.onGastVertrokken(gastZonderKamer);
 
@@ -83,7 +83,7 @@ class TestReceptieController {
 
     @Test
     public void testEmptyInterfaceMethods() {
-        GastModel gast = new GastModel(1, null, null, , KamerClassificatie.eenSter, null);
+        GastModel gast = new GastModel(1, null, null, KamerClassificatie.eenSter, null);
         receptieController.onGastVerplaatst(gast, new Locatie(0,0));
         receptieController.onGastAangekomenInKamer(gast, new Locatie(0,0));
         receptieController.onGastGaatWegUitKamer(gast, new Locatie(0,0));
@@ -91,7 +91,7 @@ class TestReceptieController {
 
     @Test
     public void testGettersSettersAndRemove() {
-        GastModel gast = new GastModel(5, null, null, , KamerClassificatie.vijfSterren, null);
+        GastModel gast = new GastModel(5, null, null, KamerClassificatie.vijfSterren, null);
         receptieController.addGast(gast);
         Assertions.assertEquals(gast, receptieController.getGast(5));
 
