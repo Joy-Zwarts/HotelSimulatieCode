@@ -2,7 +2,6 @@ package Controller.PersoonManagement;
 
 import Controller.Layout.LayoutController;
 import Controller.Layout.LayoutGeladen;
-import Controller.Systeem.reset;
 import Model.Personen.PersoonModel;
 import View.Systeem.OverzichtView; // Import toevoegen
 
@@ -13,18 +12,18 @@ public abstract class PersoonController implements LayoutGeladen, BeweegHelper.M
 
     protected LayoutController layoutController;
     protected final Map<Integer, PersoonModel> actievePersonen;
-    protected final BeweegHelper movementEngine;
+    protected final BeweegHelper beweegHelper;
 
     public PersoonController() {
         this.actievePersonen = new HashMap<>();
-        this.movementEngine = new BeweegHelper(1000, this);
-        this.movementEngine.start();
+        this.beweegHelper = new BeweegHelper(1000, this);
+        this.beweegHelper.start();
     }
 
     // om de schoonmakers te tonen in de overzicht view
     public void injecteerOverzichtView(OverzichtView overzichtView) {
-        if (this.movementEngine != null) {
-            this.movementEngine.setOverzichtView(overzichtView);
+        if (this.beweegHelper != null) {
+            this.beweegHelper.setOverzichtView(overzichtView);
         }
     }
 
@@ -35,8 +34,8 @@ public abstract class PersoonController implements LayoutGeladen, BeweegHelper.M
 
     public void resetController() {
         this.actievePersonen.clear();
-        if (this.movementEngine != null) {
-            this.movementEngine.reset();
+        if (this.beweegHelper != null) {
+            this.beweegHelper.reset();
         }
     }
 }

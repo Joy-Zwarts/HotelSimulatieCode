@@ -137,8 +137,8 @@ public class SchoonmakerController extends PersoonController implements cleaning
         SwingUtilities.invokeLater(() -> {
             Locatie target = new Locatie(kamer.getPosition().getX(), kamer.getPosition().getY() - 1);
             PathFinder pf = new PathFinder(schoonmaker.getLocatie(), target, layoutController);
-            if (movementEngine != null) {
-                movementEngine.voegRouteToe(schoonmaker, pf);
+            if (beweegHelper != null) {
+                beweegHelper.voegRouteToe(schoonmaker, pf);
             }
         });
     }
@@ -165,8 +165,8 @@ public class SchoonmakerController extends PersoonController implements cleaning
             } else {
                 SwingUtilities.invokeLater(() -> {
                     PathFinder pf = new PathFinder(schoonmaker.getLocatie(), schoonmaker.getStation(), layoutController);
-                    if (movementEngine != null) {
-                        movementEngine.voegRouteToe(schoonmaker, pf);
+                    if (beweegHelper != null) {
+                        beweegHelper.voegRouteToe(schoonmaker, pf);
                     }
                 });
             }
@@ -242,8 +242,8 @@ public class SchoonmakerController extends PersoonController implements cleaning
     // als de tijdsnelheid veranderd, loop sneller
     @Override
     public void timeChange(int HTE) {
-        if (movementEngine != null) {
-            movementEngine.setSpeed(HTE);
+        if (beweegHelper != null) {
+            beweegHelper.setSpeed(HTE);
         }
         updateOverzichtView();
     }

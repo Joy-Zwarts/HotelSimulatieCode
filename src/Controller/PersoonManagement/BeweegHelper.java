@@ -36,6 +36,7 @@ public class BeweegHelper  {
         this.actieveRoutes = new HashMap<>();
         this.actieveMensen = new HashMap<>();
         this.listener = listener;
+        // timer die per hte tick movement processed
         this.bewegingsTimer = new Timer(hteSnelheid, e -> processMovement());
     }
 
@@ -50,6 +51,7 @@ public class BeweegHelper  {
         actieveRoutes.put(persoon.getID(), pf);
     }
 
+    // wordt per hte tick aangeroepen om (als er een stap in de lijst staat) een stap te nemen
     private void processMovement() {
 
         // controleer of de simulatie is gepauzeerd

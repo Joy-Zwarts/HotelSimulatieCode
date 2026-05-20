@@ -65,7 +65,7 @@ public class SimulatieController implements reset {
 
         BioscoopController bioscoopController = new BioscoopController();
 
-        RestaurantController restaurantController = new RestaurantController(overzichtView);
+        RestaurantController restaurantController = new RestaurantController();
 
         FitnessController fitnessController = new FitnessController();
 

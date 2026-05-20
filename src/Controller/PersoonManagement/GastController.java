@@ -96,7 +96,7 @@ public class GastController extends PersoonController implements checkInEvent, c
         // bereken de route naar hun kamer
         if (gast.getTargetLocatie() != null) {
             PathFinder pf = new PathFinder(gast.getLocatie(), gast.getTargetLocatie(), layoutController);
-            movementEngine.voegRouteToe(gast, pf);
+            beweegHelper.voegRouteToe(gast, pf);
         }
     }
 
@@ -107,7 +107,7 @@ public class GastController extends PersoonController implements checkInEvent, c
 
         if (gast != null) {
             PathFinder pf = new PathFinder(gast.getLocatie(), startLocatie, layoutController);
-            movementEngine.voegRouteToe(gast, pf);
+            beweegHelper.voegRouteToe(gast, pf);
         }
     }
 
@@ -115,8 +115,8 @@ public class GastController extends PersoonController implements checkInEvent, c
     @Override
     public void timeChange(int HTE) {
         // vertel de engine dat de snelheid is veranderd
-        if (movementEngine != null) {
-            movementEngine.setSpeed(HTE);
+        if (beweegHelper != null) {
+            beweegHelper.setSpeed(HTE);
         }
     }
 
@@ -133,7 +133,7 @@ public class GastController extends PersoonController implements checkInEvent, c
                 PathFinder pf = new PathFinder(gast.getLocatie(), restaurantLocatie, layoutController);
 
                 // geef de route aan de engine (deze overschrijft de oude route)
-                movementEngine.voegRouteToe(gast, pf);
+                beweegHelper.voegRouteToe(gast, pf);
 
                 System.out.println("Gast " + gast.getID() + " heeft honger en loopt naar het restaurant.");
             } else {
@@ -179,7 +179,7 @@ public class GastController extends PersoonController implements checkInEvent, c
                 PathFinder pf = new PathFinder(gast.getLocatie(), fitnessLocatie, layoutController);
 
                 // geef de route aan de engine (deze overschrijft de oude route)
-                movementEngine.voegRouteToe(gast, pf);
+                beweegHelper.voegRouteToe(gast, pf);
 
                 System.out.println("Gast " + gast.getID() + " wilt sporten en loopt naar de gym.");
             } else {
@@ -201,7 +201,7 @@ public class GastController extends PersoonController implements checkInEvent, c
                 PathFinder pf = new PathFinder(gast.getLocatie(), bioscoopLocatie, layoutController);
 
                 // geef de route aan de engine (deze overschrijft de oude route)
-                movementEngine.voegRouteToe(gast, pf);
+                beweegHelper.voegRouteToe(gast, pf);
 
                 System.out.println("Gast " + gast.getID() + " wilt film kijken en loopt naar de bioscoop.");
             } else {
@@ -221,7 +221,7 @@ public class GastController extends PersoonController implements checkInEvent, c
             GastModel gast = actieveGasten.get(gastID);
             if (gast.getTargetLocatie() != null) {
                 PathFinder pf = new PathFinder(gast.getLocatie(), gast.getTargetLocatie(), layoutController);
-                movementEngine.voegRouteToe(gast, pf);
+                beweegHelper.voegRouteToe(gast, pf);
             }
         }
     }
@@ -231,7 +231,7 @@ public class GastController extends PersoonController implements checkInEvent, c
         GastModel gast = actieveGasten.get(gastID);
         if (gast.getTargetLocatie() != null) {
             PathFinder pf = new PathFinder(gast.getLocatie(), gast.getTargetLocatie(), layoutController);
-            movementEngine.voegRouteToe(gast, pf);
+            beweegHelper.voegRouteToe(gast, pf);
         }
     }
 
@@ -240,7 +240,7 @@ public class GastController extends PersoonController implements checkInEvent, c
         GastModel gast = actieveGasten.get(gastID);
         if (gast.getTargetLocatie() != null) {
             PathFinder pf = new PathFinder(gast.getLocatie(), gast.getTargetLocatie(), layoutController);
-            movementEngine.voegRouteToe(gast, pf);
+            beweegHelper.voegRouteToe(gast, pf);
         }
     }
 
