@@ -29,6 +29,7 @@ public class RestaurantController implements needFoodEvent, noneEvent {
         listeners.add(listener);
     }
 
+    // voeg gast toe aan lijst van gasten in het restaurant met een random verblijftijd
     @Override
     public void needFoodEvent(HotelEvent hotelEvent) {
         int gastId = hotelEvent.getGuestId();
@@ -43,6 +44,7 @@ public class RestaurantController implements needFoodEvent, noneEvent {
         );
     }
 
+    // per tick de timer ophogen en checken of de eindtijd is bereikt
     @Override
     public void noneEvent(HotelEvent event) {
         ArrayList<Integer> teVerwijderen = new ArrayList<>();

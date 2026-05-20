@@ -6,6 +6,7 @@ import Controller.Faciliteiten.fitnessOver;
 import Controller.Faciliteiten.restaurantOver;
 import Controller.Layout.LayoutController;
 import Controller.Systeem.onTimeChange;
+import Controller.Systeem.reset;
 import Model.Layout.Locatie;
 import Controller.PersoonFactory.GastCreator;
 import Model.Personen.GastModel;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GastController extends PersoonController implements checkInEvent, checkOutEvent, onTimeChange, needFoodEvent, fitnessEvent, cinemaEvent, BeweegHelper.MovementListener, bioscoopOver, restaurantOver, fitnessOver {
+public class GastController extends PersoonController implements checkInEvent, checkOutEvent, onTimeChange, needFoodEvent, fitnessEvent, cinemaEvent, BeweegHelper.MovementListener, bioscoopOver, restaurantOver, fitnessOver, reset {
 
     // attributen
     private final GastCreator factory;
@@ -34,6 +35,7 @@ public class GastController extends PersoonController implements checkInEvent, c
         this.factory = new GastCreator();
     }
 
+    // check na het lopen of de gast naar de uitgang is gelopen of niet
     private void afhandelenAankomst(GastModel gast) {
         if (gast.getLocatie().equals(startLocatie)) {
             // gast verlaat het hotel
@@ -57,6 +59,7 @@ public class GastController extends PersoonController implements checkInEvent, c
     }
 
 
+    // zet de startlocatie nadat de layout is geladen
     @Override
     public void onLayoutGeladen(LayoutController layoutController) {
         this.layoutController = layoutController;
@@ -66,6 +69,7 @@ public class GastController extends PersoonController implements checkInEvent, c
         startLocatie = new Locatie(x, y);
     }
 
+    // bij een check in event, maak een nieuwe gast, laat de abonnees het weten en stuur hun naar hun kamer
     @Override
     public void checkInEvent(HotelEvent hotelEvent) {
 
@@ -138,6 +142,7 @@ public class GastController extends PersoonController implements checkInEvent, c
         }
     }
 
+    // bij elke stap laat de abonnees weten dat de gast is verplaatst
     @Override
     public void onStepTaken(PersoonModel persoon, Locatie oudeLocatie) {
         GastModel gast = (GastModel) persoon;
@@ -148,6 +153,7 @@ public class GastController extends PersoonController implements checkInEvent, c
             }
         });
 
+        // als de gast is verplaatst vanuit hun vorige target locatie laat dit ook weten (bijv. voor de drukte teller in kamers)
         if (gast.getVorigeLocatie() != null && gast.getVorigeLocatie().equals(oudeLocatie)) {
             for (NewGast listener : listeners) {
                 listener.onGastGaatWegUitKamer(gast, oudeLocatie);
@@ -209,11 +215,6 @@ public class GastController extends PersoonController implements checkInEvent, c
 
     }
 
-    public void reset() {
-        super.resetController();
-        this.actieveGasten.clear();
-    }
-
     @Override
     public void gaWegUitBioscoop(ArrayList<Integer> gastenInBios) {
         for (int gastID : gastenInBios) {
@@ -241,5 +242,11 @@ public class GastController extends PersoonController implements checkInEvent, c
             PathFinder pf = new PathFinder(gast.getLocatie(), gast.getTargetLocatie(), layoutController);
             movementEngine.voegRouteToe(gast, pf);
         }
+    }
+
+    @Override
+    public void resetSimulatie() {
+        super.resetController();
+        this.actieveGasten.clear();
     }
 }

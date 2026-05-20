@@ -1,12 +1,13 @@
 package Controller.Events;
 
+import Controller.Systeem.reset;
 import hotelevents.HotelEvent;
 import hotelevents.HotelEventListener;
 import hotelevents.HotelEventManager;
 
 import java.util.ArrayList;
 
-public class EventHandler implements HotelEventListener {
+public class EventHandler implements HotelEventListener, reset {
 
     private ArrayList<checkInEvent> checkinListeners;
     private ArrayList<checkOutEvent> checkoutListeners;
@@ -121,7 +122,8 @@ public class EventHandler implements HotelEventListener {
         noneEventListeners.add(listener);
     }
 
-    public void reset() {
+    @Override
+    public void resetSimulatie() {
         checkinListeners.clear();
         checkoutListeners.clear();
         evacuateListeners.clear();
@@ -131,6 +133,5 @@ public class EventHandler implements HotelEventListener {
         fitnessListeners.clear();
         cleaningListeners.clear();
         noneEventListeners.clear();
-        System.out.println("EventHandler listeners succesvol schoongemaakt voor de nieuwe run.");
     }
 }

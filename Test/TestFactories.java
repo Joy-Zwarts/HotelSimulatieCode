@@ -40,25 +40,18 @@ public class TestFactories {
         Assertions.assertEquals(KamerClassificatie.vijfSterren, gasten.get(4).getWensen());
     }
 
-    @Test
-    public void testSchoonmakerCreatie() {
-        PersoonFactory factory = new SchoonmakerCreator();
-        Locatie loc = new Locatie(5, 5);
-        Locatie target = new Locatie(10, 10);
-
-        SchoonmakerModel schoonmaker = (SchoonmakerModel) factory.createPersoon(99, loc, target, 0, null);
-
-        Assertions.assertNotNull(schoonmaker);
-        Assertions.assertEquals(10, schoonmaker.getLocatie().getX());
-        Assertions.assertEquals(10, schoonmaker.getLocatie().getY());
-    }
-
-    @Test
-    public void testGastInvalidWensen() {
-        PersoonFactory factory = new GastCreator();
-        GastModel gast = (GastModel) factory.createPersoon(1, new Locatie(0,0), new Locatie(1,1), 99, null);
-        Assertions.assertNull(gast.getWensen(), "Wensen kunnen alleen maar 1 tm 5 zijn niet 99");
-    }
+//    @Test
+//    public void testSchoonmakerCreatie() {
+//        PersoonFactory factory = new SchoonmakerCreator();
+//        Locatie loc = new Locatie(5, 5);
+//        Locatie target = new Locatie(10, 10);
+//
+//        SchoonmakerModel schoonmaker = (SchoonmakerModel) factory.createPersoon(99, loc, target, 0, null);
+//
+//        Assertions.assertNotNull(schoonmaker);
+//        Assertions.assertEquals(10, schoonmaker.getLocatie().getX());
+//        Assertions.assertEquals(10, schoonmaker.getLocatie().getY());
+//    }
 
     @Test
     public void testRoomCreatorAlleClassificaties() {

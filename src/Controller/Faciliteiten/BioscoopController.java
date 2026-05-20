@@ -22,11 +22,13 @@ public class BioscoopController implements cinemaEvent, noneEvent {
         this.gastenInBios = new ArrayList<>();
     }
 
+    // voeg gast toe aan lijst van gasten in de bios
     @Override
     public void goToCinemaEvent(HotelEvent hotelEvent) {
         gastenInBios.add(hotelEvent.getGuestId());
     }
 
+    // kies een random tijd voor de film en reset de timer
     @Override
     public void startCinemaEvent(HotelEvent hotelEvent) {
         filmTimer = 1;
@@ -34,19 +36,20 @@ public class BioscoopController implements cinemaEvent, noneEvent {
         System.out.println("De film is gestart! Duur: " + filmEindTijd + " ticks.");
     }
 
+    // per tick de timer ophogen en checken of de timer de eindtijd heeft bereikt
     @Override
-    public void noneEvent(HotelEvent event) { // Throws InterruptedException weggehaald (niet nodig)
+    public void noneEvent(HotelEvent event) {
         if (filmTimer != 0) {
             filmTimer++;
 
-            // FIX: Controleer óf de timer de eindtijd heeft bereikt tijdens het ophogen
+            // controleer of de timer de eindtijd heeft bereikt als er is opgehoogd
             if (filmTimer >= filmEindTijd) {
                 System.out.println("De film is afgelopen. Gasten verlaten de bioscoop.");
                 for (bioscoopOver listener : listeners) {
                     listener.gaWegUitBioscoop(gastenInBios);
                 }
                 gastenInBios.clear();
-                filmTimer = 0; // Zet timer terug op inactief
+                filmTimer = 0;
             }
         }
     }

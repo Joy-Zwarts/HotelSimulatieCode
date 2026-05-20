@@ -145,6 +145,10 @@ public class SimulatieController implements reset {
 
         buttonController.setListeners(this);
         buttonController.setListeners(plaatsHelper);
+        buttonController.setListeners(gastController);
+        buttonController.setListeners(schoonmakerController);
+        buttonController.setListeners(receptieController);
+        buttonController.setListeners(eventHandler);
     }
 
     // getters & setters
@@ -167,30 +171,9 @@ public class SimulatieController implements reset {
 
     @Override
     public void resetSimulatie() {
-        System.out.println("Simulatie wordt gereset...");
-
         this.started = false;
         this.scenario = 1;
 
-        // 1. Reset de gasten data en stopt hun bewegingstimer
-        if (gastController != null) {
-            gastController.reset();
-        }
-
-        // 2. Reset de schoonmakers, hun queues en zet ze terug op hun station
-        if (schoonmakerController != null) {
-            schoonmakerController.reset();
-        }
-
-        // 3. Maak de receptie leeg en zet alle kamers op 'vrij'
-        if (receptieController != null) {
-            receptieController.reset();
-        }
-
-        if (eventHandler != null) {
-            eventHandler.reset();
-        }
-
-        System.out.println("Reset succesvol afgerond!");
+        System.out.println("Simulatie gereset");
     }
 }
