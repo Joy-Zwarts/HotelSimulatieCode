@@ -66,11 +66,4 @@ public class RestaurantController implements needFoodEvent, noneEvent {
             gastEindTijd.remove(gastId);
         }
     }
-    public Map<Integer, Integer> getGastTimer() {
-        return gastTimer;
-    }
-
-    public Map<Integer, Integer> getGastEindTijd() {
-        return gastEindTijd;
-    }
 }
