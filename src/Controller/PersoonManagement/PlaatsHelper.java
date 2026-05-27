@@ -134,18 +134,15 @@
                 RuimteModel ruimte = vak.getModel().getRuimte();
                 if (ruimte != null) {
 
-                    // 1. Controleer wie er vertrekt en verlaag de juiste teller
+                    // controleer wie er vertrekt en verlaag de juiste teller
                     if (persoon instanceof GastModel) {
                         ruimte.setAantalGasten(Math.max(0, ruimte.getAantalGasten() - 1));
                     } else if (persoon instanceof SchoonmakerModel) {
                         ruimte.setAantalSchoonmakers(Math.max(0, ruimte.getAantalSchoonmakers() - 1));
                     }
 
-                    // 2. Visuele update van de kamer (bezem of gast-icoon updaten/verwijderen)
+                    // UI updaten
                     refreshRuimteVisueel(ruimte);
-
-                    // 3. Zet het lopende stip-icoontje weer terug op het grid panel zodat hij kan gaan lopen
-                    // We pakken hier 'oudeLocatie' (de kamer waar hij NU uitstapt) in plaats van 'getVorigeLocatie'
                     JPanel guestLayer = vak.getGridView().getGuestPanel();
                     guestLayer.add(persoon.getPersoonLabel());
 
@@ -167,7 +164,6 @@
             }
         }
 
-        // reacties op events
 
         // verwijder gast-icoon uit kamer en verlaag het gastenaantal label
         @Override

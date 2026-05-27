@@ -19,16 +19,12 @@ public class RestaurantController implements needFoodEvent, noneEvent {
     private final Map<Integer, Integer> gastEindTijd = new HashMap<>();
     private final Map<Integer, Integer> gastTimer = new HashMap<>();
     private final Random rand = new Random();
-    private OverzichtView overzichtView;
-
-    public RestaurantController(OverzichtView view) {
-        this.overzichtView = view;
-    }
 
     public void addlisteners(restaurantOver listener) {
         listeners.add(listener);
     }
 
+    // voeg gast toe aan lijst van gasten in het restaurant met een random verblijftijd
     @Override
     public void needFoodEvent(HotelEvent hotelEvent) {
         int gastId = hotelEvent.getGuestId();
@@ -43,6 +39,7 @@ public class RestaurantController implements needFoodEvent, noneEvent {
         );
     }
 
+    // per tick de timer ophogen en checken of de eindtijd is bereikt
     @Override
     public void noneEvent(HotelEvent event) {
         ArrayList<Integer> teVerwijderen = new ArrayList<>();
@@ -68,12 +65,5 @@ public class RestaurantController implements needFoodEvent, noneEvent {
             gastTimer.remove(gastId);
             gastEindTijd.remove(gastId);
         }
-    }
-    public Map<Integer, Integer> getGastTimer() {
-        return gastTimer;
-    }
-
-    public Map<Integer, Integer> getGastEindTijd() {
-        return gastEindTijd;
     }
 }

@@ -1,5 +1,6 @@
 package Controller.PersoonManagement;
 
+import Controller.Systeem.reset;
 import Model.Layout.Locatie;
 import Model.Personen.GastModel;
 import Model.Ruimtes.KamerModel;
@@ -8,7 +9,7 @@ import View.Systeem.OverzichtView;
 
 import java.util.HashMap;
 
-public class ReceptieController implements NewKamer, NewGast {
+public class ReceptieController implements NewKamer, NewGast, reset {
 
     // attributen
     private final HashMap<Integer, KamerModel> kamers;
@@ -121,21 +122,21 @@ public class ReceptieController implements NewKamer, NewGast {
 
     }
 
-    public void reset() {
+    public void refreshView() {
+        view.tekenGastLijst(gasten);
+        view.tekenKamerLijst(kamers);
+    }
+
+    @Override
+    public void resetSimulatie() {
         this.gasten.clear();
 
-        // Maak alle kamers in het hotel weer leeg en beschikbaar
+        // maak alle kamers in het hotel weer leeg en beschikbaar
         for (KamerModel kamer : kamers.values()) {
             if (kamer != null) {
                 setKamerLeeg(kamer);
             }
         }
-        // Teken de lege gasten- en kamerlijsten opnieuw op de JTables
         refreshView();
-    }
-
-    public void refreshView() {
-        view.tekenGastLijst(gasten);
-        view.tekenKamerLijst(kamers);
     }
 }

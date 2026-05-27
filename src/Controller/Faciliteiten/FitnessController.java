@@ -23,6 +23,7 @@ public class FitnessController implements fitnessEvent, noneEvent {
         listeners.add(listener);
     }
 
+    // per tick de timer ophogen en checken of de eindtijd is bereikt
     @Override
     public void noneEvent(HotelEvent event) {
         ArrayList<Integer> teVerwijderen = new ArrayList<>();
@@ -38,11 +39,12 @@ public class FitnessController implements fitnessEvent, noneEvent {
                     listener.gaWegUitGym(gastId);
                 }
 
+                // voeg gast toe aan lijst van gasten die weg moeten
                 teVerwijderen.add(gastId);
             }
         }
 
-        // cleanup
+        // stuur de gasten weg die die weg moeten
         for (int gastId : teVerwijderen) {
             gastenInGym.remove(Integer.valueOf(gastId));
             gastTimer.remove(gastId);
@@ -50,6 +52,7 @@ public class FitnessController implements fitnessEvent, noneEvent {
         }
     }
 
+    // voeg gast toe aan gasten in de gym met een random verblijftijd
     @Override
     public void goToFitnessEvent(HotelEvent hotelEvent) {
         int gastId = hotelEvent.getGuestId();

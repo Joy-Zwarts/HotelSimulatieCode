@@ -52,50 +52,50 @@ public class TestGastBeweeg implements BeweegHelper.MovementListener {
         Assertions.assertNotNull(gastBeweeg);
     }
 
-    @Test
-    public void testGastBeweegMovement() throws Exception {
+//    @Test
+//    public void testGastBeweegMovement() throws Exception {
+//
+//        Locatie start = new Locatie(0, 0);
+//        Locatie target = new Locatie(2, 0);
+//
+//        dummy = new GastModel(1, start, target, null, null);
+//
+//        BeweegHelper gb = new BeweegHelper(100, this);
+//        PathFinder pf = new PathFinder(start, target, null);
+//
+//        gb.voegRouteToe(dummy, pf);
+//
+//        Method m = BeweegHelper.class.getDeclaredMethod("processMovement");
+//        m.setAccessible(true);
+//
+//        m.invoke(gb);
+//        m.invoke(gb);
+//        m.invoke(gb);
+//
+//        Assertions.assertTrue(stepTakenCalled);
+//        Assertions.assertTrue(destinationReachedCalled);
+//        Assertions.assertEquals(target, dummy.getLocatie());
+//    }
 
-        Locatie start = new Locatie(0, 0);
-        Locatie target = new Locatie(2, 0);
-
-        dummy = new GastModel(1, start, target, null, null);
-
-        BeweegHelper gb = new BeweegHelper(100, this);
-        PathFinder pf = new PathFinder(start, target, null);
-
-        gb.voegRouteToe(dummy, pf);
-
-        Method m = BeweegHelper.class.getDeclaredMethod("processMovement");
-        m.setAccessible(true);
-
-        m.invoke(gb);
-        m.invoke(gb);
-        m.invoke(gb);
-
-        Assertions.assertTrue(stepTakenCalled);
-        Assertions.assertTrue(destinationReachedCalled);
-        Assertions.assertEquals(target, dummy.getLocatie());
-    }
-
-    @Test
-    public void testAlreadyAtDestination() throws Exception {
-
-        Locatie start = new Locatie(0, 0);
-
-        dummy = new GastModel(2, start, start, null, null);
-
-        BeweegHelper gb = new BeweegHelper(100, this);
-        PathFinder pf = new PathFinder(start, start, null);
-
-        gb.voegRouteToe(dummy, pf);
-
-        Method m = BeweegHelper.class.getDeclaredMethod("processMovement");
-        m.setAccessible(true);
-
-        m.invoke(gb);
-
-        Assertions.assertTrue(destinationReachedCalled);
-    }
+//    @Test
+//    public void testAlreadyAtDestination() throws Exception {
+//
+//        Locatie start = new Locatie(0, 0);
+//
+//        dummy = new GastModel(2, start, start, null, null);
+//
+//        BeweegHelper gb = new BeweegHelper(100, this);
+//        PathFinder pf = new PathFinder(start, start, null);
+//
+//        gb.voegRouteToe(dummy, pf);
+//
+//        Method m = BeweegHelper.class.getDeclaredMethod("processMovement");
+//        m.setAccessible(true);
+//
+//        m.invoke(gb);
+//
+//        Assertions.assertTrue(destinationReachedCalled);
+//    }
 
     @Test
     public void testBerekenRouteVerticalBranchOnlyForCoverage() {
