@@ -3,6 +3,7 @@ package Model.Layout;
 import Controller.Layout.GridVakjeController;
 import Model.Ruimtes.*;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -13,6 +14,8 @@ public class LayoutModel {
     private final ArrayList<RuimteModel> ruimtes;
     private final ArrayList<RuimteModel> verplichteElementen;
     private final HashMap<Locatie, GridVakjeController> grid;
+    private int vakBreedte = 118;
+    private int vakHoogte = 59;
 
     //constructor
     public LayoutModel() {
@@ -66,11 +69,11 @@ public class LayoutModel {
     // getters & setters
 
     public int getVakBreedte() {
-        return 118; // voor nu nog hardcoded
+        return vakBreedte;
     }
 
     public int getVakHoogte() {
-        return 59; // voor nu nog hardcoded
+        return vakHoogte;
     }
 
     public HashMap<Locatie, GridVakjeController> getGrid() {
@@ -83,5 +86,10 @@ public class LayoutModel {
 
     public ArrayList<RuimteModel> getVerplichteElementen() {
         return verplichteElementen;
+    }
+
+    public void setVakDimensies(int dynamischeBreedte, int dynamischeHoogte) {
+        this.vakBreedte = dynamischeBreedte;
+        this.vakHoogte = dynamischeHoogte;
     }
 }

@@ -63,11 +63,19 @@ public class LayoutLoader {
             LayoutView layoutView = new LayoutView(pauseController, view);
             EventPanel eventPrint = new EventPanel(manager);
 
-            controller = new LayoutController(model, layoutView);
+            controller = new LayoutController(model, layoutView, view);
 
             view.setLayoutView(layoutView.getHotelPanel());
             view.setLegendaView();
             view.setRightView(eventPrint.getContainer());
+
+            controller.berekenEnPasVakgrootteAan();
+
+            layoutView.maakGrid(layoutView.getGridBreedte(), layoutView.getGridLengte(), model.getVakBreedte(), model.getVakHoogte(), model.getGrid());
+            layoutView.plaatsKamers(model.getRuimtes(), model.getVerplichteElementen());
+
+            layoutView.getHotelPanel().revalidate();
+            layoutView.getHotelPanel().repaint();
 
             // notify de listeners dat de layout is geladen
 
@@ -79,7 +87,6 @@ public class LayoutLoader {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            // GEBRUIK DE METHODE HIER:
             showMessage("Fout bij laden: " + ex.getMessage());
             return null;
         }

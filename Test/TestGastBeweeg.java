@@ -101,7 +101,7 @@ public class TestGastBeweeg implements BeweegHelper.MovementListener {
     public void testBerekenRouteVerticalBranchOnlyForCoverage() {
 
         LayoutController controller =
-                new LayoutController(new FakeModel(), new FakeView(null, null));
+                new LayoutController(new FakeModel(), new FakeView(null, null), new HotelSimulatieView(null));
 
         Locatie start = new Locatie(0, 0);
         Locatie end = new Locatie(2, 1);

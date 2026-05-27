@@ -6,6 +6,7 @@ import Model.Layout.Locatie;
 import Model.Personen.GastModel;
 import Model.Personen.PersoonModel;
 import View.Layout.LayoutView;
+import View.Systeem.HotelSimulatieView;
 import View.Systeem.OverzichtView;
 import hotelevents.HotelEvent;
 import hotelevents.HotelEventType;
@@ -28,7 +29,7 @@ public class TestPersoonController {
         LayoutView view = new LayoutView(null, null);
         view.setGridBreedte(10);
         view.setGridLengte(10);
-        layoutController = new LayoutController(new LayoutModel(), view);
+        layoutController = new LayoutController(new LayoutModel(), view, new HotelSimulatieView(null));
 
         gastController.onLayoutGeladen(layoutController);
         startLoc = new Locatie(5, 9);

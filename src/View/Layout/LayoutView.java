@@ -28,30 +28,49 @@ public class LayoutView {
         this.pauseController = pauseController;
     }
 
-    // maak de gridlayout aan van de hotelweergave met een nieuw grid vakje object per cel in de grid
+    // Maak de gridlayout aan van de hotelweergave met een nieuw grid vakje object per cel in de grid
     public void maakGrid(int gridBreedte, int gridLengte, int vakBreedte, int vakHoogte, HashMap<Locatie, GridVakjeController> grid) {
 
         this.grid = grid;
+        this.gridBreedte = gridBreedte;
+        this.gridLengte = gridLengte;
 
-        hotelPanel = new JPanel(null);
-        hotelPanel.setPreferredSize(
-                new Dimension(gridBreedte * vakBreedte, gridLengte * vakHoogte)
-        );
+        // als het hotelpaneel nog niet bestaat, maken we het aan, als het al wel bestaat, maken we het leeg
+        if (hotelPanel == null) {
+            hotelPanel = new JPanel();
+        } else {
+            hotelPanel.removeAll();
+        }
 
+        // bereken de totale benodigde breedte en hoogte van het hotel in pixels
+        int totalePixelsBreedte = gridBreedte * vakBreedte;
+        int totalePixelsHoogte = gridLengte * vakHoogte;
+
+        // zorg dat het paneel deze grootte wordt
+        hotelPanel.setPreferredSize(new Dimension(totalePixelsBreedte, totalePixelsHoogte));
+        hotelPanel.setLayout(new GridLayout(gridLengte, gridBreedte));
+
+        // loop door alle cellen en bouw de grid op
         for (int y = 0; y < gridLengte; y++) {
             for (int x = 0; x < gridBreedte; x++) {
 
-                // maak een grid vakje per cel
-                GridVakjeController controller = new GridVakjeController(new GridVakjeModel(x, y, vakBreedte, vakHoogte), new GridVakjeView(x, y, vakBreedte, vakHoogte), pauseController);
+                // Maak een grid vakje per cel met de nieuwe maten
+                GridVakjeController controller = new GridVakjeController(
+                        new GridVakjeModel(x, y, vakBreedte, vakHoogte),
+                        new GridVakjeView(x, y, vakBreedte, vakHoogte),
+                        pauseController
+                );
 
                 Locatie locatie = new Locatie(x, y);
-
                 grid.put(locatie, controller);
 
-                // voeg een nieuw panel toe
+                // voeg de view van het vakje toe aan het hoofd-hotelpaneel
                 hotelPanel.add(controller.getGridView().getVakjePanel());
             }
         }
+
+        hotelPanel.revalidate();
+        hotelPanel.repaint();
     }
 
     // bereken hoe groot het hotel moet zijn gebaseerd op het aantal kamers en hun posities
