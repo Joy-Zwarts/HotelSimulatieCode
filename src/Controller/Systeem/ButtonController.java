@@ -54,7 +54,7 @@ public class ButtonController implements ActionListener {
         // load scenario button
         if (source == view.getLoadScenarioButton()) {
             // Vervang 'new ScenarioPicker()' door een methode-aanroep
-            int scenarioNummer = pickScenario();
+            int scenarioNummer = pickScenario(view);
             System.out.println("Selected item: " + scenarioNummer);
             simulatieManager.setScenario(scenarioNummer);
         }
@@ -100,8 +100,8 @@ public class ButtonController implements ActionListener {
     }
 
 
-    protected int pickScenario() {
-        ScenarioPicker scenarioPicker = new ScenarioPicker();
+    protected int pickScenario(HotelSimulatieView view) {
+        ScenarioPicker scenarioPicker = new ScenarioPicker(view);
         return scenarioPicker.getSelected(); // getSelected() geeft een String terug
     }
 

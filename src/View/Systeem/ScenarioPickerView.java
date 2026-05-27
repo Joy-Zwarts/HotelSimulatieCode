@@ -11,11 +11,12 @@ public class ScenarioPickerView {
     private final JFrame frame;
 
     // constructor
-    public ScenarioPickerView() {
+    public ScenarioPickerView(HotelSimulatieView view) {
         frame = new JFrame("Scenario Picker");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(400, 200);
         frame.setLayout(null);
+        frame.setLocationRelativeTo(view);
 
         String[] options = {"Scenario 1", "Scenario 2", "Scenario 3", "Scenario 4"};
         comboBox = new JComboBox<>(options);

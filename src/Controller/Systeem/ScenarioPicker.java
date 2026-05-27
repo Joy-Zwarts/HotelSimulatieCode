@@ -1,5 +1,6 @@
 package Controller.Systeem;
 
+import View.Systeem.HotelSimulatieView;
 import View.Systeem.ScenarioPickerView;
 
 import java.awt.event.ActionEvent;
@@ -13,8 +14,8 @@ public class ScenarioPicker implements ActionListener {
     private String selected;
 
     // constructor
-    public ScenarioPicker() {
-        scenarioPickerView = new ScenarioPickerView();
+    public ScenarioPicker(HotelSimulatieView view) {
+        scenarioPickerView = new ScenarioPickerView(view);
         scenarioPickerView.getConfirmButton().addActionListener(this);
         selected = "Scenario 1";
     }
