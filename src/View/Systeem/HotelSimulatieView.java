@@ -15,7 +15,7 @@ public class HotelSimulatieView extends JFrame{
 
     private JPanel middlePanel;
     private JPanel legendaPanel;
-    private JPanel layoutPanel; // Dit blijft ons basis-paneel in het midden
+    private JPanel layoutPanel;
     private JScrollPane layoutScrollPane;
     private JPanel rightPanel;
     private JPanel topbar;
@@ -123,7 +123,6 @@ public class HotelSimulatieView extends JFrame{
 
     // maak panel aan voor de layout in het midden
     private void initLayoutPanel() {
-        // We maken een placeholder panel aan voor de start-tekst
         layoutPanel = new JPanel(new BorderLayout());
         layoutPanel.putClientProperty("noTheme", true);
         layoutPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
@@ -133,7 +132,7 @@ public class HotelSimulatieView extends JFrame{
         layoutLabel.setFont(new Font("Arial", Font.BOLD, 24));
         layoutPanel.add(layoutLabel, BorderLayout.CENTER);
 
-        // De scrollpane krijgt in eerste instantie de placeholder
+        // de scrollbar
         layoutScrollPane = new JScrollPane(layoutPanel);
         layoutScrollPane.setBorder(BorderFactory.createEmptyBorder());
         layoutScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -234,4 +233,8 @@ public class HotelSimulatieView extends JFrame{
     public JButton getSettingsButton() { return settingsButton; }
     public JButton getStopSimulationButton() { return stopSimulationButton; }
     public JPanel getTopBar() { return topbar; }
+
+    public JScrollPane getLayoutScrollPane() {
+        return layoutScrollPane;
+    }
 }
