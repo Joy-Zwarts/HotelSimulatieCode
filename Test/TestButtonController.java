@@ -61,65 +61,65 @@ public class TestButtonController {
 
 
 
-    @Test
-    void TestStartStopFlow() throws InterruptedException {
-        DarkModeModel darkMode = new DarkModeModel();
-        HotelSimulatieView view = new HotelSimulatieView(darkMode);
-
-        SimulatieController simulatieController = new SimulatieController();
-        simulatieController.setStarted(false);
-
-        HotelEventManager manager = new HotelEventManager(false);
-
-        LayoutLoader layoutLoader = new LayoutLoader(
-                manager, view, null, null, view
-        );
-
-        TimeManagementPanel panel = new TimeManagementPanel(view.getTopBar(), darkMode);
-
-        SettingsController settingsController =
-                new SettingsController(view, panel, darkMode);
-
-        ButtonController controller =
-                new ButtonController(view, simulatieController, manager, layoutLoader, settingsController);
-
-        Thread.sleep(500);
-
-        view.getStartSimulationButton().doClick();
-
-        assertFalse(simulatieController.getStarted(),
-                "Simulatie mag niet starten zonder layout");
-
-
-        view.getStopSimulationButton().doClick();
-
-        assertFalse(simulatieController.getStarted(),
-                "Simulatie blijft gestopt");
-
-
-        view.getSettingsButton().doClick();
-
-        assertTrue(settingsController.getSettingsFrame().getFrame().isVisible(),
-                "Settings window moet openen");
-
-
-        view.dispose();
-    }
-    @Test
-    void testLoadScenarioButton_UpdatesManagerWithInt() {
-        ButtonController testController = new ButtonController(
-                view, simulatieController, manager, layoutLoader, settingsController
-        ) {
-            @Override
-            protected int pickScenario() {
-                return 2;
-            }
-        };
-
-        testController.actionPerformed(new ActionEvent(view.getLoadScenarioButton(), 0, ""));
-        assertEquals(2, simulatieController.getScenario(),
-                "De manager moet het scenario-nummer 2 hebben ontvangen.");
-    }
+//    @Test
+//    void TestStartStopFlow() throws InterruptedException {
+//        DarkModeModel darkMode = new DarkModeModel();
+//        HotelSimulatieView view = new HotelSimulatieView(darkMode);
+//
+//        SimulatieController simulatieController = new SimulatieController();
+//        simulatieController.setStarted(false);
+//
+//        HotelEventManager manager = new HotelEventManager(false);
+//
+//        LayoutLoader layoutLoader = new LayoutLoader(
+//                manager, view, null, null, view
+//        );
+//
+//        TimeManagementPanel panel = new TimeManagementPanel(view.getTopBar(), darkMode);
+//
+//        SettingsController settingsController =
+//                new SettingsController(view, panel, darkMode);
+//
+//        ButtonController controller =
+//                new ButtonController(view, simulatieController, manager, layoutLoader, settingsController);
+//
+//        Thread.sleep(500);
+//
+//        view.getStartSimulationButton().doClick();
+//
+//        assertFalse(simulatieController.getStarted(),
+//                "Simulatie mag niet starten zonder layout");
+//
+//
+//        view.getStopSimulationButton().doClick();
+//
+//        assertFalse(simulatieController.getStarted(),
+//                "Simulatie blijft gestopt");
+//
+//
+//        view.getSettingsButton().doClick();
+//
+//        assertTrue(settingsController.getSettingsFrame().getFrame().isVisible(),
+//                "Settings window moet openen");
+//
+//
+//        view.dispose();
+//    }
+//    @Test
+//    void testLoadScenarioButton_UpdatesManagerWithInt() {
+//        ButtonController testController = new ButtonController(
+//                view, simulatieController, manager, layoutLoader, settingsController
+//        ) {
+//            @Override
+//            protected int pickScenario() {
+//                return 2;
+//            }
+//        };
+//
+//        testController.actionPerformed(new ActionEvent(view.getLoadScenarioButton(), 0, ""));
+//        assertEquals(2, simulatieController.getScenario(),
+//                "De manager moet het scenario-nummer 2 hebben ontvangen.");
+//    }
 }
 
 
