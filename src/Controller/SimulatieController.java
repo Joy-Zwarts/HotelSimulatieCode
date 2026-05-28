@@ -7,8 +7,8 @@ import Controller.Faciliteiten.RestaurantController;
 import Controller.Layout.LayoutLoader;
 import Controller.PersoonManagement.*;
 import Controller.Systeem.*;
+import Controller.Timer.WachtTimer;
 import Model.Layout.LayoutModel;
-import Model.Ruimtes.FitnessModel;
 import Model.Systeem.DarkModeModel;
 import View.Systeem.HotelSimulatieView;
 import View.Systeem.OverzichtView;
@@ -22,10 +22,6 @@ public class SimulatieController implements reset {
 
     private boolean started;
     private int scenario;
-    private GastController gastController;
-    private SchoonmakerController schoonmakerController;
-    private ReceptieController receptieController;
-    private EventHandler eventHandler;
 
     // constructor
 
@@ -41,21 +37,23 @@ public class SimulatieController implements reset {
 
         HotelEventManager manager = new HotelEventManager(false);
 
-        eventHandler = new EventHandler(manager);
+        EventHandler eventHandler = new EventHandler(manager);
 
         LayoutModel model = null;
 
         PauseController pauseController = new PauseController(manager, null);
 
+        WachtTimer timer = new WachtTimer();
+
         OverzichtView overzichtView = new OverzichtView(view, pauseController, manager);
 
         pauseController.setView(overzichtView);
 
-        receptieController = new ReceptieController(overzichtView);
+        ReceptieController receptieController = new ReceptieController(overzichtView);
 
-        gastController = new GastController();
+        GastController gastController = new GastController();
 
-        schoonmakerController = new SchoonmakerController(receptieController, overzichtView);
+        SchoonmakerController schoonmakerController = new SchoonmakerController(receptieController, overzichtView, timer);
 
         gastController.injecteerOverzichtView(overzichtView);
 
@@ -63,11 +61,11 @@ public class SimulatieController implements reset {
 
         KamerAssign kamerAssign = new KamerAssign(receptieController);
 
-        BioscoopController bioscoopController = new BioscoopController();
+        BioscoopController bioscoopController = new BioscoopController(timer);
 
-        RestaurantController restaurantController = new RestaurantController();
+        RestaurantController restaurantController = new RestaurantController(timer);
 
-        FitnessController fitnessController = new FitnessController();
+        FitnessController fitnessController = new FitnessController(timer);
 
         // EVENT LISTENERS
 
@@ -83,21 +81,13 @@ public class SimulatieController implements reset {
 
         eventHandler.setEventListenerCleaning(schoonmakerController);
 
-        eventHandler.setEventListenerNoneEvent(schoonmakerController);
+        eventHandler.setEventListenerNoneEvent(timer);
 
         eventHandler.setEventListenerCheckOut(schoonmakerController);
 
         eventHandler.setEventListenerCinema(bioscoopController);
 
-        eventHandler.setEventListenerNoneEvent(bioscoopController);
-
-        eventHandler.setEventListenerFood(restaurantController);
-
-        eventHandler.setEventListenerNoneEvent(restaurantController);
-
         eventHandler.setEventListenerFitness(fitnessController);
-
-        eventHandler.setEventListenerNoneEvent(fitnessController);
 
         bioscoopController.addlisteners(gastController);
 

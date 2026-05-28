@@ -2,10 +2,10 @@ package Controller.PersoonManagement;
 
 import Controller.Events.checkOutEvent;
 import Controller.Events.cleaningEmergencyEvent;
-import Controller.Events.noneEvent;
 import Controller.Layout.LayoutController;
 import Controller.Systeem.onTimeChange;
 import Controller.Systeem.reset;
+import Controller.Timer.WachtTimer;
 import Model.Layout.Locatie;
 import Model.Personen.PersoonModel;
 import Model.Personen.SchoonmakerModel;
@@ -17,7 +17,7 @@ import hotelevents.HotelEvent;
 import javax.swing.SwingUtilities;
 import java.util.*;
 
-public class SchoonmakerController extends PersoonController implements cleaningEmergencyEvent, noneEvent, checkOutEvent, onTimeChange, reset {
+public class SchoonmakerController extends PersoonController implements cleaningEmergencyEvent, checkOutEvent, onTimeChange, reset {
 
     private final SchoonmakerCreator factory;
     private final ArrayList<NewSchoonmaker> listeners;
@@ -28,8 +28,9 @@ public class SchoonmakerController extends PersoonController implements cleaning
     public OverzichtView overzichtView;
     private final HashMap<Integer, Queue<KamerModel>> taakWachtrijen;
     private final HashMap<Integer, KamerModel> actieveKlussen;
+    private final WachtTimer wachtTimer;
 
-    public SchoonmakerController(ReceptieController rec, OverzichtView overzichtView) {
+    public SchoonmakerController(ReceptieController rec, OverzichtView overzichtView, WachtTimer wachtTimer) {
         super();
         this.receptieController = rec;
         this.overzichtView = overzichtView;
@@ -37,9 +38,10 @@ public class SchoonmakerController extends PersoonController implements cleaning
         this.factory = new SchoonmakerCreator();
         this.taakWachtrijen = new HashMap<>();
         this.actieveKlussen = new HashMap<>();
+        this.wachtTimer = wachtTimer;
     }
 
-    // als layout is geladen, maak nieuwe schoonmakers aan met hun eigen wachtlijst aan schoonmaaktaken en zet hun beide in een lijst
+    // plaats schoonmakers zodra de layout geladen is
     @Override
     public void onLayoutGeladen(LayoutController controller) {
         super.onLayoutGeladen(controller);
@@ -56,19 +58,23 @@ public class SchoonmakerController extends PersoonController implements cleaning
         taakWachtrijen.put(schoonmaker1.getID(), new LinkedList<>());
         taakWachtrijen.put(schoonmaker2.getID(), new LinkedList<>());
 
+        // notify listeners
         for (NewSchoonmaker listener : listeners) {
             listener.onSchoonmakerAangemaakt(schoonmaker1);
             listener.onSchoonmakerAangemaakt(schoonmaker2);
         }
     }
 
-    // kies een schoonmaker met de functie en kies een random schoonmaaktijd gebaseerd op de grootte van de kamer
+    // maak de kamer van een gast met een cleaning emergency schoon
     @Override
     public void cleaningEmergencyEvent(HotelEvent hotelEvent) {
+        // get de kamer
         KamerModel kamer = receptieController.getGast(hotelEvent.getGuestId()).getKamer();
         if (kamer == null) return;
+        // kies schoonmaker
         SchoonmakerModel gekozen = kiesSchoonmaker(kamer);
 
+        // bepaal random tijd
         int benodigdeTijd = 0;
         if (kamer.getDimensionH() == 1 && kamer.getDimensionW() == 1){
             benodigdeTijd = rand.nextInt(6, 10);
@@ -81,7 +87,7 @@ public class SchoonmakerController extends PersoonController implements cleaning
         verwerkNieuweTaak(gekozen, kamer, benodigdeTijd);
     }
 
-    // boven taken doet schoonmaker 1 en onder taken doet schoonmaker 2
+    // boven > schoonmaker 1 | onder > schoonmaker 2
     private SchoonmakerModel kiesSchoonmaker(KamerModel kamer) {
         int kamerY = kamer.getPosition().getY();
         int helftVanHotel = layoutController.getView().getGridLengte() / 2;
@@ -93,13 +99,16 @@ public class SchoonmakerController extends PersoonController implements cleaning
         }
     }
 
-    // bij een checkout wordt een schoonmaker gekozen om schoon te maken en wordt er een random schoonmaaktijd gekozen
+    // bij een checkout, maak die kamer schoon
     @Override
     public void checkOutEvent(HotelEvent hotelEvent) {
+        // get de kamer van de gast
         KamerModel kamer = receptieController.getGast(hotelEvent.getGuestId()).getKamer();
         if (kamer == null) return;
+        // kies schoonmaker voor de klus
         SchoonmakerModel gekozen = kiesSchoonmaker(kamer);
 
+        // bereken random tijd
         int benodigdeTijd = 0;
         if (kamer.getDimensionH() == 1 && kamer.getDimensionW() == 1) {
             benodigdeTijd = rand.nextInt(3, 5);
@@ -112,25 +121,25 @@ public class SchoonmakerController extends PersoonController implements cleaning
         verwerkNieuweTaak(gekozen, kamer, benodigdeTijd);
     }
 
-    // check of de schoonmaker al bezig is met een taak, zo ja, zet de taak in de wachtlijst, zo niet, stuur de schoonmaker naar de kamer om schoon te maken
+    // check of de schoonmaker al bezig is met een taak als er een nieuwe taak binnen komt
     private synchronized void verwerkNieuweTaak(SchoonmakerModel schoonmaker, KamerModel kamer, int benodigdeTijd) {
         boolean isAlBezig = actieveKlussen.containsKey(schoonmaker.getID()) || !taakWachtrijen.get(schoonmaker.getID()).isEmpty();
 
+        // zo ja zet die in de wachtrij
         if (isAlBezig) {
             taakWachtrijen.get(schoonmaker.getID()).add(kamer);
             System.out.println("Schoonmaker " + schoonmaker.getID() + " bezet. Kamer " + kamer.getRoomNumber() + " in queue gezet.");
-        } else {
+        } else { // zo nee, stuur hun er gelijk heen
             stuurSchoonmakerNaarKamer(schoonmaker, kamer, benodigdeTijd);
         }
 
         updateOverzichtView();
     }
 
-    // pak de juiste schoonmaker voor de taak, zet hun targetlocatie op de vieze kamer en stuur hun daarheen met pathfinder
+    // zet de schoonmaker met de schoonmaak klus (kamer) in de lijst en stuur hun daarheen
     private void stuurSchoonmakerNaarKamer(SchoonmakerModel schoonmaker, KamerModel kamer, int benodigdeTijd) {
         actieveKlussen.put(schoonmaker.getID(), kamer);
 
-        schoonmaker.setHuidigeSchoonmaakTijd(0);
         schoonmaker.setCleaning(false);
         schoonmaker.setSchoonmaakTijd(benodigdeTijd);
 
@@ -143,103 +152,86 @@ public class SchoonmakerController extends PersoonController implements cleaning
         });
     }
 
-    // als de huidige schoonmaaktijd gelijk is aan de totale schoonmaaktijd dan is de schoonmaker klaar
-    public synchronized void checkKlaarCleaning(SchoonmakerModel schoonmaker) {
-        if (schoonmaker.getHuidigeSchoonmaakTijd() >= schoonmaker.getSchoonmaakTijd()) {
-            schoonmaker.setCleaning(false);
-            actieveKlussen.remove(schoonmaker.getID());
+    // kijk of de schoonmaker klaar is met schoonmaken
+    public synchronized void klaarCleaning(SchoonmakerModel schoonmaker) {
+        schoonmaker.setCleaning(false);
+        actieveKlussen.remove(schoonmaker.getID());
 
+        // laat de listeners weten
+        SwingUtilities.invokeLater(() -> {
+            for (NewSchoonmaker listener : listeners) {
+                listener.onSchoonmakerVerlaatKamer(schoonmaker, schoonmaker.getLocatie());
+            }
+        });
+
+        //  pak de wachtrij van klussen voor die schoonmaker
+        Queue<KamerModel> wachtrij = taakWachtrijen.get(schoonmaker.getID());
+
+        // als de wachtrij nog een taak heeft ga daar heen
+        if (wachtrij != null && !wachtrij.isEmpty()) {
+            KamerModel volgendeKamer = wachtrij.poll();
+            int opvolgendeTijd = rand.nextInt(4, 8);
+            stuurSchoonmakerNaarKamer(schoonmaker, volgendeKamer, opvolgendeTijd);
+            // als er geen taken meer in de wachtrij staan ga dan terug naar je station
+        } else {
             SwingUtilities.invokeLater(() -> {
-                for (NewSchoonmaker listener : listeners) {
-                    listener.onSchoonmakerVerlaatKamer(schoonmaker, schoonmaker.getLocatie());
+                PathFinder pf = new PathFinder(schoonmaker.getLocatie(), schoonmaker.getStation(), layoutController);
+                if (beweegHelper != null) {
+                    beweegHelper.voegRouteToe(schoonmaker, pf);
                 }
             });
-
-            Queue<KamerModel> wachtrij = taakWachtrijen.get(schoonmaker.getID());
-
-            // hier wordt er gekeken of er nog een taak in de wachtlijst staat, zo ja, stuur hun naar de volgende taak, zo niet, dan mogen ze terug naar hun station
-            if (wachtrij != null && !wachtrij.isEmpty()) {
-                KamerModel volgendeKamer = wachtrij.poll();
-                int opvolgendeTijd = rand.nextInt(4, 8);
-                stuurSchoonmakerNaarKamer(schoonmaker, volgendeKamer, opvolgendeTijd);
-            } else {
-                SwingUtilities.invokeLater(() -> {
-                    PathFinder pf = new PathFinder(schoonmaker.getLocatie(), schoonmaker.getStation(), layoutController);
-                    if (beweegHelper != null) {
-                        beweegHelper.voegRouteToe(schoonmaker, pf);
-                    }
-                });
-            }
-            updateOverzichtView();
         }
+        updateOverzichtView();
     }
 
-    // per stap de abonnees het laten weten
+    // per stap laat de listeners dat weten en stop bij pauze
     @Override
     public void onStepTaken(PersoonModel persoon, Locatie oudeLocatie) {
-        // stop met bewegen als de simulatie gepauzeerd is
         if (overzichtView != null && overzichtView.isGepauzeerd()) {
             return;
         }
 
-        SchoonmakerModel sm = (SchoonmakerModel) persoon;
+        SchoonmakerModel schoonmaker = (SchoonmakerModel) persoon;
         SwingUtilities.invokeLater(() -> {
             for (NewSchoonmaker listener : listeners) {
-                listener.onSchoonmakerVerplaatst(sm, oudeLocatie);
+                listener.onSchoonmakerVerplaatst(schoonmaker, oudeLocatie);
             }
             updateOverzichtView();
         });
     }
 
-    // als de gast op locatie is check of de destination hun station is of een kamer
+    // als de schoonmaker is aangekomen in de kamer start een timer voor hoe lang ze moeten schoonmaken
     @Override
     public void onDestinationReached(PersoonModel persoon) {
+        // bij pauze, niet bewegen
         if (overzichtView != null && overzichtView.isGepauzeerd()) {
             return;
         }
 
         SwingUtilities.invokeLater(() -> {
-            SchoonmakerModel sm = (SchoonmakerModel) persoon;
+            SchoonmakerModel schoonmaker = (SchoonmakerModel) persoon;
 
-            // als het hun station is, doe niks
-            if (sm.getLocatie().equals(sm.getStation())) {
-                actieveKlussen.remove(sm.getID());
+            // als de schoonmaker bij de station is aangekomen remove de schoonmaker van de actieve klussen
+            if (schoonmaker.getLocatie().equals(schoonmaker.getStation())) {
+                actieveKlussen.remove(schoonmaker.getID());
                 updateOverzichtView();
                 return;
             }
 
-            // anders: (dus als het een kamer is om schoon te maken)
-            sm.setCleaning(true);
+            schoonmaker.setCleaning(true);
 
-            // laat de listeners weten
+            // start een nieuwe WachtTimer voor deze schoonmaker
+            wachtTimer.startTimer(() -> klaarCleaning(schoonmaker), schoonmaker.getSchoonmaakTijd());
+
+            // listener ping
             for (NewSchoonmaker listener : listeners) {
-                listener.onSchoonmakerAangekomenInKamer(sm);
+                listener.onSchoonmakerAangekomenInKamer(schoonmaker);
             }
             updateOverzichtView();
         });
     }
 
-    // roep verwerk tick aan elke tick voor beide schoonmakers
-    @Override
-    public void noneEvent(HotelEvent event) {
-        // als het hotel op pauze staat geen ticks verwerken
-        if (overzichtView != null && overzichtView.isGepauzeerd()) {
-            return;
-        }
-        verwerkTick(schoonmaker1);
-        verwerkTick(schoonmaker2);
-    }
-
-    // check of een schoonmaker klaar is met schoonmaken en update de view
-    private void verwerkTick(SchoonmakerModel schoonmaker) {
-        if (schoonmaker != null && schoonmaker.isCleaning()) {
-            schoonmaker.setHuidigeSchoonmaakTijd(schoonmaker.getHuidigeSchoonmaakTijd() + 1);
-            checkKlaarCleaning(schoonmaker);
-            updateOverzichtView();
-        }
-    }
-
-    // als de tijdsnelheid veranderd, loop sneller
+    // laat de schoonmakers bewegen op de snelheid van de timer
     @Override
     public void timeChange(int HTE) {
         if (beweegHelper != null) {
@@ -255,7 +247,6 @@ public class SchoonmakerController extends PersoonController implements cleaning
     }
 
     // getters & setters
-
     public SchoonmakerModel getSchoonmaker1() { return schoonmaker1; }
     public SchoonmakerModel getSchoonmaker2() { return schoonmaker2; }
     public Queue<KamerModel> getWachtrij(int id) { return taakWachtrijen.get(id); }
@@ -268,7 +259,6 @@ public class SchoonmakerController extends PersoonController implements cleaning
     public void resetSimulatie() {
         super.resetController();
 
-        // maak de taak wachtrijen en actieve klussen leeg
         if (this.taakWachtrijen != null) {
             for (Queue<KamerModel> queue : taakWachtrijen.values()) {
                 if (queue != null) queue.clear();
@@ -278,28 +268,22 @@ public class SchoonmakerController extends PersoonController implements cleaning
             this.actieveKlussen.clear();
         }
 
-        // reset de schoonmakers naar hun beginstatus
         if (schoonmaker1 != null && schoonmaker2 != null) {
             schoonmaker1.setCleaning(false);
-            schoonmaker1.setHuidigeSchoonmaakTijd(0);
             schoonmaker1.setSchoonmaakTijd(0);
 
             schoonmaker2.setCleaning(false);
-            schoonmaker2.setHuidigeSchoonmaakTijd(0);
             schoonmaker2.setSchoonmaakTijd(0);
 
             Locatie oudeLoc1 = new Locatie(schoonmaker1.getLocatie().getX(), schoonmaker1.getLocatie().getY());
             Locatie oudeLoc2 = new Locatie(schoonmaker2.getLocatie().getX(), schoonmaker2.getLocatie().getY());
 
-            // zet de posities terug naar hun basisstation
             schoonmaker1.setLocatie(new Locatie(schoonmaker1.getStation().getX(), schoonmaker1.getStation().getY()));
             schoonmaker2.setLocatie(new Locatie(schoonmaker2.getStation().getX(), schoonmaker2.getStation().getY()));
 
-            // voeg ze opnieuw toe aan actieve personen voor de volgende simulatie
             actievePersonen.put(schoonmaker1.getID(), schoonmaker1);
             actievePersonen.put(schoonmaker2.getID(), schoonmaker2);
 
-            // update de UI
             SwingUtilities.invokeLater(() -> {
                 for (NewSchoonmaker listener : listeners) {
                     listener.onSchoonmakerVerplaatst(schoonmaker1, oudeLoc1);
@@ -308,7 +292,6 @@ public class SchoonmakerController extends PersoonController implements cleaning
             });
         }
 
-        // update de overzichtlijst
         updateOverzichtView();
     }
 }
