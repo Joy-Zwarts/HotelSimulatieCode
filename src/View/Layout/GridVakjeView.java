@@ -87,13 +87,15 @@ public class GridVakjeView {
             return;
         }
 
-        // verwijder oude labels/icons
-        for (Component c : backgroundPanel.getComponents()) {
+        Component[] componenten = backgroundPanel.getComponents();
+        for (int i = componenten.length - 1; i >= 0; i--) {
+            Component c = componenten[i];
             if (c instanceof JLabel) {
-                if (isRechtsboven && ("GAST_LABEL".equals(c.getName()) || "GAST_ICON".equals(c.getName()))) {
+                String name = c.getName();
+                if (isRechtsboven && ("GAST_LABEL".equals(name) || "GAST_ICON".equals(name))) {
                     backgroundPanel.remove(c);
                 }
-                if (isLinksboven && ("SCHOONMAKER_LABEL".equals(c.getName()) || "SCHOONMAKER_ICON".equals(c.getName()))) {
+                if (isLinksboven && ("SCHOONMAKER_LABEL".equals(name) || "SCHOONMAKER_ICON".equals(name))) {
                     backgroundPanel.remove(c);
                 }
             }
@@ -104,7 +106,7 @@ public class GridVakjeView {
 
         // Schoonmakers
 
-        if (isLinksboven) {
+        if (isLinksboven && ruimte.getAantalSchoonmakers() > 0) {
             ImageIcon schoonmakerIcon = laadIcon("Schoonmaker.png");
             JLabel schoonmakerLabel = new JLabel(String.valueOf(ruimte.getAantalSchoonmakers()));
             schoonmakerLabel.setFont(new Font("Arial", Font.BOLD, 12));
@@ -127,7 +129,7 @@ public class GridVakjeView {
 
         // Gasten
 
-        if (isRechtsboven) {
+        if (isRechtsboven && ruimte.getAantalGasten() > 0) {
             ImageIcon gastIcon = laadIcon("gast.png");
             JLabel gastenLabel = new JLabel(String.valueOf(ruimte.getAantalGasten()));
             gastenLabel.setFont(new Font("Arial", Font.BOLD, 12));

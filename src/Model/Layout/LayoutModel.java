@@ -31,21 +31,33 @@ public class LayoutModel {
 
     // add verplichte elementen (schacht, lift, trappen & lobby)
     public void addVerplichteElementen(int gridLengte, int gridBreedte) {
-        String schachtDimension = "1," + gridLengte/2;
-        Locatie schacht1Pos = new Locatie(1,1);
-        addKamerBuitenJson(KamerType.SCHACHT, schacht1Pos, schachtDimension, gridLengte);
-        int verdiepingLiftY = (gridLengte+1)/2;
-        Locatie liftPos = new Locatie(1,verdiepingLiftY);
-        addKamerBuitenJson(KamerType.LIFT, liftPos, "1,1", gridLengte);
-        int schachtStart = (gridLengte/2 + 2);
-        Locatie schacht2Pos = new Locatie(1,schachtStart);
-        addKamerBuitenJson(KamerType.SCHACHT, schacht2Pos, schachtDimension, gridLengte);
-        String trappenDimension = "1," + gridLengte;
-        Locatie trappenPos = new Locatie(gridBreedte,1);
-        addKamerBuitenJson(KamerType.TRAPPEN, trappenPos, trappenDimension, gridLengte);
-        String lobbyDimension = gridLengte-3 + ",1";
-        Locatie lobbyPos = new Locatie(2,gridLengte);
-        addKamerBuitenJson(KamerType.LOBBY, lobbyPos, lobbyDimension, gridLengte);
+
+        // lift en schachten
+        int liftY = gridLengte / 2;
+        if (liftY < 1) liftY = 1;
+        if (liftY > 1) {
+            addKamerBuitenJson(KamerType.SCHACHT, new Locatie(1, 1), "1," + (liftY - 1), gridLengte);
+        }
+
+        addKamerBuitenJson(KamerType.LIFT, new Locatie(1, liftY), "1,1", gridLengte);
+
+        int ondersteSchachtHoogte = gridLengte - liftY;
+        if (ondersteSchachtHoogte > 0) {
+            addKamerBuitenJson(KamerType.SCHACHT, new Locatie(1, liftY + 1), "1," + ondersteSchachtHoogte, gridLengte);
+        }
+
+        // trappenhuis
+        addKamerBuitenJson(KamerType.TRAPPEN, new Locatie(gridBreedte, 1), "1," + gridLengte, gridLengte);
+
+
+        // lobby
+        int lobbyBreedte = gridBreedte - 2;
+
+        if (lobbyBreedte > 0) {
+            String lobbyDimension = lobbyBreedte + ",1";
+            Locatie lobbyPos = new Locatie(2, gridLengte);
+            addKamerBuitenJson(KamerType.LOBBY, lobbyPos, lobbyDimension, gridLengte);
+        }
     }
 
     // voeg toe aan de lijst

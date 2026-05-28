@@ -103,18 +103,53 @@ public class PlaatsHelper implements NewGast, LayoutGeladen, NewSchoonmaker, res
             RuimteModel ruimte = vak.getModel().getRuimte();
             if (ruimte != null) {
 
-                // switch tussen gast und schoonmaker voor de tellers
+                // verhoog de juiste teller in het model
                 if (persoon instanceof GastModel) {
                     ruimte.setAantalGasten(ruimte.getAantalGasten() + 1);
+
+                    // als het een kamer is zetten we deze op bezet
+                    if (ruimte instanceof Model.Ruimtes.KamerModel) {
+                        ((Model.Ruimtes.KamerModel) ruimte).setBezet(true);
+                    }
                 } else if (persoon instanceof SchoonmakerModel) {
                     ruimte.setAantalSchoonmakers(ruimte.getAantalSchoonmakers() + 1);
                 }
 
-                // verwijder het lopende icoon
+                // verwijder het lopende icoon van het gridvakje
                 JPanel guestLayer = vak.getGridView().getGuestPanel();
                 guestLayer.remove(persoon.getPersoonLabel());
 
-                // UI verversen
+
+                refreshRuimteVisueel(ruimte);
+                guestLayer.revalidate();
+                guestLayer.repaint();
+            }
+        }
+    }
+
+    public void vertrokken(PersoonModel persoon, Locatie oudeLocatie) {
+        GridVakjeController vak = grid.get(oudeLocatie);
+
+        if (vak != null) {
+            RuimteModel ruimte = vak.getModel().getRuimte();
+            if (ruimte != null) {
+
+                // verlaag de juiste teller en zorg dat deze nooit onder de 0 zakt
+                if (persoon instanceof GastModel) {
+                    ruimte.setAantalGasten(Math.max(0, ruimte.getAantalGasten() - 1));
+
+                    // zet de bezet status op false als geen gasten meer in de kamer zijn
+                    if (ruimte instanceof Model.Ruimtes.KamerModel && ruimte.getAantalGasten() == 0) {
+                        ((Model.Ruimtes.KamerModel) ruimte).setBezet(false);
+                    }
+                } else if (persoon instanceof SchoonmakerModel) {
+                    ruimte.setAantalSchoonmakers(Math.max(0, ruimte.getAantalSchoonmakers() - 1));
+                }
+
+                // verwijder het lopende icoon van het gridvakje
+                JPanel guestLayer = vak.getGridView().getGuestPanel();
+                guestLayer.remove(persoon.getPersoonLabel());
+
                 refreshRuimteVisueel(ruimte);
 
                 guestLayer.revalidate();
@@ -127,31 +162,6 @@ public class PlaatsHelper implements NewGast, LayoutGeladen, NewSchoonmaker, res
     @Override
     public void onGastGaatWegUitKamer(GastModel gast, Locatie oudeLocatie) {
         vertrokken(gast, oudeLocatie);
-    }
-
-    public void vertrokken(PersoonModel persoon, Locatie oudeLocatie) {
-        GridVakjeController vak = grid.get(oudeLocatie);
-
-        if (vak != null) {
-            RuimteModel ruimte = vak.getModel().getRuimte();
-            if (ruimte != null) {
-
-                // controleer wie er vertrekt und verlaag de juiste teller
-                if (persoon instanceof GastModel) {
-                    ruimte.setAantalGasten(Math.max(0, ruimte.getAantalGasten() - 1));
-                } else if (persoon instanceof SchoonmakerModel) {
-                    ruimte.setAantalSchoonmakers(Math.max(0, ruimte.getAantalSchoonmakers() - 1));
-                }
-
-                // UI updaten
-                refreshRuimteVisueel(ruimte);
-                JPanel guestLayer = vak.getGridView().getGuestPanel();
-                guestLayer.add(persoon.getPersoonLabel());
-
-                guestLayer.revalidate();
-                guestLayer.repaint();
-            }
-        }
     }
 
     // update und repaint de panels waar verandering in is gekomen
@@ -240,16 +250,15 @@ public class PlaatsHelper implements NewGast, LayoutGeladen, NewSchoonmaker, res
         if (grid != null) {
             for (GridVakjeController vak : grid.values()) {
                 if (vak != null) {
-                    // 1. Verwijder alle lopende/aanwezige gasten JLabels uit het gridvakje
+                    // verwijder alle lopende/aanwezige gasten JLabels uit het gridvakje
                     JPanel guestLayer = vak.getGridView().getGuestPanel();
                     guestLayer.removeAll();
 
-                    // 2. Zet de tellers van het kamer-model terug naar 0
+                    // zet de tellers van het kamer-model terug naar 0
                     RuimteModel ruimte = vak.getModel().getRuimte();
                     if (ruimte != null) {
                         ruimte.setAantalGasten(0);
                         ruimte.setAantalSchoonmakers(0);
-                        // Update de visuele cijfers und bezem-iconen van de ruimte
                         refreshRuimteVisueel(ruimte);
                     }
 

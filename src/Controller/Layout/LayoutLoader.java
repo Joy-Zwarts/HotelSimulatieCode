@@ -38,6 +38,7 @@ public class LayoutLoader {
         this.listeners = new ArrayList<>();
     }
 
+
     // maakt een nieuwe file picker klasse aan, krijgt daarvan een bestand en laad de layout daarvan en notified de listeners daarover
     public LayoutModel loadLayout() {
         try {
@@ -55,7 +56,7 @@ public class LayoutLoader {
             // nieuw model maken
             this.model = new LayoutModel();
 
-            // objecten maken via factory
+            // objecten maken via factory en toevoegen aan model
             for (RuimteData data : ruimtes) {
                 maakKamer(data);
             }
@@ -65,20 +66,33 @@ public class LayoutLoader {
 
             controller = new LayoutController(model, layoutView, view);
 
+            // bereken eerst hoe groot de grid moet worden op basis van de kamers
+            layoutView.berekenGridGrootte(model.getRuimtes());
+
+            layoutView.setGridBreedte(layoutView.getGridBreedte());
+            layoutView.setGridLengte(layoutView.getGridLengte());
+
+            // de verplichte elementen genereren in het model
+            model.addVerplichteElementen(layoutView.getGridLengte(), layoutView.getGridBreedte());
+
+            // views instellen en vakgroottes bepalen
             view.setLayoutView(layoutView.getHotelPanel());
             view.setLegendaView();
             view.setRightView(eventPrint.getContainer());
 
             controller.berekenEnPasVakgrootteAan();
 
+            // kamers en verplichte elementen tekenen
             layoutView.maakGrid(layoutView.getGridBreedte(), layoutView.getGridLengte(), model.getVakBreedte(), model.getVakHoogte(), model.getGrid());
             layoutView.plaatsKamers(model.getRuimtes(), model.getVerplichteElementen());
+
+            // de kamers nummeren
+            layoutView.nummerDeKamers();
 
             layoutView.getHotelPanel().revalidate();
             layoutView.getHotelPanel().repaint();
 
             // notify de listeners dat de layout is geladen
-
             for (LayoutGeladen listener : listeners) {
                 listener.onLayoutGeladen(controller);
             }
