@@ -2,13 +2,16 @@ package Controller.Faciliteiten;
 
 import Controller.Events.fitnessEvent;
 import Controller.Events.needFoodEvent;
+import Controller.PersoonManagement.NewGast;
 import Controller.Timer.WachtTimer;
+import Model.Layout.Locatie;
+import Model.Personen.GastModel;
 import hotelevents.HotelEvent;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-public class FitnessController implements fitnessEvent {
+public class FitnessController implements fitnessEvent, NewGast {
 
     private final ArrayList<fitnessOver> listeners = new ArrayList<>();
     private final ArrayList<Integer> gastenInFitness = new ArrayList<>();
@@ -23,16 +26,10 @@ public class FitnessController implements fitnessEvent {
         listeners.add(listener);
     }
 
-    // voeg gast toe aan lijst van gasten in de gym met een random verblijftijd
-
+    // voeg gast toe aan lijst van gasten die willen sporten
     @Override
     public void goToFitnessEvent(HotelEvent hotelEvent) {
-        int gastId = hotelEvent.getGuestId();
-
-        gastenInFitness.add(gastId);
-
-        int verblijfTijd = rand.nextInt(15, 31);
-        wachtTimer.startTimer(() -> stuurGastenWeg(gastId), verblijfTijd);
+        gastenInFitness.add(hotelEvent.getGuestId());
     }
 
     public void stuurGastenWeg(int gastId) {
@@ -41,5 +38,40 @@ public class FitnessController implements fitnessEvent {
         for (fitnessOver listener : listeners) {
             listener.gaWegUitGym(gastId);
         }
+    }
+
+    @Override
+    public void onGastAangemaakt(GastModel gast) {
+
+    }
+
+    @Override
+    public void onGastVertrokken(GastModel gast) {
+
+    }
+
+    @Override
+    public void onGastVerplaatst(GastModel gast, Locatie oudeLocatie) {
+
+    }
+
+    // als de gast in de gym is aangekomen, bereken de sporttijd en maak een timer voor hun aan
+    @Override
+    public void onGastAangekomenInKamer(GastModel gast, Locatie behaaldeLocatie) {
+        int gastId = gast.getID();
+        if (gastenInFitness.contains(gast.getID())) {
+            int verblijfTijd = rand.nextInt(15, 31);
+
+            String uniekeID = gast.getTypePersoon().name() + "-" + gastId;
+
+            wachtTimer.startTimer(uniekeID, () -> stuurGastenWeg(gastId), verblijfTijd);
+
+            System.out.println("Gast " + gastId + " is gaan sporten voor " + verblijfTijd + " ticks.");
+        }
+    }
+
+    @Override
+    public void onGastGaatWegUitKamer(GastModel gast, Locatie oudeLocatie) {
+
     }
 }

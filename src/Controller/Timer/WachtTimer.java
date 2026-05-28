@@ -5,52 +5,47 @@ import hotelevents.HotelEvent;
 import java.util.*;
 
 public class WachtTimer implements noneEvent {
+    private final Map<String, Integer> resterendeTijdMap = new HashMap<>(); // houdt persoon en resterende ticks bij
+    private final Map<String, TimerPing> listeners = new HashMap<>(); // koppelt elke persoon aan de TimerPing
 
-    // We maken een kleine interne klasse om de timer data uniek te groeperen
-    private static class TimerTaak {
-        final TimerPing callback;
-        final int eindtijd;
-        int huidigeTijd;
 
-        TimerTaak(TimerPing callback, int eindtijd) {
-            this.callback = callback;
-            this.eindtijd = eindtijd;
-            this.huidigeTijd = 1;
+    // start een timer voor een persoon op basis van hun ID
+    public synchronized void startTimer(String persoonsID, TimerPing listener, int verblijfTijd) {
+        if (resterendeTijdMap.containsKey(persoonsID)) {
+            return; // gast heeft al een lopende timer
         }
+        // sla de resterende ticks en de bijbehorende listener op
+        resterendeTijdMap.put(persoonsID, verblijfTijd);
+        listeners.put(persoonsID, listener);
     }
 
-    // We gebruiken nu een List in plaats van een Map met Lambdas als keys.
-    // Dit voorkomt het 'overschrijf-probleem' van de HashMap volledig!
-    private final List<TimerTaak> actieveTimers = new ArrayList<>();
-
-    public synchronized void startTimer(TimerPing listener, int eindtijd) {
-        actieveTimers.add(new TimerTaak(listener, eindtijd));
-    }
-
+    // verlaagt alle timers en roept timerPing aan als de tijd om is
     @Override
     public synchronized void noneEvent(HotelEvent event) {
-        List<TimerTaak> teVerwijderen = new ArrayList<>();
+        ArrayList<String> gastenDieKlaarZijn = new ArrayList<>();
 
-        // Loop veilig door alle actieve timers heen
-        for (TimerTaak taak : actieveTimers) {
-            taak.huidigeTijd++;
+        // loop door alle persoon id's heen
+        for (String id : resterendeTijdMap.keySet()) {
+            int huidigeTijd = resterendeTijdMap.get(id);
+            int nieuweTijd = huidigeTijd - 1;
 
-            if (taak.huidigeTijd >= taak.eindtijd) {
-                teVerwijderen.add(taak);
+            if (nieuweTijd <= 0) { // als na de verlaging de timer af is gelopen
+                // markeer dat deze gast klaar is
+                gastenDieKlaarZijn.add(id);
+            } else {
+                // update de tijd in de map
+                resterendeTijdMap.put(id, nieuweTijd);
             }
         }
 
-        // Cleanup en vuur de callbacks af
-        for (TimerTaak taakKlaar : teVerwijderen) {
-            actieveTimers.remove(taakKlaar);
+        // stuur alle gasten die klaar zijn weg
+        for (String id : gastenDieKlaarZijn) {
+            resterendeTijdMap.remove(id);
+            TimerPing listener = listeners.remove(id);
 
-            // Dit voert nu gegarandeerd de juiste lambda uit voor de juiste gast!
-            taakKlaar.callback.timerAfgelopen();
+            if (listener != null) {
+                listener.timerAfgelopen();
+            }
         }
-    }
-
-    // Handige extra methode voor je Reset-knop!
-    public synchronized void clear() {
-        actieveTimers.clear();
     }
 }

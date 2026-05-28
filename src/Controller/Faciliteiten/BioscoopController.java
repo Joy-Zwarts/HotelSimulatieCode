@@ -2,7 +2,10 @@ package Controller.Faciliteiten;
 
 import Controller.Events.cinemaEvent;
 import Controller.PersoonManagement.GastController;
+import Controller.PersoonManagement.NewGast;
 import Controller.Timer.WachtTimer;
+import Model.Layout.Locatie;
+import Model.Personen.GastModel;
 import hotelevents.HotelEvent;
 
 import java.util.ArrayList;
@@ -29,8 +32,12 @@ public class BioscoopController implements cinemaEvent {
     // kies een random tijd voor de film en start de timer
     @Override
     public void startCinemaEvent(HotelEvent hotelEvent) {
-        int verblijfTijd = rand.nextInt(15, 31);
-        wachtTimer.startTimer(() -> stuurGastenWeg(), verblijfTijd);
+        int verblijfTijd = rand.nextInt(15, 30);
+
+        // De bioscoop heeft één centrale timer voor de film
+        wachtTimer.startTimer("CINEMA-FILM", () -> stuurGastenWeg(), verblijfTijd);
+
+        System.out.println("De film is gestart! Duur: " + verblijfTijd + " ticks.");
     }
 
     // als de timer is afgelopen stuur iedere gast in de bioscoop weg

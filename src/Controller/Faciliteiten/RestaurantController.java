@@ -2,8 +2,11 @@ package Controller.Faciliteiten;
 
 import Controller.Events.needFoodEvent;
 import Controller.Events.noneEvent;
+import Controller.PersoonManagement.NewGast;
 import Controller.Timer.TimerPing;
 import Controller.Timer.WachtTimer;
+import Model.Layout.Locatie;
+import Model.Personen.GastModel;
 import View.Systeem.OverzichtView;
 import hotelevents.HotelEvent;
 
@@ -12,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-public class RestaurantController implements needFoodEvent {
+public class RestaurantController implements needFoodEvent, NewGast {
 
     private final ArrayList<restaurantOver> listeners = new ArrayList<>();
     private final ArrayList<Integer> gastenInRestaurant = new ArrayList<>();
@@ -29,15 +32,10 @@ public class RestaurantController implements needFoodEvent {
         this.teVerwijderen = new ArrayList<>();
     }
 
-    // voeg gast toe aan lijst van gasten in het restaurant met een random verblijftijd
+    // voeg gast toe aan lijst van gasten met een need food event
     @Override
     public void needFoodEvent(HotelEvent hotelEvent) {
-        int gastId = hotelEvent.getGuestId();
-
-        gastenInRestaurant.add(gastId);
-
-        int verblijfTijd = rand.nextInt(15, 31);
-        wachtTimer.startTimer(() -> stuurGastenWeg(gastId), verblijfTijd);
+        gastenInRestaurant.add(hotelEvent.getGuestId());
     }
 
     public void stuurGastenWeg(int gastId) {
@@ -46,5 +44,40 @@ public class RestaurantController implements needFoodEvent {
         for (restaurantOver listener : listeners) {
             listener.gaWegUitRestaurant(gastId);
         }
+    }
+
+    @Override
+    public void onGastAangemaakt(GastModel gast) {
+
+    }
+
+    @Override
+    public void onGastVertrokken(GastModel gast) {
+
+    }
+
+    @Override
+    public void onGastVerplaatst(GastModel gast, Locatie oudeLocatie) {
+
+    }
+
+    // als de gast in het restaurant is aangekomen, bereken de eettijd en maak een timer voor hun aan
+    @Override
+    public void onGastAangekomenInKamer(GastModel gast, Locatie behaaldeLocatie) {
+        int gastId = gast.getID();
+        if (gastenInRestaurant.contains(gast.getID())) {
+            int verblijfTijd = rand.nextInt(15, 31);
+
+            String uniekeID = gast.getTypePersoon().name() + "-" + gastId;
+
+            wachtTimer.startTimer(uniekeID, () -> stuurGastenWeg(gastId), verblijfTijd);
+
+            System.out.println("Gast " + gastId + " is gaan eten voor " + verblijfTijd + " ticks.");
+        }
+    }
+
+    @Override
+    public void onGastGaatWegUitKamer(GastModel gast, Locatie oudeLocatie) {
+
     }
 }

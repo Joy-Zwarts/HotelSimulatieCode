@@ -10,16 +10,9 @@ public class GastModel extends PersoonModel {
     private KamerClassificatie wensen;
     private KamerModel kamer;
     private String activity;
-    private int ticksLeft;
 
-    public GastModel(int ID,
-                     Locatie locatie,
-                     Locatie targetLocatie,
-                     KamerClassificatie wensen,
-                     KamerModel kamer) {
-
-        super(ID, locatie, targetLocatie, new Color(36, 104, 181));
-
+    public GastModel(int ID, Locatie locatie, Locatie targetLocatie, TypePersoon type, KamerClassificatie wensen, KamerModel kamer) {
+        super(ID, locatie, targetLocatie, new Color(36, 104, 181), type);
         this.wensen = wensen;
         this.kamer = kamer;
     }
@@ -43,13 +36,8 @@ public class GastModel extends PersoonModel {
     public String getActivity() {
         return activity;
     }
-    public int getTicksLeft() {
-        return ticksLeft;
-    }
+
     public void setActivity(String activity) {
         this.activity = activity;
-    }
-    public void setTicksLeft(int ticksLeft) {
-        this.ticksLeft = ticksLeft;
     }
 }

@@ -11,8 +11,8 @@ public class SchoonmakerModel extends PersoonModel {
     private int huidigeSchoonmaakTijd;
 
     // constructor
-    public SchoonmakerModel(int ID, Locatie locatie, Locatie targetLocatie, Locatie stationLocatie) {
-        super(ID, locatie, targetLocatie, new Color(150, 60, 200));
+    public SchoonmakerModel(int ID, Locatie locatie, Locatie targetLocatie, TypePersoon type, Locatie stationLocatie) {
+        super(ID, locatie, targetLocatie, new Color(150, 60, 200), type);
 
         // sla de startpositie op als het vast basisstation
         this.station = stationLocatie;

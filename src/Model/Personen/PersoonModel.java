@@ -14,14 +14,15 @@ public class PersoonModel {
     private Locatie vorigeLocatie;
     private final Color kleur;
     private final JLabel persoonLabel;
+    private TypePersoon typePersoon;
 
-    public PersoonModel(int ID, Locatie locatie, Locatie targetLocatie, Color bolletjeKleur) {
+    public PersoonModel(int ID, Locatie locatie, Locatie targetLocatie, Color bolletjeKleur, TypePersoon typePersoon) {
         this.ID = ID;
         this.locatie = locatie;
         this.targetLocatie = targetLocatie;
         this.kleur = bolletjeKleur;
-
         this.persoonLabel = createLabel();
+        this.typePersoon = typePersoon;
     }
 
     private JLabel createLabel() {
@@ -78,5 +79,9 @@ public class PersoonModel {
 
     public void setVorigeLocatie(Locatie vorigeLocatie) {
         this.vorigeLocatie = vorigeLocatie;
+    }
+
+    public TypePersoon getTypePersoon() {
+        return typePersoon;
     }
 }

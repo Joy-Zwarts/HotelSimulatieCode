@@ -10,6 +10,7 @@ import Model.Layout.Locatie;
 import Model.Personen.PersoonModel;
 import Model.Personen.SchoonmakerModel;
 import Controller.PersoonFactory.SchoonmakerCreator;
+import Model.Personen.TypePersoon;
 import Model.Ruimtes.KamerModel;
 import View.Systeem.OverzichtView;
 import hotelevents.HotelEvent;
@@ -49,8 +50,8 @@ public class SchoonmakerController extends PersoonController implements cleaning
         int breedte = layoutController.getView().getGridBreedte();
         int lengte = layoutController.getView().getGridLengte();
 
-        schoonmaker1 = (SchoonmakerModel) factory.createPersoon(1, new Locatie(breedte / 2, 0), null, 0, new Locatie(breedte / 2, 0));
-        schoonmaker2 = (SchoonmakerModel) factory.createPersoon(2, new Locatie(breedte / 2, lengte / 2), null, 0, new Locatie(breedte / 2, lengte / 2));
+        schoonmaker1 = (SchoonmakerModel) factory.createPersoon(1, new Locatie(breedte / 2, 0), null, 0, new Locatie(breedte / 2, 0), TypePersoon.SCHOONMAKER);
+        schoonmaker2 = (SchoonmakerModel) factory.createPersoon(2, new Locatie(breedte / 2, lengte / 2), null, 0, new Locatie(breedte / 2, lengte / 2), TypePersoon.SCHOONMAKER);
 
         actievePersonen.put(schoonmaker1.getID(), schoonmaker1);
         actievePersonen.put(schoonmaker2.getID(), schoonmaker2);
@@ -220,8 +221,10 @@ public class SchoonmakerController extends PersoonController implements cleaning
 
             schoonmaker.setCleaning(true);
 
+            String uniekeID = schoonmaker.getTypePersoon().name() + "-" + schoonmaker.getID();
+
             // start een nieuwe WachtTimer voor deze schoonmaker
-            wachtTimer.startTimer(() -> klaarCleaning(schoonmaker), schoonmaker.getSchoonmaakTijd());
+            wachtTimer.startTimer(uniekeID, () -> klaarCleaning(schoonmaker), schoonmaker.getSchoonmaakTijd());
 
             // listener ping
             for (NewSchoonmaker listener : listeners) {

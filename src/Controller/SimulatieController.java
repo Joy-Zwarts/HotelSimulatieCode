@@ -69,11 +69,17 @@ public class SimulatieController implements reset {
 
         // EVENT LISTENERS
 
+        gastController.setNewGuestListener(fitnessController);
+
+        gastController.setNewGuestListener(restaurantController);
+
         eventHandler.setEventListenerCheckIn(gastController);
 
         eventHandler.setEventListenerCheckOut(gastController);
 
         eventHandler.setEventListenerFood(gastController);
+
+        eventHandler.setEventListenerFood(restaurantController);
 
         eventHandler.setEventListenerCinema(gastController);
 

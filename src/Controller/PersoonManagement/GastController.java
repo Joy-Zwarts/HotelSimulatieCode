@@ -11,6 +11,7 @@ import Model.Layout.Locatie;
 import Controller.PersoonFactory.GastCreator;
 import Model.Personen.GastModel;
 import Model.Personen.PersoonModel;
+import Model.Personen.TypePersoon;
 import Model.Ruimtes.KamerType;
 import hotelevents.HotelEvent;
 
@@ -79,12 +80,7 @@ public class GastController extends PersoonController implements checkInEvent, c
         }
 
         // maak de gast aan op startlocatie
-        GastModel gast = (GastModel) factory.createPersoon(
-                hotelEvent.getGuestId(),
-                new Locatie(startLocatie.getX(), startLocatie.getY()),
-                new Locatie(0, 0),
-                hotelEvent.getData(),
-                null);
+        GastModel gast = (GastModel) factory.createPersoon(hotelEvent.getGuestId(), new Locatie(startLocatie.getX(), startLocatie.getY()), new Locatie(0, 0), hotelEvent.getData(), null, TypePersoon.GAST);
 
         actieveGasten.put(gast.getID(), gast);
 
