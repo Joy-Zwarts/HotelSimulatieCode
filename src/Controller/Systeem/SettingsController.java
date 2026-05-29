@@ -11,17 +11,13 @@ import java.awt.event.ActionListener;
 public class SettingsController implements ActionListener {
 
     // attributen
-
     private final SettingsView settingsFrame;
     private final DarkModeController darkModeController;
 
     // constructor
-    public SettingsController(HotelSimulatieView view, TimeManagementPanel panel, DarkModeModel DarkModeModel) {
+    public SettingsController(HotelSimulatieView view, TimeManagementPanel panel, DarkModeController controller) {
         settingsFrame = new SettingsView(view);
-        this.darkModeController = new DarkModeController(view, panel, DarkModeModel);
-
-        darkModeController.applyTheme();
-
+        this.darkModeController = controller;
         init();
     }
 

@@ -33,6 +33,7 @@ public class SimulatieController implements reset {
 
         DarkModeModel darkModeModel = new DarkModeModel();
 
+
         HotelSimulatieView view = new HotelSimulatieView(darkModeModel);
 
         HotelEventManager manager = new HotelEventManager(false);
@@ -135,9 +136,15 @@ public class SimulatieController implements reset {
 
         timeManagement.setListener(schoonmakerController);
 
-        SettingsController settingsController = new SettingsController(view, timeManagementPanel, darkModeModel);
-
         view.setTopbar(timePanel, timeManagementPanel);
+
+        DarkModeController darkController = new DarkModeController(view, timeManagementPanel, darkModeModel);
+
+        SettingsController settingsController = new SettingsController(view, timeManagementPanel, darkController);
+
+        darkController.verbindExtraSchermen(settingsController.getSettingsFrame(), overzichtView);
+
+        darkController.applyTheme();
 
         ButtonController buttonController = new ButtonController(view, this, manager, layoutLoader, settingsController);
 

@@ -1,3 +1,4 @@
+import Controller.Systeem.DarkModeController;
 import Controller.Systeem.PauseController;
 import Controller.Systeem.SettingsController;
 import Controller.Layout.LayoutLoader;
@@ -28,7 +29,7 @@ public class TestButtonController {
         HotelEventManager manager = new HotelEventManager(false);
         simulatieController = new SimulatieController();
         PauseController pauseController = new PauseController(manager, view2);
-        SettingsController settingsController = new SettingsController(view, panel, darkModeModel);
+        SettingsController settingsController = new SettingsController(view, panel, new DarkModeController(null, null, darkModeModel));
         LayoutLoader layoutLoader = new LayoutLoader(manager, view, null, pauseController);
     }
 

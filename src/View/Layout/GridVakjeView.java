@@ -24,6 +24,8 @@ public class GridVakjeView {
         backgroundPanel.setBounds(0, 0, breedte, hoogte);
         backgroundPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
+        backgroundPanel.putClientProperty("noTheme", true);
+
         // front layer
         JPanel guestPanel = new JPanel();
         guestPanel.setOpaque(false);
@@ -66,6 +68,10 @@ public class GridVakjeView {
             String nummer = bepaalRuimteNummer(ruimte);
             if (nummer != null) {
                 JLabel kamerNummer = new JLabel(nummer);
+
+                kamerNummer.putClientProperty("noTheme", true);
+                kamerNummer.setForeground(Color.BLACK);
+
                 kamerNummer.setBounds(2, backgroundPanel.getHeight() - 15, 40, 15);
                 backgroundPanel.add(kamerNummer);
             }
@@ -108,6 +114,8 @@ public class GridVakjeView {
         if (isLinksboven && ruimte.getAantalSchoonmakers() > 0) {
             ImageIcon schoonmakerIcon = laadIcon("Schoonmaker.png");
             JLabel schoonmakerLabel = new JLabel(String.valueOf(ruimte.getAantalSchoonmakers()));
+            schoonmakerLabel.putClientProperty("noTheme", true);
+            schoonmakerLabel.setForeground(Color.BLACK);
             schoonmakerLabel.setFont(new Font("Arial", Font.BOLD, 12));
             schoonmakerLabel.setName("SCHOONMAKER_LABEL");
             schoonmakerLabel.setSize(schoonmakerLabel.getPreferredSize());
@@ -131,6 +139,8 @@ public class GridVakjeView {
         if (isRechtsboven && ruimte.getAantalGasten() > 0) {
             ImageIcon gastIcon = laadIcon("gast.png");
             JLabel gastenLabel = new JLabel(String.valueOf(ruimte.getAantalGasten()));
+            gastenLabel.putClientProperty("noTheme", true);
+            gastenLabel.setForeground(Color.BLACK);
             gastenLabel.setFont(new Font("Arial", Font.BOLD, 12));
             gastenLabel.setName("GAST_LABEL");
             gastenLabel.setSize(gastenLabel.getPreferredSize());

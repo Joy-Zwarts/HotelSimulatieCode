@@ -30,10 +30,11 @@ public class OverzichtView implements noneEvent {
         this.manager = hotelEventManager;
 
         pauseFrame = new JFrame("Overzicht");
-        pauseFrame.setSize(1600, 800);
+        pauseFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         pauseFrame.setLocationRelativeTo(view);
         pauseFrame.setAlwaysOnTop(true);
         pauseFrame.setLayout(new BorderLayout());
+
 
         JLabel titleLabel = new JLabel("Overzicht Hotel", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
@@ -230,5 +231,9 @@ public class OverzichtView implements noneEvent {
     @Override
     public void HTETick(HotelEvent event) {
         SwingUtilities.invokeLater(() -> updateData(gastenLijst, kamerLijst, schoonmakerLijst));
+    }
+
+    public JFrame getFrame() {
+        return pauseFrame;
     }
 }
