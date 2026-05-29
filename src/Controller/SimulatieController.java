@@ -7,6 +7,7 @@ import Controller.Faciliteiten.RestaurantController;
 import Controller.Layout.LayoutLoader;
 import Controller.PersoonManagement.*;
 import Controller.Systeem.*;
+import Controller.Systeem.Intefaces.reset;
 import Controller.Timer.WachtTimer;
 import Model.Layout.LayoutModel;
 import Model.Systeem.DarkModeModel;
@@ -73,6 +74,8 @@ public class SimulatieController implements reset {
 
         gastController.setNewGuestListener(restaurantController);
 
+        gastController.setNewGuestListener(bioscoopController);
+
         eventHandler.setEventListenerCheckIn(gastController);
 
         eventHandler.setEventListenerCheckOut(gastController);
@@ -94,6 +97,8 @@ public class SimulatieController implements reset {
         eventHandler.setEventListenerCinema(bioscoopController);
 
         eventHandler.setEventListenerFitness(fitnessController);
+
+        eventHandler.setEventListenerNoneEvent(overzichtView);
 
         bioscoopController.addlisteners(gastController);
 
@@ -138,6 +143,8 @@ public class SimulatieController implements reset {
         view.setTopbar(timePanel, timeManagementPanel);
 
         ButtonController buttonController = new ButtonController(view, this, manager, layoutLoader, settingsController);
+
+        overzichtView.verbindDataBronnen(receptieController.getGasten(), receptieController.getKamers(), schoonmakerController);
 
         buttonController.setListeners(this);
         buttonController.setListeners(plaatsHelper);

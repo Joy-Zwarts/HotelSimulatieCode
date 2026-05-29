@@ -1,17 +1,18 @@
 package Controller.Faciliteiten;
 
-import Controller.Events.cinemaEvent;
-import Controller.PersoonManagement.GastController;
-import Controller.PersoonManagement.NewGast;
+import Controller.Events.Interfaces.cinemaEvent;
+import Controller.Faciliteiten.Interfaces.bioscoopOver;
+import Controller.PersoonManagement.Interfaces.NewGast;
 import Controller.Timer.WachtTimer;
 import Model.Layout.Locatie;
+import Model.Personen.Activiteit;
 import Model.Personen.GastModel;
 import hotelevents.HotelEvent;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-public class BioscoopController implements cinemaEvent {
+public class BioscoopController implements cinemaEvent, NewGast {
     private final ArrayList<bioscoopOver> listeners;
     private final Random rand = new Random();
     private final ArrayList<Integer> gastenInBios;
@@ -53,5 +54,35 @@ public class BioscoopController implements cinemaEvent {
 
     public void addlisteners(bioscoopOver listener) {
         listeners.add(listener);
+    }
+
+    @Override
+    public void onGastAangemaakt(GastModel gast) {
+
+    }
+
+    @Override
+    public void onGastVertrokken(GastModel gast) {
+
+    }
+
+    @Override
+    public void onGastVerplaatst(GastModel gast, Locatie oudeLocatie) {
+
+    }
+
+    @Override
+    public void onGastAangekomenInKamer(GastModel gast, Locatie behaaldeLocatie) {
+        int gastId = gast.getID();
+        if (gastenInBios.contains(gast.getID())) {
+            System.out.println("Gast " + gastId + " is aangekomen in de Bioscoop");
+
+            gast.setActivity(Activiteit.FILM);
+        }
+    }
+
+    @Override
+    public void onGastGaatWegUitKamer(GastModel gast, Locatie oudeLocatie) {
+
     }
 }

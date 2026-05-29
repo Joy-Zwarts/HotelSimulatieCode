@@ -1,13 +1,12 @@
 import Controller.PersoonManagement.GastController;
-import Controller.PersoonManagement.NewGast;
+import Controller.PersoonManagement.Interfaces.NewGast;
 import Controller.Layout.LayoutController;
 import Model.Layout.LayoutModel;
 import Model.Layout.Locatie;
 import Model.Personen.GastModel;
-import Model.Personen.PersoonModel;
+import Model.Personen.TypePersoon;
 import View.Layout.LayoutView;
 import View.Systeem.HotelSimulatieView;
-import View.Systeem.OverzichtView;
 import hotelevents.HotelEvent;
 import hotelevents.HotelEventType;
 import org.junit.jupiter.api.Assertions;
@@ -54,7 +53,7 @@ public class TestPersoonController {
 
     @Test
     public void testOnStepTaken() {
-        GastModel gast = new GastModel(1, startLoc, new Locatie(0,0), null, null);
+        GastModel gast = new GastModel(1, startLoc, new Locatie(0,0), TypePersoon.GAST, null, null);
         Locatie oudeLoc = new Locatie(5, 8);
 
         gast.setVorigeLocatie(oudeLoc);
@@ -64,12 +63,12 @@ public class TestPersoonController {
 
     @Test
     public void testDestinationReached() {
-        GastModel gast = new GastModel(1, startLoc, startLoc, null, null);
+        GastModel gast = new GastModel(1, startLoc, startLoc, TypePersoon.GAST, null, null);
 
         gastController.onDestinationReached(gast);
 
         Locatie kamerLoc = new Locatie(2, 2);
-        GastModel gastInKamer = new GastModel(2, kamerLoc, kamerLoc, null, null);
+        GastModel gastInKamer = new GastModel(2, kamerLoc, kamerLoc, TypePersoon.GAST, null, null);
         gastController.onDestinationReached(gastInKamer);
 
         Assertions.assertEquals(kamerLoc.getX(), gastInKamer.getVorigeLocatie().getX());

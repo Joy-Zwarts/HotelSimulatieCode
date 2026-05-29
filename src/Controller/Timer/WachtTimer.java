@@ -1,6 +1,6 @@
 package Controller.Timer;
 
-import Controller.Events.noneEvent;
+import Controller.Events.Interfaces.noneEvent;
 import hotelevents.HotelEvent;
 import java.util.*;
 

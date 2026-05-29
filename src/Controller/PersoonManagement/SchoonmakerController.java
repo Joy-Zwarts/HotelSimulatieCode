@@ -1,10 +1,11 @@
 package Controller.PersoonManagement;
 
-import Controller.Events.checkOutEvent;
-import Controller.Events.cleaningEmergencyEvent;
+import Controller.Events.Interfaces.checkOutEvent;
+import Controller.Events.Interfaces.cleaningEmergencyEvent;
 import Controller.Layout.LayoutController;
-import Controller.Systeem.onTimeChange;
-import Controller.Systeem.reset;
+import Controller.PersoonManagement.Interfaces.NewSchoonmaker;
+import Controller.Systeem.Intefaces.onTimeChange;
+import Controller.Systeem.Intefaces.reset;
 import Controller.Timer.WachtTimer;
 import Model.Layout.Locatie;
 import Model.Personen.PersoonModel;

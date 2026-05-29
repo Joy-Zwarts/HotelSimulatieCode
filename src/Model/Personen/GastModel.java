@@ -9,7 +9,7 @@ public class GastModel extends PersoonModel {
 
     private KamerClassificatie wensen;
     private KamerModel kamer;
-    private String activity;
+    private Activiteit activiteitStatus;
 
     public GastModel(int ID, Locatie locatie, Locatie targetLocatie, TypePersoon type, KamerClassificatie wensen, KamerModel kamer) {
         super(ID, locatie, targetLocatie, new Color(36, 104, 181), type);
@@ -33,11 +33,11 @@ public class GastModel extends PersoonModel {
         this.wensen = kamerClassificatie;
     }
 
-    public String getActivity() {
-        return activity;
+    public Activiteit getActivity() {
+        return activiteitStatus;
     }
 
-    public void setActivity(String activity) {
-        this.activity = activity;
+    public void setActivity(Activiteit activity) {
+        this.activiteitStatus = activity;
     }
 }

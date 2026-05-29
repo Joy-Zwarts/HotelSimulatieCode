@@ -1,12 +1,9 @@
 package View.Systeem;
 
-import Controller.Systeem.reset;
 import Model.Systeem.DarkModeModel;
-import hotelevents.Main;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.util.Objects;
 
 public class HotelSimulatieView extends JFrame{

@@ -2,6 +2,7 @@ package Controller.Systeem;
 
 import Controller.*;
 import Controller.Layout.LayoutLoader;
+import Controller.Systeem.Intefaces.reset;
 import Model.Layout.LayoutModel;
 import View.Systeem.EventPanel;
 import View.Systeem.HotelSimulatieView;

@@ -1,4 +1,5 @@
 import Controller.Events.*;
+import Controller.Events.Interfaces.*;
 import hotelevents.HotelEvent;
 import hotelevents.HotelEventManager;
 import hotelevents.HotelEventType;

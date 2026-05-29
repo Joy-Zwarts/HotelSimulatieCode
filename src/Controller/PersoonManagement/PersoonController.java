@@ -1,7 +1,7 @@
 package Controller.PersoonManagement;
 
 import Controller.Layout.LayoutController;
-import Controller.Layout.LayoutGeladen;
+import Controller.Layout.Intefaces.LayoutGeladen;
 import Model.Personen.PersoonModel;
 import View.Systeem.OverzichtView; // Import toevoegen
 

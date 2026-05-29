@@ -1,5 +1,6 @@
 package Controller.PersoonManagement;
 
+import Controller.PersoonManagement.Interfaces.NewGast;
 import Model.Layout.Locatie;
 import Model.Personen.GastModel;
 import Model.Ruimtes.KamerModel;

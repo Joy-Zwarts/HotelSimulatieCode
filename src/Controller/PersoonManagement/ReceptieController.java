@@ -1,12 +1,15 @@
 package Controller.PersoonManagement;
 
-import Controller.Systeem.reset;
+import Controller.PersoonManagement.Interfaces.NewGast;
+import Controller.PersoonManagement.Interfaces.NewKamer;
+import Controller.Systeem.Intefaces.reset;
 import Model.Layout.Locatie;
 import Model.Personen.GastModel;
 import Model.Ruimtes.KamerModel;
 import Model.Ruimtes.RuimteModel;
 import View.Systeem.OverzichtView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ReceptieController implements NewKamer, NewGast, reset {
@@ -138,5 +141,9 @@ public class ReceptieController implements NewKamer, NewGast, reset {
             }
         }
         refreshView();
+    }
+
+    public HashMap<Integer, GastModel> getGasten() {
+        return gasten;
     }
 }

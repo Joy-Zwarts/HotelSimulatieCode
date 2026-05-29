@@ -1,6 +1,4 @@
-package Controller.Faciliteiten;
-
-import java.util.ArrayList;
+package Controller.Faciliteiten.Interfaces;
 
 public interface restaurantOver {
     void gaWegUitRestaurant(int gast);

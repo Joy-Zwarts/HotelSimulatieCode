@@ -1,6 +1,7 @@
 package Controller.Systeem;
 
 import Controller.SimulatieController;
+import Controller.Systeem.Intefaces.onTimeChange;
 import View.Systeem.HotelSimulatieView;
 import View.Systeem.TimeManagementPanel;
 import hotelevents.HotelEventManager;

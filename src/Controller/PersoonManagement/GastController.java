@@ -1,14 +1,16 @@
 package Controller.PersoonManagement;
 
-import Controller.Events.*;
-import Controller.Faciliteiten.bioscoopOver;
-import Controller.Faciliteiten.fitnessOver;
-import Controller.Faciliteiten.restaurantOver;
+import Controller.Events.Interfaces.*;
+import Controller.Faciliteiten.Interfaces.bioscoopOver;
+import Controller.Faciliteiten.Interfaces.fitnessOver;
+import Controller.Faciliteiten.Interfaces.restaurantOver;
 import Controller.Layout.LayoutController;
-import Controller.Systeem.onTimeChange;
-import Controller.Systeem.reset;
+import Controller.PersoonManagement.Interfaces.NewGast;
+import Controller.Systeem.Intefaces.onTimeChange;
+import Controller.Systeem.Intefaces.reset;
 import Model.Layout.Locatie;
 import Controller.PersoonFactory.GastCreator;
+import Model.Personen.Activiteit;
 import Model.Personen.GastModel;
 import Model.Personen.PersoonModel;
 import Model.Personen.TypePersoon;
@@ -37,20 +39,30 @@ public class GastController extends PersoonController implements checkInEvent, c
     }
 
     // check na het lopen of de gast naar de uitgang is gelopen of niet
+    // check na het lopen of de gast naar de uitgang is gelopen of niet
     private void afhandelenAankomst(GastModel gast) {
+        // gast is bij de uitgang aangekomen en verlaat het hotel
         if (gast.getLocatie().equals(startLocatie)) {
-            // gast verlaat het hotel
             for (NewGast listener : listeners) {
                 listener.onGastVertrokken(gast);
             }
             actieveGasten.remove(gast.getID());
-        } else {
-            gast.setVorigeLocatie(new Locatie(gast.getLocatie().getX(), gast.getLocatie().getY()));
-            // gast is in zijn target kamer aangekomen
+        }
+        // gast is aangekomen bij een faciliteit (restaurant, fitness, cinema)
+        else if (gast.getActivity() == Activiteit.ETEN || gast.getActivity() == Activiteit.SPORTEN || gast.getActivity() == Activiteit.FILM) {
             for (NewGast listener : listeners) {
                 listener.onGastAangekomenInKamer(gast, gast.getLocatie());
             }
-            System.out.println("Gast " + gast.getID() + " is op bestemming. Teller +1.");
+        }
+        // er blijft nog over dat de gast in hun kamer zit
+        else {
+            gast.setActivity(Activiteit.IN_KAMER); // ze de status naar IN_KAMER
+            gast.setVorigeLocatie(new Locatie(gast.getLocatie().getX(), gast.getLocatie().getY()));
+
+            for (NewGast listener : listeners) {
+                listener.onGastAangekomenInKamer(gast, gast.getLocatie());
+            }
+            System.out.println("Gast " + gast.getID() + " is aangekomen in hun hotelkamer.");
         }
     }
 
@@ -93,6 +105,7 @@ public class GastController extends PersoonController implements checkInEvent, c
         if (gast.getTargetLocatie() != null) {
             PathFinder pf = new PathFinder(gast.getLocatie(), gast.getTargetLocatie(), layoutController);
             beweegHelper.voegRouteToe(gast, pf);
+            gast.setActivity(Activiteit.ONDERWEG);
         }
     }
 
@@ -143,6 +156,8 @@ public class GastController extends PersoonController implements checkInEvent, c
     public void onStepTaken(PersoonModel persoon, Locatie oudeLocatie) {
         GastModel gast = (GastModel) persoon;
 
+        gast.setActivity(Activiteit.ONDERWEG);
+
         SwingUtilities.invokeLater(() -> {
             for (NewGast listener : listeners) {
                 listener.onGastVerplaatst(gast, oudeLocatie);
@@ -176,6 +191,7 @@ public class GastController extends PersoonController implements checkInEvent, c
 
                 // geef de route aan de engine (deze overschrijft de oude route)
                 beweegHelper.voegRouteToe(gast, pf);
+                gast.setActivity(Activiteit.ONDERWEG);
 
                 System.out.println("Gast " + gast.getID() + " wilt sporten en loopt naar de gym.");
             } else {
@@ -198,6 +214,7 @@ public class GastController extends PersoonController implements checkInEvent, c
 
                 // geef de route aan de engine (deze overschrijft de oude route)
                 beweegHelper.voegRouteToe(gast, pf);
+                gast.setActivity(Activiteit.ONDERWEG);
 
                 System.out.println("Gast " + gast.getID() + " wilt film kijken en loopt naar de bioscoop.");
             } else {
@@ -218,6 +235,7 @@ public class GastController extends PersoonController implements checkInEvent, c
             if (gast.getTargetLocatie() != null) {
                 PathFinder pf = new PathFinder(gast.getLocatie(), gast.getTargetLocatie(), layoutController);
                 beweegHelper.voegRouteToe(gast, pf);
+                gast.setActivity(Activiteit.ONDERWEG);
             }
         }
     }
@@ -228,6 +246,7 @@ public class GastController extends PersoonController implements checkInEvent, c
         if (gast.getTargetLocatie() != null) {
             PathFinder pf = new PathFinder(gast.getLocatie(), gast.getTargetLocatie(), layoutController);
             beweegHelper.voegRouteToe(gast, pf);
+            gast.setActivity(Activiteit.ONDERWEG);
         }
     }
 
@@ -237,6 +256,7 @@ public class GastController extends PersoonController implements checkInEvent, c
         if (gast.getTargetLocatie() != null) {
             PathFinder pf = new PathFinder(gast.getLocatie(), gast.getTargetLocatie(), layoutController);
             beweegHelper.voegRouteToe(gast, pf);
+            gast.setActivity(Activiteit.ONDERWEG);
         }
     }
 

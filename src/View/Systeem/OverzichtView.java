@@ -1,10 +1,12 @@
 package View.Systeem;
 
+import Controller.Events.Interfaces.noneEvent;
 import Controller.Systeem.PauseController;
 import Controller.PersoonManagement.SchoonmakerController;
 import Model.Personen.SchoonmakerModel;
 import Model.Personen.GastModel;
 import Model.Ruimtes.KamerModel;
+import hotelevents.HotelEvent;
 import hotelevents.HotelEventManager;
 
 import javax.swing.*;
@@ -12,7 +14,7 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Queue;
 
-public class OverzichtView {
+public class OverzichtView implements noneEvent {
 
     private final JFrame pauseFrame;
     private final JPanel guestContent;
@@ -20,6 +22,9 @@ public class OverzichtView {
     private final JPanel cleanerContent;
     private final HotelEventManager manager;
     private boolean gepauzeerd = false;
+    private HashMap<Integer, GastModel> gastenLijst;
+    private HashMap<Integer, KamerModel> kamerLijst;
+    private SchoonmakerController schoonmakerLijst;
 
     public OverzichtView(HotelSimulatieView view, PauseController pauseController, HotelEventManager hotelEventManager) {
         this.manager = hotelEventManager;
@@ -78,8 +83,16 @@ public class OverzichtView {
         });
     }
 
+    // setter om je vanuit de simulatie controller de nodige data door te geven
+    public void verbindDataBronnen(HashMap<Integer, GastModel> gasten, HashMap<Integer, KamerModel> kamers, SchoonmakerController schoonmakerController) {
+        this.gastenLijst = gasten;
+        this.kamerLijst = kamers;
+        this.schoonmakerLijst = schoonmakerController;
+    }
+
     public void show() {
         this.gepauzeerd = true;
+        updateData(gastenLijst, kamerLijst, schoonmakerLijst);
         pauseFrame.setVisible(true);
         pauseFrame.toFront();
     }
@@ -93,6 +106,7 @@ public class OverzichtView {
         return this.gepauzeerd;
     }
 
+    // kijk of we de data hebben voor schoonmakers, zo ja, roep dan de render functie aan
     public void tekenSchoonmakerStatus(SchoonmakerController controller) {
         cleanerContent.removeAll();
 
@@ -108,6 +122,7 @@ public class OverzichtView {
         cleanerContent.repaint();
     }
 
+    // zet de schoonmakers in een lijst met hun data erbij (status, locatie & wachtrij aan taken)
     private void renderSchoonmakerInView(SchoonmakerModel sm, SchoonmakerController controller) {
         int id = sm.getID();
         String zone = (id == 1) ? "Bovenverdiepingen" : "Benedenverdiepingen";
@@ -142,6 +157,7 @@ public class OverzichtView {
         }
     }
 
+    // zet gasten in een lijst met hun data erbij (locatie, kamer & status)
     public void tekenGastLijst(HashMap<Integer, GastModel> gasten) {
         guestContent.removeAll();
         if (gasten == null || gasten.isEmpty()) {
@@ -149,11 +165,33 @@ public class OverzichtView {
         } else {
             for (GastModel gast : gasten.values()) {
                 KamerModel kamer = gast.getKamer();
-                String kamerInfo = (kamer == null) ? "null" : String.valueOf(kamer.getRoomNumber());
+
+                String kamerInfo;
+                if (kamer == null) {
+                    kamerInfo = "Geen";
+                } else {
+                    kamerInfo = String.valueOf(kamer.getRoomNumber());
+                }
+
+                String statusText;
+
+                if (gast.getActivity() == null) { // failsafe
+                    statusText = "Status niet gevonden";
+                } else {
+                    switch (gast.getActivity()) {
+                        case ETEN ->  statusText = "Aan het Eten";
+                        case SPORTEN ->  statusText = "Aan het Sporten";
+                        case FILM ->   statusText = "In de Bioscoop";
+                        case IN_KAMER ->   statusText = "In hun Kamer";
+                        default ->  statusText = "Onderweg";
+                    }
+                }
+
                 guestContent.add(new JLabel(
                         "Gast " + gast.getID() +
                                 "   |   Locatie nu: " + gast.getLocatie() +
-                                "   |   Kamer: " + kamerInfo
+                                "   |   Kamer: " + kamerInfo +
+                                "   |   Status: " + statusText
                 ));
             }
         }
@@ -161,6 +199,7 @@ public class OverzichtView {
         guestContent.repaint();
     }
 
+    // zet kamers in een lijst met hun data erbij (kamernummer en verblijvende gast)
     public void tekenKamerLijst(HashMap<Integer, KamerModel> kamers) {
         roomContent.removeAll();
         if (kamers == null || kamers.isEmpty()) {
@@ -176,5 +215,22 @@ public class OverzichtView {
         }
         roomContent.revalidate();
         roomContent.repaint();
+    }
+
+    // methode om alle drie de kolommen te tekenen met nieuwe data
+    public void updateData(HashMap<Integer, GastModel> gasten, HashMap<Integer, KamerModel> kamers, SchoonmakerController schoonmakerController) {
+        if (!gepauzeerd) return;
+
+        tekenGastLijst(gasten);
+        tekenKamerLijst(kamers);
+        tekenSchoonmakerStatus(schoonmakerController);
+    }
+
+    // per tick update je de data
+    @Override
+    public void noneEvent(HotelEvent event) throws InterruptedException {
+        SwingUtilities.invokeLater(() -> {
+            updateData(gastenLijst, kamerLijst, schoonmakerLijst);
+        });
     }
 }

@@ -1,6 +1,6 @@
 package View.Systeem;
 
-import Controller.Events.noneEvent;
+import Controller.Events.Interfaces.noneEvent;
 import hotelevents.HotelEvent;
 import hotelevents.HotelEventManager;
 

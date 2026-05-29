@@ -1,18 +1,15 @@
 package Controller.Faciliteiten;
 
-import Controller.Events.needFoodEvent;
-import Controller.Events.noneEvent;
-import Controller.PersoonManagement.NewGast;
-import Controller.Timer.TimerPing;
+import Controller.Events.Interfaces.needFoodEvent;
+import Controller.Faciliteiten.Interfaces.restaurantOver;
+import Controller.PersoonManagement.Interfaces.NewGast;
 import Controller.Timer.WachtTimer;
 import Model.Layout.Locatie;
+import Model.Personen.Activiteit;
 import Model.Personen.GastModel;
-import View.Systeem.OverzichtView;
 import hotelevents.HotelEvent;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 public class RestaurantController implements needFoodEvent, NewGast {
@@ -73,6 +70,8 @@ public class RestaurantController implements needFoodEvent, NewGast {
             wachtTimer.startTimer(uniekeID, () -> stuurGastenWeg(gastId), verblijfTijd);
 
             System.out.println("Gast " + gastId + " is gaan eten voor " + verblijfTijd + " ticks.");
+
+            gast.setActivity(Activiteit.ETEN);
         }
     }
 

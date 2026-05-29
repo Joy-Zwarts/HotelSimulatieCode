@@ -1,10 +1,11 @@
 package Controller.Faciliteiten;
 
-import Controller.Events.fitnessEvent;
-import Controller.Events.needFoodEvent;
-import Controller.PersoonManagement.NewGast;
+import Controller.Events.Interfaces.fitnessEvent;
+import Controller.Faciliteiten.Interfaces.fitnessOver;
+import Controller.PersoonManagement.Interfaces.NewGast;
 import Controller.Timer.WachtTimer;
 import Model.Layout.Locatie;
+import Model.Personen.Activiteit;
 import Model.Personen.GastModel;
 import hotelevents.HotelEvent;
 
@@ -67,6 +68,8 @@ public class FitnessController implements fitnessEvent, NewGast {
             wachtTimer.startTimer(uniekeID, () -> stuurGastenWeg(gastId), verblijfTijd);
 
             System.out.println("Gast " + gastId + " is gaan sporten voor " + verblijfTijd + " ticks.");
+
+            gast.setActivity(Activiteit.SPORTEN);
         }
     }
 

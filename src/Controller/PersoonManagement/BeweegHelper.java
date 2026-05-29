@@ -1,13 +1,10 @@
 package Controller.PersoonManagement;
 
-import Controller.Systeem.reset;
 import Model.Layout.Locatie;
-import Model.Personen.GastModel;
 import Model.Personen.PersoonModel;
 import View.Systeem.OverzichtView; // Voeg deze import toe
 
 import javax.swing.*;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;

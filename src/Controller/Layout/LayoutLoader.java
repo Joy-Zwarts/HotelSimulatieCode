@@ -1,6 +1,7 @@
 package Controller.Layout;
 
-import Controller.PersoonManagement.NewKamer;
+import Controller.Layout.Intefaces.LayoutGeladen;
+import Controller.PersoonManagement.Interfaces.NewKamer;
 import Controller.RuimteFactory.*;
 import Controller.Systeem.FilePicker;
 import Controller.Systeem.PauseController;

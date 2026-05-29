@@ -1,4 +1,4 @@
-package Controller.Events;
+package Controller.Events.Interfaces;
 
 import hotelevents.HotelEvent;
 

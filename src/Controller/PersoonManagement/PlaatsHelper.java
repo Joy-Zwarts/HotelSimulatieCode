@@ -2,10 +2,10 @@ package Controller.PersoonManagement;
 
 import Controller.Layout.GridVakjeController;
 import Controller.Layout.LayoutController;
-import Controller.Layout.LayoutGeladen;
-import Controller.PersoonManagement.NewGast;
-import Controller.PersoonManagement.NewSchoonmaker;
-import Controller.Systeem.reset;
+import Controller.Layout.Intefaces.LayoutGeladen;
+import Controller.PersoonManagement.Interfaces.NewGast;
+import Controller.PersoonManagement.Interfaces.NewSchoonmaker;
+import Controller.Systeem.Intefaces.reset;
 import Model.Layout.Locatie;
 import Model.Personen.GastModel;
 import Model.Personen.PersoonModel;
