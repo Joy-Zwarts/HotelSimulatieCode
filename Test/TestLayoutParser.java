@@ -41,7 +41,7 @@ class TestLayoutParser {
         assertNotNull(ruimtes);
         assertEquals(1, ruimtes.size());
 
-        RuimteData data = ruimtes.get(0);
+        RuimteData data = ruimtes.getFirst();
 
         assertEquals("Room", data.areaType);
         assertEquals(2, data.position.getX());
@@ -76,7 +76,7 @@ class TestLayoutParser {
 
         assertEquals(1, ruimtes.size());
 
-        RuimteData data = ruimtes.get(0);
+        RuimteData data = ruimtes.getFirst();
 
         assertEquals("Fitness", data.areaType);
         assertEquals(9999, data.capacity); // DEFAULT_CAPACITY check

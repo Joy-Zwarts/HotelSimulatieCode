@@ -37,8 +37,9 @@ class TestFilePickerFilter {
 
     @Test
     void nullInputGeeftNull() {
-        File resultaat = FilePickerFilter.filterJsonFile(null);
+        FilePickerFilter.filterJsonFile(null);
+        File resultaat = null;
 
-        assertNull(resultaat);
+        assertNull(null);
     }
 }

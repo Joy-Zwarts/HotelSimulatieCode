@@ -11,11 +11,10 @@ public class TestEventHandler implements checkInEvent, checkOutEvent, cinemaEven
 
     private int eventsCalledCount;
     private EventHandler handler;
-    private HotelEventManager manager;
 
     @BeforeEach
     public void setUp() {
-        manager = new HotelEventManager();
+        HotelEventManager manager = new HotelEventManager();
         handler = new EventHandler(manager);
         eventsCalledCount = 0;
 

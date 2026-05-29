@@ -228,9 +228,7 @@ public class OverzichtView implements noneEvent {
 
     // per tick update je de data
     @Override
-    public void HTETick(HotelEvent event) throws InterruptedException {
-        SwingUtilities.invokeLater(() -> {
-            updateData(gastenLijst, kamerLijst, schoonmakerLijst);
-        });
+    public void HTETick(HotelEvent event) {
+        SwingUtilities.invokeLater(() -> updateData(gastenLijst, kamerLijst, schoonmakerLijst));
     }
 }

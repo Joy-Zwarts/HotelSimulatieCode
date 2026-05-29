@@ -132,27 +132,26 @@ public class LayoutView {
         int maxKamerRij = gridLengte - 2;
 
         // loop door alle rijen van de grid
-        for (int y = 0; y <= maxKamerRij; y++) {
+        for (int startY = 0; startY <= maxKamerRij; startY++) {
 
             // bereken het verdiepingsnummer
-            int verdieping = maxKamerRij - y + 1;
+            int verdieping = maxKamerRij - startY + 1;
 
             // start teller voor de kamers op deze specifieke verdieping
             int kamerTellerOpVerdieping = 1;
 
             // loop door alle kolommen van de grid
-            for (int x = 0; x < gridBreedte; x++) {
+            for (int startX = 0; startX < gridBreedte; startX++) {
 
                 // pak de controller van het specifieke gridvakje
-                GridVakjeController vak = grid.get(new Locatie(x, y));
+                GridVakjeController vak = grid.get(new Locatie(startX, startY));
 
                 if (vak != null && vak.getModel().getRuimte() != null) {
 
                     RuimteModel ruimte = vak.getModel().getRuimte();
 
                     // controleer of dit vakje de linkerbovenhoek van de ruimte is en of het een echte kamer is
-                    if (vak.getModel().islinksboven() && ruimte instanceof KamerModel) {
-                        KamerModel kamer = (KamerModel) ruimte;
+                    if (vak.getModel().islinksboven() && ruimte instanceof KamerModel kamer) {
 
                         // bereken het kamernummer
                         int kamerNummer = (verdieping * 100) + kamerTellerOpVerdieping;
@@ -164,9 +163,6 @@ public class LayoutView {
                         kamerTellerOpVerdieping++;
 
 
-                        int startX = x;
-                        int startY = y;
-
                         // hoeveel gridvakjes is deze kamer breed
                         int w = kamer.getDimensionW();
 
@@ -174,13 +170,13 @@ public class LayoutView {
                         int h = kamer.getDimensionH();
 
                         // loop door alle rijen die deze kamer in beslag neemt
-                        for (int ky = startY; ky < startY + h; ky++) {
+                        for (int kamerY = startY; kamerY < startY + h; kamerY++) {
 
                             // loop door alle kolommen die deze kamer in beslag neemt
-                            for (int kx = startX; kx < startX + w; kx++) {
+                            for (int kamerX = startX; kamerX < startX + w; kamerX++) {
 
                                 // haal het gridvakje op dat onderdeel is van deze kamer
-                                GridVakjeController deelVak = grid.get(new Locatie(kx, ky));
+                                GridVakjeController deelVak = grid.get(new Locatie(kamerX, kamerY));
 
                                 // als dit deelvakje bestaat
                                 if (deelVak != null) {

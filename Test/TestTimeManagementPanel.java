@@ -13,7 +13,7 @@ class TestTimeManagementPanel {
     private TimeManagementPanel panel;
 
     // nep darkmodemodel zodat die gebruikt kan worden omdat darkmode in de panels staan
-    class FakeDarkModeModel extends DarkModeModel {
+    static class FakeDarkModeModel extends DarkModeModel {
         private final boolean darkMode;
 
         public FakeDarkModeModel(boolean darkMode) {

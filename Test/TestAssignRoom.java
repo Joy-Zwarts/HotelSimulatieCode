@@ -15,7 +15,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TestKamerAssign {
 
-    private ReceptieController controller;
     private HashMap<Integer, KamerModel> kamerLijst;
     private KamerAssign kamerAssign;
 
@@ -23,14 +22,25 @@ class TestKamerAssign {
     void setUp() {
         kamerLijst = new HashMap<>();
 
-        controller = new ReceptieController(null) {
+        ReceptieController controller = new ReceptieController(null) {
             @Override
             public HashMap<Integer, KamerModel> getKamers() {
                 return kamerLijst;
             }
-            @Override public void setKamerVol(KamerModel k) { k.setBezet(true); }
-            @Override public void setKamerLeeg(KamerModel k) { k.setBezet(false); }
-            @Override public void refreshView() {}
+
+            @Override
+            public void setKamerVol(KamerModel k) {
+                k.setBezet(true);
+            }
+
+            @Override
+            public void setKamerLeeg(KamerModel k) {
+                k.setBezet(false);
+            }
+
+            @Override
+            public void refreshView() {
+            }
         };
 
         kamerAssign = new KamerAssign(controller);

@@ -77,7 +77,7 @@ class TestLayoutLoader {
                 try {
                     java.nio.file.Files.writeString(tempFile.toPath(), "[]");
                     tempFile.deleteOnExit();
-                } catch (Exception e) {}
+                } catch (Exception _) {}
                 return tempFile;
             }
             @Override
@@ -158,7 +158,7 @@ class TestLayoutLoader {
             method.invoke(layoutLoader, data);
             fail("Zou een exception moeten gooien");
         } catch (Exception e) {
-            assertTrue(e.getCause() instanceof IllegalArgumentException);
+            assertInstanceOf(IllegalArgumentException.class, e.getCause());
         }
     }
 }

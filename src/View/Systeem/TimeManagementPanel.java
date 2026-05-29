@@ -26,17 +26,17 @@ public class TimeManagementPanel {
         panelTimeManagement.setPreferredSize(new Dimension(525, 50));
 
         // buttons aanmaken
-        normaleTijd = new JButton(laadIcon("play.png", 45, 45));
+        normaleTijd = new JButton(laadIcon("play.png", 45));
         normaleTijd.setOpaque(false);
         normaleTijd.setContentAreaFilled(false);
         normaleTijd.setBorderPainted(false);
 
-        fastForwardTijd = new JButton(laadIcon("fastForward.png", 68, 45));
+        fastForwardTijd = new JButton(laadIcon("fastForward.png", 68));
         fastForwardTijd.setOpaque(false);
         fastForwardTijd.setContentAreaFilled(false);
         fastForwardTijd.setBorderPainted(false);
 
-        doubleFastForwardTijd = new JButton(laadIcon("doubleFastForward.png", 83, 45));
+        doubleFastForwardTijd = new JButton(laadIcon("doubleFastForward.png", 83));
         doubleFastForwardTijd.setOpaque(false);
         doubleFastForwardTijd.setContentAreaFilled(false);
         doubleFastForwardTijd.setBorderPainted(false);
@@ -50,14 +50,14 @@ public class TimeManagementPanel {
     }
 
     // icon laden
-    private ImageIcon laadIcon(String bestand, int width, int height) {
+    private ImageIcon laadIcon(String bestand, int width) {
         java.net.URL url = getClass().getResource("/Res/" + bestand);
         if (url == null) {
             System.out.println("Niet gevonden: " + bestand);
             return null;
         }
         ImageIcon icon = new ImageIcon(url);
-        Image scaled = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        Image scaled = icon.getImage().getScaledInstance(width, 45, Image.SCALE_SMOOTH);
         return new ImageIcon(scaled);
     }
 
@@ -69,13 +69,13 @@ public class TimeManagementPanel {
         ImageIcon fastForwardTijdIcon;
         ImageIcon doubleFastForwardTijdIcon;
         if (darkMode.isDarkMode()) {
-            normaleTijdIcon = new ImageIcon(Objects.requireNonNull(laadIcon("playDarkMode.png", 45, 45)).getImage());
-            fastForwardTijdIcon = new ImageIcon(Objects.requireNonNull(laadIcon("fastForwardDarkMode.png", 55, 45)).getImage());
-            doubleFastForwardTijdIcon = new ImageIcon(Objects.requireNonNull(laadIcon("doubleFastForwardDarkMode.png", 65, 45)).getImage());
+            normaleTijdIcon = new ImageIcon(Objects.requireNonNull(laadIcon("playDarkMode.png", 45)).getImage());
+            fastForwardTijdIcon = new ImageIcon(Objects.requireNonNull(laadIcon("fastForwardDarkMode.png", 55)).getImage());
+            doubleFastForwardTijdIcon = new ImageIcon(Objects.requireNonNull(laadIcon("doubleFastForwardDarkMode.png", 65)).getImage());
         } else {
-            normaleTijdIcon = new ImageIcon(Objects.requireNonNull(laadIcon("play.png", 45, 45)).getImage());
-            fastForwardTijdIcon = new ImageIcon(Objects.requireNonNull(laadIcon("fastForward.png", 55, 45)).getImage());
-            doubleFastForwardTijdIcon = new ImageIcon(Objects.requireNonNull(laadIcon("doubleFastForward.png", 65, 45)).getImage());
+            normaleTijdIcon = new ImageIcon(Objects.requireNonNull(laadIcon("play.png", 45)).getImage());
+            fastForwardTijdIcon = new ImageIcon(Objects.requireNonNull(laadIcon("fastForward.png", 55)).getImage());
+            doubleFastForwardTijdIcon = new ImageIcon(Objects.requireNonNull(laadIcon("doubleFastForward.png", 65)).getImage());
         }
 
         normaleTijd.setIcon(normaleTijdIcon);

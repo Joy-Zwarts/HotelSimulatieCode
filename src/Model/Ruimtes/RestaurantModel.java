@@ -4,7 +4,7 @@ import Model.Layout.Locatie;
 
 public class RestaurantModel extends RuimteModel {
     // attributen
-    private final long capacity;
+    private long capacity;
     private final String id;
     private static int counter = 0;
 
@@ -23,8 +23,8 @@ public class RestaurantModel extends RuimteModel {
         return id;
     }
 
-    public void setCapacity(long capacity) {
-        capacity = capacity;
+    public void setCapacity(long cap) {
+        this.capacity = cap;
     }
 
     public long getCapacity() {

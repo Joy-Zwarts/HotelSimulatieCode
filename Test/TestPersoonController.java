@@ -18,7 +18,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class TestPersoonController {
 
     private GastController gastController;
-    private LayoutController layoutController;
     private Locatie startLoc;
 
     @BeforeEach
@@ -28,7 +27,7 @@ public class TestPersoonController {
         LayoutView view = new LayoutView(null, null);
         view.setGridBreedte(10);
         view.setGridLengte(10);
-        layoutController = new LayoutController(new LayoutModel(), view, new HotelSimulatieView(null));
+        LayoutController layoutController = new LayoutController(new LayoutModel(), view, new HotelSimulatieView(null));
 
         gastController.onLayoutGeladen(layoutController);
         startLoc = new Locatie(5, 9);

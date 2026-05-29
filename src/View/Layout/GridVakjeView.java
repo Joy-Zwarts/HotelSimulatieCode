@@ -35,7 +35,7 @@ public class GridVakjeView {
         gastenContainer.setOpaque(false);
 
         gastenContainer.setLayout(new FlowLayout(FlowLayout.CENTER, 1, 0));
-        guestPanel.add(gastenContainer, BorderLayout.SOUTH);;
+        guestPanel.add(gastenContainer, BorderLayout.SOUTH);
 
         // voeg ze toe aan de layeredPane
         layeredPane.add(backgroundPanel, Integer.valueOf(0));

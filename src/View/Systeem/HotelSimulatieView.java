@@ -12,7 +12,6 @@ public class HotelSimulatieView extends JFrame{
 
     private JPanel middlePanel;
     private JPanel legendaPanel;
-    private JPanel layoutPanel;
     private JScrollPane layoutScrollPane;
     private JPanel rightPanel;
     private JPanel topbar;
@@ -25,7 +24,7 @@ public class HotelSimulatieView extends JFrame{
     private JButton stopSimulationButton;
     private JButton settingsButton;
     private final DarkModeModel darkMode;
-    private EindeSimulatieView eindeOverlay;
+    private final EindeSimulatieView eindeOverlay;
 
     // constructor
     public HotelSimulatieView(DarkModeModel darkMode) {
@@ -120,7 +119,7 @@ public class HotelSimulatieView extends JFrame{
 
     // maak panel aan voor de layout in het midden
     private void initLayoutPanel() {
-        layoutPanel = new JPanel(new BorderLayout());
+        JPanel layoutPanel = new JPanel(new BorderLayout());
         layoutPanel.putClientProperty("noTheme", true);
         layoutPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         setBackground(UIManager.getColor("Panel.background"));
@@ -145,7 +144,7 @@ public class HotelSimulatieView extends JFrame{
         setBackground(UIManager.getColor("Panel.background"));
         legendaPanel.setPreferredSize(new Dimension(960, 95));
 
-        JLabel legendaLabel = new JLabel(legenda);
+        JLabel legendaLabel = new JLabel();
 
         legendaPanel.add(legendaLabel);
         middlePanel.add(legendaPanel, BorderLayout.SOUTH);

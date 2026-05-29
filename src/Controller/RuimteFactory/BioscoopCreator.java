@@ -10,6 +10,6 @@ public class BioscoopCreator extends RuimteFactory {
     // maakt een nieuwe cinema aan gebaseerd op de meegekregen data
     @Override
     public RuimteModel createRuimte(Locatie position, String dimension, long capacity, String classification) {
-        return new BioscoopModel(KamerType.CINEMA, position, dimension, 20, "C");
+        return new BioscoopModel(KamerType.CINEMA, position, dimension, "C");
     }
 }
