@@ -129,4 +129,20 @@ public class LayoutModel {
         this.vakBreedte = dynamischeBreedte;
         this.vakHoogte = dynamischeHoogte;
     }
+
+    public RuimteModel getRuimteBijLocatie(Locatie locatie) {
+        for (RuimteModel ruimte : ruimtes) {
+            if (ruimte.getPosition().equals(locatie)) {
+                return ruimte;
+            }
+        }
+
+        for (RuimteModel ruimte : verplichteElementen) {
+            if (ruimte.getPosition().equals(locatie)) {
+                return ruimte;
+            }
+        }
+
+        return null;
+    }
 }

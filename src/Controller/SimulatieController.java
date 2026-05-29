@@ -80,8 +80,6 @@ public class SimulatieController implements reset {
 
         eventHandler.setEventListenerFood(gastController);
 
-        eventHandler.setEventListenerFood(restaurantController);
-
         eventHandler.setEventListenerCinema(gastController);
 
         eventHandler.setEventListenerFitness(gastController);
@@ -114,6 +112,8 @@ public class SimulatieController implements reset {
 
         layoutLoader.setNewLayoutListener(schoonmakerController);
 
+        layoutLoader.setNewLayoutListener(restaurantController);
+
         layoutLoader.setNewRoomListener(receptieController);
 
         gastController.setNewGuestListener(kamerAssign);
@@ -145,6 +145,8 @@ public class SimulatieController implements reset {
         settingsController.addListener(bioscoopController);
 
         settingsController.addListener(schoonmakerController);
+
+        settingsController.addListener(restaurantController);
 
         darkController.verbindExtraSchermen(settingsController.getSettingsFrame(), overzichtView);
 
