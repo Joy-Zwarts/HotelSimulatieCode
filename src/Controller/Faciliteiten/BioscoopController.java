@@ -7,21 +7,37 @@ import Controller.Timer.WachtTimer;
 import Model.Layout.Locatie;
 import Model.Personen.Activiteit;
 import Model.Personen.GastModel;
+import View.Systeem.TijdsDuur;
+import View.Systeem.settingsListener;
 import hotelevents.HotelEvent;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
-public class BioscoopController implements cinemaEvent, NewGast {
+public class BioscoopController implements cinemaEvent, NewGast, settingsListener {
     private final ArrayList<bioscoopOver> listeners;
     private final Random rand = new Random();
     private final ArrayList<Integer> gastenInBios;
     private final WachtTimer  wachtTimer;
+    private final HashMap<TijdsDuur, Integer> maxTijd;
+    private final HashMap<TijdsDuur, Integer> minTijd;
+    private TijdsDuur filmDuur = TijdsDuur.NORMAAL;
 
     public BioscoopController(WachtTimer timer) {
         this.listeners = new ArrayList<>();
         this.gastenInBios = new ArrayList<>();
         this.wachtTimer = timer;
+        this.maxTijd = new HashMap<>();
+        this.minTijd = new HashMap<>();
+
+        minTijd.put(TijdsDuur.LANG, 25);
+        minTijd.put(TijdsDuur.NORMAAL, 15);
+        minTijd.put(TijdsDuur.KORT, 5);
+
+        maxTijd.put(TijdsDuur.LANG, 35);
+        maxTijd.put(TijdsDuur.NORMAAL, 25);
+        maxTijd.put(TijdsDuur.KORT, 15);
     }
 
     // voeg gast toe aan lijst van gasten in de gym
@@ -33,10 +49,9 @@ public class BioscoopController implements cinemaEvent, NewGast {
     // kies een random tijd voor de film en start de timer
     @Override
     public void startCinemaEvent(HotelEvent hotelEvent) {
-        int verblijfTijd = rand.nextInt(15, 30);
+        int verblijfTijd = rand.nextInt(minTijd.get(filmDuur), maxTijd.get(filmDuur));
 
         // De bioscoop heeft één centrale timer voor de film
-        //noinspection Convert2MethodRef
         wachtTimer.startTimer("CINEMA-FILM", () -> stuurGastenWeg(), verblijfTijd);
 
         System.out.println("De film is gestart! Duur: " + verblijfTijd + " ticks.");
@@ -84,6 +99,36 @@ public class BioscoopController implements cinemaEvent, NewGast {
 
     @Override
     public void onGastGaatWegUitKamer(GastModel gast, Locatie oudeLocatie) {
+
+    }
+
+    @Override
+    public void schoonmaakTijdVeranderd(TijdsDuur tijdsDuur) {
+
+    }
+
+    @Override
+    public void filmDuurVeranderd(TijdsDuur tijdsDuur) {
+        this.filmDuur = tijdsDuur;
+    }
+
+    @Override
+    public void aantalSchoonmakersVeranderd(int aantalSchoonmakers) {
+
+    }
+
+    @Override
+    public void restaurantCapaciteitVeranderd(int restaurantCapaciteit) {
+
+    }
+
+    @Override
+    public void trapLoopDuurVeranderd(int trapLoopDuur) {
+
+    }
+
+    @Override
+    public void gastMaxWachttijdVeranderd(int gastMaxWachttijd) {
 
     }
 }

@@ -142,6 +142,8 @@ public class SimulatieController implements reset {
 
         SettingsController settingsController = new SettingsController(view, timeManagementPanel, darkController);
 
+        settingsController.addListener(bioscoopController);
+
         darkController.verbindExtraSchermen(settingsController.getSettingsFrame(), overzichtView);
 
         darkController.applyTheme();
