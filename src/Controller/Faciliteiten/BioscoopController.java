@@ -33,11 +33,11 @@ public class BioscoopController implements cinemaEvent, NewGast, settingsListene
 
         minTijd.put(TijdsDuur.LANG, 25);
         minTijd.put(TijdsDuur.NORMAAL, 15);
-        minTijd.put(TijdsDuur.KORT, 5);
+        minTijd.put(TijdsDuur.KORT, 8);
 
         maxTijd.put(TijdsDuur.LANG, 35);
         maxTijd.put(TijdsDuur.NORMAAL, 25);
-        maxTijd.put(TijdsDuur.KORT, 15);
+        maxTijd.put(TijdsDuur.KORT, 17);
     }
 
     // voeg gast toe aan lijst van gasten in de gym

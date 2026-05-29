@@ -14,12 +14,14 @@ import Controller.PersoonFactory.SchoonmakerCreator;
 import Model.Personen.TypePersoon;
 import Model.Ruimtes.KamerModel;
 import View.Systeem.OverzichtView;
+import View.Systeem.TijdsDuur;
+import View.Systeem.settingsListener;
 import hotelevents.HotelEvent;
 
 import javax.swing.SwingUtilities;
 import java.util.*;
 
-public class SchoonmakerController extends PersoonController implements cleaningEmergencyEvent, checkOutEvent, onTimeChange, reset {
+public class SchoonmakerController extends PersoonController implements cleaningEmergencyEvent, checkOutEvent, onTimeChange, reset, settingsListener {
 
     private final SchoonmakerCreator factory;
     private final ArrayList<NewSchoonmaker> listeners;
@@ -31,6 +33,11 @@ public class SchoonmakerController extends PersoonController implements cleaning
     private final HashMap<Integer, Queue<KamerModel>> taakWachtrijen;
     private final HashMap<Integer, KamerModel> actieveKlussen;
     private final WachtTimer wachtTimer;
+    private final HashMap<TijdsDuur, Integer> maxTijdEmergency;
+    private final HashMap<TijdsDuur, Integer> minTijdEmergency;
+    private final HashMap<TijdsDuur, Integer> maxTijdCheckout;
+    private final HashMap<TijdsDuur, Integer> minTijdCheckout;
+    private TijdsDuur cleanDuur = TijdsDuur.NORMAAL;
 
     public SchoonmakerController(ReceptieController rec, OverzichtView overzichtView, WachtTimer wachtTimer) {
         super();
@@ -41,6 +48,28 @@ public class SchoonmakerController extends PersoonController implements cleaning
         this.taakWachtrijen = new HashMap<>();
         this.actieveKlussen = new HashMap<>();
         this.wachtTimer = wachtTimer;
+
+        this.maxTijdEmergency = new HashMap<>();
+        this.minTijdEmergency = new HashMap<>();
+
+        minTijdEmergency.put(TijdsDuur.LANG, 17);
+        minTijdEmergency.put(TijdsDuur.NORMAAL, 10);
+        minTijdEmergency.put(TijdsDuur.KORT, 7);
+
+        maxTijdEmergency.put(TijdsDuur.LANG, 27);
+        maxTijdEmergency.put(TijdsDuur.NORMAAL, 16);
+        maxTijdEmergency.put(TijdsDuur.KORT, 11);
+
+        this.maxTijdCheckout = new HashMap<>();
+        this.minTijdCheckout = new HashMap<>();
+
+        minTijdCheckout.put(TijdsDuur.LANG, 9);
+        minTijdCheckout.put(TijdsDuur.NORMAAL, 5);
+        minTijdCheckout.put(TijdsDuur.KORT, 3);
+
+        maxTijdCheckout.put(TijdsDuur.LANG, 14);
+        maxTijdCheckout.put(TijdsDuur.NORMAAL, 8);
+        maxTijdCheckout.put(TijdsDuur.KORT, 6);
     }
 
     // plaats schoonmakers zodra de layout geladen is
@@ -79,11 +108,11 @@ public class SchoonmakerController extends PersoonController implements cleaning
         // bepaal random tijd
         int benodigdeTijd;
         if (kamer.getDimensionH() == 1 && kamer.getDimensionW() == 1){
-            benodigdeTijd = rand.nextInt(6, 10);
+            benodigdeTijd = rand.nextInt(((int)(minTijdEmergency.get(cleanDuur) * 0.6)), ((int)(maxTijdEmergency.get(cleanDuur) * 0.6)));
         } else if (kamer.getDimensionH() == 2 && kamer.getDimensionW() == 2){
-            benodigdeTijd = rand.nextInt(10, 16);
+            benodigdeTijd = rand.nextInt(minTijdEmergency.get(cleanDuur), maxTijdEmergency.get(cleanDuur));
         } else {
-            benodigdeTijd = rand.nextInt(16, 24);
+            benodigdeTijd = rand.nextInt(((int)(minTijdEmergency.get(cleanDuur) * 1.6)), ((int)(maxTijdEmergency.get(cleanDuur) * 1.6)));
         }
 
         verwerkNieuweTaak(gekozen, kamer, benodigdeTijd);
@@ -113,11 +142,11 @@ public class SchoonmakerController extends PersoonController implements cleaning
         // bereken random tijd
         int benodigdeTijd;
         if (kamer.getDimensionH() == 1 && kamer.getDimensionW() == 1) {
-            benodigdeTijd = rand.nextInt(3, 5);
+            benodigdeTijd = rand.nextInt(((int)(minTijdCheckout.get(cleanDuur) * 0.6)), ((int)(minTijdCheckout.get(cleanDuur) * 0.6)));
         } else if (kamer.getDimensionH() == 2 && kamer.getDimensionW() == 2) {
-            benodigdeTijd = rand.nextInt(5, 8);
+            benodigdeTijd = rand.nextInt(minTijdCheckout.get(cleanDuur), maxTijdCheckout.get(cleanDuur));
         } else {
-            benodigdeTijd = rand.nextInt(8, 12);
+            benodigdeTijd = rand.nextInt(((int)(minTijdCheckout.get(cleanDuur) * 1.6)), ((int)(minTijdCheckout.get(cleanDuur) * 1.6)));
         }
 
         verwerkNieuweTaak(gekozen, kamer, benodigdeTijd);
@@ -297,5 +326,35 @@ public class SchoonmakerController extends PersoonController implements cleaning
         }
 
         updateOverzichtView();
+    }
+
+    @Override
+    public void schoonmaakTijdVeranderd(TijdsDuur tijdsDuur) {
+        this.cleanDuur = tijdsDuur;
+    }
+
+    @Override
+    public void filmDuurVeranderd(TijdsDuur tijdsDuur) {
+
+    }
+
+    @Override
+    public void aantalSchoonmakersVeranderd(int aantalSchoonmakers) {
+
+    }
+
+    @Override
+    public void restaurantCapaciteitVeranderd(int restaurantCapaciteit) {
+
+    }
+
+    @Override
+    public void trapLoopDuurVeranderd(int trapLoopDuur) {
+
+    }
+
+    @Override
+    public void gastMaxWachttijdVeranderd(int gastMaxWachttijd) {
+
     }
 }
