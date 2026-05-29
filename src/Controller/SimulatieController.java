@@ -99,7 +99,7 @@ public class SimulatieController implements reset {
 
         bioscoopController.addlisteners(gastController);
 
-        restaurantController.addlisteners(gastController);
+        restaurantController.addListeners(gastController);
 
         fitnessController.addlisteners(gastController);
 

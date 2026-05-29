@@ -1,8 +1,13 @@
 package Model.Layout;
 
 import Controller.Layout.GridVakjeController;
+import Controller.RuimteFactory.LiftCreator;
+import Controller.RuimteFactory.LobbyCreator;
+import Controller.RuimteFactory.SchachtCreator;
+import Controller.RuimteFactory.TrappenhuisCreator;
 import Model.Ruimtes.*;
 
+import javax.xml.stream.Location;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,11 +22,21 @@ public class LayoutModel {
     private int vakBreedte = 118;
     private int vakHoogte = 59;
 
+    private final LiftCreator liftCreator;
+    private final SchachtCreator schachtCreator;
+    private final TrappenhuisCreator trappenhuisCreator;
+    private final LobbyCreator lobbyCreator;
+
     //constructor
     public LayoutModel() {
         ruimtes = new ArrayList<>();
         verplichteElementen = new ArrayList<>();
         grid = new HashMap<>();
+
+        this.liftCreator = new LiftCreator();
+        this.schachtCreator = new SchachtCreator();
+        this.trappenhuisCreator = new TrappenhuisCreator();
+        this.lobbyCreator = new LobbyCreator();
     }
 
     // voeg kamer toe aan lijst van kamers
@@ -49,7 +64,6 @@ public class LayoutModel {
         // trappenhuis
         addKamerBuitenJson(KamerType.TRAPPEN, new Locatie(gridBreedte, 1), "1," + gridLengte, gridLengte);
 
-
         // lobby
         int lobbyBreedte = gridBreedte - 2;
 
@@ -64,16 +78,27 @@ public class LayoutModel {
     public void addKamerBuitenJson(KamerType kamerType, Locatie position, String dimension, int gridLengte) {
         switch (kamerType) {
             case KamerType.LIFT:
-                verplichteElementen.add(new LiftModel(kamerType, position, dimension, (gridLengte + 1) / 2, true));
+                // gebruik de liftCreator
+                RuimteModel lift = liftCreator.createRuimte(position, dimension, 0, null);
+                verplichteElementen.add(lift);
                 break;
+
             case KamerType.SCHACHT:
-                verplichteElementen.add(new SchachtModel(kamerType, position, dimension));
+                // gebruik de schachtCreator
+                RuimteModel schacht = schachtCreator.createRuimte(position, dimension, 0, null);
+                verplichteElementen.add(schacht);
                 break;
+
             case KamerType.TRAPPEN:
-                verplichteElementen.add(new TrappenhuisModel(kamerType, position, dimension));
+                // gebruik de trappenhuisCreator
+                RuimteModel trap = trappenhuisCreator.createRuimte(position, dimension, 0, null);
+                verplichteElementen.add(trap);
                 break;
+
             case KamerType.LOBBY:
-                verplichteElementen.add(new LobbyModel(kamerType, position, dimension));
+                // gebruik de lobbyCreator
+                RuimteModel lobby = lobbyCreator.createRuimte(position, dimension, 0, null);
+                verplichteElementen.add(lobby);
                 break;
         }
     }

@@ -20,7 +20,7 @@ public class RestaurantController implements needFoodEvent, NewGast {
     public final WachtTimer wachtTimer;
     public ArrayList<Integer> teVerwijderen;
 
-    public void addlisteners(restaurantOver listener) {
+    public void addListeners(restaurantOver listener) {
         listeners.add(listener);
     }
 
