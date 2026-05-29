@@ -99,20 +99,47 @@ public class SchoonmakerController extends PersoonController implements cleaning
     // maak de kamer van een gast met een cleaning emergency schoon
     @Override
     public void cleaningEmergency(HotelEvent hotelEvent) {
-        // get de kamer
         KamerModel kamer = receptieController.getGast(hotelEvent.getGuestId()).getKamer();
         if (kamer == null) return;
-        // kies schoonmaker
+
         SchoonmakerModel gekozen = kiesSchoonmaker(kamer);
 
-        // bepaal random tijd
+        int min = minTijdEmergency.get(cleanDuur);
+        int max = maxTijdEmergency.get(cleanDuur);
+
         int benodigdeTijd;
         if (kamer.getDimensionH() == 1 && kamer.getDimensionW() == 1){
-            benodigdeTijd = rand.nextInt(((int)(minTijdEmergency.get(cleanDuur) * 0.6)), ((int)(maxTijdEmergency.get(cleanDuur) * 0.6)));
+            int berekendMin = (int)(min * 0.6);
+            int berekendMax = Math.max(berekendMin + 1, (int)(max * 0.6));
+            benodigdeTijd = rand.nextInt(berekendMin, berekendMax);
         } else if (kamer.getDimensionH() == 2 && kamer.getDimensionW() == 2){
-            benodigdeTijd = rand.nextInt(minTijdEmergency.get(cleanDuur), maxTijdEmergency.get(cleanDuur));
+            benodigdeTijd = rand.nextInt(min, max);
         } else {
-            benodigdeTijd = rand.nextInt(((int)(minTijdEmergency.get(cleanDuur) * 1.6)), ((int)(maxTijdEmergency.get(cleanDuur) * 1.6)));
+            benodigdeTijd = rand.nextInt((int)(min * 1.6), (int)(max * 1.6));
+        }
+
+        verwerkNieuweTaak(gekozen, kamer, benodigdeTijd);
+    }
+
+    @Override
+    public void checkOut(HotelEvent hotelEvent) {
+        KamerModel kamer = receptieController.getGast(hotelEvent.getGuestId()).getKamer();
+        if (kamer == null) return;
+
+        SchoonmakerModel gekozen = kiesSchoonmaker(kamer);
+
+        int min = minTijdCheckout.get(cleanDuur);
+        int max = maxTijdCheckout.get(cleanDuur);
+
+        int benodigdeTijd;
+        if (kamer.getDimensionH() == 1 && kamer.getDimensionW() == 1) {
+            int berekendMin = (int)(min * 0.6);
+            int berekendMax = Math.max(berekendMin + 1, (int)(max * 0.6));
+            benodigdeTijd = rand.nextInt(berekendMin, berekendMax);
+        } else if (kamer.getDimensionH() == 2 && kamer.getDimensionW() == 2) {
+            benodigdeTijd = rand.nextInt(min, max);
+        } else {
+            benodigdeTijd = rand.nextInt((int)(min * 1.6), (int)(max * 1.6));
         }
 
         verwerkNieuweTaak(gekozen, kamer, benodigdeTijd);
@@ -128,28 +155,6 @@ public class SchoonmakerController extends PersoonController implements cleaning
         } else {
             return schoonmaker2;
         }
-    }
-
-    // bij een checkout, maak die kamer schoon
-    @Override
-    public void checkOut(HotelEvent hotelEvent) {
-        // get de kamer van de gast
-        KamerModel kamer = receptieController.getGast(hotelEvent.getGuestId()).getKamer();
-        if (kamer == null) return;
-        // kies schoonmaker voor de klus
-        SchoonmakerModel gekozen = kiesSchoonmaker(kamer);
-
-        // bereken random tijd
-        int benodigdeTijd;
-        if (kamer.getDimensionH() == 1 && kamer.getDimensionW() == 1) {
-            benodigdeTijd = rand.nextInt(((int)(minTijdCheckout.get(cleanDuur) * 0.6)), ((int)(minTijdCheckout.get(cleanDuur) * 0.6)));
-        } else if (kamer.getDimensionH() == 2 && kamer.getDimensionW() == 2) {
-            benodigdeTijd = rand.nextInt(minTijdCheckout.get(cleanDuur), maxTijdCheckout.get(cleanDuur));
-        } else {
-            benodigdeTijd = rand.nextInt(((int)(minTijdCheckout.get(cleanDuur) * 1.6)), ((int)(minTijdCheckout.get(cleanDuur) * 1.6)));
-        }
-
-        verwerkNieuweTaak(gekozen, kamer, benodigdeTijd);
     }
 
     // check of de schoonmaker al bezig is met een taak als er een nieuwe taak binnen komt
