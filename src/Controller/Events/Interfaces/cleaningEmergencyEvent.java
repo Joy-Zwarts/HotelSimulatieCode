@@ -3,5 +3,5 @@ package Controller.Events.Interfaces;
 import hotelevents.HotelEvent;
 
 public interface cleaningEmergencyEvent {
-    void cleaningEmergencyEvent(HotelEvent hotelEvent);
+    void cleaningEmergency(HotelEvent hotelEvent);
 }

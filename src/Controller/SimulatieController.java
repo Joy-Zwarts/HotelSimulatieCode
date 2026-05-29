@@ -9,7 +9,6 @@ import Controller.PersoonManagement.*;
 import Controller.Systeem.*;
 import Controller.Systeem.Intefaces.reset;
 import Controller.Timer.WachtTimer;
-import Model.Layout.LayoutModel;
 import Model.Systeem.DarkModeModel;
 import View.Systeem.HotelSimulatieView;
 import View.Systeem.OverzichtView;
@@ -39,8 +38,6 @@ public class SimulatieController implements reset {
         HotelEventManager manager = new HotelEventManager(false);
 
         EventHandler eventHandler = new EventHandler(manager);
-
-        LayoutModel model = null;
 
         PauseController pauseController = new PauseController(manager, null);
 
@@ -106,7 +103,7 @@ public class SimulatieController implements reset {
 
         fitnessController.addlisteners(gastController);
 
-        LayoutLoader layoutLoader = new LayoutLoader(manager, view, model, pauseController, view);
+        LayoutLoader layoutLoader = new LayoutLoader(manager, view, null, pauseController);
 
         PlaatsHelper plaatsHelper = new PlaatsHelper(null);
 

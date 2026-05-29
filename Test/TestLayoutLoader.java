@@ -28,12 +28,12 @@ class TestLayoutLoader {
         manager = new HotelEventManager();
         view = new HotelSimulatieView(new DarkModeModel());
         model = new LayoutModel();
-        layoutLoader = new LayoutLoader(manager, view, model, null, view);
+        layoutLoader = new LayoutLoader(manager, view, model, null);
     }
 
     @Test
     void testLoadLayoutSuccess() {
-        LayoutLoader spyLoader = new LayoutLoader(manager, view, model, null, view) {
+        LayoutLoader spyLoader = new LayoutLoader(manager, view, model, null) {
             @Override
             protected File getFileFromPicker() {
                 File tempFile = new File("test_layout.json");
@@ -70,7 +70,7 @@ class TestLayoutLoader {
     void testLayoutGeladenListener() {
         AtomicInteger callCount = new AtomicInteger(0);
 
-        LayoutLoader spyLoader = new LayoutLoader(manager, view, model, null, view) {
+        LayoutLoader spyLoader = new LayoutLoader(manager, view, model, null) {
             @Override
             protected File getFileFromPicker() {
                 File tempFile = new File("test_layout_listener.json");
@@ -94,7 +94,7 @@ class TestLayoutLoader {
     @Test
     void testLoadLayoutWithException() {
         // We maken een Spy die een bestand geeft dat niet bestaat om de catch-block te testen
-        LayoutLoader spyLoader = new LayoutLoader(manager, view, model, null, view) {
+        LayoutLoader spyLoader = new LayoutLoader(manager, view, model, null) {
             @Override
             protected File getFileFromPicker() {
                 return new File("niet_bestaand_bestand.json");

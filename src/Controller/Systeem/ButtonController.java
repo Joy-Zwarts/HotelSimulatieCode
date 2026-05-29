@@ -23,7 +23,7 @@ public class ButtonController implements ActionListener {
     private final LayoutLoader layoutLoader;
     private LayoutModel model;
     private final SettingsController settingsController;
-    private ArrayList<reset> listeners;
+    private final ArrayList<reset> listeners;
 
     // constructor
 

@@ -11,7 +11,6 @@ public class GridVakjeView {
     private final JLayeredPane layeredPane;
     private final JPanel backgroundPanel; // back Layer
     private final JPanel gastenContainer; // de container waar gasten in komen
-    private JLabel aantalMensen;
 
     // constructor
     public GridVakjeView(int x, int y, int breedte, int hoogte) {
@@ -238,9 +237,5 @@ public class GridVakjeView {
 
     public JComponent getVakjePanel() {
         return layeredPane;
-    }
-
-    public JLabel getPersonenLabel() {
-        return aantalMensen;
     }
 }

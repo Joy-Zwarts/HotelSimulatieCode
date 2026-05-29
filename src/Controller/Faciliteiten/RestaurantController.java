@@ -31,7 +31,7 @@ public class RestaurantController implements needFoodEvent, NewGast {
 
     // voeg gast toe aan lijst van gasten met een need food event
     @Override
-    public void needFoodEvent(HotelEvent hotelEvent) {
+    public void needFood(HotelEvent hotelEvent) {
         gastenInRestaurant.add(hotelEvent.getGuestId());
     }
 

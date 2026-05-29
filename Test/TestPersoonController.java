@@ -46,7 +46,7 @@ public class TestPersoonController {
         });
 
         HotelEvent event = new HotelEvent(1, HotelEventType.CHECK_IN, 1, 2); // Gast 1, 2 sterren
-        gastController.checkInEvent(event);
+        gastController.checkIn(event);
 
         Assertions.assertTrue(listenerCalled.get(), "Listener moet aangeroepen worden bij check-in");
     }
@@ -76,11 +76,11 @@ public class TestPersoonController {
 
     @Test
     public void testEventRoutes() {
-        gastController.checkInEvent(new HotelEvent(1, HotelEventType.CHECK_IN, 1, 1));
-        gastController.needFoodEvent(new HotelEvent(1, HotelEventType.NEED_FOOD, 1, 0));
+        gastController.checkIn(new HotelEvent(1, HotelEventType.CHECK_IN, 1, 1));
+        gastController.needFood(new HotelEvent(1, HotelEventType.NEED_FOOD, 1, 0));
         gastController.goToFitnessEvent(new HotelEvent(1, HotelEventType.GOTO_FITNESS, 1, 0));
         gastController.goToCinemaEvent(new HotelEvent(1, HotelEventType.GOTO_CINEMA, 1, 0));
-        gastController.checkOutEvent(new HotelEvent(1, HotelEventType.CHECK_OUT, 1, 0));
+        gastController.checkOut(new HotelEvent(1, HotelEventType.CHECK_OUT, 1, 0));
     }
 
     @Test

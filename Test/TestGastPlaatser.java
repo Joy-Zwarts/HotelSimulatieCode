@@ -2,6 +2,7 @@ import Controller.PersoonManagement.PlaatsHelper;
 import Controller.Systeem.PauseController;
 import Model.Layout.Locatie;
 import Model.Personen.GastModel;
+import Model.Personen.TypePersoon;
 import Model.Ruimtes.KamerClassificatie;
 import Model.Ruimtes.KamerModel;
 import Model.Ruimtes.KamerType;
@@ -54,7 +55,7 @@ public class TestGastPlaatser { // Klasse even op public gezet
         this.testRuimte = testKamer; // RuimteModel veld vullen
 
         // 3. GridVakjeModel & View (4 ints: x, y, w, h)
-        GridVakjeModel vakModel = new GridVakjeModel(testLocatie.getX(), testLocatie.getY(), 50, 50);
+        GridVakjeModel vakModel = new GridVakjeModel(testLocatie.getX(), testLocatie.getY());
         vakModel.setRuimte(testKamer);
 
         GridVakjeView vakView = new GridVakjeView(testLocatie.getX(), testLocatie.getY(), 50, 50);
@@ -73,6 +74,7 @@ public class TestGastPlaatser { // Klasse even op public gezet
                 1,
                 testLocatie,
                 new Locatie(1, 1),
+                TypePersoon.GAST,
                 sterren,
                 testKamer);
     }
@@ -115,7 +117,7 @@ public class TestGastPlaatser { // Klasse even op public gezet
     public void testOnGastVerplaatst_SuccesvolleVerplaatsing() {
         // Setup: Maak een tweede locatie en vakje aan
         Locatie nieuweLocatie = new Locatie(2, 2);
-        GridVakjeModel nieuwVakModel = new GridVakjeModel(2, 2, 50, 50);
+        GridVakjeModel nieuwVakModel = new GridVakjeModel(2, 2);
         GridVakjeView nieuwVakView = new GridVakjeView(2, 2, 50, 50);
         GridVakjeController nieuwVakController = new GridVakjeController(nieuwVakModel, nieuwVakView, pauseController);
 
@@ -181,7 +183,7 @@ public class TestGastPlaatser { // Klasse even op public gezet
     @Test
     void testOnGastVertrokken_MetNullLocatie_CrashtNiet() {
         // Setup: Maak een gast zonder locatie
-        GastModel spookGast = new GastModel(99, null, null, KamerClassificatie.eenSter, (KamerModel) testRuimte);
+        GastModel spookGast = new GastModel(99, null, null, TypePersoon.GAST, KamerClassificatie.eenSter, (KamerModel) testRuimte);
 
         // Actie & Assert
         assertDoesNotThrow(() -> gastPlaatser.onGastVertrokken(spookGast),

@@ -36,6 +36,7 @@ public class BioscoopController implements cinemaEvent, NewGast {
         int verblijfTijd = rand.nextInt(15, 30);
 
         // De bioscoop heeft één centrale timer voor de film
+        //noinspection Convert2MethodRef
         wachtTimer.startTimer("CINEMA-FILM", () -> stuurGastenWeg(), verblijfTijd);
 
         System.out.println("De film is gestart! Duur: " + verblijfTijd + " ticks.");

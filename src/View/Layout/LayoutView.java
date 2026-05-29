@@ -47,7 +47,7 @@ public class LayoutView {
         // loopt door de x en y uitgerekend van de grid en maak een nieuw gridvakje aan voor elke x en y
         for (int y = 0; y < gridLengte; y++) {
             for (int x = 0; x < gridBreedte; x++) {
-                GridVakjeController controller = new GridVakjeController(new GridVakjeModel(x, y, vakBreedte, vakHoogte), new GridVakjeView(x, y, vakBreedte, vakHoogte), pauseController);
+                GridVakjeController controller = new GridVakjeController(new GridVakjeModel(x, y), new GridVakjeView(x, y, vakBreedte, vakHoogte), pauseController);
 
                 // sla de cel op in de lijst van vakjes met de locatie als key
                 Locatie locatie = new Locatie(x, y);

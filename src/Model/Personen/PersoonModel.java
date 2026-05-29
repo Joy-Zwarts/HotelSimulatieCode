@@ -14,7 +14,7 @@ public class PersoonModel {
     private Locatie vorigeLocatie;
     private final Color kleur;
     private final JLabel persoonLabel;
-    private TypePersoon typePersoon;
+    private final TypePersoon typePersoon;
 
     public PersoonModel(int ID, Locatie locatie, Locatie targetLocatie, Color bolletjeKleur, TypePersoon typePersoon) {
         this.ID = ID;

@@ -34,7 +34,7 @@ public class BeweegHelper  {
         this.actieveMensen = new HashMap<>();
         this.listener = listener;
         // timer die per hte tick movement processed
-        this.bewegingsTimer = new Timer(hteSnelheid, e -> processMovement());
+        this.bewegingsTimer = new Timer(hteSnelheid, _ -> processMovement());
     }
 
     public void setOverzichtView(OverzichtView overzichtView) {

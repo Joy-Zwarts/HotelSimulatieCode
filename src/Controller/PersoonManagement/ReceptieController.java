@@ -9,7 +9,6 @@ import Model.Ruimtes.KamerModel;
 import Model.Ruimtes.RuimteModel;
 import View.Systeem.OverzichtView;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ReceptieController implements NewKamer, NewGast, reset {

@@ -21,7 +21,7 @@ public class WachtTimer implements noneEvent {
 
     // verlaagt alle timers en roept timerPing aan als de tijd om is
     @Override
-    public synchronized void noneEvent(HotelEvent event) {
+    public synchronized void HTETick(HotelEvent event) {
         ArrayList<String> gastenDieKlaarZijn = new ArrayList<>();
 
         // loop door alle persoon id's heen

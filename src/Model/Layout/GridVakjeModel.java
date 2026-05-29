@@ -9,18 +9,14 @@ public class GridVakjeModel {
     private final int x;
     private final int y;
     private RuimteModel ruimte;
-    private final int breedte;
-    private final int hoogte;
     private boolean linksboven = false;
     private boolean linksonder = false;
     private boolean rechtsboven = false;
 
     // constructor
-    public GridVakjeModel(int x, int y, int breedte, int hoogte) {
+    public GridVakjeModel(int x, int y) {
         this.x = x;
         this.y = y;
-        this.breedte = breedte;
-        this.hoogte = hoogte;
     }
 
     // getters & setters
@@ -37,12 +33,8 @@ public class GridVakjeModel {
         return y;
     }
 
-    public int getBreedte() {
-        return breedte;
-    }
-
-    public int getHoogte() {
-        return hoogte;
+    public int getX() {
+        return x;
     }
 
     public boolean islinksboven() {

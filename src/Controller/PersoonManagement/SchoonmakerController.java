@@ -69,7 +69,7 @@ public class SchoonmakerController extends PersoonController implements cleaning
 
     // maak de kamer van een gast met een cleaning emergency schoon
     @Override
-    public void cleaningEmergencyEvent(HotelEvent hotelEvent) {
+    public void cleaningEmergency(HotelEvent hotelEvent) {
         // get de kamer
         KamerModel kamer = receptieController.getGast(hotelEvent.getGuestId()).getKamer();
         if (kamer == null) return;
@@ -77,7 +77,7 @@ public class SchoonmakerController extends PersoonController implements cleaning
         SchoonmakerModel gekozen = kiesSchoonmaker(kamer);
 
         // bepaal random tijd
-        int benodigdeTijd = 0;
+        int benodigdeTijd;
         if (kamer.getDimensionH() == 1 && kamer.getDimensionW() == 1){
             benodigdeTijd = rand.nextInt(6, 10);
         } else if (kamer.getDimensionH() == 2 && kamer.getDimensionW() == 2){
@@ -103,7 +103,7 @@ public class SchoonmakerController extends PersoonController implements cleaning
 
     // bij een checkout, maak die kamer schoon
     @Override
-    public void checkOutEvent(HotelEvent hotelEvent) {
+    public void checkOut(HotelEvent hotelEvent) {
         // get de kamer van de gast
         KamerModel kamer = receptieController.getGast(hotelEvent.getGuestId()).getKamer();
         if (kamer == null) return;
@@ -111,7 +111,7 @@ public class SchoonmakerController extends PersoonController implements cleaning
         SchoonmakerModel gekozen = kiesSchoonmaker(kamer);
 
         // bereken random tijd
-        int benodigdeTijd = 0;
+        int benodigdeTijd;
         if (kamer.getDimensionH() == 1 && kamer.getDimensionW() == 1) {
             benodigdeTijd = rand.nextInt(3, 5);
         } else if (kamer.getDimensionH() == 2 && kamer.getDimensionW() == 2) {

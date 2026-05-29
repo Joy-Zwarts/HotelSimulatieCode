@@ -84,7 +84,7 @@ public class GastController extends PersoonController implements checkInEvent, c
 
     // bij een check in event, maak een nieuwe gast, laat de abonnees het weten en stuur hun naar hun kamer
     @Override
-    public void checkInEvent(HotelEvent hotelEvent) {
+    public void checkIn(HotelEvent hotelEvent) {
 
         // failsafe als de gast al bestaat
         if (actieveGasten.containsKey(hotelEvent.getGuestId())) {
@@ -111,7 +111,7 @@ public class GastController extends PersoonController implements checkInEvent, c
 
     // maakt een nieuwe route naar de uitgang
     @Override
-    public void checkOutEvent(HotelEvent hotelEvent) {
+    public void checkOut(HotelEvent hotelEvent) {
         GastModel gast = actieveGasten.get(hotelEvent.getGuestId());
 
         if (gast != null) {
@@ -130,7 +130,7 @@ public class GastController extends PersoonController implements checkInEvent, c
     }
 
     @Override
-    public void needFoodEvent(HotelEvent hotelEvent) {
+    public void needFood(HotelEvent hotelEvent) {
         GastModel gast = actieveGasten.get(hotelEvent.getGuestId());
 
         if (gast != null) {

@@ -39,14 +39,14 @@ public class TestEventHandler implements checkInEvent, checkOutEvent, cinemaEven
         Assertions.assertEquals(10, eventsCalledCount, "Niet alle event types hebben de listeners getriggerd");
     }
 
-    @Override public void checkInEvent(HotelEvent e) { eventsCalledCount++; }
-    @Override public void checkOutEvent(HotelEvent e) { eventsCalledCount++; }
-    @Override public void evacuateEvent(HotelEvent e) { eventsCalledCount++; }
-    @Override public void godzillaEvent(HotelEvent e) { eventsCalledCount++; }
-    @Override public void needFoodEvent(HotelEvent e) { eventsCalledCount++; }
+    @Override public void checkIn(HotelEvent e) { eventsCalledCount++; }
+    @Override public void checkOut(HotelEvent e) { eventsCalledCount++; }
+    @Override public void evacuate(HotelEvent e) { eventsCalledCount++; }
+    @Override public void godzilla(HotelEvent e) { eventsCalledCount++; }
+    @Override public void needFood(HotelEvent e) { eventsCalledCount++; }
     @Override public void goToCinemaEvent(HotelEvent e) { eventsCalledCount++; }
     @Override public void startCinemaEvent(HotelEvent e) { eventsCalledCount++; }
     @Override public void goToFitnessEvent(HotelEvent e) { eventsCalledCount++; }
-    @Override public void cleaningEmergencyEvent(HotelEvent e) { eventsCalledCount++; }
-    @Override public void noneEvent(HotelEvent e) { eventsCalledCount++; }
+    @Override public void cleaningEmergency(HotelEvent e) { eventsCalledCount++; }
+    @Override public void HTETick(HotelEvent e) { eventsCalledCount++; }
 }

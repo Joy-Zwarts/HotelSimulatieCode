@@ -1,4 +1,3 @@
-import Controller.Systeem.ButtonController;
 import Controller.Systeem.PauseController;
 import Controller.Systeem.SettingsController;
 import Controller.Layout.LayoutLoader;
@@ -11,8 +10,6 @@ import View.Systeem.TimeManagementPanel;
 import hotelevents.HotelEventManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.awt.event.ActionEvent;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -38,7 +35,7 @@ public class TestButtonController {
         simulatieController = new SimulatieController();
         pauseController = new PauseController(manager, view2);
         settingsController = new SettingsController(view, panel, darkModeModel);
-        layoutLoader = new LayoutLoader(manager, view, null, pauseController, view);
+        layoutLoader = new LayoutLoader(manager, view, null, pauseController);
     }
 
     @Test

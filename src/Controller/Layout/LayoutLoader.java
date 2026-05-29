@@ -31,7 +31,7 @@ public class LayoutLoader {
     private final ArrayList<LayoutGeladen> listeners;
 
     // constructor
-    public LayoutLoader(HotelEventManager manager, HotelSimulatieView view, LayoutModel model, PauseController pauseController, HotelSimulatieView simulatieView) {
+    public LayoutLoader(HotelEventManager manager, HotelSimulatieView view, LayoutModel model, PauseController pauseController) {
         this.manager = manager;
         this.view = view;
         this.model = model;
@@ -43,7 +43,6 @@ public class LayoutLoader {
     // maakt een nieuwe file picker klasse aan, krijgt daarvan een bestand en laad de layout daarvan en notified de listeners daarover
     public LayoutModel loadLayout() {
         try {
-            FilePicker picker = new FilePicker();
             File gekozenBestand = getFileFromPicker();
 
             if (gekozenBestand == null) {
