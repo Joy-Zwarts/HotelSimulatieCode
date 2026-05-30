@@ -39,26 +39,29 @@ public class GastController extends PersoonController implements checkInEvent, c
     }
 
     private void afhandelenAankomst(GastModel gast) {
+        // als de gast bij de uitgang is
         if (gast.getLocatie().equals(startLocatie)) {
             for (NewGast listener : listeners) {
                 listener.onGastVertrokken(gast);
             }
             actieveGasten.remove(gast.getID());
-            return; // Stoppen!
+            return;
         }
 
-        // Controleer of de gast op een restaurant-tegel staat, of bezig is met sport/film
-        if (gast.getActivity() == Activiteit.SPORTEN || gast.getActivity() == Activiteit.FILM ||
-                (layoutController.getModel().getRuimteBijLocatie(gast.getLocatie()) != null &&
-                        layoutController.getModel().getRuimteBijLocatie(gast.getLocatie()).getAreaType() == KamerType.RESTAURANT)) {
-
+        if ((layoutController.getModel().getRuimteBijLocatie(gast.getLocatie()).getAreaType().equals(KamerType.RESTAURANT)) ||
+                (layoutController.getModel().getRuimteBijLocatie(gast.getLocatie()).getAreaType().equals(KamerType.FITNESS)) ||
+                (layoutController.getModel().getRuimteBijLocatie(gast.getLocatie()).getAreaType().equals(KamerType.CINEMA)) ||
+                (layoutController.getModel().getRuimteBijLocatie(gast.getLocatie()).getAreaType().equals(KamerType.LIFT)) ||
+                (layoutController.getModel().getRuimteBijLocatie(gast.getLocatie()).getAreaType().equals(KamerType.SCHACHT)) ||
+                (layoutController.getModel().getRuimteBijLocatie(gast.getLocatie()).getAreaType().equals(KamerType.LOBBY)) ||
+                (layoutController.getModel().getRuimteBijLocatie(gast.getLocatie()).getAreaType().equals(KamerType.TRAPPEN))
+        ) {
             for (NewGast listener : listeners) {
                 listener.onGastAangekomenInKamer(gast, gast.getLocatie());
             }
-            return; // CRUCIAAL: Stop hier! Loop niet door naar de 'else' hotelkamer-logica!
+            return;
         }
 
-        // Dit wordt Alleen uitgevoerd als hij écht naar zijn hotelkamer liep
         gast.setActivity(Activiteit.IN_KAMER);
         gast.setVorigeLocatie(new Locatie(gast.getLocatie().getX(), gast.getLocatie().getY()));
 
@@ -264,8 +267,6 @@ public class GastController extends PersoonController implements checkInEvent, c
             beweegHelper.voegRouteToe(gast, pf);
 
             gast.setActivity(Activiteit.ONDERWEG);
-
-            System.out.println("GastController: Gast " + gastID + " is stil omgekeerd.");
         }
     }
 

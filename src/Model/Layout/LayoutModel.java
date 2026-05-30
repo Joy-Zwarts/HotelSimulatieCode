@@ -130,7 +130,8 @@ public class LayoutModel {
         this.vakHoogte = dynamischeHoogte;
     }
 
-    public RuimteModel getRuimteBijLocatie(Locatie locatie) {
+    public RuimteModel getRuimteBijLocatie(Locatie loc) {
+        Locatie locatie = new Locatie(loc.getX(), loc.getY()+1);
         for (RuimteModel ruimte : ruimtes) {
             if (ruimte.getPosition().equals(locatie)) {
                 return ruimte;
