@@ -1,6 +1,5 @@
 package Controller.Faciliteiten;
 
-import Controller.Events.Interfaces.needFoodEvent;
 import Controller.Faciliteiten.Interfaces.restaurantOver;
 import Controller.Layout.Intefaces.LayoutGeladen;
 import Controller.Layout.LayoutController;
@@ -14,18 +13,18 @@ import Model.Ruimtes.RestaurantModel;
 import Model.Ruimtes.RuimteModel;
 import View.Systeem.TijdsDuur;
 import Controller.Systeem.Interfaces.settingsListener;
-import hotelevents.HotelEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-public class RestaurantController implements needFoodEvent, NewGast, settingsListener, LayoutGeladen {
+public class RestaurantController implements NewGast, settingsListener, LayoutGeladen {
 
     private final ArrayList<restaurantOver> listeners = new ArrayList<>();
     private final Random rand = new Random();
     public final WachtTimer wachtTimer;
     public HashMap<String, RestaurantModel> restaurants = new HashMap<>();
+    public LayoutController layoutController;
 
     public void addListeners(restaurantOver listener) {
         listeners.add(listener);
@@ -35,13 +34,8 @@ public class RestaurantController implements needFoodEvent, NewGast, settingsLis
         this.wachtTimer = timer;
     }
 
-    @Override
-    public void needFood(HotelEvent hotelEvent) {
-        // Logica om gast naar restaurant te sturen (Pathfinding triggeren)
-    }
-
+    // als gasten klaar zijn met eten
     public void stuurGastWeg(int gastId, RestaurantModel restaurant) {
-        // Verwijder de gast uit het specifieke restaurant model
         restaurant.verwijderGast(gastId);
 
         for (restaurantOver listener : listeners) {
@@ -50,31 +44,41 @@ public class RestaurantController implements needFoodEvent, NewGast, settingsLis
         System.out.println("Gast " + gastId + " heeft het restaurant verlaten.");
     }
 
+    // als er geen plek is in het restaurant
+    public void gastGeweigerd(int gastId) {
+        for (restaurantOver listener : listeners) {
+            listener.gastGeweigerd(gastId);
+        }
+    }
+
+    // kijkt of er plek is in het restaurant, zo ja, dan mogen ze blijven eten, zo nee, worden ze weggestuurd
     @Override
     public void onGastAangekomenInKamer(GastModel gast, Locatie behaaldeLocatie) {
         int gastId = gast.getID();
 
-        // zoek het restaurant waar de gast zich nu bevindt
+        // welk restaurant is het
         for (RestaurantModel restaurant : restaurants.values()) {
-            if ((gast.getLocatie().getX() == (restaurant.getPosition().getX())) && (gast.getLocatie().getY() == (restaurant.getPosition().getY()-1))) {
+            if ((gast.getLocatie().getX() == (restaurant.getPosition().getX())) &&
+                    (gast.getLocatie().getY() == (restaurant.getPosition().getY() - 1))) {
 
-                // controleer  of er wel plek is
+                // als er nog plek is
                 if (!restaurant.isVol()) {
                     restaurant.voegGastToe(gastId);
 
+                    // bereken eettijd
                     int verblijfTijd = rand.nextInt(15, 31);
                     String uniekeID = gast.getTypePersoon().name() + "-" + gastId;
 
-                    // start de timer en geef het restaurant mee zodat we weten waar ze weggaan
+                    // start timer voor hun
                     wachtTimer.startTimer(uniekeID, () -> stuurGastWeg(gastId, restaurant), verblijfTijd);
 
                     System.out.println("Gast " + gastId + " eet in restaurant " + restaurant.getID() + " voor " + verblijfTijd + " ticks.");
                     gast.setActivity(Activiteit.ETEN);
                 } else {
                     System.out.println("Gast " + gastId + " wilde eten, maar restaurant " + restaurant.getID() + " is vol!");
-                    for (restaurantOver listener : listeners) {
-                        listener.gaWegUitRestaurant(gastId);
-                    }
+                    String uniekeWeigerID = "WEIGER-" + gast.getTypePersoon().name() + "-" + gastId;
+                    // start de timer zodat het swing safe is en roep de weiger-event aan
+                    wachtTimer.startTimer(uniekeWeigerID, () -> gastGeweigerd(gastId), 0);
                 }
                 break;
             }
@@ -89,9 +93,10 @@ public class RestaurantController implements needFoodEvent, NewGast, settingsLis
     }
 
     @Override
-    public void onLayoutGeladen(LayoutController layoutController) {
+    public void onLayoutGeladen(LayoutController controller) {
+        this.layoutController = controller;
         for (RuimteModel ruimte : layoutController.getModel().getRuimtes()) {
-            if (ruimte.getAreaType().equals(KamerType.RESTAURANT)){
+            if (ruimte.getAreaType().equals(KamerType.RESTAURANT)) {
                 RestaurantModel restaurant = (RestaurantModel) ruimte;
                 restaurants.put(restaurant.getID(), restaurant);
                 System.out.println("Restaurant " + restaurant.getID() + " succesvol gekoppeld aan de controller.");

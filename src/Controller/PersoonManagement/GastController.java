@@ -38,36 +38,34 @@ public class GastController extends PersoonController implements checkInEvent, c
         this.factory = new GastCreator();
     }
 
-    // check na het lopen of de gast naar de uitgang is gelopen of niet
     private void afhandelenAankomst(GastModel gast) {
         if (gast.getLocatie().equals(startLocatie)) {
             for (NewGast listener : listeners) {
                 listener.onGastVertrokken(gast);
             }
             actieveGasten.remove(gast.getID());
+            return; // Stoppen!
         }
-        // Als de gast aangekomen is bij een special ruimte (zoals het restaurant)
-        else if (layoutController.getModel().getRuimteBijLocatie(gast.getLocatie()) != null &&
-                (layoutController.getModel().getRuimteBijLocatie(gast.getLocatie()).getAreaType() == KamerType.RESTAURANT ||
-                        gast.getActivity() == Activiteit.SPORTEN ||
-                        gast.getActivity() == Activiteit.FILM)) {
 
-            // We informeren de faciliteit-controllers dat de gast er is
-            for (NewGast listener : listeners) {
-                listener.onGastAangekomenInKamer(gast, gast.getLocatie());
-            }
-        }
-        // Alleen als hij écht naar zijn hotelkamer liep
-        else {
-            gast.setActivity(Activiteit.IN_KAMER);
-            // Sla de hotelkamer op als vorige locatie voor wanneer hij straks weer weggaat!
-            gast.setVorigeLocatie(new Locatie(gast.getLocatie().getX(), gast.getLocatie().getY()));
+        // Controleer of de gast op een restaurant-tegel staat, of bezig is met sport/film
+        if (gast.getActivity() == Activiteit.SPORTEN || gast.getActivity() == Activiteit.FILM ||
+                (layoutController.getModel().getRuimteBijLocatie(gast.getLocatie()) != null &&
+                        layoutController.getModel().getRuimteBijLocatie(gast.getLocatie()).getAreaType() == KamerType.RESTAURANT)) {
 
             for (NewGast listener : listeners) {
                 listener.onGastAangekomenInKamer(gast, gast.getLocatie());
             }
-            System.out.println("Gast " + gast.getID() + " is aangekomen in hun hotelkamer.");
+            return; // CRUCIAAL: Stop hier! Loop niet door naar de 'else' hotelkamer-logica!
         }
+
+        // Dit wordt Alleen uitgevoerd als hij écht naar zijn hotelkamer liep
+        gast.setActivity(Activiteit.IN_KAMER);
+        gast.setVorigeLocatie(new Locatie(gast.getLocatie().getX(), gast.getLocatie().getY()));
+
+        for (NewGast listener : listeners) {
+            listener.onGastAangekomenInKamer(gast, gast.getLocatie());
+        }
+        System.out.println("Gast " + gast.getID() + " is aangekomen in hun hotelkamer.");
     }
 
     // zet een nieuwe listener als er een gast wordt aangemaakt
@@ -142,7 +140,7 @@ public class GastController extends PersoonController implements checkInEvent, c
                 PathFinder pf = new PathFinder(gast.getLocatie(), restaurantLocatie, layoutController);
                 beweegHelper.voegRouteToe(gast, pf);
 
-                // HERSTEL: Net als bij de gym en bioscoop zetten we hem op ONDERWEG tijdens het lopen
+                // FIX: Zet op ONDERWEG, niet op ETEN!
                 gast.setActivity(Activiteit.ONDERWEG);
 
                 System.out.println("Gast " + gast.getID() + " heeft honger en loopt naar het restaurant.");
@@ -241,14 +239,33 @@ public class GastController extends PersoonController implements checkInEvent, c
     public void gaWegUitRestaurant(int gastID) {
         GastModel gast = actieveGasten.get(gastID);
         if (gast != null && gast.getTargetLocatie() != null) {
-            // Sla het restaurant op als vorige locatie voordat hij gaat lopen
-            gast.setVorigeLocatie(new Locatie(gast.getLocatie().getX(), gast.getLocatie().getY()));
+
+            // CRUCIALE VISUELE FIX: Haal de gast uit de kamer/restaurant-telling in de view!
+            for (NewGast listener : listeners) {
+                listener.onGastGaatWegUitKamer(gast, gast.getLocatie());
+            }
 
             PathFinder pf = new PathFinder(gast.getLocatie(), gast.getTargetLocatie(), layoutController);
             beweegHelper.voegRouteToe(gast, pf);
-
-            // Zet status terug naar onderweg
             gast.setActivity(Activiteit.ONDERWEG);
+        }
+    }
+
+    @Override
+    public void gastGeweigerd(int gastID) {
+        GastModel gast = actieveGasten.get(gastID);
+        if (gast != null && gast.getTargetLocatie() != null) {
+
+            // sla de restaurant-locatie op als vorige locatie
+            gast.setVorigeLocatie(new Locatie(gast.getLocatie().getX(), gast.getLocatie().getY()));
+
+            // bereken de route terug naar hun hotelkamer
+            PathFinder pf = new PathFinder(gast.getLocatie(), gast.getTargetLocatie(), layoutController);
+            beweegHelper.voegRouteToe(gast, pf);
+
+            gast.setActivity(Activiteit.ONDERWEG);
+
+            System.out.println("GastController: Gast " + gastID + " is stil omgekeerd.");
         }
     }
 
@@ -266,5 +283,9 @@ public class GastController extends PersoonController implements checkInEvent, c
     public void resetSimulatie() {
         super.resetController();
         this.actieveGasten.clear();
+    }
+
+    public BeweegHelper getBeweegHelper() {
+        return beweegHelper;
     }
 }
