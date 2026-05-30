@@ -236,6 +236,9 @@ public class GastController extends PersoonController implements checkInEvent, c
                 beweegHelper.voegRouteToe(gast, pf);
                 gast.setActivity(Activiteit.ONDERWEG);
             }
+            for (NewGast listener : listeners) {
+                listener.onGastGaatWegUitKamer(gast, gast.getLocatie());
+            }
         }
     }
 
@@ -244,7 +247,6 @@ public class GastController extends PersoonController implements checkInEvent, c
         GastModel gast = actieveGasten.get(gastID);
         if (gast != null && gast.getTargetLocatie() != null) {
 
-            // CRUCIALE VISUELE FIX: Haal de gast uit de kamer/restaurant-telling in de view!
             for (NewGast listener : listeners) {
                 listener.onGastGaatWegUitKamer(gast, gast.getLocatie());
             }
@@ -278,6 +280,9 @@ public class GastController extends PersoonController implements checkInEvent, c
             PathFinder pf = new PathFinder(gast.getLocatie(), gast.getTargetLocatie(), layoutController);
             beweegHelper.voegRouteToe(gast, pf);
             gast.setActivity(Activiteit.ONDERWEG);
+        }
+        for (NewGast listener : listeners) {
+            listener.onGastGaatWegUitKamer(gast, gast.getLocatie());
         }
     }
 
