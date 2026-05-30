@@ -46,16 +46,21 @@ public class GastController extends PersoonController implements checkInEvent, c
             }
             actieveGasten.remove(gast.getID());
         }
-        // Als de gast onderweg was naar eten, sport of film:
-        else if (gast.getActivity() == Activiteit.ETEN || gast.getActivity() == Activiteit.SPORTEN || gast.getActivity() == Activiteit.FILM) {
+        // Als de gast aangekomen is bij een special ruimte (zoals het restaurant)
+        else if (layoutController.getModel().getRuimteBijLocatie(gast.getLocatie()) != null &&
+                (layoutController.getModel().getRuimteBijLocatie(gast.getLocatie()).getAreaType() == KamerType.RESTAURANT ||
+                        gast.getActivity() == Activiteit.SPORTEN ||
+                        gast.getActivity() == Activiteit.FILM)) {
+
             // We informeren de faciliteit-controllers dat de gast er is
             for (NewGast listener : listeners) {
                 listener.onGastAangekomenInKamer(gast, gast.getLocatie());
             }
         }
-        // Alleen als hij écht naar zijn kamer liep (bijvoorbeeld na het eten)
+        // Alleen als hij écht naar zijn hotelkamer liep
         else {
             gast.setActivity(Activiteit.IN_KAMER);
+            // Sla de hotelkamer op als vorige locatie voor wanneer hij straks weer weggaat!
             gast.setVorigeLocatie(new Locatie(gast.getLocatie().getX(), gast.getLocatie().getY()));
 
             for (NewGast listener : listeners) {
@@ -137,8 +142,8 @@ public class GastController extends PersoonController implements checkInEvent, c
                 PathFinder pf = new PathFinder(gast.getLocatie(), restaurantLocatie, layoutController);
                 beweegHelper.voegRouteToe(gast, pf);
 
-                // CRUCIAAL: Zet de activiteit alvast op ETEN (of introduceer ETEN_ONDERWEG)
-                gast.setActivity(Activiteit.ETEN);
+                // HERSTEL: Net als bij de gym en bioscoop zetten we hem op ONDERWEG tijdens het lopen
+                gast.setActivity(Activiteit.ONDERWEG);
 
                 System.out.println("Gast " + gast.getID() + " heeft honger en loopt naar het restaurant.");
             }
@@ -235,9 +240,14 @@ public class GastController extends PersoonController implements checkInEvent, c
     @Override
     public void gaWegUitRestaurant(int gastID) {
         GastModel gast = actieveGasten.get(gastID);
-        if (gast.getTargetLocatie() != null) {
+        if (gast != null && gast.getTargetLocatie() != null) {
+            // Sla het restaurant op als vorige locatie voordat hij gaat lopen
+            gast.setVorigeLocatie(new Locatie(gast.getLocatie().getX(), gast.getLocatie().getY()));
+
             PathFinder pf = new PathFinder(gast.getLocatie(), gast.getTargetLocatie(), layoutController);
             beweegHelper.voegRouteToe(gast, pf);
+
+            // Zet status terug naar onderweg
             gast.setActivity(Activiteit.ONDERWEG);
         }
     }
