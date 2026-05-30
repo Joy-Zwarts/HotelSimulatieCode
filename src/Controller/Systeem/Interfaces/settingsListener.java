@@ -1,4 +1,6 @@
-package View.Systeem;
+package Controller.Systeem.Interfaces;
+
+import View.Systeem.TijdsDuur;
 
 public interface settingsListener {
     void schoonmaakTijdVeranderd(TijdsDuur tijdsDuur);

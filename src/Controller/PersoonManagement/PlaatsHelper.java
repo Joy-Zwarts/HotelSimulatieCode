@@ -5,7 +5,7 @@ import Controller.Layout.LayoutController;
 import Controller.Layout.Intefaces.LayoutGeladen;
 import Controller.PersoonManagement.Interfaces.NewGast;
 import Controller.PersoonManagement.Interfaces.NewSchoonmaker;
-import Controller.Systeem.Intefaces.reset;
+import Controller.Systeem.Interfaces.reset;
 import Model.Layout.Locatie;
 import Model.Personen.GastModel;
 import Model.Personen.PersoonModel;

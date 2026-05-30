@@ -1,5 +1,6 @@
 package Controller.Systeem;
 
+import Controller.Systeem.Interfaces.settingsListener;
 import View.Systeem.*;
 
 import javax.swing.*;

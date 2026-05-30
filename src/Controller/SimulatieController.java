@@ -7,7 +7,7 @@ import Controller.Faciliteiten.RestaurantController;
 import Controller.Layout.LayoutLoader;
 import Controller.PersoonManagement.*;
 import Controller.Systeem.*;
-import Controller.Systeem.Intefaces.reset;
+import Controller.Systeem.Interfaces.reset;
 import Controller.Timer.WachtTimer;
 import Model.Systeem.DarkModeModel;
 import View.Systeem.HotelSimulatieView;

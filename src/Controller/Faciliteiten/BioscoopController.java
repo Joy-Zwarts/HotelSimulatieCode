@@ -8,7 +8,7 @@ import Model.Layout.Locatie;
 import Model.Personen.Activiteit;
 import Model.Personen.GastModel;
 import View.Systeem.TijdsDuur;
-import View.Systeem.settingsListener;
+import Controller.Systeem.Interfaces.settingsListener;
 import hotelevents.HotelEvent;
 
 import java.util.ArrayList;

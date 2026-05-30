@@ -6,8 +6,8 @@ import Controller.Faciliteiten.Interfaces.fitnessOver;
 import Controller.Faciliteiten.Interfaces.restaurantOver;
 import Controller.Layout.LayoutController;
 import Controller.PersoonManagement.Interfaces.NewGast;
-import Controller.Systeem.Intefaces.onTimeChange;
-import Controller.Systeem.Intefaces.reset;
+import Controller.Systeem.Interfaces.onTimeChange;
+import Controller.Systeem.Interfaces.reset;
 import Model.Layout.Locatie;
 import Controller.PersoonFactory.GastCreator;
 import Model.Personen.Activiteit;
@@ -39,24 +39,23 @@ public class GastController extends PersoonController implements checkInEvent, c
     }
 
     // check na het lopen of de gast naar de uitgang is gelopen of niet
-    // check na het lopen of de gast naar de uitgang is gelopen of niet
     private void afhandelenAankomst(GastModel gast) {
-        // gast is bij de uitgang aangekomen en verlaat het hotel
         if (gast.getLocatie().equals(startLocatie)) {
             for (NewGast listener : listeners) {
                 listener.onGastVertrokken(gast);
             }
             actieveGasten.remove(gast.getID());
         }
-        // gast is aangekomen bij een faciliteit (restaurant, fitness, cinema)
+        // Als de gast onderweg was naar eten, sport of film:
         else if (gast.getActivity() == Activiteit.ETEN || gast.getActivity() == Activiteit.SPORTEN || gast.getActivity() == Activiteit.FILM) {
+            // We informeren de faciliteit-controllers dat de gast er is
             for (NewGast listener : listeners) {
                 listener.onGastAangekomenInKamer(gast, gast.getLocatie());
             }
         }
-        // er blijft nog over dat de gast in hun kamer zit
+        // Alleen als hij écht naar zijn kamer liep (bijvoorbeeld na het eten)
         else {
-            gast.setActivity(Activiteit.IN_KAMER); // ze de status naar IN_KAMER
+            gast.setActivity(Activiteit.IN_KAMER);
             gast.setVorigeLocatie(new Locatie(gast.getLocatie().getX(), gast.getLocatie().getY()));
 
             for (NewGast listener : listeners) {
@@ -132,21 +131,16 @@ public class GastController extends PersoonController implements checkInEvent, c
     @Override
     public void needFood(HotelEvent hotelEvent) {
         GastModel gast = actieveGasten.get(hotelEvent.getGuestId());
-
         if (gast != null) {
-            // zoek een restaurant locatie
             Locatie restaurantLocatie = layoutController.vindLocatie(KamerType.RESTAURANT);
-
             if (restaurantLocatie != null) {
-                // maak een nieuwe Pathfinder naar het restaurant
                 PathFinder pf = new PathFinder(gast.getLocatie(), restaurantLocatie, layoutController);
-
-                // geef de route aan de engine (deze overschrijft de oude route)
                 beweegHelper.voegRouteToe(gast, pf);
 
+                // CRUCIAAL: Zet de activiteit alvast op ETEN (of introduceer ETEN_ONDERWEG)
+                gast.setActivity(Activiteit.ETEN);
+
                 System.out.println("Gast " + gast.getID() + " heeft honger en loopt naar het restaurant.");
-            } else {
-                System.out.println("Geen restaurant gevonden in het hotel!");
             }
         }
     }
@@ -155,8 +149,6 @@ public class GastController extends PersoonController implements checkInEvent, c
     @Override
     public void onStepTaken(PersoonModel persoon, Locatie oudeLocatie) {
         GastModel gast = (GastModel) persoon;
-
-        gast.setActivity(Activiteit.ONDERWEG);
 
         SwingUtilities.invokeLater(() -> {
             for (NewGast listener : listeners) {

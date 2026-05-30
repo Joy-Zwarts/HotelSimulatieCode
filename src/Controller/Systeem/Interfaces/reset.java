@@ -1,4 +1,4 @@
-package Controller.Systeem.Intefaces;
+package Controller.Systeem.Interfaces;
 
 public interface reset {
     void resetSimulatie();

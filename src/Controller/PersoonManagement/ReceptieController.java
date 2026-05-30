@@ -2,7 +2,7 @@ package Controller.PersoonManagement;
 
 import Controller.PersoonManagement.Interfaces.NewGast;
 import Controller.PersoonManagement.Interfaces.NewKamer;
-import Controller.Systeem.Intefaces.reset;
+import Controller.Systeem.Interfaces.reset;
 import Model.Layout.Locatie;
 import Model.Personen.GastModel;
 import Model.Ruimtes.KamerModel;

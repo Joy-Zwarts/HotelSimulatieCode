@@ -13,7 +13,7 @@ import Model.Ruimtes.KamerType;
 import Model.Ruimtes.RestaurantModel;
 import Model.Ruimtes.RuimteModel;
 import View.Systeem.TijdsDuur;
-import View.Systeem.settingsListener;
+import Controller.Systeem.Interfaces.settingsListener;
 import hotelevents.HotelEvent;
 
 import java.util.ArrayList;
@@ -56,7 +56,7 @@ public class RestaurantController implements needFoodEvent, NewGast, settingsLis
 
         // zoek het restaurant waar de gast zich nu bevindt
         for (RestaurantModel restaurant : restaurants.values()) {
-            if (gast.getLocatie().equals(restaurant.getPosition())) {
+            if ((gast.getLocatie().getX() == (restaurant.getPosition().getX())) && (gast.getLocatie().getY() == (restaurant.getPosition().getY()-1))) {
 
                 // controleer  of er wel plek is
                 if (!restaurant.isVol()) {
@@ -76,7 +76,7 @@ public class RestaurantController implements needFoodEvent, NewGast, settingsLis
                         listener.gaWegUitRestaurant(gastId);
                     }
                 }
-                break; // Gast kan maar in één restaurant tegelijk zijn
+                break;
             }
         }
     }

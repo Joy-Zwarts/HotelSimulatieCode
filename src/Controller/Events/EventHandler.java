@@ -1,7 +1,7 @@
 package Controller.Events;
 
 import Controller.Events.Interfaces.*;
-import Controller.Systeem.Intefaces.reset;
+import Controller.Systeem.Interfaces.reset;
 import hotelevents.HotelEvent;
 import hotelevents.HotelEventListener;
 import hotelevents.HotelEventManager;

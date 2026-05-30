@@ -144,6 +144,8 @@ public class OverzichtView implements noneEvent {
         }
         cleanerContent.add(new JLabel(statusText));
         cleanerContent.add(new JLabel("Locatie nu: " + sm.getLocatie()));
+        cleanerContent.add(new JLabel("TargetLocatie: " + sm.getTargetLocatie()));
+
 
         cleanerContent.add(new JLabel("Wachtrij taken:"));
         Queue<KamerModel> q = controller.getWachtrij(id);
@@ -191,8 +193,10 @@ public class OverzichtView implements noneEvent {
                 guestContent.add(new JLabel(
                         "Gast " + gast.getID() +
                                 "   |   Locatie nu: " + gast.getLocatie() +
+                                "   |   Target Locatie: " + gast.getTargetLocatie() +
                                 "   |   Kamer: " + kamerInfo +
                                 "   |   Status: " + statusText
+
                 ));
             }
         }
@@ -210,7 +214,8 @@ public class OverzichtView implements noneEvent {
                 String verblijvende = (kamer.getVerblijvende() == null) ? "null" : String.valueOf(kamer.getVerblijvende().getID());
                 roomContent.add(new JLabel(
                         "Kamernummer:  " + kamer.getRoomNumber() +
-                                "    |    Verblijvende :  gast " + verblijvende
+                                "    |    Verblijvende :  gast " + verblijvende +
+                                "    |    Locatie: " + kamer.getPosition()
                 ));
             }
         }
