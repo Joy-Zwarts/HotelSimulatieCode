@@ -148,6 +148,8 @@ public class SimulatieController implements reset {
 
         settingsController.addListener(restaurantController);
 
+        settingsController.addListener(gastController);
+
         darkController.verbindExtraSchermen(settingsController.getSettingsFrame(), overzichtView);
 
         darkController.applyTheme();

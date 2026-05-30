@@ -15,6 +15,7 @@ import Model.Personen.GastModel;
 import Model.Personen.PersoonModel;
 import Model.Personen.TypePersoon;
 import Model.Ruimtes.KamerType;
+import View.Systeem.TijdsDuur;
 import hotelevents.HotelEvent;
 
 import javax.swing.*;
@@ -286,7 +287,33 @@ public class GastController extends PersoonController implements checkInEvent, c
         this.actieveGasten.clear();
     }
 
-    public BeweegHelper getBeweegHelper() {
-        return beweegHelper;
+    @Override
+    public void schoonmaakTijdVeranderd(TijdsDuur tijdsDuur) {
+
+    }
+
+    @Override
+    public void filmDuurVeranderd(TijdsDuur tijdsDuur) {
+
+    }
+
+    @Override
+    public void aantalSchoonmakersVeranderd(int aantalSchoonmakers) {
+
+    }
+
+    @Override
+    public void restaurantCapaciteitVeranderd(int restaurantCapaciteit) {
+
+    }
+
+    @Override
+    public void trapLoopDuurVeranderd(int trapLoopDuur) {
+        beweegHelper.setTrapVertragingTicks(trapLoopDuur);
+    }
+
+    @Override
+    public void gastMaxWachttijdVeranderd(int gastMaxWachttijd) {
+
     }
 }

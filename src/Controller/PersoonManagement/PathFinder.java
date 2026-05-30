@@ -85,6 +85,11 @@ public class PathFinder {
         return currentLocatie;
     }
 
+    // je kan hiermee de volgende stap bekijken zonder dat de stap uit de wachtrij weg wordt gehaald
+    public Locatie peekNextStep() {
+        return walkQueue.peek();
+    }
+
     public boolean isBestemmingBereikt() {
         return walkQueue.isEmpty();
     }

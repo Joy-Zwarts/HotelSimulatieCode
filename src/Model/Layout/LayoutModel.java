@@ -7,7 +7,6 @@ import Controller.RuimteFactory.SchachtCreator;
 import Controller.RuimteFactory.TrappenhuisCreator;
 import Model.Ruimtes.*;
 
-import javax.xml.stream.Location;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
