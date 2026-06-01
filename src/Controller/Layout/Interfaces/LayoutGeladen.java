@@ -1,4 +1,4 @@
-package Controller.Layout.Intefaces;
+package Controller.Layout.Interfaces;
 
 import Controller.Layout.LayoutController;
 

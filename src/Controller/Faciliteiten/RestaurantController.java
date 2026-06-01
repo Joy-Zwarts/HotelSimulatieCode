@@ -1,7 +1,7 @@
 package Controller.Faciliteiten;
 
 import Controller.Faciliteiten.Interfaces.restaurantOver;
-import Controller.Layout.Intefaces.LayoutGeladen;
+import Controller.Layout.Interfaces.LayoutGeladen;
 import Controller.Layout.LayoutController;
 import Controller.PersoonManagement.Interfaces.NewGast;
 import Controller.Timer.WachtTimer;
@@ -73,7 +73,7 @@ public class RestaurantController implements NewGast, settingsListener, LayoutGe
                     wachtTimer.startTimer(uniekeID, () -> stuurGastWeg(gastId, restaurant), verblijfTijd);
 
                     System.out.println("Gast " + gastId + " eet in restaurant " + restaurant.getID() + " voor " + verblijfTijd + " ticks.");
-                    gast.setActivity(Activiteit.ETEN);
+                    gast.setActiviteit(Activiteit.ETEN);
                 } else {
                     System.out.println("Gast " + gastId + " wilde eten, maar restaurant " + restaurant.getID() + " is vol!");
                     String uniekeWeigerID = "WEIGER-" + gast.getTypePersoon().name() + "-" + gastId;

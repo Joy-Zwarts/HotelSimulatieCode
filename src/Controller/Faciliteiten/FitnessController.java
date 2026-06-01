@@ -69,7 +69,7 @@ public class FitnessController implements fitnessEvent, NewGast {
 
             System.out.println("Gast " + gastId + " is gaan sporten voor " + verblijfTijd + " ticks.");
 
-            gast.setActivity(Activiteit.SPORTEN);
+            gast.setActiviteit(Activiteit.SPORTEN);
         }
     }
 

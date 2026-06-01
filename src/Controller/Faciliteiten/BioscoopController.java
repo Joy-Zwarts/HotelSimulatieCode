@@ -93,7 +93,7 @@ public class BioscoopController implements cinemaEvent, NewGast, settingsListene
         if (gastenInBios.contains(gast.getID())) {
             System.out.println("Gast " + gastId + " is aangekomen in de Bioscoop");
 
-            gast.setActivity(Activiteit.FILM);
+            gast.setActiviteit(Activiteit.FILM);
         }
     }
 

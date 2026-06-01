@@ -63,7 +63,7 @@ public class GastController extends PersoonController implements checkInEvent, c
             return;
         }
 
-        gast.setActivity(Activiteit.IN_KAMER);
+        gast.setActiviteit(Activiteit.IN_KAMER);
         gast.setVorigeLocatie(new Locatie(gast.getLocatie().getX(), gast.getLocatie().getY()));
 
         for (NewGast listener : listeners) {
@@ -111,7 +111,7 @@ public class GastController extends PersoonController implements checkInEvent, c
         if (gast.getTargetLocatie() != null) {
             PathFinder pf = new PathFinder(gast.getLocatie(), gast.getTargetLocatie(), layoutController);
             beweegHelper.voegRouteToe(gast, pf);
-            gast.setActivity(Activiteit.ONDERWEG);
+            gast.setActiviteit(Activiteit.ONDERWEG);
         }
     }
 
@@ -144,8 +144,8 @@ public class GastController extends PersoonController implements checkInEvent, c
                 PathFinder pf = new PathFinder(gast.getLocatie(), restaurantLocatie, layoutController);
                 beweegHelper.voegRouteToe(gast, pf);
 
-                // FIX: Zet op ONDERWEG, niet op ETEN!
-                gast.setActivity(Activiteit.ONDERWEG);
+
+                gast.setActiviteit(Activiteit.ONDERWEG);
 
                 System.out.println("Gast " + gast.getID() + " heeft honger en loopt naar het restaurant.");
             }
@@ -190,7 +190,7 @@ public class GastController extends PersoonController implements checkInEvent, c
 
                 // geef de route aan de engine (deze overschrijft de oude route)
                 beweegHelper.voegRouteToe(gast, pf);
-                gast.setActivity(Activiteit.ONDERWEG);
+                gast.setActiviteit(Activiteit.ONDERWEG);
 
                 System.out.println("Gast " + gast.getID() + " wilt sporten en loopt naar de gym.");
             } else {
@@ -213,7 +213,7 @@ public class GastController extends PersoonController implements checkInEvent, c
 
                 // geef de route aan de engine (deze overschrijft de oude route)
                 beweegHelper.voegRouteToe(gast, pf);
-                gast.setActivity(Activiteit.ONDERWEG);
+                gast.setActiviteit(Activiteit.ONDERWEG);
 
                 System.out.println("Gast " + gast.getID() + " wilt film kijken en loopt naar de bioscoop.");
             } else {
@@ -234,7 +234,7 @@ public class GastController extends PersoonController implements checkInEvent, c
             if (gast.getTargetLocatie() != null) {
                 PathFinder pf = new PathFinder(gast.getLocatie(), gast.getTargetLocatie(), layoutController);
                 beweegHelper.voegRouteToe(gast, pf);
-                gast.setActivity(Activiteit.ONDERWEG);
+                gast.setActiviteit(Activiteit.ONDERWEG);
             }
             for (NewGast listener : listeners) {
                 listener.onGastGaatWegUitKamer(gast, gast.getLocatie());
@@ -253,7 +253,7 @@ public class GastController extends PersoonController implements checkInEvent, c
 
             PathFinder pf = new PathFinder(gast.getLocatie(), gast.getTargetLocatie(), layoutController);
             beweegHelper.voegRouteToe(gast, pf);
-            gast.setActivity(Activiteit.ONDERWEG);
+            gast.setActiviteit(Activiteit.ONDERWEG);
         }
     }
 
@@ -269,7 +269,7 @@ public class GastController extends PersoonController implements checkInEvent, c
             PathFinder pf = new PathFinder(gast.getLocatie(), gast.getTargetLocatie(), layoutController);
             beweegHelper.voegRouteToe(gast, pf);
 
-            gast.setActivity(Activiteit.ONDERWEG);
+            gast.setActiviteit(Activiteit.ONDERWEG);
         }
     }
 
@@ -279,7 +279,7 @@ public class GastController extends PersoonController implements checkInEvent, c
         if (gast.getTargetLocatie() != null) {
             PathFinder pf = new PathFinder(gast.getLocatie(), gast.getTargetLocatie(), layoutController);
             beweegHelper.voegRouteToe(gast, pf);
-            gast.setActivity(Activiteit.ONDERWEG);
+            gast.setActiviteit(Activiteit.ONDERWEG);
         }
         for (NewGast listener : listeners) {
             listener.onGastGaatWegUitKamer(gast, gast.getLocatie());

@@ -1,6 +1,6 @@
 package Controller.Layout;
 
-import Controller.Layout.Intefaces.LayoutGeladen;
+import Controller.Layout.Interfaces.LayoutGeladen;
 import Controller.PersoonManagement.Interfaces.NewKamer;
 import Controller.RuimteFactory.*;
 import Controller.Systeem.FilePicker;
@@ -137,7 +137,7 @@ public class LayoutLoader {
         );
 
         // voeg de ruimte toe aan het layout model
-        model.addKamer(ruimte);
+        model.addRuimte(ruimte);
 
         // notify de listeners dat er een nieuwe kamer is aangemaakt als het type ruimte ROOM is
         if (ruimte.getAreaType().equals(KamerType.ROOM) && newRoomListener != null) {

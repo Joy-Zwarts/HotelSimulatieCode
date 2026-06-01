@@ -35,9 +35,6 @@ public class RuimteModel {
     public String getDimension() {
         return dimension;
     }
-    public String getPositionString() {
-        return position.toString();
-    }
 
     public int getAantalGasten() {
         return aantalGasten;

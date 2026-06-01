@@ -9,7 +9,7 @@ public class KamerModel extends RuimteModel {
     private int roomNumber;
     private boolean bezet;
     private GastModel verblijvende;
-    private static int tijdelijkeTeller = 1; // back-up teller
+    private static int tijdelijkeTeller = 1; // back-up
 
     public KamerModel(KamerType areaType, Locatie position, String dimension, KamerClassificatie classification, boolean Bezet) {
         super(areaType, position, dimension);

@@ -33,11 +33,11 @@ public class GastModel extends PersoonModel {
         this.wensen = kamerClassificatie;
     }
 
-    public Activiteit getActivity() {
+    public Activiteit getActiviteit() {
         return activiteitStatus;
     }
 
-    public void setActivity(Activiteit activity) {
+    public void setActiviteit(Activiteit activity) {
         this.activiteitStatus = activity;
     }
 }
