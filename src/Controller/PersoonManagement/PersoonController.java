@@ -1,14 +1,15 @@
 package Controller.PersoonManagement;
 
 import Controller.Layout.LayoutController;
-import Controller.Layout.LayoutGeladen;
+import Controller.Layout.Intefaces.LayoutGeladen;
+import Controller.Systeem.Interfaces.settingsListener;
 import Model.Personen.PersoonModel;
 import View.Systeem.OverzichtView; // Import toevoegen
 
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class PersoonController implements LayoutGeladen, BeweegHelper.MovementListener {
+public abstract class PersoonController implements LayoutGeladen, BeweegHelper.MovementListener, settingsListener {
 
     protected LayoutController layoutController;
     protected final Map<Integer, PersoonModel> actievePersonen;
@@ -37,5 +38,10 @@ public abstract class PersoonController implements LayoutGeladen, BeweegHelper.M
         if (this.beweegHelper != null) {
             this.beweegHelper.reset();
         }
+    }
+
+    @Override
+    public void trapLoopDuurVeranderd(int trapLoopDuur) {
+        beweegHelper.setTrapVertragingTicks(trapLoopDuur);
     }
 }

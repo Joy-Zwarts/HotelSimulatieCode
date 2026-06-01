@@ -2,6 +2,7 @@ package Controller.Systeem;
 
 import Controller.*;
 import Controller.Layout.LayoutLoader;
+import Controller.Systeem.Interfaces.reset;
 import Model.Layout.LayoutModel;
 import View.Systeem.EventPanel;
 import View.Systeem.HotelSimulatieView;
@@ -22,7 +23,7 @@ public class ButtonController implements ActionListener {
     private final LayoutLoader layoutLoader;
     private LayoutModel model;
     private final SettingsController settingsController;
-    private ArrayList<reset> listeners;
+    private final ArrayList<reset> listeners;
 
     // constructor
 

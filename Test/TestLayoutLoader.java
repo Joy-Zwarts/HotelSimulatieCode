@@ -28,12 +28,12 @@ class TestLayoutLoader {
         manager = new HotelEventManager();
         view = new HotelSimulatieView(new DarkModeModel());
         model = new LayoutModel();
-        layoutLoader = new LayoutLoader(manager, view, model, null, view);
+        layoutLoader = new LayoutLoader(manager, view, model, null);
     }
 
     @Test
     void testLoadLayoutSuccess() {
-        LayoutLoader spyLoader = new LayoutLoader(manager, view, model, null, view) {
+        LayoutLoader spyLoader = new LayoutLoader(manager, view, model, null) {
             @Override
             protected File getFileFromPicker() {
                 File tempFile = new File("test_layout.json");
@@ -70,14 +70,14 @@ class TestLayoutLoader {
     void testLayoutGeladenListener() {
         AtomicInteger callCount = new AtomicInteger(0);
 
-        LayoutLoader spyLoader = new LayoutLoader(manager, view, model, null, view) {
+        LayoutLoader spyLoader = new LayoutLoader(manager, view, model, null) {
             @Override
             protected File getFileFromPicker() {
                 File tempFile = new File("test_layout_listener.json");
                 try {
                     java.nio.file.Files.writeString(tempFile.toPath(), "[]");
                     tempFile.deleteOnExit();
-                } catch (Exception e) {}
+                } catch (Exception _) {}
                 return tempFile;
             }
             @Override
@@ -94,7 +94,7 @@ class TestLayoutLoader {
     @Test
     void testLoadLayoutWithException() {
         // We maken een Spy die een bestand geeft dat niet bestaat om de catch-block te testen
-        LayoutLoader spyLoader = new LayoutLoader(manager, view, model, null, view) {
+        LayoutLoader spyLoader = new LayoutLoader(manager, view, model, null) {
             @Override
             protected File getFileFromPicker() {
                 return new File("niet_bestaand_bestand.json");
@@ -158,7 +158,7 @@ class TestLayoutLoader {
             method.invoke(layoutLoader, data);
             fail("Zou een exception moeten gooien");
         } catch (Exception e) {
-            assertTrue(e.getCause() instanceof IllegalArgumentException);
+            assertInstanceOf(IllegalArgumentException.class, e.getCause());
         }
     }
 }

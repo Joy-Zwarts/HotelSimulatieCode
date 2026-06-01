@@ -11,20 +11,18 @@ import View.Systeem.HotelSimulatieView;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Method;
-
 public class TestGastBeweeg implements BeweegHelper.MovementListener {
 
     private boolean stepTakenCalled;
     private boolean destinationReachedCalled;
     private GastModel dummy;
 
-    public class FakeView extends LayoutView {
+    public static class FakeView extends LayoutView {
         public FakeView(PauseController pauseController, HotelSimulatieView SimulatieView) {
             super(pauseController, SimulatieView);
         }
     }
-    public class FakeModel extends LayoutModel {
+    public static class FakeModel extends LayoutModel {
     }
 
     @Test

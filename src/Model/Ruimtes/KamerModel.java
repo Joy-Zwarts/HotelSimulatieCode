@@ -9,13 +9,12 @@ public class KamerModel extends RuimteModel {
     private int roomNumber;
     private boolean bezet;
     private GastModel verblijvende;
-    private static int counter = 0;
+    private static int tijdelijkeTeller = 1; // back-up teller
 
-    // constructor
     public KamerModel(KamerType areaType, Locatie position, String dimension, KamerClassificatie classification, boolean Bezet) {
         super(areaType, position, dimension);
         this.classification = classification;
-        this.roomNumber = ++counter;
+        this.roomNumber = tijdelijkeTeller++;
         this.bezet = Bezet;
         this.verblijvende = null;
     }

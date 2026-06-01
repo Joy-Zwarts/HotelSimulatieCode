@@ -7,8 +7,8 @@ import Controller.Faciliteiten.RestaurantController;
 import Controller.Layout.LayoutLoader;
 import Controller.PersoonManagement.*;
 import Controller.Systeem.*;
-import Model.Layout.LayoutModel;
-import Model.Ruimtes.FitnessModel;
+import Controller.Systeem.Interfaces.reset;
+import Controller.Timer.WachtTimer;
 import Model.Systeem.DarkModeModel;
 import View.Systeem.HotelSimulatieView;
 import View.Systeem.OverzichtView;
@@ -22,10 +22,6 @@ public class SimulatieController implements reset {
 
     private boolean started;
     private int scenario;
-    private GastController gastController;
-    private SchoonmakerController schoonmakerController;
-    private ReceptieController receptieController;
-    private EventHandler eventHandler;
 
     // constructor
 
@@ -37,25 +33,26 @@ public class SimulatieController implements reset {
 
         DarkModeModel darkModeModel = new DarkModeModel();
 
+
         HotelSimulatieView view = new HotelSimulatieView(darkModeModel);
 
         HotelEventManager manager = new HotelEventManager(false);
 
-        eventHandler = new EventHandler(manager);
-
-        LayoutModel model = null;
+        EventHandler eventHandler = new EventHandler(manager);
 
         PauseController pauseController = new PauseController(manager, null);
+
+        WachtTimer timer = new WachtTimer();
 
         OverzichtView overzichtView = new OverzichtView(view, pauseController, manager);
 
         pauseController.setView(overzichtView);
 
-        receptieController = new ReceptieController(overzichtView);
+        ReceptieController receptieController = new ReceptieController(overzichtView);
 
-        gastController = new GastController();
+        GastController gastController = new GastController();
 
-        schoonmakerController = new SchoonmakerController(receptieController, overzichtView);
+        SchoonmakerController schoonmakerController = new SchoonmakerController(receptieController, overzichtView, timer);
 
         gastController.injecteerOverzichtView(overzichtView);
 
@@ -63,13 +60,19 @@ public class SimulatieController implements reset {
 
         KamerAssign kamerAssign = new KamerAssign(receptieController);
 
-        BioscoopController bioscoopController = new BioscoopController();
+        BioscoopController bioscoopController = new BioscoopController(timer);
 
-        RestaurantController restaurantController = new RestaurantController();
+        RestaurantController restaurantController = new RestaurantController(timer);
 
-        FitnessController fitnessController = new FitnessController();
+        FitnessController fitnessController = new FitnessController(timer);
 
         // EVENT LISTENERS
+
+        gastController.setNewGuestListener(fitnessController);
+
+        gastController.setNewGuestListener(restaurantController);
+
+        gastController.setNewGuestListener(bioscoopController);
 
         eventHandler.setEventListenerCheckIn(gastController);
 
@@ -83,29 +86,23 @@ public class SimulatieController implements reset {
 
         eventHandler.setEventListenerCleaning(schoonmakerController);
 
-        eventHandler.setEventListenerNoneEvent(schoonmakerController);
+        eventHandler.setEventListenerNoneEvent(timer);
 
         eventHandler.setEventListenerCheckOut(schoonmakerController);
 
         eventHandler.setEventListenerCinema(bioscoopController);
 
-        eventHandler.setEventListenerNoneEvent(bioscoopController);
-
-        eventHandler.setEventListenerFood(restaurantController);
-
-        eventHandler.setEventListenerNoneEvent(restaurantController);
-
         eventHandler.setEventListenerFitness(fitnessController);
 
-        eventHandler.setEventListenerNoneEvent(fitnessController);
+        eventHandler.setEventListenerNoneEvent(overzichtView);
 
         bioscoopController.addlisteners(gastController);
 
-        restaurantController.addlisteners(gastController);
+        restaurantController.addListeners(gastController);
 
         fitnessController.addlisteners(gastController);
 
-        LayoutLoader layoutLoader = new LayoutLoader(manager, view, model, pauseController, view);
+        LayoutLoader layoutLoader = new LayoutLoader(manager, view, null, pauseController);
 
         PlaatsHelper plaatsHelper = new PlaatsHelper(null);
 
@@ -114,6 +111,8 @@ public class SimulatieController implements reset {
         layoutLoader.setNewLayoutListener(gastController);
 
         layoutLoader.setNewLayoutListener(schoonmakerController);
+
+        layoutLoader.setNewLayoutListener(restaurantController);
 
         layoutLoader.setNewRoomListener(receptieController);
 
@@ -137,11 +136,27 @@ public class SimulatieController implements reset {
 
         timeManagement.setListener(schoonmakerController);
 
-        SettingsController settingsController = new SettingsController(view, timeManagementPanel, darkModeModel);
-
         view.setTopbar(timePanel, timeManagementPanel);
 
+        DarkModeController darkController = new DarkModeController(view, timeManagementPanel, darkModeModel);
+
+        SettingsController settingsController = new SettingsController(view, timeManagementPanel, darkController);
+
+        settingsController.addListener(bioscoopController);
+
+        settingsController.addListener(schoonmakerController);
+
+        settingsController.addListener(restaurantController);
+
+        settingsController.addListener(gastController);
+
+        darkController.verbindExtraSchermen(settingsController.getSettingsFrame(), overzichtView);
+
+        darkController.applyTheme();
+
         ButtonController buttonController = new ButtonController(view, this, manager, layoutLoader, settingsController);
+
+        overzichtView.verbindDataBronnen(receptieController.getGasten(), receptieController.getKamers(), schoonmakerController);
 
         buttonController.setListeners(this);
         buttonController.setListeners(plaatsHelper);

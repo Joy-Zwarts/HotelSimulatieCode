@@ -6,5 +6,5 @@ public enum KamerClassificatie {
     tweeSterren,
     drieSterren,
     vierSterren,
-    vijfSterren;
+    vijfSterren
 }

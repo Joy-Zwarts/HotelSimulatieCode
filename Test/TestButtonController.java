@@ -1,4 +1,4 @@
-import Controller.Systeem.ButtonController;
+import Controller.Systeem.DarkModeController;
 import Controller.Systeem.PauseController;
 import Controller.Systeem.SettingsController;
 import Controller.Layout.LayoutLoader;
@@ -12,33 +12,25 @@ import hotelevents.HotelEventManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.awt.event.ActionEvent;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestButtonController {
 
     private HotelSimulatieView view;
     private OverzichtView view2;
-    private TimeManagementPanel panel;
-    private DarkModeModel darkModeModel;
-    private SettingsController settingsController;
     private SimulatieController simulatieController;
-    private HotelEventManager manager;
-    private LayoutLoader layoutLoader;
-    private PauseController pauseController;
 
     @BeforeEach
     void setUp() {
 
-        darkModeModel = new DarkModeModel();
+        DarkModeModel darkModeModel = new DarkModeModel();
         view = new HotelSimulatieView(darkModeModel);
-        panel = new TimeManagementPanel(view.getTopBar(), darkModeModel);
-        manager = new HotelEventManager(false);
+        TimeManagementPanel panel = new TimeManagementPanel(view.getTopBar(), darkModeModel);
+        HotelEventManager manager = new HotelEventManager(false);
         simulatieController = new SimulatieController();
-        pauseController = new PauseController(manager, view2);
-        settingsController = new SettingsController(view, panel, darkModeModel);
-        layoutLoader = new LayoutLoader(manager, view, null, pauseController, view);
+        PauseController pauseController = new PauseController(manager, view2);
+        SettingsController settingsController = new SettingsController(view, panel, new DarkModeController(null, null, darkModeModel));
+        LayoutLoader layoutLoader = new LayoutLoader(manager, view, null, pauseController);
     }
 
     @Test

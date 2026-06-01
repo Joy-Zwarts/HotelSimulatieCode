@@ -1,13 +1,10 @@
 package Controller.PersoonManagement;
 
-import Controller.Systeem.reset;
 import Model.Layout.Locatie;
-import Model.Personen.GastModel;
 import Model.Personen.PersoonModel;
-import View.Systeem.OverzichtView; // Voeg deze import toe
+import View.Systeem.OverzichtView;
 
 import javax.swing.*;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,18 +12,20 @@ import java.util.Map;
 public class BeweegHelper  {
     private final Map<Integer, PathFinder> actieveRoutes;
     private final Map<Integer, PersoonModel> actieveMensen;
+    private final Map<Integer, Integer> wachtTicksPerPersoon;
     private final Timer bewegingsTimer;
     private final MovementListener listener;
     private OverzichtView overzichtView;
+    private static int trapVertragingTicks = 1;
 
     public void reset() {
         bewegingsTimer.stop();
         actieveRoutes.clear();
         actieveMensen.clear();
+        wachtTicksPerPersoon.clear();
         bewegingsTimer.start();
     }
 
-    // interface voor stappen genomen en als de targetlocatie is bereikt
     public interface MovementListener {
         void onStepTaken(PersoonModel persoon, Locatie oudeLocatie);
         void onDestinationReached(PersoonModel persoon);
@@ -35,9 +34,9 @@ public class BeweegHelper  {
     public BeweegHelper(int hteSnelheid, MovementListener listener) {
         this.actieveRoutes = new HashMap<>();
         this.actieveMensen = new HashMap<>();
+        this.wachtTicksPerPersoon = new HashMap<>();
         this.listener = listener;
-        // timer die per hte tick movement processed
-        this.bewegingsTimer = new Timer(hteSnelheid, e -> processMovement());
+        this.bewegingsTimer = new Timer(hteSnelheid, _ -> processMovement());
     }
 
     public void setOverzichtView(OverzichtView overzichtView) {
@@ -49,51 +48,58 @@ public class BeweegHelper  {
     public void voegRouteToe(PersoonModel persoon, PathFinder pf) {
         actieveMensen.put(persoon.getID(), persoon);
         actieveRoutes.put(persoon.getID(), pf);
+        wachtTicksPerPersoon.put(persoon.getID(), 0);
     }
 
-    // wordt per hte tick aangeroepen om (als er een stap in de lijst staat) een stap te nemen
     private void processMovement() {
-
-        // controleer of de simulatie is gepauzeerd
         if (overzichtView != null && overzichtView.isGepauzeerd()) {
             return;
         }
 
-        // loopt door alle IDs van actieve routes
         for (Integer id : new ArrayList<>(actieveRoutes.keySet())) {
-
-            // haal het persoon op die hoort bij deze ID
             PersoonModel persoon = actieveMensen.get(id);
-
             PathFinder pf = actieveRoutes.get(id);
 
-            // als de bestemming bereikt is
+            // controleer of deze persoon nog in de wachtstand staat (bijvoorbeeld op de trap)
+            int resterendeWachtTicks = wachtTicksPerPersoon.getOrDefault(id, 0);
+            if (resterendeWachtTicks > 0) {
+                wachtTicksPerPersoon.put(id, resterendeWachtTicks - 1);
+                continue; // sla deze tick over voor dit persoon, ze zijn nog de trap op/af aan het gaan
+            }
+
             if (pf.isBestemmingBereikt()) {
-
-                // ping listener
                 listener.onDestinationReached(persoon);
-
-                // verwijder de route uit actieve routes
                 actieveRoutes.remove(id);
-
+                wachtTicksPerPersoon.remove(id);
             } else {
-
-                // bewaar de oude locatie
                 Locatie oudeLocatie = new Locatie(
                         persoon.getLocatie().getX(),
                         persoon.getLocatie().getY()
                 );
 
-                // pak de volgende stap
-                Locatie volgendeStap = pf.getNextStep();
+                // peek de volgende stap om te kijken of het een verticale stap is
+                Locatie volgendeStap = pf.peekNextStep();
 
-                // verplaats de persoon naar de nieuwe x en y
+                if (volgendeStap != null) {
+                    // check of de y verandert
+                    if (oudeLocatie.getY() != volgendeStap.getY()) {
+                        // trek er 1 vanaf omdat deze huidige tick al telt als de eerste tick
+                        wachtTicksPerPersoon.put(id, trapVertragingTicks - 1);
+                        System.out.println("Gast " + id + " neemt de trap naar verdieping " + volgendeStap.getY() + " (Vertraging ingezet).");
+                    }
+                }
+
+                // voer de stap nu uit
+                volgendeStap = pf.getNextStep();
                 persoon.getLocatie().setX(volgendeStap.getX());
                 persoon.getLocatie().setY(volgendeStap.getY());
 
-                // ping listener
                 listener.onStepTaken(persoon, oudeLocatie);
             }
         }
+    }
+
+    public void setTrapVertragingTicks(int vertraging) {
+        this.trapVertragingTicks = vertraging;
     }
 }

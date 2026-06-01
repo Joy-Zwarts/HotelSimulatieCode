@@ -1,6 +1,7 @@
 package Controller.Events;
 
-import Controller.Systeem.reset;
+import Controller.Events.Interfaces.*;
+import Controller.Systeem.Interfaces.reset;
 import hotelevents.HotelEvent;
 import hotelevents.HotelEventListener;
 import hotelevents.HotelEventManager;
@@ -9,15 +10,15 @@ import java.util.ArrayList;
 
 public class EventHandler implements HotelEventListener, reset {
 
-    private ArrayList<checkInEvent> checkinListeners;
-    private ArrayList<checkOutEvent> checkoutListeners;
-    private ArrayList<evacuateEvent> evacuateListeners;
-    private ArrayList<godzillaEvent> godzillaListeners;
-    private ArrayList<needFoodEvent> foodListeners;
-    private ArrayList<cinemaEvent> cinemaListeners;
-    private ArrayList<fitnessEvent> fitnessListeners;
-    private ArrayList<cleaningEmergencyEvent> cleaningListeners;
-    private ArrayList<noneEvent> noneEventListeners;
+    private final ArrayList<checkInEvent> checkinListeners;
+    private final ArrayList<checkOutEvent> checkoutListeners;
+    private final ArrayList<evacuateEvent> evacuateListeners;
+    private final ArrayList<godzillaEvent> godzillaListeners;
+    private final ArrayList<needFoodEvent> foodListeners;
+    private final ArrayList<cinemaEvent> cinemaListeners;
+    private final ArrayList<fitnessEvent> fitnessListeners;
+    private final ArrayList<cleaningEmergencyEvent> cleaningListeners;
+    private final ArrayList<noneEvent> noneEventListeners;
 
 
     public EventHandler(HotelEventManager manager) {
@@ -37,27 +38,27 @@ public class EventHandler implements HotelEventListener, reset {
         switch (hotelEvent.getEventType()) {
             case CHECK_IN:
                 for (checkInEvent listener : checkinListeners) {
-                    listener.checkInEvent(hotelEvent);
+                    listener.checkIn(hotelEvent);
                 }
                 break;
             case CHECK_OUT:
                 for (checkOutEvent listener : checkoutListeners) {
-                    listener.checkOutEvent(hotelEvent);
+                    listener.checkOut(hotelEvent);
                 }
                 break;
             case EVACUATE:
                 for (evacuateEvent listener : evacuateListeners) {
-                    listener.evacuateEvent(hotelEvent);
+                    listener.evacuate(hotelEvent);
                 }
                 break;
             case GODZILLA:
                 for (godzillaEvent listener : godzillaListeners) {
-                    listener.godzillaEvent(hotelEvent);
+                    listener.godzilla(hotelEvent);
                 }
                 break;
             case NEED_FOOD:
                 for (needFoodEvent listener : foodListeners) {
-                    listener.needFoodEvent(hotelEvent);
+                    listener.needFood(hotelEvent);
                 }
                 break;
             case GOTO_CINEMA:
@@ -77,13 +78,13 @@ public class EventHandler implements HotelEventListener, reset {
                 break;
             case CLEANING_EMERGENCY:
                 for (cleaningEmergencyEvent listener : cleaningListeners) {
-                    listener.cleaningEmergencyEvent(hotelEvent);
+                    listener.cleaningEmergency(hotelEvent);
                 }
                 break;
             case NONE:
                 for (noneEvent listener : noneEventListeners) {
                     try {
-                        listener.noneEvent(hotelEvent);
+                        listener.HTETick(hotelEvent);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }

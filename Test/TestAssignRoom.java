@@ -2,6 +2,7 @@ import Controller.PersoonManagement.KamerAssign;
 import Controller.PersoonManagement.ReceptieController;
 import Model.Layout.Locatie;
 import Model.Personen.GastModel;
+import Model.Personen.TypePersoon;
 import Model.Ruimtes.KamerModel;
 import Model.Ruimtes.KamerType;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +15,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TestKamerAssign {
 
-    private ReceptieController controller;
     private HashMap<Integer, KamerModel> kamerLijst;
     private KamerAssign kamerAssign;
 
@@ -22,14 +22,25 @@ class TestKamerAssign {
     void setUp() {
         kamerLijst = new HashMap<>();
 
-        controller = new ReceptieController(null) {
+        ReceptieController controller = new ReceptieController(null) {
             @Override
             public HashMap<Integer, KamerModel> getKamers() {
                 return kamerLijst;
             }
-            @Override public void setKamerVol(KamerModel k) { k.setBezet(true); }
-            @Override public void setKamerLeeg(KamerModel k) { k.setBezet(false); }
-            @Override public void refreshView() {}
+
+            @Override
+            public void setKamerVol(KamerModel k) {
+                k.setBezet(true);
+            }
+
+            @Override
+            public void setKamerLeeg(KamerModel k) {
+                k.setBezet(false);
+            }
+
+            @Override
+            public void refreshView() {
+            }
         };
 
         kamerAssign = new KamerAssign(controller);
@@ -40,7 +51,7 @@ class TestKamerAssign {
         KamerModel kamer = new KamerModel(KamerType.ROOM, new Locatie(5,5), "1,1", vierSterren, false);
         kamerLijst.put(1, kamer);
 
-        GastModel gast = new GastModel(1, new Locatie(0,0), new Locatie(0,0), vierSterren, null);
+        GastModel gast = new GastModel(1, new Locatie(0,0), new Locatie(0,0), TypePersoon.GAST, vierSterren, null);
 
         kamerAssign.assignKamer(gast);
 
@@ -58,7 +69,7 @@ class TestKamerAssign {
         kamerLijst.put(1, kamer);
 
         // gast wil 5 sterren
-        GastModel gast = new GastModel(1, new Locatie(0,0), new Locatie(0,0), vijfSterren, null);
+        GastModel gast = new GastModel(1, new Locatie(0,0), new Locatie(0,0),TypePersoon.GAST, vijfSterren, null);
 
         kamerAssign.assignKamer(gast);
 
@@ -70,7 +81,7 @@ class TestKamerAssign {
     @Test
     void testAssignKamerGeenBeschikbaarheid() {
         // geen kamers in de lijst
-        GastModel gast = new GastModel(1, new Locatie(0,0), new Locatie(0,0), eenSter, null);
+        GastModel gast = new GastModel(1, new Locatie(0,0), new Locatie(0,0),TypePersoon.GAST, eenSter, null);
 
         kamerAssign.assignKamer(gast);
 
@@ -82,7 +93,7 @@ class TestKamerAssign {
         KamerModel bezetteKamer = new KamerModel(KamerType.ROOM, new Locatie(5,5), "1,1", tweeSterren, true);
         kamerLijst.put(1, bezetteKamer);
 
-        GastModel gast = new GastModel(1, new Locatie(0,0), new Locatie(0,0), tweeSterren, null);
+        GastModel gast = new GastModel(1, new Locatie(0,0), new Locatie(0,0),TypePersoon.GAST, tweeSterren, null);
 
         kamerAssign.assignKamer(gast);
 
@@ -94,7 +105,7 @@ class TestKamerAssign {
         assertDoesNotThrow(() -> kamerAssign.assignKamer(null));
 
         // gast heeft geen wensen
-        GastModel gastZonderWensen = new GastModel(1, new Locatie(0,0), new Locatie(0,0), null, null);
+        GastModel gastZonderWensen = new GastModel(1, new Locatie(0,0), new Locatie(0,0),TypePersoon.GAST, null, null);
         assertDoesNotThrow(() -> kamerAssign.assignKamer(gastZonderWensen));
         assertNull(gastZonderWensen.getKamer());
     }
@@ -103,7 +114,7 @@ class TestKamerAssign {
     void testOnGastAangemaakt() {
         KamerModel kamer = new KamerModel(KamerType.ROOM, new Locatie(5,5), "1,1", eenSter, false);
         kamerLijst.put(1, kamer);
-        GastModel gast = new GastModel(1, new Locatie(0,0), new Locatie(0,0), eenSter, null);
+        GastModel gast = new GastModel(1, new Locatie(0,0), new Locatie(0,0),TypePersoon.GAST, eenSter, null);
 
         kamerAssign.onGastAangemaakt(gast);
 
@@ -113,7 +124,7 @@ class TestKamerAssign {
     @Test
     void testOnGastVertrokken() {
         KamerModel kamer = new KamerModel(KamerType.ROOM, new Locatie(5,5), "1,1", eenSter, true);
-        GastModel gast = new GastModel(1, new Locatie(0,0), new Locatie(0,0),eenSter, null);
+        GastModel gast = new GastModel(1, new Locatie(0,0), new Locatie(0,0),TypePersoon.GAST,eenSter, null);
         gast.setKamer(kamer);
         kamer.setVerblijvende(gast);
 
@@ -123,7 +134,7 @@ class TestKamerAssign {
         assertNull(kamer.getVerblijvende());
 
         assertDoesNotThrow(() -> kamerAssign.onGastVertrokken(null));
-        assertDoesNotThrow(() -> kamerAssign.onGastVertrokken(new GastModel(2, null, null, null, null)));
+        assertDoesNotThrow(() -> kamerAssign.onGastVertrokken(new GastModel(2, null, null,TypePersoon.GAST, null, null)));
     }
 
     @Test

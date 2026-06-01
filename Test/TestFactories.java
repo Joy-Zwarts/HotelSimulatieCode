@@ -1,9 +1,8 @@
 import Controller.PersoonFactory.GastCreator;
 import Controller.PersoonFactory.PersoonFactory;
-import Controller.PersoonFactory.SchoonmakerCreator;
 import Model.Layout.Locatie;
 import Model.Personen.GastModel;
-import Model.Personen.SchoonmakerModel;
+import Model.Personen.TypePersoon;
 import Model.Ruimtes.KamerClassificatie;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,11 +25,11 @@ public class TestFactories {
     public void testGastCreatie() {
         PersoonFactory factory = new GastCreator();
 
-        gasten.add((GastModel) factory.createPersoon(1, new Locatie(0,0), new Locatie(1,1), 1, null));
-        gasten.add((GastModel) factory.createPersoon(2, new Locatie(0,0), new Locatie(1,1), 2, null));
-        gasten.add((GastModel) factory.createPersoon(3, new Locatie(0,0), new Locatie(1,1), 3, null));
-        gasten.add((GastModel) factory.createPersoon(4, new Locatie(0,0), new Locatie(1,1), 4, null));
-        gasten.add((GastModel) factory.createPersoon(5, new Locatie(0,0), new Locatie(1,1), 5, null));
+        gasten.add((GastModel) factory.createPersoon(1, new Locatie(0,0), new Locatie(1,1), 1, null, TypePersoon.GAST));
+        gasten.add((GastModel) factory.createPersoon(2, new Locatie(0,0), new Locatie(1,1), 2, null, TypePersoon.GAST));
+        gasten.add((GastModel) factory.createPersoon(3, new Locatie(0,0), new Locatie(1,1), 3, null, TypePersoon.GAST));
+        gasten.add((GastModel) factory.createPersoon(4, new Locatie(0,0), new Locatie(1,1), 4, null, TypePersoon.GAST));
+        gasten.add((GastModel) factory.createPersoon(5, new Locatie(0,0), new Locatie(1,1), 5, null, TypePersoon.GAST));
 
         Assertions.assertEquals(5, gasten.size());
         Assertions.assertEquals(KamerClassificatie.eenSter, gasten.get(0).getWensen());
@@ -77,9 +76,7 @@ public class TestFactories {
     @Test
     public void testRoomCreatorUnknownClassification() {
         RuimteFactory factory = new KamerCreator();
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            factory.createRuimte(new Locatie(0,0), "1,1", 0, "99 Stars");
-        });
+        Assertions.assertThrows(IllegalArgumentException.class, () -> factory.createRuimte(new Locatie(0,0), "1,1", 0, "99 Stars"));
     }
 
     @Test
@@ -87,7 +84,7 @@ public class TestFactories {
         RuimteFactory factory = new BioscoopCreator();
         RuimteModel cinema = factory.createRuimte(new Locatie(2, 2), "2,2", 0, "");
 
-        Assertions.assertTrue(cinema instanceof BioscoopModel);
+        Assertions.assertInstanceOf(BioscoopModel.class, cinema);
         Assertions.assertEquals(KamerType.CINEMA, cinema.getAreaType());
         Assertions.assertTrue(((BioscoopModel) cinema).getId().startsWith("C"), "ID moet beginnen met C");
     }
@@ -97,7 +94,7 @@ public class TestFactories {
         RuimteFactory factory = new FitnessCreator();
         RuimteModel fitness = factory.createRuimte(new Locatie(3, 3), "1,2", 0, "");
 
-        Assertions.assertTrue(fitness instanceof FitnessModel);
+        Assertions.assertInstanceOf(FitnessModel.class, fitness);
         Assertions.assertEquals(KamerType.FITNESS, fitness.getAreaType());
         Assertions.assertTrue(((FitnessModel) fitness).getId().startsWith("F"), "ID moet beginnen met F");
     }
@@ -107,7 +104,7 @@ public class TestFactories {
         RuimteFactory factory = new RestaurantCreator();
         RuimteModel restaurant = factory.createRuimte(new Locatie(4, 4), "3,2", 1, "");
 
-        Assertions.assertTrue(restaurant instanceof RestaurantModel);
+        Assertions.assertInstanceOf(RestaurantModel.class, restaurant);
         Assertions.assertEquals(KamerType.RESTAURANT, restaurant.getAreaType());
         Assertions.assertTrue(((RestaurantModel) restaurant).getID().startsWith("R"), "ID moet beginnen met R");
         Assertions.assertEquals(0, (restaurant).getAantalGasten());

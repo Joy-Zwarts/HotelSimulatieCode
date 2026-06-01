@@ -1,4 +1,4 @@
-package Controller.Faciliteiten;
+package Controller.Faciliteiten.Interfaces;
 
 import java.util.ArrayList;
 

@@ -1,6 +1,8 @@
 package Controller.PersoonManagement;
 
-import Controller.Systeem.reset;
+import Controller.PersoonManagement.Interfaces.NewGast;
+import Controller.PersoonManagement.Interfaces.NewKamer;
+import Controller.Systeem.Interfaces.reset;
 import Model.Layout.Locatie;
 import Model.Personen.GastModel;
 import Model.Ruimtes.KamerModel;
@@ -138,5 +140,9 @@ public class ReceptieController implements NewKamer, NewGast, reset {
             }
         }
         refreshView();
+    }
+
+    public HashMap<Integer, GastModel> getGasten() {
+        return gasten;
     }
 }

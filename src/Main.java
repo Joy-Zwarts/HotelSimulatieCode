@@ -1,7 +1,7 @@
 import Controller.SimulatieController;
 
 public class Main {
-    public static void main(String[] args) {
+    static void main() {
 
         SimulatieController simulatieController = new SimulatieController() {};
     }

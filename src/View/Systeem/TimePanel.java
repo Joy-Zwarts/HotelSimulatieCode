@@ -1,6 +1,6 @@
 package View.Systeem;
 
-import Controller.Events.noneEvent;
+import Controller.Events.Interfaces.noneEvent;
 import hotelevents.HotelEvent;
 import hotelevents.HotelEventManager;
 
@@ -38,7 +38,7 @@ public class TimePanel implements noneEvent{
 
     // per tick bereken de tijd opnieuw en pas het label aan
     @Override
-    public void noneEvent(HotelEvent event) {
+    public void HTETick(HotelEvent event) {
         long totalSeconds = event.getTime();
         int minutes = (int) (totalSeconds / 60);
         int seconds = (int) (totalSeconds % 60);

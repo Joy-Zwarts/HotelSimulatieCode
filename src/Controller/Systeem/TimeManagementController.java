@@ -1,6 +1,7 @@
 package Controller.Systeem;
 
 import Controller.SimulatieController;
+import Controller.Systeem.Interfaces.onTimeChange;
 import View.Systeem.HotelSimulatieView;
 import View.Systeem.TimeManagementPanel;
 import hotelevents.HotelEventManager;
@@ -20,7 +21,7 @@ public class TimeManagementController implements ActionListener {
     private final JButton normal;
     private final JButton fastForward;
     private final JButton doubleFastForward;
-    private ArrayList<onTimeChange> timeChangeListeners;
+    private final ArrayList<onTimeChange> timeChangeListeners;
 
     // constructor
     public TimeManagementController(HotelEventManager Manager, SimulatieController Controller, HotelSimulatieView View, TimeManagementPanel Panel) {

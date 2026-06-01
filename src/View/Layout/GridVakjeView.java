@@ -11,7 +11,6 @@ public class GridVakjeView {
     private final JLayeredPane layeredPane;
     private final JPanel backgroundPanel; // back Layer
     private final JPanel gastenContainer; // de container waar gasten in komen
-    private JLabel aantalMensen;
 
     // constructor
     public GridVakjeView(int x, int y, int breedte, int hoogte) {
@@ -25,6 +24,8 @@ public class GridVakjeView {
         backgroundPanel.setBounds(0, 0, breedte, hoogte);
         backgroundPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
+        backgroundPanel.putClientProperty("noTheme", true);
+
         // front layer
         JPanel guestPanel = new JPanel();
         guestPanel.setOpaque(false);
@@ -36,7 +37,7 @@ public class GridVakjeView {
         gastenContainer.setOpaque(false);
 
         gastenContainer.setLayout(new FlowLayout(FlowLayout.CENTER, 1, 0));
-        guestPanel.add(gastenContainer, BorderLayout.SOUTH);;
+        guestPanel.add(gastenContainer, BorderLayout.SOUTH);
 
         // voeg ze toe aan de layeredPane
         layeredPane.add(backgroundPanel, Integer.valueOf(0));
@@ -67,6 +68,10 @@ public class GridVakjeView {
             String nummer = bepaalRuimteNummer(ruimte);
             if (nummer != null) {
                 JLabel kamerNummer = new JLabel(nummer);
+
+                kamerNummer.putClientProperty("noTheme", true);
+                kamerNummer.setForeground(Color.BLACK);
+
                 kamerNummer.setBounds(2, backgroundPanel.getHeight() - 15, 40, 15);
                 backgroundPanel.add(kamerNummer);
             }
@@ -87,13 +92,15 @@ public class GridVakjeView {
             return;
         }
 
-        // verwijder oude labels/icons
-        for (Component c : backgroundPanel.getComponents()) {
+        Component[] componenten = backgroundPanel.getComponents();
+        for (int i = componenten.length - 1; i >= 0; i--) {
+            Component c = componenten[i];
             if (c instanceof JLabel) {
-                if (isRechtsboven && ("GAST_LABEL".equals(c.getName()) || "GAST_ICON".equals(c.getName()))) {
+                String name = c.getName();
+                if (isRechtsboven && ("GAST_LABEL".equals(name) || "GAST_ICON".equals(name))) {
                     backgroundPanel.remove(c);
                 }
-                if (isLinksboven && ("SCHOONMAKER_LABEL".equals(c.getName()) || "SCHOONMAKER_ICON".equals(c.getName()))) {
+                if (isLinksboven && ("SCHOONMAKER_LABEL".equals(name) || "SCHOONMAKER_ICON".equals(name))) {
                     backgroundPanel.remove(c);
                 }
             }
@@ -104,9 +111,11 @@ public class GridVakjeView {
 
         // Schoonmakers
 
-        if (isLinksboven) {
+        if (isLinksboven && ruimte.getAantalSchoonmakers() > 0) {
             ImageIcon schoonmakerIcon = laadIcon("Schoonmaker.png");
             JLabel schoonmakerLabel = new JLabel(String.valueOf(ruimte.getAantalSchoonmakers()));
+            schoonmakerLabel.putClientProperty("noTheme", true);
+            schoonmakerLabel.setForeground(Color.BLACK);
             schoonmakerLabel.setFont(new Font("Arial", Font.BOLD, 12));
             schoonmakerLabel.setName("SCHOONMAKER_LABEL");
             schoonmakerLabel.setSize(schoonmakerLabel.getPreferredSize());
@@ -127,9 +136,11 @@ public class GridVakjeView {
 
         // Gasten
 
-        if (isRechtsboven) {
+        if (isRechtsboven && ruimte.getAantalGasten() > 0) {
             ImageIcon gastIcon = laadIcon("gast.png");
             JLabel gastenLabel = new JLabel(String.valueOf(ruimte.getAantalGasten()));
+            gastenLabel.putClientProperty("noTheme", true);
+            gastenLabel.setForeground(Color.BLACK);
             gastenLabel.setFont(new Font("Arial", Font.BOLD, 12));
             gastenLabel.setName("GAST_LABEL");
             gastenLabel.setSize(gastenLabel.getPreferredSize());
@@ -236,9 +247,5 @@ public class GridVakjeView {
 
     public JComponent getVakjePanel() {
         return layeredPane;
-    }
-
-    public JLabel getPersonenLabel() {
-        return aantalMensen;
     }
 }

@@ -1,69 +1,116 @@
 package Controller.Faciliteiten;
 
-import Controller.Events.needFoodEvent;
-import Controller.Events.noneEvent;
-import View.Systeem.OverzichtView;
-import hotelevents.HotelEvent;
+import Controller.Faciliteiten.Interfaces.restaurantOver;
+import Controller.Layout.Intefaces.LayoutGeladen;
+import Controller.Layout.LayoutController;
+import Controller.PersoonManagement.Interfaces.NewGast;
+import Controller.Timer.WachtTimer;
+import Model.Layout.Locatie;
+import Model.Personen.Activiteit;
+import Model.Personen.GastModel;
+import Model.Ruimtes.KamerType;
+import Model.Ruimtes.RestaurantModel;
+import Model.Ruimtes.RuimteModel;
+import View.Systeem.TijdsDuur;
+import Controller.Systeem.Interfaces.settingsListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
-public class RestaurantController implements needFoodEvent, noneEvent {
+public class RestaurantController implements NewGast, settingsListener, LayoutGeladen {
 
     private final ArrayList<restaurantOver> listeners = new ArrayList<>();
-    private final ArrayList<Integer> gastenInRestaurant = new ArrayList<>();
-
-    // per gast eigen eindtijd
-    private final Map<Integer, Integer> gastEindTijd = new HashMap<>();
-    private final Map<Integer, Integer> gastTimer = new HashMap<>();
     private final Random rand = new Random();
+    public final WachtTimer wachtTimer;
+    public HashMap<String, RestaurantModel> restaurants = new HashMap<>();
+    public LayoutController layoutController;
 
-    public void addlisteners(restaurantOver listener) {
+    public void addListeners(restaurantOver listener) {
         listeners.add(listener);
     }
 
-    // voeg gast toe aan lijst van gasten in het restaurant met een random verblijftijd
-    @Override
-    public void needFoodEvent(HotelEvent hotelEvent) {
-        int gastId = hotelEvent.getGuestId();
-
-        gastenInRestaurant.add(gastId);
-
-        gastTimer.put(gastId, 1);
-        gastEindTijd.put(gastId, rand.nextInt(15, 31));
-
-        System.out.println(
-                "Gast " + gastId + " is gaan eten voor " + gastEindTijd.get(gastId) + " ticks."
-        );
+    public RestaurantController(WachtTimer timer) {
+        this.wachtTimer = timer;
     }
 
-    // per tick de timer ophogen en checken of de eindtijd is bereikt
+    // als gasten klaar zijn met eten
+    public void stuurGastWeg(int gastId, RestaurantModel restaurant) {
+        restaurant.verwijderGast(gastId);
+
+        for (restaurantOver listener : listeners) {
+            listener.gaWegUitRestaurant(gastId);
+        }
+        System.out.println("Gast " + gastId + " heeft het restaurant verlaten.");
+    }
+
+    // als er geen plek is in het restaurant
+    public void gastGeweigerd(int gastId) {
+        for (restaurantOver listener : listeners) {
+            listener.gastGeweigerd(gastId);
+        }
+    }
+
+    // kijkt of er plek is in het restaurant, zo ja, dan mogen ze blijven eten, zo nee, worden ze weggestuurd
     @Override
-    public void noneEvent(HotelEvent event) {
-        ArrayList<Integer> teVerwijderen = new ArrayList<>();
+    public void onGastAangekomenInKamer(GastModel gast, Locatie behaaldeLocatie) {
+        int gastId = gast.getID();
 
-        for (int gastId : gastenInRestaurant) {
+        // welk restaurant is het
+        for (RestaurantModel restaurant : restaurants.values()) {
+            if ((gast.getLocatie().getX() == (restaurant.getPosition().getX())) &&
+                    (gast.getLocatie().getY() == (restaurant.getPosition().getY() - 1))) {
 
-            int timer = gastTimer.get(gastId) + 1;
-            gastTimer.put(gastId, timer);
+                // als er nog plek is
+                if (!restaurant.isVol()) {
+                    restaurant.voegGastToe(gastId);
 
-            if (timer >= gastEindTijd.get(gastId)) {
+                    // bereken eettijd
+                    int verblijfTijd = rand.nextInt(15, 31);
+                    String uniekeID = gast.getTypePersoon().name() + "-" + gastId;
 
-                for (restaurantOver listener : listeners) {
-                    listener.gaWegUitRestaurant(gastId);
+                    // start timer voor hun
+                    wachtTimer.startTimer(uniekeID, () -> stuurGastWeg(gastId, restaurant), verblijfTijd);
+
+                    System.out.println("Gast " + gastId + " eet in restaurant " + restaurant.getID() + " voor " + verblijfTijd + " ticks.");
+                    gast.setActivity(Activiteit.ETEN);
+                } else {
+                    System.out.println("Gast " + gastId + " wilde eten, maar restaurant " + restaurant.getID() + " is vol!");
+                    String uniekeWeigerID = "WEIGER-" + gast.getTypePersoon().name() + "-" + gastId;
+                    // start de timer zodat het swing safe is en roep de weiger-event aan
+                    wachtTimer.startTimer(uniekeWeigerID, () -> gastGeweigerd(gastId), 0);
                 }
-
-                teVerwijderen.add(gastId);
+                break;
             }
         }
+    }
 
-        // cleanup
-        for (int gastId : teVerwijderen) {
-            gastenInRestaurant.remove(Integer.valueOf(gastId));
-            gastTimer.remove(gastId);
-            gastEindTijd.remove(gastId);
+    @Override
+    public void restaurantCapaciteitVeranderd(int restaurantCapaciteit) {
+        for (RestaurantModel restaurant : restaurants.values()) {
+            restaurant.setCapacity(restaurantCapaciteit);
         }
     }
+
+    @Override
+    public void onLayoutGeladen(LayoutController controller) {
+        this.layoutController = controller;
+        for (RuimteModel ruimte : layoutController.getModel().getRuimtes()) {
+            if (ruimte.getAreaType().equals(KamerType.RESTAURANT)) {
+                RestaurantModel restaurant = (RestaurantModel) ruimte;
+                restaurants.put(restaurant.getID(), restaurant);
+                System.out.println("Restaurant " + restaurant.getID() + " succesvol gekoppeld aan de controller.");
+            }
+        }
+    }
+
+    @Override public void onGastAangemaakt(GastModel gast) {}
+    @Override public void onGastVertrokken(GastModel gast) {}
+    @Override public void onGastVerplaatst(GastModel gast, Locatie oudeLocatie) {}
+    @Override public void onGastGaatWegUitKamer(GastModel gast, Locatie oudeLocatie) {}
+    @Override public void schoonmaakTijdVeranderd(TijdsDuur tijdsDuur) {}
+    @Override public void filmDuurVeranderd(TijdsDuur tijdsDuur) {}
+    @Override public void aantalSchoonmakersVeranderd(int aantalSchoonmakers) {}
+    @Override public void trapLoopDuurVeranderd(int trapLoopDuur) {}
+    @Override public void gastMaxWachttijdVeranderd(int gastMaxWachttijd) {}
 }
