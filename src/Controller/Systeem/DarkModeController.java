@@ -16,7 +16,6 @@ public class DarkModeController {
     private final DarkModeModel model;
     private final TimeManagementPanel timeManagementPanel;
 
-    // NIEUW: Bewaar referenties naar de andere views
     private SettingsView settingsView;
     private OverzichtView overzichtView;
 
@@ -27,7 +26,6 @@ public class DarkModeController {
         this.timeManagementPanel = panel;
     }
 
-    // NIEUW: Zorg dat we de schermen later kunnen koppelen vanuit je hoofdprogramma/controller
     public void verbindExtraSchermen(SettingsView settingsView, OverzichtView overzichtView) {
         this.settingsView = settingsView;
         this.overzichtView = overzichtView;

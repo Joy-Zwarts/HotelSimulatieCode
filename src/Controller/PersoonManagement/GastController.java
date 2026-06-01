@@ -29,13 +29,13 @@ public class GastController extends PersoonController implements checkInEvent, c
     private final GastCreator factory;
     private final ArrayList<NewGast> listeners;
     private Locatie startLocatie;
-    private final Map<Integer, GastModel> actieveGasten;
+    private final Map<Integer, GastModel> gasten;
 
     // constructor
     public GastController() {
         super();
         this.listeners = new ArrayList<>();
-        this.actieveGasten = new HashMap<>();
+        this.gasten = new HashMap<>();
         this.factory = new GastCreator();
     }
 
@@ -45,7 +45,7 @@ public class GastController extends PersoonController implements checkInEvent, c
             for (NewGast listener : listeners) {
                 listener.onGastVertrokken(gast);
             }
-            actieveGasten.remove(gast.getID());
+            gasten.remove(gast.getID());
             return;
         }
 
@@ -93,14 +93,14 @@ public class GastController extends PersoonController implements checkInEvent, c
     public void checkIn(HotelEvent hotelEvent) {
 
         // failsafe als de gast al bestaat
-        if (actieveGasten.containsKey(hotelEvent.getGuestId())) {
+        if (gasten.containsKey(hotelEvent.getGuestId())) {
             return;
         }
 
         // maak de gast aan op startlocatie
         GastModel gast = (GastModel) factory.createPersoon(hotelEvent.getGuestId(), new Locatie(startLocatie.getX(), startLocatie.getY()), new Locatie(0, 0), hotelEvent.getData(), null, TypePersoon.GAST);
 
-        actieveGasten.put(gast.getID(), gast);
+        gasten.put(gast.getID(), gast);
 
         // notify de listener dat er een nieuwe gast is gemaakt
         for (NewGast listener : listeners) {
@@ -118,7 +118,7 @@ public class GastController extends PersoonController implements checkInEvent, c
     // maakt een nieuwe route naar de uitgang
     @Override
     public void checkOut(HotelEvent hotelEvent) {
-        GastModel gast = actieveGasten.get(hotelEvent.getGuestId());
+        GastModel gast = gasten.get(hotelEvent.getGuestId());
 
         if (gast != null) {
             PathFinder pf = new PathFinder(gast.getLocatie(), startLocatie, layoutController);
@@ -137,7 +137,7 @@ public class GastController extends PersoonController implements checkInEvent, c
 
     @Override
     public void needFood(HotelEvent hotelEvent) {
-        GastModel gast = actieveGasten.get(hotelEvent.getGuestId());
+        GastModel gast = gasten.get(hotelEvent.getGuestId());
         if (gast != null) {
             Locatie restaurantLocatie = layoutController.vindLocatie(KamerType.RESTAURANT);
             if (restaurantLocatie != null) {
@@ -178,7 +178,7 @@ public class GastController extends PersoonController implements checkInEvent, c
 
     @Override
     public void goToFitnessEvent(HotelEvent hotelEvent) {
-        GastModel gast = actieveGasten.get(hotelEvent.getGuestId());
+        GastModel gast = gasten.get(hotelEvent.getGuestId());
 
         if (gast != null) {
             // zoek een restaurant locatie
@@ -201,7 +201,7 @@ public class GastController extends PersoonController implements checkInEvent, c
 
     @Override
     public void goToCinemaEvent(HotelEvent hotelEvent) {
-        GastModel gast = actieveGasten.get(hotelEvent.getGuestId());
+        GastModel gast = gasten.get(hotelEvent.getGuestId());
 
         if (gast != null) {
             // zoek een restaurant locatie
@@ -230,7 +230,7 @@ public class GastController extends PersoonController implements checkInEvent, c
     @Override
     public void gaWegUitBioscoop(ArrayList<Integer> gastenInBios) {
         for (int gastID : gastenInBios) {
-            GastModel gast = actieveGasten.get(gastID);
+            GastModel gast = gasten.get(gastID);
             if (gast.getTargetLocatie() != null) {
                 PathFinder pf = new PathFinder(gast.getLocatie(), gast.getTargetLocatie(), layoutController);
                 beweegHelper.voegRouteToe(gast, pf);
@@ -244,7 +244,7 @@ public class GastController extends PersoonController implements checkInEvent, c
 
     @Override
     public void gaWegUitRestaurant(int gastID) {
-        GastModel gast = actieveGasten.get(gastID);
+        GastModel gast = gasten.get(gastID);
         if (gast != null && gast.getTargetLocatie() != null) {
 
             for (NewGast listener : listeners) {
@@ -259,7 +259,7 @@ public class GastController extends PersoonController implements checkInEvent, c
 
     @Override
     public void gastGeweigerd(int gastID) {
-        GastModel gast = actieveGasten.get(gastID);
+        GastModel gast = gasten.get(gastID);
         if (gast != null && gast.getTargetLocatie() != null) {
 
             // sla de restaurant-locatie op als vorige locatie
@@ -275,7 +275,7 @@ public class GastController extends PersoonController implements checkInEvent, c
 
     @Override
     public void gaWegUitGym(int gastID) {
-        GastModel gast = actieveGasten.get(gastID);
+        GastModel gast = gasten.get(gastID);
         if (gast.getTargetLocatie() != null) {
             PathFinder pf = new PathFinder(gast.getLocatie(), gast.getTargetLocatie(), layoutController);
             beweegHelper.voegRouteToe(gast, pf);
@@ -289,7 +289,7 @@ public class GastController extends PersoonController implements checkInEvent, c
     @Override
     public void resetSimulatie() {
         super.resetController();
-        this.actieveGasten.clear();
+        this.gasten.clear();
     }
 
     @Override
