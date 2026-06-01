@@ -75,7 +75,7 @@ public class SettingsView {
         restaurantCapaciteit.setForeground(dark);
         restaurantCapaciteit.setFont(sliderFont);
 
-        trapLoopDuur = new JSlider(1, 10, 1);
+        trapLoopDuur = new JSlider(1, 5, 1);
         trapLoopDuur.setPaintTicks(true);
         trapLoopDuur.setMajorTickSpacing(1);
         trapLoopDuur.setPaintLabels(true);

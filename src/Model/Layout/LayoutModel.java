@@ -7,7 +7,6 @@ import Controller.RuimteFactory.SchachtCreator;
 import Controller.RuimteFactory.TrappenhuisCreator;
 import Model.Ruimtes.*;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -39,7 +38,7 @@ public class LayoutModel {
     }
 
     // voeg kamer toe aan lijst van kamers
-    public void addKamer(RuimteModel ruimte) {
+    public void addRuimte(RuimteModel ruimte) {
         ruimtes.add(ruimte);
     }
 

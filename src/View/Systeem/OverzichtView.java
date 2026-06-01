@@ -178,10 +178,10 @@ public class OverzichtView implements noneEvent {
 
                 String statusText;
 
-                if (gast.getActivity() == null) { // failsafe
+                if (gast.getActiviteit() == null) { // failsafe
                     statusText = "Status niet gevonden";
                 } else {
-                    switch (gast.getActivity()) {
+                    switch (gast.getActiviteit()) {
                         case ETEN ->  statusText = "Aan het Eten";
                         case SPORTEN ->  statusText = "Aan het Sporten";
                         case FILM ->   statusText = "In de Bioscoop";

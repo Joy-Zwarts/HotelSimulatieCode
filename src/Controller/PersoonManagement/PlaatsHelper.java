@@ -2,7 +2,7 @@ package Controller.PersoonManagement;
 
 import Controller.Layout.GridVakjeController;
 import Controller.Layout.LayoutController;
-import Controller.Layout.Intefaces.LayoutGeladen;
+import Controller.Layout.Interfaces.LayoutGeladen;
 import Controller.PersoonManagement.Interfaces.NewGast;
 import Controller.PersoonManagement.Interfaces.NewSchoonmaker;
 import Controller.Systeem.Interfaces.reset;
