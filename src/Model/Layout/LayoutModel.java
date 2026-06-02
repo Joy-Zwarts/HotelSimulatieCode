@@ -49,14 +49,7 @@ public class LayoutModel {
         int liftY = gridLengte / 2;
         if (liftY < 1) liftY = 1;
         if (liftY > 1) {
-            addKamerBuitenJson(KamerType.SCHACHT, new Locatie(1, 1), "1," + (liftY - 1), gridLengte);
-        }
-
-        addKamerBuitenJson(KamerType.LIFT, new Locatie(1, liftY), "1,1", gridLengte);
-
-        int ondersteSchachtHoogte = gridLengte - liftY;
-        if (ondersteSchachtHoogte > 0) {
-            addKamerBuitenJson(KamerType.SCHACHT, new Locatie(1, liftY + 1), "1," + ondersteSchachtHoogte, gridLengte);
+            addKamerBuitenJson(KamerType.SCHACHT, new Locatie(1, 1), "1," + gridLengte, gridLengte);
         }
 
         // trappenhuis
@@ -75,12 +68,6 @@ public class LayoutModel {
     // voeg toe aan de lijst
     public void addKamerBuitenJson(KamerType kamerType, Locatie position, String dimension, int gridLengte) {
         switch (kamerType) {
-            case KamerType.LIFT:
-                // gebruik de liftCreator
-                RuimteModel lift = liftCreator.createRuimte(position, dimension, 0, null);
-                verplichteElementen.add(lift);
-                break;
-
             case KamerType.SCHACHT:
                 // gebruik de schachtCreator
                 RuimteModel schacht = schachtCreator.createRuimte(position, dimension, 0, null);
