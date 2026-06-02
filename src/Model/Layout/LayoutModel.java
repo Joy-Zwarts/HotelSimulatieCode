@@ -1,7 +1,7 @@
 package Model.Layout;
 
 import Controller.Layout.GridVakjeController;
-import Controller.RuimteFactory.LiftCreator;
+import Controller.PersoonFactory.LiftCreator;
 import Controller.RuimteFactory.LobbyCreator;
 import Controller.RuimteFactory.SchachtCreator;
 import Controller.RuimteFactory.TrappenhuisCreator;
