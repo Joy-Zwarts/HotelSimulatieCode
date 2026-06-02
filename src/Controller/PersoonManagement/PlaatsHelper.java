@@ -4,10 +4,12 @@ import Controller.Layout.GridVakjeController;
 import Controller.Layout.LayoutController;
 import Controller.Layout.Interfaces.LayoutGeladen;
 import Controller.PersoonManagement.Interfaces.NewGast;
+import Controller.PersoonManagement.Interfaces.NewLift;
 import Controller.PersoonManagement.Interfaces.NewSchoonmaker;
 import Controller.Systeem.Interfaces.reset;
 import Model.Layout.Locatie;
 import Model.Personen.GastModel;
+import Model.Personen.LiftModel;
 import Model.Personen.PersoonModel;
 import Model.Personen.SchoonmakerModel;
 import Model.Ruimtes.RuimteModel;
@@ -16,7 +18,7 @@ import View.Layout.LayoutView;
 import javax.swing.*;
 import java.util.HashMap;
 
-public class PlaatsHelper implements NewGast, LayoutGeladen, NewSchoonmaker, reset {
+public class PlaatsHelper implements NewGast, LayoutGeladen, NewSchoonmaker, reset, NewLift {
 
     // attributen
     private HashMap<Locatie, GridVakjeController> grid;
@@ -33,6 +35,12 @@ public class PlaatsHelper implements NewGast, LayoutGeladen, NewSchoonmaker, res
     @Override
     public void onGastAangemaakt(GastModel gast) {
         plaatsPersoon(gast);
+    }
+
+
+    @Override
+    public void onLiftAangemaakt(LiftModel lift) {
+        plaatsPersoon(lift);
     }
 
     @Override
@@ -237,6 +245,35 @@ public class PlaatsHelper implements NewGast, LayoutGeladen, NewSchoonmaker, res
             nieuwPanel.repaint();
         }
     }
+
+
+    @Override
+    public void onLiftVerplaatst(LiftModel lift, Locatie oudeLocatie) {
+        if (oudeLocatie != null && oudeLocatie.equals(lift.getLocatie())) return;
+
+        // oude vakje opschonen
+        GridVakjeController oudVak = grid.get(oudeLocatie);
+        if (oudVak != null) {
+            JPanel oudPanel = oudVak.getGridView().getGuestPanel();
+            oudPanel.remove(lift.getPersoonLabel());
+
+            oudPanel.revalidate();
+            oudPanel.repaint();
+        }
+
+        // gast icoontje op nieuw vakje plaatsten
+        GridVakjeController nieuwVak = grid.get(lift.getLocatie());
+        if (nieuwVak != null) {
+            JPanel nieuwPanel = nieuwVak.getGridView().getGuestPanel();
+            nieuwPanel.add(lift.getPersoonLabel());
+
+            nieuwPanel.revalidate();
+            nieuwPanel.repaint();
+        }
+    }
+
+
+
 
     // krijg layout controller na het aanmaken van de layout
     @Override
