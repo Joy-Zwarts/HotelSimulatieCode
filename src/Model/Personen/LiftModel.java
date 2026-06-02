@@ -1,27 +1,31 @@
-package Model.Ruimtes;
+package Model.Personen;
 
 import Model.Layout.Locatie;
+import Model.Ruimtes.KamerType;
+import Model.Personen.PersoonModel;
 
-public class LiftModel extends RuimteModel {
+import java.awt.*;
+
+public class LiftModel extends PersoonModel {
     // attributen
     private int verdieping;
     private boolean beschikbaar;
 
     // constructors
-    public LiftModel(KamerType areaType, Locatie position, String dimension, int verdieping, boolean beschikbaar) {
-        super(areaType, position, dimension);
+    public LiftModel(int id, Locatie position, Locatie targetLocatie, int verdieping, boolean beschikbaar) {
+        super(id, position, targetLocatie, Color.GRAY, TypePersoon.LIFT);
         this.verdieping = verdieping;
         this.beschikbaar = beschikbaar;
     }
 
     public void liftOmhoog() {
         --this.verdieping;
-        this.getPosition().setY(this.verdieping);
+        this.getLocatie().setY(this.verdieping);
     }
 
     public void liftOmlaag() {
         ++this.verdieping;
-        this.getPosition().setY(this.verdieping);
+        this.getLocatie().setY(this.verdieping);
     }
 
     public void liftCalled() {
@@ -43,4 +47,5 @@ public class LiftModel extends RuimteModel {
     public void setBeschikbaar(boolean beschikbaar) {
         this.beschikbaar = beschikbaar;
     }
+
 }
