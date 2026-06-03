@@ -44,7 +44,7 @@ class TestKamerAssign {
             }
         };
 
-        kamerAssign = new KamerAssign(controller, new SimulatieController());
+        kamerAssign = new KamerAssign(controller);
     }
 
     @Test
