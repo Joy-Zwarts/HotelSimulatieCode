@@ -64,8 +64,6 @@ public class KamerAssign implements NewGast {
                 assignKamer(gast);
                 break;
             case KamerClassificatie.eenSter:
-                gast.setWensen(KamerClassificatie.vijfSterren);
-                assignKamer(gast);
                 break;
         }
         System.out.println("Kamer zoeken voor gast " + gast.getID() + " met de wensen " + gast.getWensen());
