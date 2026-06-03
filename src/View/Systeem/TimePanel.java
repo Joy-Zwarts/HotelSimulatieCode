@@ -46,9 +46,9 @@ public class TimePanel implements noneEvent{
         SwingUtilities.invokeLater(() -> {
             timeLabel.setText(String.format("%02d:%02d", minutes, seconds));
 
-            if (totalSeconds >= 501) {
-                view.toonEindScherm();
-            }
+//            if (totalSeconds >= 501) {
+//                view.toonEindScherm();
+//            }
         });
     }
 }

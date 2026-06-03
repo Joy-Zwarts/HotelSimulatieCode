@@ -2,6 +2,8 @@ package Controller.Timer;
 
 import Controller.Events.Interfaces.noneEvent;
 import hotelevents.HotelEvent;
+
+import javax.swing.*;
 import java.util.*;
 
 public class WachtTimer implements noneEvent {
@@ -24,28 +26,32 @@ public class WachtTimer implements noneEvent {
     public synchronized void HTETick(HotelEvent event) {
         ArrayList<String> gastenDieKlaarZijn = new ArrayList<>();
 
-        // loop door alle persoon id's heen
         for (String id : resterendeTijdMap.keySet()) {
             int huidigeTijd = resterendeTijdMap.get(id);
             int nieuweTijd = huidigeTijd - 1;
 
-            if (nieuweTijd <= 0) { // als na de verlaging de timer af is gelopen
-                // markeer dat deze gast klaar is
+            if (nieuweTijd <= 0) {
                 gastenDieKlaarZijn.add(id);
             } else {
-                // update de tijd in de map
                 resterendeTijdMap.put(id, nieuweTijd);
             }
         }
 
-        // stuur alle gasten die klaar zijn weg
-        for (String id : gastenDieKlaarZijn) {
-            resterendeTijdMap.remove(id);
-            TimerPing listener = listeners.remove(id);
+        // Voer het aflopen van de timers uit op de Swing thread
+        // om deadlocks met de UI (OverzichtView) te voorkomen!
+        if (!gastenDieKlaarZijn.isEmpty()) {
+            SwingUtilities.invokeLater(() -> {
+                synchronized (this) { // Zorg dat de maps veilig vergrendeld zijn tijdens opschonen
+                    for (String id : gastenDieKlaarZijn) {
+                        resterendeTijdMap.remove(id);
+                        TimerPing listener = listeners.remove(id);
 
-            if (listener != null) {
-                listener.timerAfgelopen();
-            }
+                        if (listener != null) {
+                            listener.timerAfgelopen();
+                        }
+                    }
+                }
+            });
         }
     }
 }

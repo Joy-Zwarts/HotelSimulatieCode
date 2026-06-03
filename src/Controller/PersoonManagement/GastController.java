@@ -157,13 +157,11 @@ public class GastController extends PersoonController implements checkInEvent, c
     public void onStepTaken(PersoonModel persoon, Locatie oudeLocatie) {
         GastModel gast = (GastModel) persoon;
 
-        SwingUtilities.invokeLater(() -> {
-            for (NewGast listener : listeners) {
-                listener.onGastVerplaatst(gast, oudeLocatie);
-            }
-        });
+        for (NewGast listener : listeners) {
+            listener.onGastVerplaatst(gast, oudeLocatie);
+        }
 
-        // als de gast is verplaatst vanuit hun vorige target locatie laat dit ook weten (bijv. voor de drukte teller in kamers)
+        // als de gast is verplaatst vanuit hun vorige target locatie laat dit ook weten
         if (gast.getVorigeLocatie() != null && gast.getVorigeLocatie().equals(oudeLocatie)) {
             for (NewGast listener : listeners) {
                 listener.onGastGaatWegUitKamer(gast, oudeLocatie);
