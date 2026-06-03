@@ -1,5 +1,6 @@
 package Controller.PersoonManagement;
 
+import Controller.Events.Interfaces.checkOutEvent;
 import Controller.PersoonManagement.Interfaces.NewGast;
 import Controller.PersoonManagement.Interfaces.NewKamer;
 import Controller.Systeem.Interfaces.reset;
@@ -145,4 +146,5 @@ public class ReceptieController implements NewKamer, NewGast, reset {
     public HashMap<Integer, GastModel> getGasten() {
         return gasten;
     }
+
 }

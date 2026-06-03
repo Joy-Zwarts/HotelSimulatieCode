@@ -76,9 +76,9 @@ public class TimeManagementController implements ActionListener {
         // double fast-forward knop
         else if (source == doubleFastForward) {
             if (controller.getStarted()) { // als de simulatie is gestart
-                manager.setHte(250); // zet speed op 1 tick per 0.25 sec
+                manager.setHte(100); // zet speed op 1 tick per 0.25 sec
                 for (onTimeChange listener : timeChangeListeners) {
-                    listener.timeChange(250);
+                    listener.timeChange(100);
                 }
             } else {
                 JOptionPane.showMessageDialog(view,

@@ -37,11 +37,10 @@ public class WachtTimer implements noneEvent {
             }
         }
 
-        // Voer het aflopen van de timers uit op de Swing thread
-        // om deadlocks met de UI (OverzichtView) te voorkomen!
+        // voer het aflopen van de timers uit op de Swing thread
         if (!gastenDieKlaarZijn.isEmpty()) {
             SwingUtilities.invokeLater(() -> {
-                synchronized (this) { // Zorg dat de maps veilig vergrendeld zijn tijdens opschonen
+                synchronized (this) {
                     for (String id : gastenDieKlaarZijn) {
                         resterendeTijdMap.remove(id);
                         TimerPing listener = listeners.remove(id);
