@@ -49,6 +49,8 @@ public class BeweegHelper  {
         actieveMensen.put(persoon.getID(), persoon);
         actieveRoutes.put(persoon.getID(), pf);
         wachtTicksPerPersoon.put(persoon.getID(), 0);
+
+        pf.berekenRoute();
     }
 
     private void processMovement() {
@@ -83,8 +85,9 @@ public class BeweegHelper  {
                 if (volgendeStap != null) {
                     // check of de y verandert
                     if (oudeLocatie.getY() != volgendeStap.getY()) {
-                        // trek er 1 vanaf omdat deze huidige tick al telt als de eerste tick
-                        wachtTicksPerPersoon.put(id, trapVertragingTicks - 1);
+                        // Zorg dat resterende wacht ticks nooit kleiner dan 1 wordt tijdens de stap zelf
+                        int ticks = Math.max(1, trapVertragingTicks);
+                        wachtTicksPerPersoon.put(id, ticks);
                         System.out.println("Gast " + id + " neemt de trap naar verdieping " + volgendeStap.getY() + " (Vertraging ingezet).");
                     }
                 }

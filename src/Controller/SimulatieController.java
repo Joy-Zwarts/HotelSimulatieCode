@@ -21,7 +21,7 @@ public class SimulatieController implements reset {
     // attributen
 
     private boolean started;
-    private int scenario;
+    public int scenario;
 
     // constructor
 
@@ -130,7 +130,7 @@ public class SimulatieController implements reset {
 
         schoonmakerController.setNewSchoonmakerListener(plaatsHelper);
 
-        TimePanel timePanel = new TimePanel(manager, view.getTopBar(), view);
+        TimePanel timePanel = new TimePanel(manager, view.getTopBar(), view, this);
 
         eventHandler.setEventListenerNoneEvent(timePanel);
 
@@ -198,5 +198,18 @@ public class SimulatieController implements reset {
         this.scenario = 1;
 
         System.out.println("Simulatie gereset");
+    }
+
+    // In SimulatieController.java (of jouw centrale controller)
+    public int getMaxHteVoorScenario() {
+        if (this.scenario == 1) {
+            return 500;
+        } else if (this.scenario == 2) {
+            return 1000;
+        } else if (this.scenario == 3) {
+            return 2000;
+        }
+
+        return 2000; // fallback
     }
 }

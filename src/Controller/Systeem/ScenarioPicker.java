@@ -1,5 +1,6 @@
 package Controller.Systeem;
 
+import Controller.SimulatieController; // <-- Voeg deze toe
 import View.Systeem.HotelSimulatieView;
 import View.Systeem.ScenarioPickerView;
 
@@ -8,46 +9,37 @@ import java.awt.event.ActionListener;
 
 public class ScenarioPicker implements ActionListener {
 
-    // attributen
-
     private final ScenarioPickerView scenarioPickerView;
+    private final SimulatieController simulatieManager;
     private String selected;
 
     // constructor
-    public ScenarioPicker(HotelSimulatieView view) {
-        scenarioPickerView = new ScenarioPickerView(view);
-        scenarioPickerView.getConfirmButton().addActionListener(this);
-        selected = "Scenario 1";
+    public ScenarioPicker(HotelSimulatieView view, SimulatieController simulatieManager) {
+        this.simulatieManager = simulatieManager;
+        this.scenarioPickerView = new ScenarioPickerView(view);
+        this.scenarioPickerView.getConfirmButton().addActionListener(this);
+        this.selected = "Scenario 1";
     }
 
-    // als er wordt geklikt op de confirm button, registreer het gekozen scenario
     @Override
     public void actionPerformed(ActionEvent e) {
         selected = (String) scenarioPickerView.getComboBox().getSelectedItem();
         System.out.println("Selected scenario: " + selected);
 
-        int scenarioNumber = getSelected();
+        int scenarioNumber = getSelectedNumber();
         System.out.println("Scenario number: " + scenarioNumber);
 
-        scenarioPickerView.close(); // close frame na de keuze
+        simulatieManager.setScenario(scenarioNumber);
+
+        scenarioPickerView.close();
     }
 
-    // geef het nummer van het scenario door
-    public int getSelected() {
-        int selectedNumber = 1;
-        switch (selected) {
-            case "Scenario 1":
-                break;
-            case "Scenario 2":
-                selectedNumber = 2;
-                break;
-            case "Scenario 3":
-                selectedNumber = 3;
-                break;
-            case "Scenario 4":
-                selectedNumber = 4;
-                break;
-        }
-        return selectedNumber;
+    private int getSelectedNumber() {
+        return switch (selected) {
+            case "Scenario 2" -> 2;
+            case "Scenario 3" -> 3;
+            case "Scenario 4" -> 4;
+            default -> 1;
+        };
     }
 }

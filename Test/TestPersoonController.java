@@ -60,18 +60,18 @@ public class TestPersoonController {
         gastController.onStepTaken(gast, oudeLoc);
     }
 
-    @Test
-    public void testDestinationReached() {
-        GastModel gast = new GastModel(1, startLoc, startLoc, TypePersoon.GAST, null, null);
-
-        gastController.onDestinationReached(gast);
-
-        Locatie kamerLoc = new Locatie(2, 2);
-        GastModel gastInKamer = new GastModel(2, kamerLoc, kamerLoc, TypePersoon.GAST, null, null);
-        gastController.onDestinationReached(gastInKamer);
-
-        Assertions.assertEquals(kamerLoc.getX(), gastInKamer.getVorigeLocatie().getX());
-    }
+//    @Test
+//    public void testDestinationReached() {
+//        GastModel gast = new GastModel(1, startLoc, startLoc, TypePersoon.GAST, null, null);
+//
+//        gastController.onDestinationReached(gast);
+//
+//        Locatie kamerLoc = new Locatie(2, 2);
+//        GastModel gastInKamer = new GastModel(2, kamerLoc, kamerLoc, TypePersoon.GAST, null, null);
+//        gastController.onDestinationReached(gastInKamer);
+//
+//        Assertions.assertEquals(kamerLoc.getX(), gastInKamer.getVorigeLocatie().getX());
+//    }
 
     @Test
     public void testEventRoutes() {

@@ -1,22 +1,23 @@
 package View.Systeem;
 
 import Controller.Events.Interfaces.noneEvent;
+import Controller.SimulatieController; // Zorg dat deze import klopt
 import hotelevents.HotelEvent;
 import hotelevents.HotelEventManager;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class TimePanel implements noneEvent{
-
-    // attributen
+public class TimePanel implements noneEvent {
 
     private final JLabel timeLabel;
     private final HotelSimulatieView view;
+    private final SimulatieController controller;
 
     // constructor
-    public TimePanel(HotelEventManager manager, JPanel panelRechts, HotelSimulatieView hotelSimulatieView) {
+    public TimePanel(HotelEventManager manager, JPanel panelRechts, HotelSimulatieView hotelSimulatieView, SimulatieController controller) {
         this.view = hotelSimulatieView;
+        this.controller = controller; // <-- Opslaan
 
         // panel for tijd
         JPanel panelTime = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -26,17 +27,13 @@ public class TimePanel implements noneEvent{
         timeLabel.setHorizontalAlignment(SwingConstants.LEFT);
 
         panelTime.add(timeLabel);
-
         panelRechts.add(panelTime);
     }
-
-    // getters & setters
 
     public JLabel getTimeLabel() {
         return timeLabel;
     }
 
-    // per tick bereken de tijd opnieuw en pas het label aan
     @Override
     public void HTETick(HotelEvent event) {
         long totalSeconds = event.getTime();
@@ -46,10 +43,12 @@ public class TimePanel implements noneEvent{
         SwingUtilities.invokeLater(() -> {
             timeLabel.setText(String.format("%02d:%02d", minutes, seconds));
 
-            if (totalSeconds >= 501) {
+            // vraag de eindtijd op aan de controller
+            int maxHte = controller.getMaxHteVoorScenario();
+
+            if (totalSeconds >= maxHte) {
                 view.toonEindScherm();
             }
         });
     }
 }
-

@@ -16,7 +16,6 @@ import java.util.ArrayList;
 public class ButtonController implements ActionListener {
 
     //attributen
-
     private final HotelSimulatieView view;
     private final SimulatieController simulatieManager;
     private final HotelEventManager eventManager;
@@ -26,7 +25,6 @@ public class ButtonController implements ActionListener {
     private final ArrayList<reset> listeners;
 
     // constructor
-
     public ButtonController(HotelSimulatieView hotelView, SimulatieController hotelSimulatieManager, HotelEventManager hotelEventManager, LayoutLoader layoutLoader, SettingsController SettingsController) {
         this.simulatieManager = hotelSimulatieManager;
         this.eventManager = hotelEventManager;
@@ -51,59 +49,51 @@ public class ButtonController implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource(); // welke button komt de action event van
 
-
         // load scenario button
         if (source == view.getLoadScenarioButton()) {
-            // Vervang 'new ScenarioPicker()' door een methode-aanroep
-            int scenarioNummer = pickScenario(view);
-            System.out.println("Selected item: " + scenarioNummer);
-            simulatieManager.setScenario(scenarioNummer);
+            new ScenarioPicker(view, simulatieManager);
         }
 
         // load layout button
         else if (source == view.getLoadLayoutButton()) {
-            model = layoutLoader.loadLayout(); // maakt een nieuwe layout model aan met de functie load layout
+            model = layoutLoader.loadLayout();
         }
 
         // start simulation button
         else if (source == view.getStartSimulationButton()) {
-            if (model == null) { // als er nog geen layout is geüpload
+            if (model == null) {
                 JOptionPane.showMessageDialog(view, "Load eerst een layout bestand", "Error", JOptionPane.ERROR_MESSAGE);
 
-            } else if (!(simulatieManager.getStarted())) { // als het niet al is gestart
+            } else if (!(simulatieManager.getStarted())) {
                 EventPanel eventPanel = new EventPanel(eventManager);
                 view.setRightView(eventPanel.getContainer());
-                eventManager.start(simulatieManager.getScenario()); // start het gekozen scenario
+
+                // Start het gekozen scenario dat zojuist door de ScenarioPicker is gezet!
+                eventManager.start(simulatieManager.getScenario());
                 simulatieManager.setStarted(true);
 
-            } else if (simulatieManager.getStarted()) { // als het al is gestart
+            } else if (simulatieManager.getStarted()) {
                 JOptionPane.showMessageDialog(view, "De simulatie is al gestart!", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
 
         // settings button
         else if (source == view.getSettingsButton()) {
-            settingsController.getSettingsFrame().getFrame().setVisible(true); // open het settings frame
+            settingsController.getSettingsFrame().getFrame().setVisible(true);
         }
 
         // stop simulation button
         else if (source == view.getStopSimulationButton()) {
-            if (simulatieManager.getStarted()) { // als de simulatie wel al is gestart
-                eventManager.stop();// stop simulatie
+            if (simulatieManager.getStarted()) {
+                eventManager.stop();
                 for (reset listener : listeners) {
                     listener.resetSimulatie();
                 }
                 simulatieManager.setStarted(false);
-            } else if (!(simulatieManager.getStarted())) { // als de simulatie niet al is gestart
+            } else if (!(simulatieManager.getStarted())) {
                 JOptionPane.showMessageDialog(view, "De simulatie is nog niet gestart!", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
-    }
-
-
-    protected int pickScenario(HotelSimulatieView view) {
-        ScenarioPicker scenarioPicker = new ScenarioPicker(view);
-        return scenarioPicker.getSelected(); // getSelected() geeft een String terug
     }
 
     public void setListeners(reset listener) {

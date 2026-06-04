@@ -17,8 +17,6 @@ public class PathFinder {
         this.targetLocatie = target;
         this.layoutController = controller;
         this.walkQueue = new LinkedList<>();
-
-        berekenRoute();
     }
 
     // bereken de route van de locatie nu naar de target locatie
