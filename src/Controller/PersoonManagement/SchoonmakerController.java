@@ -362,4 +362,8 @@ public class SchoonmakerController extends PersoonController implements cleaning
     public void gastMaxWachttijdVeranderd(int gastMaxWachttijd) {
 
     }
+
+    public int getActieveKlussenAantal() {
+        return this.actieveKlussen.size();
+    }
 }

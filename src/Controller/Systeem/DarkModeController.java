@@ -16,7 +16,6 @@ public class DarkModeController {
     private final DarkModeModel model;
     private final TimeManagementPanel timeManagementPanel;
 
-    // NIEUW: Bewaar referenties naar de andere views
     private SettingsView settingsView;
     private OverzichtView overzichtView;
 
@@ -27,7 +26,6 @@ public class DarkModeController {
         this.timeManagementPanel = panel;
     }
 
-    // NIEUW: Zorg dat we de schermen later kunnen koppelen vanuit je hoofdprogramma/controller
     public void verbindExtraSchermen(SettingsView settingsView, OverzichtView overzichtView) {
         this.settingsView = settingsView;
         this.overzichtView = overzichtView;
@@ -41,23 +39,23 @@ public class DarkModeController {
 
     // pas het thema toe aan alle componenten
     public void applyTheme() {
-        // Stel de standaard Java Swing kleuren in
+        // stel de standaard Java Swing kleuren in
         UIManager.put("Panel.background", model.getBackgroundColor());
         UIManager.put("Label.foreground", model.getForegroundColor());
         UIManager.put("Button.background", model.getButtonBackgroundColor());
         UIManager.put("Button.foreground", model.getButtonForegroundColor());
 
-        // 1. Update de Hoofdview
+        // update de Hoofdview
         SwingUtilities.updateComponentTreeUI(view);
         updateComponentColors(view, model.getBackgroundColor(), model.getForegroundColor());
 
-        // 2. NIEUW: Update de SettingsView (als deze is gekoppeld)
+        // update de SettingsView (als deze is gekoppeld)
         if (settingsView != null && settingsView.getFrame() != null) {
             SwingUtilities.updateComponentTreeUI(settingsView.getFrame());
             updateComponentColors(settingsView.getFrame(), model.getBackgroundColor(), model.getForegroundColor());
         }
 
-        // 3. NIEUW: Update de OverzichtView (als deze is gekoppeld)
+        // update de OverzichtView (als deze is gekoppeld)
         if (overzichtView != null && overzichtView.getFrame() != null) {
             SwingUtilities.updateComponentTreeUI(overzichtView.getFrame());
             updateComponentColors(overzichtView.getFrame(), model.getBackgroundColor(), model.getForegroundColor());

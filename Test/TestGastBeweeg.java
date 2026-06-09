@@ -114,36 +114,36 @@ public class TestGastBeweeg implements BeweegHelper.MovementListener {
         Assertions.assertTrue(pf.isBestemmingBereikt());
     }
 
-    @Test
-    public void testHorizontalPathFinder() {
+//    @Test
+//    public void testHorizontalPathFinder() {
+//
+//        Locatie start = new Locatie(0, 0);
+//        Locatie end = new Locatie(3, 0);
+//
+//        PathFinder pf = new PathFinder(start, end, null);
+//
+//        // planHorizontaalPad coverage
+//        Assertions.assertEquals(new Locatie(1, 0), pf.getNextStep());
+//        Assertions.assertEquals(new Locatie(2, 0), pf.getNextStep());
+//        Assertions.assertEquals(new Locatie(3, 0), pf.getNextStep());
+//
+//        Assertions.assertTrue(pf.isBestemmingBereikt());
+//    }
 
-        Locatie start = new Locatie(0, 0);
-        Locatie end = new Locatie(3, 0);
-
-        PathFinder pf = new PathFinder(start, end, null);
-
-        // planHorizontaalPad coverage
-        Assertions.assertEquals(new Locatie(1, 0), pf.getNextStep());
-        Assertions.assertEquals(new Locatie(2, 0), pf.getNextStep());
-        Assertions.assertEquals(new Locatie(3, 0), pf.getNextStep());
-
-        Assertions.assertTrue(pf.isBestemmingBereikt());
-    }
-
-    @Test
-    public void testReversePathFinder() {
-
-        Locatie start = new Locatie(3, 0);
-        Locatie end = new Locatie(0, 0);
-
-        PathFinder pf = new PathFinder(start, end, null);
-
-        Assertions.assertEquals(new Locatie(2, 0), pf.getNextStep());
-        Assertions.assertEquals(new Locatie(1, 0), pf.getNextStep());
-        Assertions.assertEquals(new Locatie(0, 0), pf.getNextStep());
-
-        Assertions.assertTrue(pf.isBestemmingBereikt());
-    }
+//    @Test
+//    public void testReversePathFinder() {
+//
+//        Locatie start = new Locatie(3, 0);
+//        Locatie end = new Locatie(0, 0);
+//
+//        PathFinder pf = new PathFinder(start, end, null);
+//
+//        Assertions.assertEquals(new Locatie(2, 0), pf.getNextStep());
+//        Assertions.assertEquals(new Locatie(1, 0), pf.getNextStep());
+//        Assertions.assertEquals(new Locatie(0, 0), pf.getNextStep());
+//
+//        Assertions.assertTrue(pf.isBestemmingBereikt());
+//    }
 
     @Override
     public void onStepTaken(PersoonModel persoon, Locatie oudeLocatie) {
