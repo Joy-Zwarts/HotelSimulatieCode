@@ -54,13 +54,9 @@ public class SimulatieController implements reset {
 
         SchoonmakerController schoonmakerController = new SchoonmakerController(receptieController, overzichtView, timer);
 
-        LiftController liftController = new LiftController();
-
         gastController.injecteerOverzichtView(overzichtView);
 
         schoonmakerController.injecteerOverzichtView(overzichtView);
-
-        liftController.injecteerOverzichtView(overzichtView);
 
         KamerAssign kamerAssign = new KamerAssign(receptieController);
 
@@ -69,6 +65,8 @@ public class SimulatieController implements reset {
         RestaurantController restaurantController = new RestaurantController(timer);
 
         FitnessController fitnessController = new FitnessController(timer);
+
+        // EVENT LISTENERS
 
         gastController.setNewGuestListener(fitnessController);
 
@@ -106,7 +104,7 @@ public class SimulatieController implements reset {
 
         LayoutLoader layoutLoader = new LayoutLoader(manager, view, null, pauseController);
 
-        PlaatsHelper plaatsHelper = new PlaatsHelper(null, null);
+        PlaatsHelper plaatsHelper = new PlaatsHelper(null);
 
         layoutLoader.setNewLayoutListener(plaatsHelper);
 
@@ -116,8 +114,6 @@ public class SimulatieController implements reset {
 
         layoutLoader.setNewLayoutListener(restaurantController);
 
-        layoutLoader.setNewLayoutListener(liftController);
-
         layoutLoader.setNewRoomListener(receptieController);
 
         gastController.setNewGuestListener(kamerAssign);
@@ -125,8 +121,6 @@ public class SimulatieController implements reset {
         gastController.setNewGuestListener(plaatsHelper);
 
         gastController.setNewGuestListener(receptieController);
-
-        liftController.setNewLiftListener(plaatsHelper);
 
         schoonmakerController.setNewSchoonmakerListener(plaatsHelper);
 
@@ -141,8 +135,6 @@ public class SimulatieController implements reset {
         timeManagement.setListener(gastController);
 
         timeManagement.setListener(schoonmakerController);
-
-        timeManagement.setListener(liftController);
 
         view.setTopbar(timePanel, timeManagementPanel);
 
@@ -172,8 +164,8 @@ public class SimulatieController implements reset {
         buttonController.setListeners(schoonmakerController);
         buttonController.setListeners(receptieController);
         buttonController.setListeners(eventHandler);
-        buttonController.setListeners(liftController);
     }
+
     // getters & setters
 
     public boolean getStarted() {

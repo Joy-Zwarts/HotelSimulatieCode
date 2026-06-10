@@ -28,7 +28,7 @@ public class PlaatsHelper implements NewGast, LayoutGeladen, NewSchoonmaker, res
     private LayoutView layoutView;
 
     // constructor
-    public PlaatsHelper(LayoutView view, GridVakjeView view2) {
+    public PlaatsHelper(LayoutView view) {
         this.grid = null;
         this.layoutView = view;
     }

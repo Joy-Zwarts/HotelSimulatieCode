@@ -65,7 +65,7 @@ public class TestGastPlaatser { // Klasse even op public gezet
         testGrid.put(testLocatie, testVakController);
 
         // 4. GastPlaatser initialiseren en grid injecteren
-        gastPlaatser = new PlaatsHelper(null, null);
+        gastPlaatser = new PlaatsHelper(null);
         injectGridIntoPlaatser(testGrid);
 
         // 5. GastModel aanmaken
