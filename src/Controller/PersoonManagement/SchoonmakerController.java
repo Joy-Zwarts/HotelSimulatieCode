@@ -8,7 +8,7 @@ import Controller.Systeem.Interfaces.onTimeChange;
 import Controller.Systeem.Interfaces.reset;
 import Controller.Timer.WachtTimer;
 import Model.Layout.Locatie;
-import Model.Personen.PersoonModel;
+import Model.Personen.EntiteitenModel;
 import Model.Personen.SchoonmakerModel;
 import Controller.PersoonFactory.SchoonmakerCreator;
 import Model.Personen.TypePersoon;
@@ -21,7 +21,7 @@ import hotelevents.HotelEvent;
 import javax.swing.SwingUtilities;
 import java.util.*;
 
-public class SchoonmakerController extends PersoonController implements cleaningEmergencyEvent, checkOutEvent, onTimeChange, reset, settingsListener {
+public class SchoonmakerController extends EntiteitenController implements cleaningEmergencyEvent, checkOutEvent, onTimeChange, reset, settingsListener {
 
     private final SchoonmakerCreator factory;
     private final ArrayList<NewSchoonmaker> listeners;
@@ -83,8 +83,8 @@ public class SchoonmakerController extends PersoonController implements cleaning
         schoonmaker1 = (SchoonmakerModel) factory.createPersoon(1, new Locatie(breedte / 2, 0), null, 0, new Locatie(breedte / 2, 0), TypePersoon.SCHOONMAKER);
         schoonmaker2 = (SchoonmakerModel) factory.createPersoon(2, new Locatie(breedte / 2, lengte / 2), null, 0, new Locatie(breedte / 2, lengte / 2), TypePersoon.SCHOONMAKER);
 
-        actievePersonen.put(schoonmaker1.getID(), schoonmaker1);
-        actievePersonen.put(schoonmaker2.getID(), schoonmaker2);
+        actieveEntiteiten.put(schoonmaker1.getID(), schoonmaker1);
+        actieveEntiteiten.put(schoonmaker2.getID(), schoonmaker2);
 
         taakWachtrijen.put(schoonmaker1.getID(), new LinkedList<>());
         taakWachtrijen.put(schoonmaker2.getID(), new LinkedList<>());
@@ -222,12 +222,12 @@ public class SchoonmakerController extends PersoonController implements cleaning
 
     // per stap laat de listeners dat weten en stop bij pauze
     @Override
-    public void onStepTaken(PersoonModel persoon, Locatie oudeLocatie) {
+    public void onStepTaken(EntiteitenModel Entiteit, Locatie oudeLocatie) {
         if (overzichtView != null && overzichtView.isGepauzeerd()) {
             return;
         }
 
-        SchoonmakerModel schoonmaker = (SchoonmakerModel) persoon;
+        SchoonmakerModel schoonmaker = (SchoonmakerModel) Entiteit;
         SwingUtilities.invokeLater(() -> {
             for (NewSchoonmaker listener : listeners) {
                 listener.onSchoonmakerVerplaatst(schoonmaker, oudeLocatie);
@@ -238,14 +238,14 @@ public class SchoonmakerController extends PersoonController implements cleaning
 
     // als de schoonmaker is aangekomen in de kamer start een timer voor hoe lang ze moeten schoonmaken
     @Override
-    public void onDestinationReached(PersoonModel persoon) {
+    public void onDestinationReached(EntiteitenModel Entiteit) {
         // bij pauze, niet bewegen
         if (overzichtView != null && overzichtView.isGepauzeerd()) {
             return;
         }
 
         SwingUtilities.invokeLater(() -> {
-            SchoonmakerModel schoonmaker = (SchoonmakerModel) persoon;
+            SchoonmakerModel schoonmaker = (SchoonmakerModel) Entiteit;
 
             // als de schoonmaker bij de station is aangekomen remove de schoonmaker van de actieve klussen
             if (schoonmaker.getLocatie().equals(schoonmaker.getStation())) {
@@ -319,8 +319,8 @@ public class SchoonmakerController extends PersoonController implements cleaning
             schoonmaker1.setLocatie(new Locatie(schoonmaker1.getStation().getX(), schoonmaker1.getStation().getY()));
             schoonmaker2.setLocatie(new Locatie(schoonmaker2.getStation().getX(), schoonmaker2.getStation().getY()));
 
-            actievePersonen.put(schoonmaker1.getID(), schoonmaker1);
-            actievePersonen.put(schoonmaker2.getID(), schoonmaker2);
+            actieveEntiteiten.put(schoonmaker1.getID(), schoonmaker1);
+            actieveEntiteiten.put(schoonmaker2.getID(), schoonmaker2);
 
             SwingUtilities.invokeLater(() -> {
                 for (NewSchoonmaker listener : listeners) {

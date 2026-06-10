@@ -6,16 +6,15 @@ import Controller.PersoonManagement.Interfaces.NewLift;
 import Controller.Systeem.Interfaces.onTimeChange;
 import Controller.Systeem.Interfaces.reset;
 import Model.Layout.Locatie;
+import Model.Personen.EntiteitenModel;
 import Model.Personen.LiftModel;
-import Model.Personen.PersoonModel;
 import Model.Personen.TypePersoon;
 import View.Systeem.TijdsDuur;
-import hotelevents.HotelEvent;
 
 import javax.swing.SwingUtilities;
 import java.util.ArrayList;
 
-public class LiftController extends PersoonController implements onTimeChange, reset { // Voeg hier straks je liftEvent interface aan toe!
+public class LiftController extends EntiteitenController implements onTimeChange, reset { // Voeg hier straks je liftEvent interface aan toe!
 
     private final LiftCreator factory;
     private final ArrayList<NewLift> listeners;
@@ -38,9 +37,9 @@ public class LiftController extends PersoonController implements onTimeChange, r
         Locatie startLocatie = new Locatie(schachtX, bodemY);
 
         // Maak de lift aan via de factory
-        deLift = (LiftModel) factory.createPersoon(999, startLocatie, startLocatie, 0, startLocatie, TypePersoon.LIFT);
+        deLift = (LiftModel) factory.createEntiteit(999, startLocatie, startLocatie, 0, startLocatie, TypePersoon.LIFT);
 
-        actievePersonen.put(deLift.getID(), deLift);
+        actieveEntiteiten.put(deLift.getID(), deLift);
 
         // Laat de listeners weten dat de lift getekend moet worden
         SwingUtilities.invokeLater(() -> {
@@ -52,9 +51,9 @@ public class LiftController extends PersoonController implements onTimeChange, r
 
     // Per stap die de lift zet, de PlaatsHelper aansturen
     @Override
-    public void onStepTaken(PersoonModel persoon, Locatie oudeLocatie) {
-        if (persoon instanceof LiftModel) {
-            LiftModel lift = (LiftModel) persoon;
+    public void onStepTaken(EntiteitenModel Entiteit, Locatie oudeLocatie) {
+        if (Entiteit instanceof LiftModel) {
+            LiftModel lift = (LiftModel) Entiteit;
             SwingUtilities.invokeLater(() -> {
                 for (NewLift listener : listeners) {
                     listener.onLiftVerplaatst(lift, oudeLocatie);
@@ -65,9 +64,9 @@ public class LiftController extends PersoonController implements onTimeChange, r
 
     // Als de lift arriveert op de verdieping waar hij heen moest
     @Override
-    public void onDestinationReached(PersoonModel persoon) {
-        if (persoon instanceof LiftModel) {
-            LiftModel lift = (LiftModel) persoon;
+    public void onDestinationReached(EntiteitenModel Entiteit) {
+        if (Entiteit instanceof LiftModel) {
+            LiftModel lift = (LiftModel) Entiteit;
             System.out.println("Lift is aangekomen op bestemming: " + lift.getLocatie());
             // hier moet er nog komen te staan wat de gasten moeten doen: in en uitstappen
         }

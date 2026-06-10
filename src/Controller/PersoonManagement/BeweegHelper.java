@@ -1,6 +1,7 @@
 package Controller.PersoonManagement;
 
 import Model.Layout.Locatie;
+import Model.Personen.EntiteitenModel;
 import Model.Personen.PersoonModel;
 import View.Systeem.OverzichtView;
 
@@ -27,8 +28,8 @@ public class BeweegHelper  {
     }
 
     public interface MovementListener {
-        void onStepTaken(PersoonModel persoon, Locatie oudeLocatie);
-        void onDestinationReached(PersoonModel persoon);
+        void onStepTaken(EntiteitenModel Entiteit, Locatie oudeLocatie);
+        void onDestinationReached(EntiteitenModel Entiteit);
     }
 
     public BeweegHelper(int hteSnelheid, MovementListener listener) {

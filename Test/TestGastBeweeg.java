@@ -4,8 +4,8 @@ import Controller.Layout.LayoutController;
 import Controller.Systeem.PauseController;
 import Model.Layout.LayoutModel;
 import Model.Layout.Locatie;
+import Model.Personen.EntiteitenModel;
 import Model.Personen.GastModel;
-import Model.Personen.PersoonModel;
 import View.Layout.LayoutView;
 import View.Systeem.HotelSimulatieView;
 import org.junit.jupiter.api.Assertions;
@@ -146,12 +146,12 @@ public class TestGastBeweeg implements BeweegHelper.MovementListener {
 //    }
 
     @Override
-    public void onStepTaken(PersoonModel persoon, Locatie oudeLocatie) {
+    public void onStepTaken(EntiteitenModel Entiteit, Locatie oudeLocatie) {
 
     }
 
     @Override
-    public void onDestinationReached(PersoonModel persoon) {
+    public void onDestinationReached(EntiteitenModel Entiteit) {
 
     }
 }

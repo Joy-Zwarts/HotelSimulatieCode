@@ -52,6 +52,8 @@ public class SimulatieController implements reset {
 
         GastController gastController = new GastController();
 
+        LiftController liftController = new LiftController();
+
         SchoonmakerController schoonmakerController = new SchoonmakerController(receptieController, overzichtView, timer);
 
         gastController.injecteerOverzichtView(overzichtView);
@@ -104,7 +106,9 @@ public class SimulatieController implements reset {
 
         LayoutLoader layoutLoader = new LayoutLoader(manager, view, null, pauseController);
 
-        PlaatsHelper plaatsHelper = new PlaatsHelper(null);
+        PlaatsHelper plaatsHelper = new PlaatsHelper(null, null);
+
+        liftController.setNewLiftListener(plaatsHelper);
 
         layoutLoader.setNewLayoutListener(plaatsHelper);
 
@@ -113,6 +117,8 @@ public class SimulatieController implements reset {
         layoutLoader.setNewLayoutListener(schoonmakerController);
 
         layoutLoader.setNewLayoutListener(restaurantController);
+
+        layoutLoader.setNewLayoutListener(liftController);
 
         layoutLoader.setNewRoomListener(receptieController);
 

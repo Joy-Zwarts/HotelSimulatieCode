@@ -1,32 +1,29 @@
 package Model.Personen;
 
 import Model.Layout.Locatie;
-
 import javax.swing.*;
 import java.awt.*;
 
-public class PersoonModel {
+public class PersoonModel extends EntiteitenModel {
 
-    private final int ID;
-
-    private Locatie locatie;
-    private final Locatie targetLocatie;
-    private Locatie vorigeLocatie;
+    // VERWIJDERD: ID, locatie, targetLocatie en vorigeLocatie (staan al in EntiteitenModel)
     private final Color kleur;
     private final JLabel persoonLabel;
     private final TypePersoon typePersoon;
 
     public PersoonModel(int ID, Locatie locatie, Locatie targetLocatie, Color bolletjeKleur, TypePersoon typePersoon) {
-        this.ID = ID;
-        this.locatie = locatie;
-        this.targetLocatie = targetLocatie;
+        // Dit stuurt de data netjes door naar EntiteitenModel
+        super(ID, locatie, targetLocatie);
         this.kleur = bolletjeKleur;
+        // Let op: createLabel() wordt nu aangeroepen ná super(), zodat getID() de juiste waarde heeft
         this.persoonLabel = createLabel();
         this.typePersoon = typePersoon;
     }
 
     private JLabel createLabel() {
-        JLabel label = new JLabel(String.valueOf(ID), SwingConstants.CENTER) {
+        // Gebruik getID() in plaats van de losse variabele ID,
+        // zodat je de ID uit de superclass ophaalt.
+        JLabel label = new JLabel(String.valueOf(getID()), SwingConstants.CENTER) {
 
             @Override
             protected void paintComponent(Graphics g) {
@@ -53,33 +50,12 @@ public class PersoonModel {
         return label;
     }
 
-    public int getID() {
-        return ID;
-    }
-
     public JLabel getPersoonLabel() {
         return persoonLabel;
     }
 
-    public Locatie getLocatie() {
-        return locatie;
-    }
-
-    public void setLocatie(Locatie locatie) {
-        this.locatie = locatie;
-    }
-
-    public Locatie getTargetLocatie() {
-        return targetLocatie;
-    }
-
-    public Locatie getVorigeLocatie() {
-        return vorigeLocatie;
-    }
-
-    public void setVorigeLocatie(Locatie vorigeLocatie) {
-        this.vorigeLocatie = vorigeLocatie;
-    }
+    // VERWIJDERD: getVorigeLocatie() en setVorigeLocatie()
+    // Deze stonden al in EntiteitenModel en wermsten hier de werking tegen.
 
     public TypePersoon getTypePersoon() {
         return typePersoon;
