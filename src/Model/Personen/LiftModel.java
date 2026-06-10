@@ -14,18 +14,6 @@ public class LiftModel extends EntiteitenModel {
         this.beschikbaar = beschikbaar;
     }
 
-    public void liftOmhoog() {
-        --this.verdieping;
-        this.getLocatie().setY(this.verdieping);
-    }
-
-    public void liftOmlaag() {
-        ++this.verdieping;
-        this.getLocatie().setY(this.verdieping);
-    }
-
-    public void liftCalled() {
-    }
 
     // getters en setters
     public int getVerdieping() {

@@ -26,6 +26,7 @@ public class LiftController extends EntiteitenController implements onTimeChange
         this.factory = new LiftCreator();
     }
 
+
     // Plaats de lift zodra de layout geladen is
     @Override
     public void onLayoutGeladen(LayoutController controller) {
@@ -47,6 +48,46 @@ public class LiftController extends EntiteitenController implements onTimeChange
                 listener.onLiftAangemaakt(deLift);
             }
         });
+    }
+
+    public void liftOmhoog() {
+        if (deLift != null) {
+            // 1. Sla de huidige (oude) locatie op voor de listeners
+            Locatie oudeLocatie = new Locatie(deLift.getLocatie().getX(), deLift.getLocatie().getY());
+
+            // 2. Bereken de nieuwe Y-waarde (omhoog = Y wordt kleiner)
+            int nieuweY = deLift.getLocatie().getY() - 1;
+
+            // 3. Zorg dat we niet boven het grid uitvliegen (veiligheidscheck)
+            if (nieuweY >= 0) {
+                deLift.getLocatie().setY(nieuweY);
+
+                // 4. Trigger de methode die de View een seintje geeft
+                onStepTaken(deLift, oudeLocatie);
+            }
+        }
+    }
+
+    public void liftOmlaag() {
+        if (deLift != null && layoutController != null) {
+            // 1. Sla de huidige (oude) locatie op
+            Locatie oudeLocatie = new Locatie(deLift.getLocatie().getX(), deLift.getLocatie().getY());
+
+            // 2. Bereken de nieuwe Y-waarde (omlaag = Y wordt groter)
+            int nieuweY = deLift.getLocatie().getY() + 1;
+            int maxBodemY = layoutController.getView().getGridLengte() - 1;
+
+            // 3. Zorg dat we niet door de bodem zakken
+            if (nieuweY <= maxBodemY) {
+                deLift.getLocatie().setY(nieuweY);
+
+                // 4. Trigger de methode die de View een seintje geeft
+                onStepTaken(deLift, oudeLocatie);
+            }
+        }
+    }
+
+    public void liftCalled() {
     }
 
     // Per stap die de lift zet, de PlaatsHelper aansturen
