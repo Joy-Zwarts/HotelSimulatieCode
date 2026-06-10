@@ -20,27 +20,31 @@ public class PathFinder {
     }
 
     // bereken de route van de locatie nu naar de target locatie
+    // bereken de route van de locatie nu naar de target locatie
+    // bereken de route van de locatie nu naar de target locatie
     public void berekenRoute() {
         walkQueue.clear();
 
         // check of we naar een andere verdieping moeten
         if (currentLocatie.getY() != targetLocatie.getY()) {
 
+            // We dwingen de gasten om ALTIJD de lift te pakken (kolom 0)
+            int liftX = 0;
 
-            // locatie van de trap ophalen
-            int trapX = layoutController.getView().getGridBreedte() - 1;
+            System.out.println("PathFinder: Gast MOET de lift nemen op X: " + liftX);
 
-            Locatie trapHuidigeVerdieping = new Locatie(trapX, currentLocatie.getY());
-            Locatie trapTargetVerdieping = new Locatie(trapX, targetLocatie.getY());
+            // Maak de locaties aan voor de lift op beide verdiepingen
+            Locatie liftHuidigeVerdieping = new Locatie(liftX, currentLocatie.getY());
+            Locatie liftTargetVerdieping = new Locatie(liftX, targetLocatie.getY());
 
-            // loop horizontaal naar de trap op de current verdieping
-            planHorizontaalPad(currentLocatie, trapHuidigeVerdieping);
+            // 1. Loop eerst horizontaal vanaf de huidige kamer naar de lift (X = 0)
+            planHorizontaalPad(currentLocatie, liftHuidigeVerdieping);
 
-            // ga verticaal (met de trap) naar de target verdieping
-            planVerticaalPad(trapHuidigeVerdieping, trapTargetVerdieping);
+            // 2. Ga verticaal met de lift naar de juiste verdieping
+            planVerticaalPad(liftHuidigeVerdieping, liftTargetVerdieping);
 
-            // loop vanaf de trap op de nieuwe verdieping naar de target kamer
-            planHorizontaalPad(trapTargetVerdieping, targetLocatie);
+            // 3. Loop vanaf de lift op de nieuwe verdieping horizontaal naar de target kamer
+            planHorizontaalPad(liftTargetVerdieping, targetLocatie);
 
         } else {
             // als je al op de juiste verdieping bent loop direct horizontaal naar de target kamer

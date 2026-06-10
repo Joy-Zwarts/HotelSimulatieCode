@@ -21,7 +21,6 @@ import java.util.List;
 
 public class LayoutLoader {
     // attributen
-
     private final HotelEventManager manager;
     private final HotelSimulatieView view;
     private LayoutModel model;
@@ -38,7 +37,6 @@ public class LayoutLoader {
         this.pauseController = pauseController;
         this.listeners = new ArrayList<>();
     }
-
 
     // maakt een nieuwe file picker klasse aan, krijgt daarvan een bestand en laad de layout daarvan en notified de listeners daarover
     public LayoutModel loadLayout() {
@@ -64,35 +62,22 @@ public class LayoutLoader {
             LayoutView layoutView = new LayoutView(pauseController, view);
             EventPanel eventPrint = new EventPanel(manager);
 
+            // DE FIX: De LayoutController constructor bouwt intern de complete grid-grootte,
+            // verplichte elementen, dynamische vakgrootte, grid-opzet en kamers al op via zijn init() methode.
             controller = new LayoutController(model, layoutView, view);
 
-            // bereken eerst hoe groot de grid moet worden op basis van de kamers
-            layoutView.berekenGridGrootte(model.getRuimtes());
+            // De kamers nummeren (moet gebeuren nadat kamers en grid geplaatst zijn)
+            layoutView.nummerDeKamers();
 
-            layoutView.setGridBreedte(layoutView.getGridBreedte());
-            layoutView.setGridLengte(layoutView.getGridLengte());
-
-            // de verplichte elementen genereren in het model
-            model.addVerplichteElementen(layoutView.getGridLengte(), layoutView.getGridBreedte());
-
-            // views instellen en vakgroottes bepalen
+            // Koppel de gegenereerde views vast aan de hoofd-simulatie-interface
             view.setLayoutView(layoutView.getHotelPanel());
             view.setLegendaView();
             view.setRightView(eventPrint.getContainer());
 
-            controller.berekenEnPasVakgrootteAan();
-
-            // kamers en verplichte elementen tekenen
-            layoutView.maakGrid(layoutView.getGridBreedte(), layoutView.getGridLengte(), model.getVakBreedte(), model.getVakHoogte(), model.getGrid());
-            layoutView.plaatsKamers(model.getRuimtes(), model.getVerplichteElementen());
-
-            // de kamers nummeren
-            layoutView.nummerDeKamers();
-
             layoutView.getHotelPanel().revalidate();
             layoutView.getHotelPanel().repaint();
 
-            // notify de listeners dat de layout is geladen
+            // notify de listeners dat de layout succesvol is geladen
             for (LayoutGeladen listener : listeners) {
                 listener.onLayoutGeladen(controller);
             }
@@ -128,7 +113,6 @@ public class LayoutLoader {
         }
 
         // maak een nieuw ruimtemodel aan met de data en de bijbehorende factory
-
         RuimteModel ruimte = factory.createRuimte(
                 data.position,
                 data.dimension,

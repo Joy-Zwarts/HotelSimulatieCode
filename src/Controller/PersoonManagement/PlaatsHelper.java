@@ -7,7 +7,6 @@ import Controller.PersoonManagement.Interfaces.NewGast;
 import Controller.PersoonManagement.Interfaces.NewLift;
 import Controller.PersoonManagement.Interfaces.NewSchoonmaker;
 import Controller.Systeem.Interfaces.reset;
-import Controller.Systeem.PauseController;
 import Model.Layout.Locatie;
 import Model.Personen.GastModel;
 import Model.Personen.LiftModel;
@@ -42,9 +41,13 @@ public class PlaatsHelper implements NewGast, LayoutGeladen, NewSchoonmaker, res
         plaatsPersoon(gast);
     }
 
-
     @Override
     public void onLiftAangemaakt(LiftModel lift) {
+        // Zorg dat het grid up-to-date is vanuit de controller
+        if (this.grid == null && this.layoutController != null && this.layoutController.getView() != null) {
+            this.grid = this.layoutController.getView().getGrid();
+        }
+
         Locatie loc = lift.getLocatie();
 
         if (grid != null && loc != null) {
@@ -52,28 +55,19 @@ public class PlaatsHelper implements NewGast, LayoutGeladen, NewSchoonmaker, res
             if (vak != null) {
                 GridVakjeView vakView = vak.getGridView();
 
-                // Sla de vage UI-preferred sizes over, en vraag direct de echte maten op uit je LayoutModel!
-                // (Zorg dat je via jouw centrale controller of hoofdklasse bij de 'layoutController' of het 'layoutModel' kunt)
+                // Vraag direct de echte maten op uit het LayoutModel via de controller
                 int actueleBreedte = layoutController.getModel().getVakBreedte();
                 int actueleHoogte = layoutController.getModel().getVakHoogte();
 
                 // Veilige fallback (just in case)
-                if (actueleBreedte <= 0) actueleBreedte = 60;
-                if (actueleHoogte <= 0) actueleHoogte = 40;
+                if (actueleBreedte <= 0) actueleBreedte = 118;
+                if (actueleHoogte <= 0) actueleHoogte = 59;
 
                 // Maak de LiftView aan met de exacte model-maten
                 LiftView liftView = new LiftView(actueleBreedte, actueleHoogte);
 
-                // GEEF DE LIFT EXPLICIET EEN GROOTTE MEE (voor het geval de LayoutManager dwarsliggt)
-                liftView.setBounds(0, 0, actueleBreedte, actueleHoogte);
-
-                // Voeg toe aan de guestLayer
-                JPanel guestLayer = vakView.getGuestPanel();
-                guestLayer.add(liftView);
-
-                // Forceer Swing om de boel nu ECHT te tekenen
-                guestLayer.revalidate();
-                guestLayer.repaint();
+                // VOEG TOE AAN DE LIFT LAYER (LAAG 1) via de nieuwe methode in GridVakjeView
+                vakView.voegLiftToe(liftView);
             }
         }
     }
@@ -120,19 +114,17 @@ public class PlaatsHelper implements NewGast, LayoutGeladen, NewSchoonmaker, res
     // zet het schoonmaker-icoontje op de juiste plek na een stap
     @Override
     public void onSchoonmakerVerplaatst(SchoonmakerModel schoonmaker, Locatie oudeLocatie) {
-
         if (oudeLocatie != null && oudeLocatie.equals(schoonmaker.getLocatie())) {return;}
 
         GridVakjeController oudVak = grid.get(oudeLocatie);
-
-        if (oudVak != null) {JPanel oudPanel = oudVak.getGridView().getGuestPanel();
+        if (oudVak != null) {
+            JPanel oudPanel = oudVak.getGridView().getGuestPanel();
             oudPanel.remove(schoonmaker.getPersoonLabel());
             oudPanel.revalidate();
             oudPanel.repaint();
         }
 
         GridVakjeController nieuwVak = grid.get(schoonmaker.getLocatie());
-
         if (nieuwVak != null) {
             JPanel nieuwPanel = nieuwVak.getGridView().getGuestPanel();
             nieuwPanel.add(schoonmaker.getPersoonLabel());
@@ -181,7 +173,6 @@ public class PlaatsHelper implements NewGast, LayoutGeladen, NewSchoonmaker, res
                 // verwijder het lopende icoon van het gridvakje
                 JPanel guestLayer = vak.getGridView().getGuestPanel();
                 guestLayer.remove(persoon.getPersoonLabel());
-
 
                 refreshRuimteVisueel(ruimte);
                 guestLayer.revalidate();
@@ -233,9 +224,6 @@ public class PlaatsHelper implements NewGast, LayoutGeladen, NewSchoonmaker, res
 
         for (GridVakjeController vak : grid.values()) {
             if (vak != null && vak.getModel() != null) {
-
-                // DE CRUCIALE FIX: Eerst controleren of het vakje wel een ruimte heeft (!= null)
-                // Gangen en lege vakjes hebben geen ruimte, dus die sloegen voorheen de boel plat.
                 RuimteModel vakRuimte = vak.getModel().getRuimte();
 
                 if (vakRuimte != null && vakRuimte.equals(ruimte)) {
@@ -248,21 +236,17 @@ public class PlaatsHelper implements NewGast, LayoutGeladen, NewSchoonmaker, res
         }
     }
 
-
     // verwijder gast-icoon uit kamer und verlaag het gastenaantal label
     @Override
     public void onGastVertrokken(GastModel gast) {
-
         Locatie gastLoc = gast.getLocatie();
 
         if (grid != null && gastLoc != null) {
             GridVakjeController vak = grid.get(gastLoc);
 
             if (vak != null) {
-                // verlaag het aantal gasten in het model
                 RuimteModel ruimte = vak.getModel().getRuimte();
                 if (ruimte != null) {
-                    // verwijder het specifieke label van de gast in de kamer
                     JPanel guestLayer = vak.getGridView().getGuestPanel();
                     guestLayer.remove(gast.getPersoonLabel());
 
@@ -301,57 +285,43 @@ public class PlaatsHelper implements NewGast, LayoutGeladen, NewSchoonmaker, res
         }
     }
 
-
     @Override
     public void onLiftVerplaatst(LiftModel lift, Locatie oudeLocatie) {
         if (oudeLocatie != null && oudeLocatie.equals(lift.getLocatie())) return;
 
         LiftView deLiftView = null;
 
-        // 1. Oude vakje opschonen en de LiftView zoeken
+        // 1. Oude vakje opschonen en de LiftView uit de liftContainer halen (Laag 1)
         GridVakjeController oudVak = grid.get(oudeLocatie);
         if (oudVak != null) {
-            JPanel oudPanel = oudVak.getGridView().getGuestPanel();
+            JPanel oudLiftContainer = oudVak.getGridView().getLiftContainer();
 
-            // Zoek naar de LiftView in het oude panel
-            for (Component comp : oudPanel.getComponents()) {
+            for (Component comp : oudLiftContainer.getComponents()) {
                 if (comp instanceof LiftView) {
                     deLiftView = (LiftView) comp;
-                    oudPanel.remove(deLiftView); // Haal hem weg uit het oude panel
+                    oudLiftContainer.remove(deLiftView);
                     break;
                 }
             }
-
-            // Ververs het oude panel zodat de lift visueel verdwijnt
-            oudPanel.revalidate();
-            oudPanel.repaint();
+            oudLiftContainer.revalidate();
+            oudLiftContainer.repaint();
         }
 
-        // 2. De lift op het nieuwe vakje plaatsen
+        // 2. De lift in de liftContainer van het nieuwe vakje plaatsen
         if (deLiftView != null) {
             GridVakjeController nieuwVak = grid.get(lift.getLocatie());
             if (nieuwVak != null) {
-                JPanel nieuwPanel = nieuwVak.getGridView().getGuestPanel();
-
-                // Voeg de teruggevonden LiftView toe aan het nieuwe panel
-                nieuwPanel.add(deLiftView);
-
-                // Ververs het nieuwe panel zodat de lift verschijnt
-                nieuwPanel.revalidate();
-                nieuwPanel.repaint();
+                // Voeg direct toe via de methode van GridVakjeView (zet hem weer netjes op Laag 1)
+                nieuwVak.getGridView().voegLiftToe(deLiftView);
             }
         }
     }
-
-
-
 
     @Override
     public void onLayoutGeladen(LayoutController layoutController) {
         this.layoutController = layoutController;
         if (layoutController != null) {
             this.layoutView = layoutController.getView();
-            // Vraag het grid op. Als deze nu nog leeg is, herstellen we dat live bij het plaatsen!
             this.grid = layoutView.getGrid();
         }
     }
@@ -361,9 +331,12 @@ public class PlaatsHelper implements NewGast, LayoutGeladen, NewSchoonmaker, res
         if (grid != null) {
             for (GridVakjeController vak : grid.values()) {
                 if (vak != null) {
-                    // verwijder alle lopende/aanwezige gasten JLabels uit het gridvakje
+                    // Verwijder alle lopende entiteiten uit de guest panel (Laag 2)
                     JPanel guestLayer = vak.getGridView().getGuestPanel();
                     guestLayer.removeAll();
+
+                    // Verwijder ook de lift uit de lift layer (Laag 1)
+                    vak.getGridView().verwijderLift();
 
                     // zet de tellers van het kamer-model terug naar 0
                     RuimteModel ruimte = vak.getModel().getRuimte();

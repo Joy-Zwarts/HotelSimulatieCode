@@ -9,8 +9,9 @@ public class GridVakjeView {
 
     // attributen
     private final JLayeredPane layeredPane;
-    private final JPanel backgroundPanel; // back Layer
-    private final JPanel gastenContainer; // de container waar gasten in komen
+    private final JPanel backgroundPanel; // Back Layer (Laag 0)
+    private final JPanel liftContainer;    // Lift Layer (Laag 1) - NIEUW
+    private final JPanel gastenContainer;  // Gasten Container (Laag 2)
 
     // constructor
     public GridVakjeView(int x, int y, int breedte, int hoogte) {
@@ -18,30 +19,50 @@ public class GridVakjeView {
         layeredPane.setBounds(x * breedte, y * hoogte, breedte, hoogte);
         layeredPane.setPreferredSize(new Dimension(breedte, hoogte));
 
+        // 1. Achtergrond & Basis layout (Laag 0)
         backgroundPanel = new JPanel();
         backgroundPanel.setBackground(Color.WHITE);
         backgroundPanel.setLayout(null);
         backgroundPanel.setBounds(0, 0, breedte, hoogte);
         backgroundPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-
         backgroundPanel.putClientProperty("noTheme", true);
 
-        // front layer
+        // 2. Container voor de Lift (Laag 1)
+        liftContainer = new JPanel(new BorderLayout());
+        liftContainer.setOpaque(false);
+        liftContainer.setBounds(0, 0, breedte, hoogte);
+
+        // 3. Front layer voor de gasten (Laag 2)
         JPanel guestPanel = new JPanel();
         guestPanel.setOpaque(false);
         guestPanel.setBounds(0, 0, breedte, hoogte);
         guestPanel.setLayout(new BorderLayout());
 
-        // container voor de gasten
+        // container voor de gasten zelf
         gastenContainer = new JPanel();
         gastenContainer.setOpaque(false);
-
         gastenContainer.setLayout(new FlowLayout(FlowLayout.CENTER, 1, 0));
         guestPanel.add(gastenContainer, BorderLayout.SOUTH);
 
-        // voeg ze toe aan de layeredPane
+        // Voeg de panelen in de juiste volgorde (lagen) toe aan de layeredPane
         layeredPane.add(backgroundPanel, Integer.valueOf(0));
-        layeredPane.add(guestPanel, Integer.valueOf(1));
+        layeredPane.add(liftContainer, Integer.valueOf(1)); // Lift zit nu tussen achtergrond en gasten in
+        layeredPane.add(guestPanel, Integer.valueOf(2));
+    }
+
+    // Voegt de lift toe aan dit specifieke vakje
+    public void voegLiftToe(LiftView lift) {
+        liftContainer.removeAll(); // Zorg dat er niet per ongeluk twee liften in staan
+        liftContainer.add(lift, BorderLayout.CENTER);
+        layeredPane.revalidate();
+        layeredPane.repaint();
+    }
+
+    // Verwijdert de lift uit dit vakje (handig als de lift gaat bewegen)
+    public void verwijderLift() {
+        liftContainer.removeAll();
+        layeredPane.revalidate();
+        layeredPane.repaint();
     }
 
     // zet de icoontjes van de kamer, de kleurtjes en het kamer nummer
@@ -110,7 +131,6 @@ public class GridVakjeView {
         int spacing = 2;
 
         // Schoonmakers
-
         if (isLinksboven && ruimte.getAantalSchoonmakers() > 0) {
             ImageIcon schoonmakerIcon = laadIcon("Schoonmaker.png");
             JLabel schoonmakerLabel = new JLabel(String.valueOf(ruimte.getAantalSchoonmakers()));
@@ -135,7 +155,6 @@ public class GridVakjeView {
         }
 
         // Gasten
-
         if (isRechtsboven && ruimte.getAantalGasten() > 0) {
             ImageIcon gastIcon = laadIcon("gast.png");
             JLabel gastenLabel = new JLabel(String.valueOf(ruimte.getAantalGasten()));
@@ -205,6 +224,7 @@ public class GridVakjeView {
 
     // laad het icoon gebaseerd op de naam van het bestand
     private ImageIcon laadIcon(String bestand) {
+        // Let op: controleer of je map "Res" of "res" heet om nullpointers te voorkomen!
         java.net.URL url = getClass().getResource("/Res/" + bestand);
         return (url == null) ? null : new ImageIcon(url);
     }
@@ -243,6 +263,10 @@ public class GridVakjeView {
 
     public JPanel getBackgroundPanel() {
         return backgroundPanel;
+    }
+
+    public JPanel getLiftContainer() {
+        return liftContainer;
     }
 
     public JComponent getVakjePanel() {

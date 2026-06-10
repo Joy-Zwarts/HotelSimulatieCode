@@ -98,6 +98,8 @@ public class SimulatieController implements reset {
 
         eventHandler.setEventListenerNoneEvent(overzichtView);
 
+        eventHandler.setEventListenerNoneEvent(liftController);
+
         bioscoopController.addlisteners(gastController);
 
         restaurantController.addListeners(gastController);
