@@ -7,13 +7,16 @@ import Controller.PersoonManagement.Interfaces.NewGast;
 import Controller.PersoonManagement.Interfaces.NewLift;
 import Controller.PersoonManagement.Interfaces.NewSchoonmaker;
 import Controller.Systeem.Interfaces.reset;
+import Controller.Systeem.PauseController;
 import Model.Layout.Locatie;
 import Model.Personen.GastModel;
 import Model.Personen.LiftModel;
 import Model.Personen.PersoonModel;
 import Model.Personen.SchoonmakerModel;
 import Model.Ruimtes.RuimteModel;
+import View.Layout.GridVakjeView;
 import View.Layout.LayoutView;
+import View.Layout.LiftView;
 
 import javax.swing.*;
 import java.util.HashMap;
@@ -22,7 +25,6 @@ public class PlaatsHelper implements NewGast, LayoutGeladen, NewSchoonmaker, res
 
     // attributen
     private HashMap<Locatie, GridVakjeController> grid;
-
     private LayoutView layoutView;
 
     // constructor
@@ -40,7 +42,31 @@ public class PlaatsHelper implements NewGast, LayoutGeladen, NewSchoonmaker, res
 
     @Override
     public void onLiftAangemaakt(LiftModel lift) {
-        plaatsPersoon(lift);
+        Locatie loc = lift.getLocatie();
+
+        if (grid != null && loc != null) {
+            GridVakjeController vak = grid.get(loc);
+            if (vak != null) {
+                //krijg de breedte en hoogte van een vakje, om die aan de lift mee te geven
+                GridVakjeView vakView = vak.getGridView();
+
+                int actueleBreedte = (int) vakView.getVakjePanel().getPreferredSize().getWidth();
+                int actueleHoogte = (int) vakView.getVakjePanel().getPreferredSize().getHeight();
+
+                // Veilige fallback
+                if (actueleBreedte <= 0) actueleBreedte = 40;
+                if (actueleHoogte <= 0) actueleHoogte = 40;
+
+                LiftView liftView = new LiftView();
+                liftView.styleLiftLabel(lift.getPersoonLabel(), actueleBreedte, actueleHoogte);
+
+                JPanel guestLayer = vakView.getGuestPanel();
+                guestLayer.add(lift.getPersoonLabel());
+
+                guestLayer.revalidate();
+                guestLayer.repaint();
+            }
+        }
     }
 
     @Override
