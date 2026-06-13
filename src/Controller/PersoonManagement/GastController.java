@@ -94,7 +94,7 @@ public class GastController extends EntiteitenController implements checkInEvent
         }
 
         // maak de gast aan op startlocatie
-        GastModel gast = (GastModel) factory.createPersoon(hotelEvent.getGuestId(), new Locatie(startLocatie.getX(), startLocatie.getY()), new Locatie(0, 0), hotelEvent.getData(), null, TypePersoon.GAST);
+        GastModel gast = (GastModel) factory.createEntiteit(hotelEvent.getGuestId(), new Locatie(startLocatie.getX(), startLocatie.getY()), new Locatie(0, 0), hotelEvent.getData(), null, TypePersoon.GAST);
 
         gasten.put(gast.getID(), gast);
 

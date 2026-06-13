@@ -80,8 +80,8 @@ public class SchoonmakerController extends EntiteitenController implements clean
         int breedte = layoutController.getView().getGridBreedte();
         int lengte = layoutController.getView().getGridLengte();
 
-        schoonmaker1 = (SchoonmakerModel) factory.createPersoon(1, new Locatie(breedte / 2, 0), null, 0, new Locatie(breedte / 2, 0), TypePersoon.SCHOONMAKER);
-        schoonmaker2 = (SchoonmakerModel) factory.createPersoon(2, new Locatie(breedte / 2, lengte / 2), null, 0, new Locatie(breedte / 2, lengte / 2), TypePersoon.SCHOONMAKER);
+        schoonmaker1 = (SchoonmakerModel) factory.createEntiteit(1, new Locatie(breedte / 2, 0), null, 0, new Locatie(breedte / 2, 0), TypePersoon.SCHOONMAKER);
+        schoonmaker2 = (SchoonmakerModel) factory.createEntiteit(2, new Locatie(breedte / 2, lengte / 2), null, 0, new Locatie(breedte / 2, lengte / 2), TypePersoon.SCHOONMAKER);
 
         actieveEntiteiten.put(schoonmaker1.getID(), schoonmaker1);
         actieveEntiteiten.put(schoonmaker2.getID(), schoonmaker2);

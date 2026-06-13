@@ -17,10 +17,10 @@ public class PathFinder {
         this.targetLocatie = target;
         this.layoutController = controller;
         this.walkQueue = new LinkedList<>();
+
+        berekenRoute();
     }
 
-    // bereken de route van de locatie nu naar de target locatie
-    // bereken de route van de locatie nu naar de target locatie
     // bereken de route van de locatie nu naar de target locatie
     public void berekenRoute() {
         walkQueue.clear();
@@ -28,23 +28,21 @@ public class PathFinder {
         // check of we naar een andere verdieping moeten
         if (currentLocatie.getY() != targetLocatie.getY()) {
 
-            // We dwingen de gasten om ALTIJD de lift te pakken (kolom 0)
-            int liftX = 0;
 
-            System.out.println("PathFinder: Gast MOET de lift nemen op X: " + liftX);
+            // locatie van de trap ophalen
+            int trapX = layoutController.getView().getGridBreedte() - 1;
 
-            // Maak de locaties aan voor de lift op beide verdiepingen
-            Locatie liftHuidigeVerdieping = new Locatie(liftX, currentLocatie.getY());
-            Locatie liftTargetVerdieping = new Locatie(liftX, targetLocatie.getY());
+            Locatie trapHuidigeVerdieping = new Locatie(trapX, currentLocatie.getY());
+            Locatie trapTargetVerdieping = new Locatie(trapX, targetLocatie.getY());
 
-            // 1. Loop eerst horizontaal vanaf de huidige kamer naar de lift (X = 0)
-            planHorizontaalPad(currentLocatie, liftHuidigeVerdieping);
+            // loop horizontaal naar de trap op de current verdieping
+            planHorizontaalPad(currentLocatie, trapHuidigeVerdieping);
 
-            // 2. Ga verticaal met de lift naar de juiste verdieping
-            planVerticaalPad(liftHuidigeVerdieping, liftTargetVerdieping);
+            // ga verticaal (met de trap) naar de target verdieping
+            planVerticaalPad(trapHuidigeVerdieping, trapTargetVerdieping);
 
-            // 3. Loop vanaf de lift op de nieuwe verdieping horizontaal naar de target kamer
-            planHorizontaalPad(liftTargetVerdieping, targetLocatie);
+            // loop vanaf de trap op de nieuwe verdieping naar de target kamer
+            planHorizontaalPad(trapTargetVerdieping, targetLocatie);
 
         } else {
             // als je al op de juiste verdieping bent loop direct horizontaal naar de target kamer

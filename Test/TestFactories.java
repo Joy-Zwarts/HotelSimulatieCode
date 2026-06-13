@@ -1,5 +1,5 @@
+import Controller.PersoonFactory.EntiteitenFactory;
 import Controller.PersoonFactory.GastCreator;
-import Controller.PersoonFactory.PersoonFactory;
 import Model.Layout.Locatie;
 import Model.Personen.GastModel;
 import Model.Personen.TypePersoon;
@@ -23,13 +23,13 @@ public class TestFactories {
 
     @Test
     public void testGastCreatie() {
-        PersoonFactory factory = new GastCreator();
+        EntiteitenFactory factory = new GastCreator();
 
-        gasten.add((GastModel) factory.createPersoon(1, new Locatie(0,0), new Locatie(1,1), 1, null, TypePersoon.GAST));
-        gasten.add((GastModel) factory.createPersoon(2, new Locatie(0,0), new Locatie(1,1), 2, null, TypePersoon.GAST));
-        gasten.add((GastModel) factory.createPersoon(3, new Locatie(0,0), new Locatie(1,1), 3, null, TypePersoon.GAST));
-        gasten.add((GastModel) factory.createPersoon(4, new Locatie(0,0), new Locatie(1,1), 4, null, TypePersoon.GAST));
-        gasten.add((GastModel) factory.createPersoon(5, new Locatie(0,0), new Locatie(1,1), 5, null, TypePersoon.GAST));
+        gasten.add((GastModel) factory.createEntiteit(1, new Locatie(0,0), new Locatie(1,1), 1, null, TypePersoon.GAST));
+        gasten.add((GastModel) factory.createEntiteit(2, new Locatie(0,0), new Locatie(1,1), 2, null, TypePersoon.GAST));
+        gasten.add((GastModel) factory.createEntiteit(3, new Locatie(0,0), new Locatie(1,1), 3, null, TypePersoon.GAST));
+        gasten.add((GastModel) factory.createEntiteit(4, new Locatie(0,0), new Locatie(1,1), 4, null, TypePersoon.GAST));
+        gasten.add((GastModel) factory.createEntiteit(5, new Locatie(0,0), new Locatie(1,1), 5, null, TypePersoon.GAST));
 
         Assertions.assertEquals(5, gasten.size());
         Assertions.assertEquals(KamerClassificatie.eenSter, gasten.get(0).getWensen());
