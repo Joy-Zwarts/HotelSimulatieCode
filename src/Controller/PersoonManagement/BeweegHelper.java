@@ -1,8 +1,8 @@
 package Controller.PersoonManagement;
 
 import Model.Layout.Locatie;
-import Model.Personen.EntiteitenModel;
-import Model.Personen.PersoonModel;
+import Model.Entiteiten.EntiteitenModel;
+import Model.Entiteiten.PersoonModel;
 import View.Systeem.OverzichtView;
 
 import javax.swing.*;

@@ -1,9 +1,8 @@
 package Controller.PersoonFactory;
 
 import Model.Layout.Locatie;
-import Model.Personen.EntiteitenModel;
-import Model.Personen.PersoonModel;
-import Model.Personen.TypePersoon;
+import Model.Entiteiten.EntiteitenModel;
+import Model.Entiteiten.TypePersoon;
 
 public abstract class EntiteitenFactory {
 

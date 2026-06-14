@@ -1,11 +1,10 @@
 package Controller.PersoonManagement;
 
-import Controller.Events.Interfaces.checkOutEvent;
 import Controller.PersoonManagement.Interfaces.NewGast;
 import Controller.PersoonManagement.Interfaces.NewKamer;
 import Controller.Systeem.Interfaces.reset;
 import Model.Layout.Locatie;
-import Model.Personen.GastModel;
+import Model.Entiteiten.GastModel;
 import Model.Ruimtes.KamerModel;
 import Model.Ruimtes.RuimteModel;
 import View.Systeem.OverzichtView;

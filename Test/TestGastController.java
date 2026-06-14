@@ -1,7 +1,7 @@
 import Controller.PersoonManagement.GastController;
+import Model.Entiteiten.GastModel;
+import Model.Entiteiten.TypePersoon;
 import Model.Layout.Locatie;
-import Model.Personen.GastModel;
-import Model.Personen.TypePersoon;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;

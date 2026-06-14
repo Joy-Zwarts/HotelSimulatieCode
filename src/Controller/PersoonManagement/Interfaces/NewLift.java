@@ -1,7 +1,7 @@
 package Controller.PersoonManagement.Interfaces;
 
 import Model.Layout.Locatie;
-import Model.Personen.LiftModel;
+import Model.Entiteiten.LiftModel;
 
 public interface NewLift {
     void onLiftAangemaakt(LiftModel lift);

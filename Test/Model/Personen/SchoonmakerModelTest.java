@@ -1,5 +1,7 @@
 package Model.Personen;
 
+import Model.Entiteiten.SchoonmakerModel;
+import Model.Entiteiten.TypePersoon;
 import Model.Layout.Locatie;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

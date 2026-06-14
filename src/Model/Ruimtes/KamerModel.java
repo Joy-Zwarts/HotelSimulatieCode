@@ -1,7 +1,7 @@
 package Model.Ruimtes;
 
 import Model.Layout.Locatie;
-import Model.Personen.GastModel;
+import Model.Entiteiten.GastModel;
 
 public class KamerModel extends RuimteModel {
     // attributen

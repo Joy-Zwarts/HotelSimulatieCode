@@ -1,4 +1,4 @@
-package Model.Personen;
+package Model.Entiteiten;
 
 import Model.Layout.Locatie;
 
@@ -41,4 +41,7 @@ public class EntiteitenModel {
     }
 
 
+    public void setTargetLocatie(Locatie locatie) {
+        this.locatie = targetLocatie;
+    }
 }

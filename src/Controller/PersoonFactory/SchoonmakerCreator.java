@@ -1,10 +1,9 @@
 package Controller.PersoonFactory;
 
 import Model.Layout.Locatie;
-import Model.Personen.EntiteitenModel;
-import Model.Personen.PersoonModel;
-import Model.Personen.SchoonmakerModel;
-import Model.Personen.TypePersoon;
+import Model.Entiteiten.EntiteitenModel;
+import Model.Entiteiten.SchoonmakerModel;
+import Model.Entiteiten.TypePersoon;
 
 // maakt schoonmaker aan gebaseerd op de meegekregen data
 public class SchoonmakerCreator extends EntiteitenFactory {

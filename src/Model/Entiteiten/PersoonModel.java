@@ -1,4 +1,4 @@
-package Model.Personen;
+package Model.Entiteiten;
 
 import Model.Layout.Locatie;
 import javax.swing.*;

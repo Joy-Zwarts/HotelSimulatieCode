@@ -1,8 +1,8 @@
 import Controller.PersoonFactory.EntiteitenFactory;
 import Controller.PersoonFactory.GastCreator;
+import Model.Entiteiten.GastModel;
+import Model.Entiteiten.TypePersoon;
 import Model.Layout.Locatie;
-import Model.Personen.GastModel;
-import Model.Personen.TypePersoon;
 import Model.Ruimtes.KamerClassificatie;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

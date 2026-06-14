@@ -1,8 +1,8 @@
 import Controller.PersoonManagement.PlaatsHelper;
 import Controller.Systeem.PauseController;
+import Model.Entiteiten.GastModel;
+import Model.Entiteiten.TypePersoon;
 import Model.Layout.Locatie;
-import Model.Personen.GastModel;
-import Model.Personen.TypePersoon;
 import Model.Ruimtes.KamerClassificatie;
 import Model.Ruimtes.KamerModel;
 import Model.Ruimtes.KamerType;

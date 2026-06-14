@@ -2,10 +2,9 @@ package Controller.PersoonFactory;
 
 
 import Model.Layout.Locatie;
-import Model.Personen.EntiteitenModel;
-import Model.Personen.GastModel;
-import Model.Personen.PersoonModel;
-import Model.Personen.TypePersoon;
+import Model.Entiteiten.EntiteitenModel;
+import Model.Entiteiten.GastModel;
+import Model.Entiteiten.TypePersoon;
 import Model.Ruimtes.KamerClassificatie;
 
 public class GastCreator extends EntiteitenFactory {

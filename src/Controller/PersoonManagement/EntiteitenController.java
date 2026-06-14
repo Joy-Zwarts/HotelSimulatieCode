@@ -3,7 +3,7 @@ package Controller.PersoonManagement;
 import Controller.Layout.LayoutController;
 import Controller.Layout.Interfaces.LayoutGeladen;
 import Controller.Systeem.Interfaces.settingsListener;
-import Model.Personen.EntiteitenModel;
+import Model.Entiteiten.EntiteitenModel;
 import View.Systeem.OverzichtView; // Import toevoegen
 
 import java.util.HashMap;

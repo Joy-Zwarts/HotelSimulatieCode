@@ -1,7 +1,7 @@
 package Controller.PersoonManagement.Interfaces;
 
 import Model.Layout.Locatie;
-import Model.Personen.SchoonmakerModel;
+import Model.Entiteiten.SchoonmakerModel;
 
 public interface NewSchoonmaker {
 

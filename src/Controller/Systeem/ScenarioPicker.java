@@ -1,6 +1,6 @@
 package Controller.Systeem;
 
-import Controller.SimulatieController; // <-- Voeg deze toe
+import Controller.SimulatieController;
 import View.Systeem.HotelSimulatieView;
 import View.Systeem.ScenarioPickerView;
 

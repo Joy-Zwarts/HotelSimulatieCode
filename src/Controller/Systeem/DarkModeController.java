@@ -15,7 +15,6 @@ public class DarkModeController {
     private final HotelSimulatieView view;
     private final DarkModeModel model;
     private final TimeManagementPanel timeManagementPanel;
-
     private SettingsView settingsView;
     private OverzichtView overzichtView;
 

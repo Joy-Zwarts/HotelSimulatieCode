@@ -1,10 +1,10 @@
 import Controller.PersoonManagement.GastController;
 import Controller.PersoonManagement.Interfaces.NewGast;
 import Controller.Layout.LayoutController;
+import Model.Entiteiten.GastModel;
+import Model.Entiteiten.TypePersoon;
 import Model.Layout.LayoutModel;
 import Model.Layout.Locatie;
-import Model.Personen.GastModel;
-import Model.Personen.TypePersoon;
 import View.Layout.LayoutView;
 import View.Systeem.HotelSimulatieView;
 import hotelevents.HotelEvent;

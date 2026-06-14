@@ -1,4 +1,4 @@
-package Model.Personen;
+package Model.Entiteiten;
 
 public enum TypePersoon {
     GAST,

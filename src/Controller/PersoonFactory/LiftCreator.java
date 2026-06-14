@@ -1,10 +1,9 @@
 package Controller.PersoonFactory;
 
 import Model.Layout.Locatie;
-import Model.Personen.EntiteitenModel;
-import Model.Personen.TypePersoon;
-import Model.Personen.LiftModel;
-import Model.Personen.PersoonModel;
+import Model.Entiteiten.EntiteitenModel;
+import Model.Entiteiten.TypePersoon;
+import Model.Entiteiten.LiftModel;
 
 public class LiftCreator extends EntiteitenFactory {
     // In LiftCreator.java

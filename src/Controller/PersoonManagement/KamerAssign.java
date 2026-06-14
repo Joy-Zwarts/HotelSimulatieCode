@@ -2,7 +2,7 @@ package Controller.PersoonManagement;
 
 import Controller.PersoonManagement.Interfaces.NewGast;
 import Model.Layout.Locatie;
-import Model.Personen.GastModel;
+import Model.Entiteiten.GastModel;
 import Model.Ruimtes.KamerModel;
 import Model.Ruimtes.KamerClassificatie;
 

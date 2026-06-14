@@ -1,7 +1,7 @@
 package Controller.PersoonManagement.Interfaces;
 
 import Model.Layout.Locatie;
-import Model.Personen.GastModel;
+import Model.Entiteiten.GastModel;
 
 // notified listener als er een gast is aangemaakt
 public interface NewGast {
