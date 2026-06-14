@@ -1,6 +1,7 @@
 package Controller.PersoonManagement;
 
 import Model.Layout.Locatie;
+import Model.Personen.EntiteitenModel;
 import Model.Personen.PersoonModel;
 import View.Systeem.OverzichtView;
 
@@ -27,8 +28,8 @@ public class BeweegHelper  {
     }
 
     public interface MovementListener {
-        void onStepTaken(PersoonModel persoon, Locatie oudeLocatie);
-        void onDestinationReached(PersoonModel persoon);
+        void onStepTaken(EntiteitenModel Entiteit, Locatie oudeLocatie);
+        void onDestinationReached(EntiteitenModel Entiteit);
     }
 
     public BeweegHelper(int hteSnelheid, MovementListener listener) {
@@ -85,7 +86,7 @@ public class BeweegHelper  {
                 if (volgendeStap != null) {
                     // check of de y verandert
                     if (oudeLocatie.getY() != volgendeStap.getY()) {
-                        // Zorg dat resterende wacht ticks nooit kleiner dan 1 wordt tijdens de stap zelf
+                        // zorg dat resterende wacht ticks nooit kleiner dan 1 wordt tijdens de stap zelf
                         int ticks = Math.max(1, trapVertragingTicks);
                         wachtTicksPerPersoon.put(id, ticks);
                         System.out.println("Gast " + id + " neemt de trap naar verdieping " + volgendeStap.getY() + " (Vertraging ingezet).");

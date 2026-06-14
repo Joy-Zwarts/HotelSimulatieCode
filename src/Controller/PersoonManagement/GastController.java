@@ -10,20 +10,16 @@ import Controller.Systeem.Interfaces.onTimeChange;
 import Controller.Systeem.Interfaces.reset;
 import Model.Layout.Locatie;
 import Controller.PersoonFactory.GastCreator;
-import Model.Personen.Activiteit;
-import Model.Personen.GastModel;
-import Model.Personen.PersoonModel;
-import Model.Personen.TypePersoon;
+import Model.Personen.*;
 import Model.Ruimtes.KamerType;
 import View.Systeem.TijdsDuur;
 import hotelevents.HotelEvent;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GastController extends PersoonController implements checkInEvent, checkOutEvent, onTimeChange, needFoodEvent, fitnessEvent, cinemaEvent, BeweegHelper.MovementListener, bioscoopOver, restaurantOver, fitnessOver, reset {
+public class GastController extends EntiteitenController implements checkInEvent, checkOutEvent, onTimeChange, needFoodEvent, fitnessEvent, cinemaEvent, BeweegHelper.MovementListener, bioscoopOver, restaurantOver, fitnessOver, reset {
 
     // attributen
     private final GastCreator factory;
@@ -98,7 +94,7 @@ public class GastController extends PersoonController implements checkInEvent, c
         }
 
         // maak de gast aan op startlocatie
-        GastModel gast = (GastModel) factory.createPersoon(hotelEvent.getGuestId(), new Locatie(startLocatie.getX(), startLocatie.getY()), new Locatie(0, 0), hotelEvent.getData(), null, TypePersoon.GAST);
+        GastModel gast = (GastModel) factory.createEntiteit(hotelEvent.getGuestId(), new Locatie(startLocatie.getX(), startLocatie.getY()), new Locatie(0, 0), hotelEvent.getData(), null, TypePersoon.GAST);
 
         gasten.put(gast.getID(), gast);
 
@@ -154,8 +150,8 @@ public class GastController extends PersoonController implements checkInEvent, c
 
     // bij elke stap laat de abonnees weten dat de gast is verplaatst
     @Override
-    public void onStepTaken(PersoonModel persoon, Locatie oudeLocatie) {
-        GastModel gast = (GastModel) persoon;
+    public void onStepTaken(EntiteitenModel Entiteit, Locatie oudeLocatie) {
+        GastModel gast = (GastModel) Entiteit;
 
         for (NewGast listener : listeners) {
             listener.onGastVerplaatst(gast, oudeLocatie);
@@ -170,8 +166,8 @@ public class GastController extends PersoonController implements checkInEvent, c
     }
 
     @Override
-    public void onDestinationReached(PersoonModel persoon) {
-        afhandelenAankomst((GastModel) persoon);
+    public void onDestinationReached(EntiteitenModel Entiteit) {
+        afhandelenAankomst((GastModel) Entiteit);
     }
 
     @Override

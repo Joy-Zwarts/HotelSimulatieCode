@@ -1,6 +1,5 @@
 import Controller.PersoonManagement.KamerAssign;
 import Controller.PersoonManagement.ReceptieController;
-import Controller.SimulatieController;
 import Model.Layout.Locatie;
 import Model.Personen.GastModel;
 import Model.Personen.TypePersoon;
