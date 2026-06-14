@@ -146,4 +146,7 @@ public class ReceptieController implements NewKamer, NewGast, reset {
         return gasten;
     }
 
+    public void voegGastToe(GastModel gast) {
+        this.gasten.put(gast.getID(), gast);
+    }
 }

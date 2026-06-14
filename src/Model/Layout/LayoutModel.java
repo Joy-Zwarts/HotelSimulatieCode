@@ -131,4 +131,12 @@ public class LayoutModel {
 
         return null;
     }
+
+    public void setVakBreedte(int i) {
+        this.vakBreedte = i;
+    }
+
+    public void setVakHoogte(int i) {
+        this.vakHoogte = i;
+    }
 }

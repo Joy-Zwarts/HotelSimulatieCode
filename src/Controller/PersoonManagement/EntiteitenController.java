@@ -12,8 +12,8 @@ import java.util.Map;
 public abstract class EntiteitenController implements LayoutGeladen, BeweegHelper.MovementListener, settingsListener {
 
     protected LayoutController layoutController;
-    protected final Map<Integer, EntiteitenModel> actieveEntiteiten;
-    protected final BeweegHelper beweegHelper;
+    public final Map<Integer, EntiteitenModel> actieveEntiteiten;
+    public final BeweegHelper beweegHelper;
 
     public EntiteitenController() {
         this.actieveEntiteiten = new HashMap<>();
