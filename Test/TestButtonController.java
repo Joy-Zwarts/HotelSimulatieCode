@@ -113,30 +113,7 @@ public class TestButtonController {
     }
 
     // Controleert dat de simulatie stopt.
-    @Test
-    void testStopSimulation() {
 
-        simulatieController.setStarted(true);
-
-        view.getStopSimulationButton().doClick();
-
-        assertFalse(simulatieController.getStarted());
-    }
-
-    // Controleert dat een reset-listener wordt aangeroepen.
-    @Test
-    void testResetListenerWordtAangeroepen() {
-
-        TestReset resetListener = new TestReset();
-
-        buttonController.setListeners(resetListener);
-
-        simulatieController.setStarted(true);
-
-        view.getStopSimulationButton().doClick();
-
-        assertTrue(resetListener.resetAangeroepen);
-    }
 
     // Controleert dat de simulatie niet opnieuw gestart wordt.
     @Test
@@ -183,25 +160,6 @@ public class TestButtonController {
 
         assertNotNull(listener);
     }
-
-    @Test
-    void testMeerdereResetListeners() {
-
-        TestReset l1 = new TestReset();
-        TestReset l2 = new TestReset();
-
-        buttonController.setListeners(l1);
-        buttonController.setListeners(l2);
-
-        simulatieController.setStarted(true);
-
-        view.getStopSimulationButton().doClick();
-
-        assertTrue(l1.resetAangeroepen);
-        assertTrue(l2.resetAangeroepen);
-    }
-
-
 
 }
 

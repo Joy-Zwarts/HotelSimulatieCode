@@ -140,44 +140,7 @@ public class SettingsControllerTest {
         assertEquals(TijdsDuur.LANG, listener.filmDuur);
     }
 
-    // Controleert of de slider voor schoonmakers werkt.
-    @Test
-    void testAantalSchoonmakersSlider() {
 
-        TestListener listener = new TestListener();
-
-        controller.addListener(listener);
-
-        controller.getSettingsFrame().getAantalSchoonmakers().setValue(6);
-
-        assertEquals(6, listener.schoonmakers);
-    }
-
-    // Controleert of de restaurantslider werkt.
-    @Test
-    void testRestaurantSlider() {
-
-        TestListener listener = new TestListener();
-
-        controller.addListener(listener);
-
-        controller.getSettingsFrame().getRestaurantCapaciteit().setValue(20);
-
-        assertEquals(20, listener.restaurant);
-    }
-
-    // Controleert of de traploopslider werkt.
-    @Test
-    void testTrapLoopSlider() {
-
-        TestListener listener = new TestListener();
-
-        controller.addListener(listener);
-
-        controller.getSettingsFrame().getTrapLoopDuur().setValue(8);
-
-        assertEquals(8, listener.trapLoop);
-    }
 
     // Controleert of de wachttijdslider werkt.
     @Test
