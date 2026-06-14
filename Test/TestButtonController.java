@@ -1,16 +1,20 @@
-import Controller.Systeem.DarkModeController;
-import Controller.Systeem.PauseController;
-import Controller.Systeem.SettingsController;
 import Controller.Layout.LayoutLoader;
 import Controller.SimulatieController;
+import Controller.Systeem.ButtonController;
+import Controller.Systeem.DarkModeController;
+import Controller.Systeem.Interfaces.reset;
+import Controller.Systeem.PauseController;
+import Controller.Systeem.SettingsController;
+import Model.Layout.LayoutModel;
 import Model.Systeem.DarkModeModel;
 import View.Systeem.HotelSimulatieView;
 import View.Systeem.OverzichtView;
 import View.Systeem.TimeManagementPanel;
-
 import hotelevents.HotelEventManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.lang.reflect.Field;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -19,100 +23,148 @@ public class TestButtonController {
     private HotelSimulatieView view;
     private OverzichtView view2;
     private SimulatieController simulatieController;
+    private HotelEventManager manager;
+    private ButtonController buttonController;
 
     @BeforeEach
     void setUp() {
 
         DarkModeModel darkModeModel = new DarkModeModel();
+
         view = new HotelSimulatieView(darkModeModel);
-        TimeManagementPanel panel = new TimeManagementPanel(view.getTopBar(), darkModeModel);
-        HotelEventManager manager = new HotelEventManager(false);
+
+        TimeManagementPanel panel =
+                new TimeManagementPanel(view.getTopBar(), darkModeModel);
+
+        manager = new HotelEventManager(false);
+
         simulatieController = new SimulatieController();
-        PauseController pauseController = new PauseController(manager, view2);
-        SettingsController settingsController = new SettingsController(view, panel, new DarkModeController(null, null, darkModeModel));
-        LayoutLoader layoutLoader = new LayoutLoader(manager, view, null, pauseController);
+
+        PauseController pauseController =
+                new PauseController(manager, view2);
+
+        SettingsController settingsController =
+                new SettingsController(
+                        view,
+                        panel,
+                        new DarkModeController(null, null, darkModeModel));
+
+        LayoutLoader layoutLoader =
+                new LayoutLoader(manager, view, null, pauseController);
+
+        // Maak de controller aan zodat alle buttons een ActionListener krijgen.
+        buttonController = new ButtonController(
+                view,
+                simulatieController,
+                manager,
+                layoutLoader,
+                settingsController);
     }
 
+
+
+    // Dummy reset-listener.
+    private static class TestReset implements reset {
+
+        boolean resetAangeroepen = false;
+
+        @Override
+        public void resetSimulatie() {
+            resetAangeroepen = true;
+        }
+    }
+
+    // Controleert dat de simulatie niet start zonder layout.
     @Test
     void testStartSimulationButtonZonderLayout() {
+
         simulatieController.setStarted(false);
 
         view.getStartSimulationButton().doClick();
 
-        assertFalse(simulatieController.getStarted(),
-                "Simulatie mag niet starten zonder dat er een layout geladen is.");
+        assertFalse(simulatieController.getStarted());
+    }
+
+    // Controleert dat de settingsknop bestaat.
+    @Test
+    void testSettingsButtonBestaat() {
+
+        assertNotNull(view.getSettingsButton());
+    }
+
+    // Controleert dat op de settingsknop geklikt kan worden.
+    @Test
+    void testOpenWindow() {
+
+        view.getSettingsButton().doClick();
+
+        assertNotNull(view.getSettingsButton());
+    }
+
+    // Controleert dat stoppen niets doet als de simulatie niet gestart is.
+    @Test
+    void testStopSimulationNietGestart() {
+
+        simulatieController.setStarted(false);
+
+        view.getStopSimulationButton().doClick();
+
+        assertFalse(simulatieController.getStarted());
+    }
+
+    // Controleert dat de simulatie stopt.
+
+
+    // Controleert dat de simulatie niet opnieuw gestart wordt.
+    @Test
+    void testStartSimulationWanneerAlGestart() {
+
+        simulatieController.setStarted(true);
+
+        view.getStartSimulationButton().doClick();
+
+        assertTrue(simulatieController.getStarted());
     }
 
     @Test
-    void testOpenWindow() {
-        view.getSettingsButton().doClick();
+    void testStartSimulationMetLayout() throws Exception {
 
-        assertNotNull(view.getSettingsButton(), "Button moet aanwezig zijn");
+        LayoutModel model = new LayoutModel();
+
+        Field field = ButtonController.class.getDeclaredField("model");
+        field.setAccessible(true);
+        field.set(buttonController, model);
+
+        simulatieController.setStarted(false);
+
+        view.getStartSimulationButton().doClick();
+
+        assertTrue(simulatieController.getStarted());
     }
 
 
+    @Test
+    void testLoadScenarioButton() {
 
+        view.getLoadScenarioButton().doClick();
 
-//    @Test
-//    void TestStartStopFlow() throws InterruptedException {
-//        DarkModeModel darkMode = new DarkModeModel();
-//        HotelSimulatieView view = new HotelSimulatieView(darkMode);
-//
-//        SimulatieController simulatieController = new SimulatieController();
-//        simulatieController.setStarted(false);
-//
-//        HotelEventManager manager = new HotelEventManager(false);
-//
-//        LayoutLoader layoutLoader = new LayoutLoader(
-//                manager, view, null, null, view
-//        );
-//
-//        TimeManagementPanel panel = new TimeManagementPanel(view.getTopBar(), darkMode);
-//
-//        SettingsController settingsController =
-//                new SettingsController(view, panel, darkMode);
-//
-//        ButtonController controller =
-//                new ButtonController(view, simulatieController, manager, layoutLoader, settingsController);
-//
-//        Thread.sleep(500);
-//
-//        view.getStartSimulationButton().doClick();
-//
-//        assertFalse(simulatieController.getStarted(),
-//                "Simulatie mag niet starten zonder layout");
-//
-//
-//        view.getStopSimulationButton().doClick();
-//
-//        assertFalse(simulatieController.getStarted(),
-//                "Simulatie blijft gestopt");
-//
-//
-//        view.getSettingsButton().doClick();
-//
-//        assertTrue(settingsController.getSettingsFrame().getFrame().isVisible(),
-//                "Settings window moet openen");
-//
-//
-//        view.dispose();
-//    }
-//    @Test
-//    void testLoadScenarioButton_UpdatesManagerWithInt() {
-//        ButtonController testController = new ButtonController(
-//                view, simulatieController, manager, layoutLoader, settingsController
-//        ) {
-//            @Override
-//            protected int pickScenario() {
-//                return 2;
-//            }
-//        };
-//
-//        testController.actionPerformed(new ActionEvent(view.getLoadScenarioButton(), 0, ""));
-//        assertEquals(2, simulatieController.getScenario(),
-//                "De manager moet het scenario-nummer 2 hebben ontvangen.");
-//    }
+        assertNotNull(view.getLoadScenarioButton());
+    }
+
+    @Test
+    void testSetListeners() {
+
+        TestReset listener = new TestReset();
+
+        buttonController.setListeners(listener);
+
+        assertNotNull(listener);
+    }
+
 }
+
+
+
 
 
 

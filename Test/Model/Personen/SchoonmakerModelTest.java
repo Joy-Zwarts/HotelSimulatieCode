@@ -28,9 +28,16 @@ class SchoonmakerModelTest {
 
     }
     @Test
-    void isCleaningNULLTest(){
+    void isCleaningNULLTest() throws Exception {
 
-        //assert + act
+        // Zet het private veld 'cleaning' op null.
+        java.lang.reflect.Field field =
+                SchoonmakerModel.class.getDeclaredField("cleaning");
+
+        field.setAccessible(true);
+        field.set(schoonmakerModel, null);
+
+        // isCleaning() moet dan false teruggeven.
         assertFalse(schoonmakerModel.isCleaning());
     }
     @Test
