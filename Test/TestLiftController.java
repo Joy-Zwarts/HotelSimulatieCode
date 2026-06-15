@@ -25,9 +25,6 @@ public class TestLiftController {
     private LayoutController fakeLayoutController;
     private MockNewLiftListener mockListener;
 
-    // =========================================================================
-    // Lightweight Mocks & Stubs
-    // =========================================================================
 
     static class MockNewLiftListener implements NewLift {
         boolean aangemaaktCalled = false;
@@ -64,9 +61,6 @@ public class TestLiftController {
         }
     }
 
-    // =========================================================================
-    // Setup
-    // =========================================================================
 
     @BeforeEach
     void setUp() {
@@ -97,12 +91,8 @@ public class TestLiftController {
         liftController.actieveEntiteiten.put(lift.getID(), lift);
     }
 
-    // =========================================================================
-    // Tests voor Basis en Initialisatie Branches
-    // =========================================================================
-
     @Test
-    void onLayoutGeladen_MaaktLiftAanEnTriggertListener() {
+    void onLayoutGeladenMaaktLiftAanEnTriggertListener() {
         liftController.onLayoutGeladen(fakeLayoutController);
 
         flushSwingQueue();
@@ -115,12 +105,12 @@ public class TestLiftController {
     }
 
     @Test
-    void testLiftCalled_DektLegeMethodeAf() {
+    void LiftCalledDektLegeMethodeAf() {
         assertDoesNotThrow(() -> liftController.liftCalled());
     }
 
     @Test
-    void testResetSimulatie_ZetRichtingOmhoog() throws Exception {
+    void ResetSimulatieZetRichtingOmhoog() throws Exception {
         Field field = LiftController.class.getDeclaredField("gaatOmhoog");
         field.setAccessible(true);
 
@@ -130,12 +120,9 @@ public class TestLiftController {
         assertTrue(field.getBoolean(liftController));
     }
 
-    // =========================================================================
-    // Tests voor LiftOmhoog en LiftOmlaag Randvoorwaarden
-    // =========================================================================
 
     @Test
-    void liftOmhoog_En_LiftOmlaag_WanneerLiftModelNullIs_DoetNiets() {
+    void liftOmhoogEnLiftOmlaagWanneerLiftModelNullIsDoetNiets() {
         // liftModel is default null bij constructie
         assertDoesNotThrow(() -> liftController.liftOmhoog());
         assertDoesNotThrow(() -> liftController.liftOmlaag());
@@ -143,7 +130,7 @@ public class TestLiftController {
     }
 
     @Test
-    void liftOmhoog_NormaalEnRandvoorwaardeTop() throws Exception {
+    void liftOmhoogNormaalEnRandvoorwaardeTop() throws Exception {
         liftController.onLayoutGeladen(fakeLayoutController); // staat nu op Y=4
         flushSwingQueue();
 
@@ -168,7 +155,7 @@ public class TestLiftController {
     }
 
     @Test
-    void liftOmlaag_NormaalEnRandvoorwaardeBodem() throws Exception {
+    void liftOmlaagNormaalEnRandvoorwaardeBodem() throws Exception {
         liftController.onLayoutGeladen(fakeLayoutController);
         flushSwingQueue();
 
@@ -193,12 +180,9 @@ public class TestLiftController {
         assertEquals(4, mockListener.lastLift.getLocatie().getY());
     }
 
-    // =========================================================================
-    // Tests voor Event en Type Branches (instanceof)
-    // =========================================================================
 
     @Test
-    void onStepTaken_En_onDestinationReached_MetFoutieveInstantie_DoetNiets() {
+    void onStepTakenEnonDestinationReachedMetFoutieveInstantieDoetNiets() {
         DummyEntiteit dummy = new DummyEntiteit();
 
         // Test de 'false' branch van de 'if (Entiteit instanceof LiftModel)' check
@@ -210,24 +194,20 @@ public class TestLiftController {
     }
 
     @Test
-    void onDestinationReached_MetCorrecteLift_TriggertConsoleLog() throws Exception {
+    void onDestinationReachedMetCorrecteLiftTriggertConsoleLog() throws Exception {
         LiftModel fakeLift = new LiftModel(999, new Locatie(0,2), new Locatie(0,2), 0, true);
         assertDoesNotThrow(() -> liftController.onDestinationReached(fakeLift));
     }
 
-    // =========================================================================
-    // Tests voor Pendel Logica Branches (timeChange & HTETick)
-    // =========================================================================
-
     @Test
-    void timeChange_En_HTETick_WanneerLayoutOfLiftNullIs_RetouneertVroegtijdig() {
+    void timeChangeEnHTETickWanneerLayoutOfLiftNullIsRetouneertVroegtijdig() {
         // Geen layout of lift geladen -> raakt de vroege 'if (liftModel == null || layoutController == null) return;' branch
         assertDoesNotThrow(() -> liftController.timeChange(1000));
         assertDoesNotThrow(() -> liftController.HTETick(null));
     }
 
     @Test
-    void testPendelLogica_AlleRichtingWissels_In_TimeChange() throws Exception {
+    void AlleRichtingWisselsInTimeChange() throws Exception {
         liftController.onLayoutGeladen(fakeLayoutController); // Lift staat op Y=4, gaatOmhoog = true
         flushSwingQueue();
 
@@ -262,7 +242,7 @@ public class TestLiftController {
     }
 
     @Test
-    void testPendelLogica_In_HTETick() throws Exception {
+    void PendelLogicaInHTETick() throws Exception {
         liftController.onLayoutGeladen(fakeLayoutController); // Bodem Y=4, gaatOmhoog = true
         flushSwingQueue();
         HotelEvent dummyEvent = new HotelEvent(1, HotelEventType.NONE, 0, 0);
@@ -291,7 +271,7 @@ public class TestLiftController {
     }
 
     @Test
-    void testLegeInterfaceStubs() {
+    void LegeInterfaceStubs() {
         assertDoesNotThrow(() -> liftController.schoonmaakTijdVeranderd(null));
         assertDoesNotThrow(() -> liftController.filmDuurVeranderd(null));
         assertDoesNotThrow(() -> liftController.aantalSchoonmakersVeranderd(5));

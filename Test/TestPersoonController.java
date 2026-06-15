@@ -34,7 +34,7 @@ public class TestPersoonController {
     }
 
     @Test
-    public void testCheckIn() {
+    public void CheckIn() {
         AtomicBoolean listenerCalled = new AtomicBoolean(false);
         gastController.setNewGuestListener(new NewGast() {
             @Override public void onGastAangemaakt(GastModel gast) { listenerCalled.set(true); }
@@ -51,7 +51,7 @@ public class TestPersoonController {
     }
 
     @Test
-    public void testOnStepTaken() {
+    public void OnStepTaken() {
         GastModel gast = new GastModel(1, startLoc, new Locatie(0,0), TypePersoon.GAST, null, null);
         Locatie oudeLoc = new Locatie(5, 8);
 
@@ -60,21 +60,9 @@ public class TestPersoonController {
         gastController.onStepTaken(gast, oudeLoc);
     }
 
-//    @Test
-//    public void testDestinationReached() {
-//        GastModel gast = new GastModel(1, startLoc, startLoc, TypePersoon.GAST, null, null);
-//
-//        gastController.onDestinationReached(gast);
-//
-//        Locatie kamerLoc = new Locatie(2, 2);
-//        GastModel gastInKamer = new GastModel(2, kamerLoc, kamerLoc, TypePersoon.GAST, null, null);
-//        gastController.onDestinationReached(gastInKamer);
-//
-//        Assertions.assertEquals(kamerLoc.getX(), gastInKamer.getVorigeLocatie().getX());
-//    }
 
     @Test
-    public void testEventRoutes() {
+    public void EventRoutes() {
         gastController.checkIn(new HotelEvent(1, HotelEventType.CHECK_IN, 1, 1));
         gastController.needFood(new HotelEvent(1, HotelEventType.NEED_FOOD, 1, 0));
         gastController.goToFitnessEvent(new HotelEvent(1, HotelEventType.GOTO_FITNESS, 1, 0));
@@ -83,12 +71,12 @@ public class TestPersoonController {
     }
 
     @Test
-    public void testTimeChange() {
+    public void TimeChange() {
         gastController.timeChange(2000);
     }
 
     @Test
-    public void testStartCinemaEmptyMethod() {
+    public void StartCinemaEmptyMethod() {
         gastController.startCinemaEvent(null);
     }
 }

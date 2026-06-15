@@ -13,9 +13,7 @@ public class TestPathFinder {
 
     private LayoutController fakeLayoutController;
 
-    // =========================================================================
-    // Lightweight Fake voor LayoutView om de gridbreedte te controleren
-    // =========================================================================
+
     static class FakeLayoutView extends LayoutView {
         private final int gridBreedte;
 
@@ -39,12 +37,8 @@ public class TestPathFinder {
         fakeLayoutController = new LayoutController(model, view, hoofdView);
     }
 
-    // =========================================================================
-    // Tests voor dezelfde verdieping (Horizontale beweging)
-    // =========================================================================
-
     @Test
-    void berekenRoute_ZelfdeVerdieping_NaarRechts() {
+    void berekenRouteZelfdeVerdiepingNaarRechts() {
         Locatie start = new Locatie(1, 2);
         Locatie target = new Locatie(3, 2); // Y is gelijk, X stijgt (naar rechts)
 
@@ -70,7 +64,7 @@ public class TestPathFinder {
     }
 
     @Test
-    void berekenRoute_ZelfdeVerdieping_NaarLinks() {
+    void berekenRouteZelfdeVerdiepingNaarLinks() {
         Locatie start = new Locatie(4, 1);
         Locatie target = new Locatie(2, 1); // Y is gelijk, X daalt (naar links)
 
@@ -83,7 +77,7 @@ public class TestPathFinder {
     }
 
     @Test
-    void berekenRoute_MeteenOpBestemming() {
+    void berekenRouteMeteenOpBestemming() {
         Locatie start = new Locatie(2, 2);
         Locatie target = new Locatie(2, 2); // Start en target zijn exact gelijk
 
@@ -94,22 +88,15 @@ public class TestPathFinder {
         assertNull(pf.getNextStep());
     }
 
-    // =========================================================================
-    // Tests voor andere verdieping (Horizontaal + Verticaal via de trap)
-    // =========================================================================
 
     @Test
-    void berekenRoute_AndereVerdieping_OmhoogEnNaarTrap() {
+    void berekenRouteAndereVerdiepingOmhoogEnNaarTrap() {
         // Gridbreedte = 5, dus trapX = 5 - 1 = 4
         Locatie start = new Locatie(2, 3);
         Locatie target = new Locatie(1, 1); // Andere verdieping: Y daalt (omhoog), targetX is links van de trap
 
         PathFinder pf = new PathFinder(start, target, fakeLayoutController);
 
-        // Verwacht padverloop:
-        // 1. Horizontaal naar trapX (4) op huidige verdieping (3): (3,3) -> (4,3)
-        // 2. Verticaal via trap naar target verdieping (1): (4,2) -> (4,1)
-        // 3. Horizontaal vanaf de trap (4) naar targetX (1) op verdieping (1): (3,1) -> (2,1) -> (1,1)
 
         // Deel 1: Naar de trap (X stijgt naar 4)
         assertEquals(new Locatie(3, 3), pf.getNextStep());
@@ -128,16 +115,13 @@ public class TestPathFinder {
     }
 
     @Test
-    void berekenRoute_AndereVerdieping_Omlaag() {
+    void berekenRouteAndereVerdiepingOmlaag() {
         // Start staat toevallig al op de X-as van de trap (4), target ligt lager (Y stijgt)
         Locatie start = new Locatie(4, 0);
         Locatie target = new Locatie(4, 2);
 
         PathFinder pf = new PathFinder(start, target, fakeLayoutController);
 
-        // 1. Horizontaal naar trap op huidige verdieping -> Al op X=4 (0 iteraties)
-        // 2. Verticaal omlaag (Y stijgt naar 2): (4,1) -> (4,2)
-        // 3. Horizontaal vanaf trap naar target -> Al op X=4 (0 iteraties)
 
         assertEquals(new Locatie(4, 1), pf.getNextStep());
         assertEquals(new Locatie(4, 2), pf.getNextStep());
@@ -145,12 +129,9 @@ public class TestPathFinder {
         assertTrue(pf.isBestemmingBereikt());
     }
 
-    // =========================================================================
-    // Tests voor Randvoorwaarden & Getters
-    // =========================================================================
 
     @Test
-    void testGetNextStep_WanneerWachtrijLeegIs_ReturnsNull() {
+    void GetNextStepWanneerWachtrijLeegIsReturnsNull() {
         Locatie start = new Locatie(0, 0);
         Locatie target = new Locatie(0, 0);
         PathFinder pf = new PathFinder(start, target, fakeLayoutController);
@@ -160,7 +141,7 @@ public class TestPathFinder {
     }
 
     @Test
-    void testPeekNextStep_WanneerWachtrijLeegIs_ReturnsNull() {
+    void PeekNextStepWanneerWachtrijLeegIsReturnsNull() {
         Locatie start = new Locatie(0, 0);
         Locatie target = new Locatie(0, 0);
         PathFinder pf = new PathFinder(start, target, fakeLayoutController);

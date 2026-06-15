@@ -10,8 +10,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TestTimer {
 
-    // Dummy listener waarmee gecontroleerd kan worden
-    // of timerAfgelopen() daadwerkelijk wordt aangeroepen.
     static class TestListener implements TimerPing {
         boolean afgelopen = false;
 
@@ -23,7 +21,7 @@ class TestTimer {
 
     // Test of een nieuwe timer correct wordt toegevoegd.
     @Test
-    void startTimerVoegtTimerToe() throws Exception {
+    void VoegTimerToe() throws Exception {
         WachtTimer timer = new WachtTimer();
         TestListener listener = new TestListener();
 
@@ -43,7 +41,7 @@ class TestTimer {
 
     // Test dat dezelfde persoon niet twee timers krijgt.
     @Test
-    void startTimerVoegtGeenDubbeleTimerToe() throws Exception {
+    void DubbleTimer() throws Exception {
         WachtTimer timer = new WachtTimer();
         TestListener listener = new TestListener();
 
@@ -90,7 +88,7 @@ class TestTimer {
 
     // Test dat een timer afloopt en de listener wordt aangeroepen.
     @Test
-    void tickLaatTimerAflopen() throws Exception {
+    void TimerAflopen() throws Exception {
         WachtTimer timer = new WachtTimer();
         TestListener listener = new TestListener();
 
@@ -109,7 +107,7 @@ class TestTimer {
     // Test meerdere timers tegelijk.
     // Eén timer moet aflopen, de andere moet doorgaan.
     @Test
-    void meerdereTimersWordenGoedVerwerkt() throws Exception {
+    void MeerdeTimersTegelijk() throws Exception {
         WachtTimer timer = new WachtTimer();
 
         TestListener listener1 = new TestListener();

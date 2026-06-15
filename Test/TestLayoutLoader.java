@@ -32,7 +32,7 @@ class TestLayoutLoader {
     }
 
     @Test
-    void testLoadLayoutSuccess() {
+    void LoadLayoutSuccess() {
         LayoutLoader spyLoader = new LayoutLoader(manager, view, model, null) {
             @Override
             protected File getFileFromPicker() {
@@ -67,7 +67,7 @@ class TestLayoutLoader {
     }
 
     @Test
-    void testLayoutGeladenListener() {
+    void LayoutGeladenListener() {
         AtomicInteger callCount = new AtomicInteger(0);
 
         LayoutLoader spyLoader = new LayoutLoader(manager, view, model, null) {
@@ -92,7 +92,7 @@ class TestLayoutLoader {
     }
 
     @Test
-    void testLoadLayoutWithException() {
+    void LoadLayoutWithException() {
         // We maken een Spy die een bestand geeft dat niet bestaat om de catch-block te testen
         LayoutLoader spyLoader = new LayoutLoader(manager, view, model, null) {
             @Override
@@ -108,7 +108,7 @@ class TestLayoutLoader {
     }
 
     @Test
-    void testMaakKamerAlleTypes() throws Exception {
+    void MaakKamerAlleTypes() throws Exception {
         Method method = LayoutLoader.class.getDeclaredMethod("maakKamer", RuimteData.class);
         method.setAccessible(true);
 
@@ -127,7 +127,7 @@ class TestLayoutLoader {
     }
 
     @Test
-    void testNewRoomListener() throws Exception {
+    void NewRoomListener() throws Exception {
         AtomicBoolean listenerCalled = new AtomicBoolean(false);
         layoutLoader.setNewRoomListener(ruimte -> {
             if (ruimte.getAreaType() == KamerType.ROOM) {
@@ -148,7 +148,7 @@ class TestLayoutLoader {
     }
 
     @Test
-    void testMaakKamerUnknownType() {
+    void MaakKamerUnknownType() {
         RuimteData data = new RuimteData();
         data.areaType = "Unknown";
 

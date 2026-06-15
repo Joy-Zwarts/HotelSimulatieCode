@@ -47,7 +47,7 @@ class TestKamerAssign {
     }
 
     @Test
-    void testAssignKamerDirectMatch() {
+    void AssignKamerDirectMatch() {
         KamerModel kamer = new KamerModel(KamerType.ROOM, new Locatie(5,5), "1,1", vierSterren, false);
         kamerLijst.put(1, kamer);
 
@@ -63,7 +63,7 @@ class TestKamerAssign {
     }
 
     @Test
-    void testAssignKamerDowngradeTraject() {
+    void AssignKamerDowngradeTraject() {
         // alleen een 1-ster kamer beschikbaar
         KamerModel kamer = new KamerModel(KamerType.ROOM, new Locatie(10,10), "1,1", eenSter, false);
         kamerLijst.put(1, kamer);
@@ -79,7 +79,7 @@ class TestKamerAssign {
     }
 
     @Test
-    void testAssignKamerGeenBeschikbaarheid() {
+    void AssignKamerGeenBeschikbaarheid() {
         // geen kamers in de lijst
         GastModel gast = new GastModel(1, new Locatie(0,0), new Locatie(0,0),TypePersoon.GAST, eenSter, null);
 
@@ -89,7 +89,7 @@ class TestKamerAssign {
     }
 
     @Test
-    void testAssignKamerBezetSlaatOver() {
+    void AssignKamerBezetSlaatOver() {
         KamerModel bezetteKamer = new KamerModel(KamerType.ROOM, new Locatie(5,5), "1,1", tweeSterren, true);
         kamerLijst.put(1, bezetteKamer);
 
@@ -101,7 +101,7 @@ class TestKamerAssign {
     }
 
     @Test
-    void testNullGuards() {
+    void NullGuards() {
         assertDoesNotThrow(() -> kamerAssign.assignKamer(null));
 
         // gast heeft geen wensen
@@ -111,7 +111,7 @@ class TestKamerAssign {
     }
 
     @Test
-    void testOnGastAangemaakt() {
+    void OnGastAangemaakt() {
         KamerModel kamer = new KamerModel(KamerType.ROOM, new Locatie(5,5), "1,1", eenSter, false);
         kamerLijst.put(1, kamer);
         GastModel gast = new GastModel(1, new Locatie(0,0), new Locatie(0,0),TypePersoon.GAST, eenSter, null);
@@ -122,7 +122,7 @@ class TestKamerAssign {
     }
 
     @Test
-    void testOnGastVertrokken() {
+    void OnGastVertrokken() {
         KamerModel kamer = new KamerModel(KamerType.ROOM, new Locatie(5,5), "1,1", eenSter, true);
         GastModel gast = new GastModel(1, new Locatie(0,0), new Locatie(0,0),TypePersoon.GAST,eenSter, null);
         gast.setKamer(kamer);
@@ -138,7 +138,7 @@ class TestKamerAssign {
     }
 
     @Test
-    void testLegeMethodesVoorCoverage() {
+    void LegeMethodesVoorCoverage() {
         assertDoesNotThrow(() -> kamerAssign.onGastVerplaatst(null, null));
         assertDoesNotThrow(() -> kamerAssign.onGastAangekomenInKamer(null, null));
         assertDoesNotThrow(() -> kamerAssign.onGastGaatWegUitKamer(null, null));

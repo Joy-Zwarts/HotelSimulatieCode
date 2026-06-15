@@ -19,7 +19,7 @@ class TestLayoutModel {
     }
 
     @Test
-    void testVakDimensiesEnGetters() {
+    void VakDimensiesEnGetters() {
         assertEquals(118, model.getVakBreedte());
         assertEquals(59, model.getVakHoogte());
 
@@ -30,7 +30,7 @@ class TestLayoutModel {
     }
 
     @Test
-    void testAddRuimte() {
+    void AddRuimte() {
         RuimteModel dummyRuimte = new RuimteModel(KamerType.ROOM, new Locatie(2, 2), "1,1") {
             @Override public KamerType getAreaType() { return KamerType.ROOM; }
         };
@@ -41,7 +41,7 @@ class TestLayoutModel {
     }
 
     @Test
-    void testAddVerplichteElementen_NormaleGrid_MaaktAlleElementen() {
+    void AddVerplichteElementenNormaleGridMaaktAlleElementen() {
         // b = 10, l = 10 -> liftY = 5 (>1), lobbyBreedte = 8 (>0)
         model.addVerplichteElementen(10, 10);
 
@@ -60,7 +60,7 @@ class TestLayoutModel {
     }
 
     @Test
-    void testAddVerplichteElementen_KleineGrid_SlaatBranchesOver() {
+    void AddVerplichteElementenKleineGridSlaatBranchesOver() {
         // l = 1 -> liftY = 0 -> < 1 -> wordt 1. liftY is niet > 1 dus SCHACHT wordt overgeslagen.
         // b = 2 -> lobbyBreedte = 0 -> niet > 0 dus LOBBY wordt overgeslagen.
         model.addVerplichteElementen(1, 2);
@@ -73,7 +73,7 @@ class TestLayoutModel {
     }
 
     @Test
-    void testAddKamerBuitenJson_DefaultSwitchBranch() {
+    void AddKamerBuitenJsonDefaultSwitchBranch() {
         // Handmatig aanroepen met een type dat niet in de switch staat (bijv. ROOM)
         // Dit zorgt ervoor dat de 'default' (het negeren van de kamer) gedekt is.
         assertDoesNotThrow(() -> model.addKamerBuitenJson(KamerType.ROOM, new Locatie(1,1), "1,1", 5));
@@ -81,7 +81,7 @@ class TestLayoutModel {
     }
 
     @Test
-    void testGetRuimteBijLocatie_VindtRuimtesCorrect() {
+    void GetRuimteBijLocatieVindtRuimtesCorrect() {
         Locatie kamerLoc = new Locatie(2, 2);
         // Let op de interne transformatie in getRuimteBijLocatie: loc.getY() + 1
         // Dus als we zoeken op (2, 1), zoekt de methode intern naar (2, 2)

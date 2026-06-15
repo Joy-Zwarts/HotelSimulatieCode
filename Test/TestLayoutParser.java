@@ -52,7 +52,7 @@ class TestLayoutParser {
     }
 
     @Test
-    void testParse_defaultCapacity() throws Exception {
+    void ParseDefaultCapacity() throws Exception {
 
         // JSON zonder capacity de default word dan 9999
         String json = """

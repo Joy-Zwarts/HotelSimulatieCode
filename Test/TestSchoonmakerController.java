@@ -41,9 +41,6 @@ public class TestSchoonmakerController {
     private boolean aangekomenAangeroepen = false;
     private boolean verlatenAangeroepen = false;
 
-    // =========================================================================
-    // Fakes & Stubs (Nu écht 100% waterdicht)
-    // =========================================================================
     static class FakeLayoutView extends LayoutView {
         public FakeLayoutView() { super(null, null); }
         @Override public int getGridBreedte() { return 10; }
@@ -64,7 +61,6 @@ public class TestSchoonmakerController {
         @Override public GastModel getGast(int id) { return gasten.get(id); }
     }
 
-    // GECORRIGEERD: Matching signature met TimerPing
     static class FakeWachtTimer extends WachtTimer {
         public TimerPing opgeslagenCallback;
 
@@ -74,9 +70,6 @@ public class TestSchoonmakerController {
         }
     }
 
-    // =========================================================================
-    // Setup
-    // =========================================================================
     @BeforeEach
     void setUp() {
         fakeOverzichtView = new OverzichtView(new HotelSimulatieView(null), null, new HotelEventManager()) {
@@ -106,16 +99,12 @@ public class TestSchoonmakerController {
         try {
             SwingUtilities.invokeAndWait(() -> {});
         } catch (InterruptedException | InvocationTargetException e) {
-            // Slikken voor test stabiliteit
         }
     }
 
-    // =========================================================================
-    // TEST CASES
-    // =========================================================================
 
     @Test
-    void testOnLayoutGeladen() {
+    void OnLayoutGeladen() {
         assertNull(schoonmakerController.getSchoonmaker1());
         forceerLayoutGeladen();
         assertNotNull(schoonmakerController.getSchoonmaker1());
@@ -124,7 +113,7 @@ public class TestSchoonmakerController {
     }
 
     @Test
-    void testCleaningEmergency_KamerDimensiesEnDurations() {
+    void CleaningEmergency() {
         forceerLayoutGeladen();
 
         // Path: Gast heeft geen kamer
@@ -176,7 +165,7 @@ public class TestSchoonmakerController {
     }
 
     @Test
-    void testCheckOut_Variaties() {
+    void CheckOutVariaties() {
         forceerLayoutGeladen();
 
         // Path: Gast heeft geen kamer
@@ -224,7 +213,7 @@ public class TestSchoonmakerController {
     }
 
     @Test
-    void testKlaarCleaning_MetEnZonderWachtrij() {
+    void KlaarCleaningWachtrij() {
         forceerLayoutGeladen();
         SchoonmakerModel sm1 = schoonmakerController.getSchoonmaker1();
 
@@ -242,7 +231,7 @@ public class TestSchoonmakerController {
     }
 
     @Test
-    void testOnStepTaken_En_PauzeBranches() {
+    void OnStepTaken() {
         forceerLayoutGeladen();
         SchoonmakerModel sm1 = schoonmakerController.getSchoonmaker1();
         Locatie oud = new Locatie(0, 0);
@@ -263,7 +252,7 @@ public class TestSchoonmakerController {
     }
 
     @Test
-    void testOnDestinationReached_Branches() {
+    void OnDestinationReached() {
         forceerLayoutGeladen();
         SchoonmakerModel sm1 = schoonmakerController.getSchoonmaker1();
 
@@ -304,13 +293,13 @@ public class TestSchoonmakerController {
     }
 
     @Test
-    void testTimeChange() {
+    void TimeChange() {
         schoonmakerController.timeChange(10);
         assertNotNull(schoonmakerController);
     }
 
     @Test
-    void testResetSimulatie() {
+    void ResetSimulatie() {
         forceerLayoutGeladen();
         SchoonmakerModel sm1 = schoonmakerController.getSchoonmaker1();
 
@@ -323,7 +312,7 @@ public class TestSchoonmakerController {
     }
 
     @Test
-    void testOngebruikteSettingsListeners() {
+    void OngebruikteSettingsListeners() {
         schoonmakerController.filmDuurVeranderd(TijdsDuur.NORMAAL);
         schoonmakersVeranderd();
         schoonmakerController.aantalSchoonmakersVeranderd(5);

@@ -7,7 +7,7 @@ public class TestSimulatieController {
 
     // Controleert de beginwaarde van started.
     @Test
-    void testStartedDefault() {
+    void StartedDefault() {
 
         SimulatieController controller = new SimulatieController();
 
@@ -16,7 +16,7 @@ public class TestSimulatieController {
 
     // Controleert setStarted().
     @Test
-    void testSetStarted() {
+    void SetStarted() {
 
         SimulatieController controller = new SimulatieController();
 
@@ -27,7 +27,7 @@ public class TestSimulatieController {
 
     // Controleert de standaardwaarde van scenario.
     @Test
-    void testScenarioDefault() {
+    void ScenarioDefault() {
 
         SimulatieController controller = new SimulatieController();
 
@@ -36,7 +36,7 @@ public class TestSimulatieController {
 
     // Controleert setScenario().
     @Test
-    void testSetScenario() {
+    void SetScenario() {
 
         SimulatieController controller = new SimulatieController();
 
@@ -47,7 +47,7 @@ public class TestSimulatieController {
 
     // Controleert resetSimulatie().
     @Test
-    void testResetSimulatie() {
+    void ResetSimulatie() {
 
         SimulatieController controller = new SimulatieController();
 
@@ -62,7 +62,7 @@ public class TestSimulatieController {
 
     // Controleert scenario 1.
     @Test
-    void testMaxHteScenario1() {
+    void MaxHteScenario1() {
 
         SimulatieController controller = new SimulatieController();
 
@@ -73,7 +73,7 @@ public class TestSimulatieController {
 
     // Controleert scenario 2.
     @Test
-    void testMaxHteScenario2() {
+    void MaxHteScenario2() {
 
         SimulatieController controller = new SimulatieController();
 
@@ -84,7 +84,7 @@ public class TestSimulatieController {
 
     // Controleert scenario 3.
     @Test
-    void testMaxHteScenario3() {
+    void MaxHteScenario3() {
 
         SimulatieController controller = new SimulatieController();
 
@@ -95,7 +95,7 @@ public class TestSimulatieController {
 
     // Controleert de fallback.
     @Test
-    void testMaxHteOnbekendScenario() {
+    void MaxHteOnbekendScenario() {
 
         SimulatieController controller = new SimulatieController();
 

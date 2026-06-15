@@ -52,7 +52,7 @@ public class TestTimeManagementController {
 
     // Controleert dat een listener toegevoegd kan worden.
     @Test
-    void testListenerToevoegen() {
+    void ListenerToevoegen() {
 
         TestListener listener = new TestListener();
 
@@ -63,7 +63,7 @@ public class TestTimeManagementController {
 
     // Controleert de normale snelheid.
     @Test
-    void testNormaleSnelheid() {
+    void NormaleSnelheid() {
 
         simulatieController.setStarted(true);
 
@@ -78,7 +78,7 @@ public class TestTimeManagementController {
 
     // Controleert fast forward.
     @Test
-    void testFastForward() {
+    void FastForward() {
 
         simulatieController.setStarted(true);
 
@@ -93,7 +93,7 @@ public class TestTimeManagementController {
 
     // Controleert double fast forward.
     @Test
-    void testDoubleFastForward() {
+    void DoubleFastForward() {
 
         simulatieController.setStarted(true);
 
@@ -108,7 +108,7 @@ public class TestTimeManagementController {
 
     // Controleert dat de normale knop niets doet als de simulatie niet gestart is.
     @Test
-    void testNormaleTijdNietGestart() {
+    void NietGestart() {
 
         simulatieController.setStarted(false);
 
@@ -123,7 +123,7 @@ public class TestTimeManagementController {
 
     // Controleert dat fast forward niets doet als de simulatie niet gestart is.
     @Test
-    void testFastForwardNietGestart() {
+    void FastForwardNietGestart() {
 
         simulatieController.setStarted(false);
 
@@ -138,7 +138,7 @@ public class TestTimeManagementController {
 
     // Controleert dat double fast forward niets doet als de simulatie niet gestart is.
     @Test
-    void testDoubleFastForwardNietGestart() {
+    void DoubleFastForwardNietGestart() {
 
         simulatieController.setStarted(false);
 

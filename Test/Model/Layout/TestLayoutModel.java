@@ -3,7 +3,6 @@ package Model.Layout;
 import Model.Ruimtes.KamerClassificatie;
 import Model.Ruimtes.KamerModel;
 import Model.Ruimtes.KamerType;
-import Model.Ruimtes.RuimteModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

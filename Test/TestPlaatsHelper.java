@@ -33,9 +33,6 @@ public class TestPlaatsHelper {
     private FakeLayoutView fakeLayoutView;
     private HashMap<Locatie, GridVakjeController> mockGrid;
 
-    // =========================================================================
-    // Lightweight Fakes & Stubs met instelbare booleans voor 100% coverage
-    // =========================================================================
 
     static class FakeLayoutController extends LayoutController {
         private final LayoutModel model;
@@ -107,7 +104,6 @@ public class TestPlaatsHelper {
         @Override public JLabel getPersoonLabel() { return this.label; }
     }
 
-    // CRUCIAL: Dit type dekt de 'false' branches van 'instanceof GastModel' EN 'instanceof SchoonmakerModel' af!
     static class OnbekendPersoonType extends PersoonModel {
         private final JLabel label = new JLabel("Onbekend");
         public OnbekendPersoonType(Locatie loc) { super(999, loc, loc, Color.RED, TypePersoon.GAST); }
@@ -118,10 +114,6 @@ public class TestPlaatsHelper {
         public DummyPersoon(Locatie loc) { super(99, loc, loc, Color.BLACK, TypePersoon.GAST); }
         @Override public JLabel getPersoonLabel() { return null; }
     }
-
-    // =========================================================================
-    // Setup
-    // =========================================================================
 
     @BeforeEach
     void setUp() throws Exception {
@@ -148,12 +140,9 @@ public class TestPlaatsHelper {
         field.set(plaatsHelper, grid);
     }
 
-    // =========================================================================
-    // TEST CASES
-    // =========================================================================
 
     @Test
-    void testInitialisatieEnAanmaken() {
+    void InitialisatieEnAanmaken() {
         plaatsHelper.onLayoutGeladen(fakeLayoutController);
         Locatie loc = new Locatie(1, 1);
         voegVakjeToe(loc, new KamerModel(KamerType.ROOM, null, "1,1", null, false));
@@ -163,7 +152,7 @@ public class TestPlaatsHelper {
     }
 
     @Test
-    void testOnLiftAangemaakt_Variaties() throws Exception {
+    void OnLiftAangemaaktVariaties() throws Exception {
         Locatie loc = new Locatie(0, 4);
         LiftModel lift = new LiftModel(999, loc, loc, 0, true);
 
@@ -186,7 +175,7 @@ public class TestPlaatsHelper {
     }
 
     @Test
-    void testPlaatsPersoon_UnhappyPaths() throws Exception {
+    void PlaatsPersoon() throws Exception {
         plaatsHelper.plaatsPersoon(null);
 
         injecteerGridDirect(null);
@@ -207,7 +196,7 @@ public class TestPlaatsHelper {
     }
 
     @Test
-    void testVerplaatsingen_NormaalEnVroegeReturns() throws Exception {
+    void VerplaatsingenNormaalEnVroegeReturns() throws Exception {
         injecteerGridDirect(mockGrid);
         Locatie oud = new Locatie(1, 1);
         Locatie nieuw = new Locatie(2, 1);
@@ -226,7 +215,7 @@ public class TestPlaatsHelper {
     }
 
     @Test
-    void testOnLiftVerplaatst_AlleLoopBranches() throws Exception {
+    void OnLiftVerplaatst() throws Exception {
         injecteerGridDirect(mockGrid);
         Locatie oud = new Locatie(0, 2);
         Locatie nieuw = new Locatie(0, 1);
@@ -245,7 +234,7 @@ public class TestPlaatsHelper {
     }
 
     @Test
-    void testAankomstEnVertrek_KamerLogicaEnTellers() throws Exception {
+    void AankomstEnVertrek() throws Exception {
         injecteerGridDirect(mockGrid);
         Locatie loc = new Locatie(1, 1);
         Locatie andereLoc = new Locatie(2, 2);
@@ -284,7 +273,7 @@ public class TestPlaatsHelper {
     }
 
     @Test
-    void testAankomstEnVertrek_OnbekendPersoonType() throws Exception {
+    void AankomstEnVertrekOnbekendPersoonType() throws Exception {
         injecteerGridDirect(mockGrid);
         Locatie loc = new Locatie(1, 1);
         KamerModel kamer = new KamerModel(KamerType.ROOM, null, "1,1", null, false);
@@ -303,7 +292,7 @@ public class TestPlaatsHelper {
     }
 
     @Test
-    void testAankomstEnVertrek_AlgemeneRuimte() throws Exception {
+    void AankomstEnVertrekAlgemeneRuimte() throws Exception {
         injecteerGridDirect(mockGrid);
         Locatie loc = new Locatie(5, 5);
         FakeAlgemeneRuimte algemeen = new FakeAlgemeneRuimte();
@@ -315,7 +304,7 @@ public class TestPlaatsHelper {
     }
 
     @Test
-    void testOnGastVertrokken_En_RefreshBranches() throws Exception {
+    void OnGastVertrokkenEnRefreshBranches() throws Exception {
         injecteerGridDirect(mockGrid);
         Locatie loc = new Locatie(1, 1);
         voegVakjeToe(loc, null);
@@ -328,12 +317,12 @@ public class TestPlaatsHelper {
     }
 
     @Test
-    void testLayoutGeladen_NullBranch() {
+    void LayoutGeladenNull() {
         plaatsHelper.onLayoutGeladen(null);
     }
 
     @Test
-    void testResetSimulatie_Compleet() throws Exception {
+    void ResetSimulatieCompleet() throws Exception {
         injecteerGridDirect(mockGrid);
         Locatie loc = new Locatie(1, 1);
         KamerModel kamer = new KamerModel(KamerType.ROOM, null, "1,1", null, false);

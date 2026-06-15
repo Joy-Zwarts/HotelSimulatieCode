@@ -33,24 +33,24 @@ class TestTimeManagementPanel {
     }
 
     @Test
-    void testPanelWordtAangemaakt() {
+    void testPanelAanmaken() {
         assertNotNull(panel.getTimeManagementPanel());
     }
 
     @Test
-    void testKnoppenBestaan() {
+    void BestaandeKnoppen() {
         assertNotNull(panel.getNormaleTijd());
         assertNotNull(panel.getFastForwardTijd());
         assertNotNull(panel.getDoubleFastForwardTijd());
     }
 
     @Test
-    void testKnoppenToegevoegdAanPanel() {
+    void KnoppenToegevoegd() {
         assertEquals(3, panel.getTimeManagementPanel().getComponentCount());
     }
 
     @Test
-    void testSetTimeButtonsLightMode() {
+    void ButtonsLightMode() {
         panel = new TimeManagementPanel(panelRechts, new FakeDarkModeModel(false));
 
         panel.setTimeButtons();
@@ -60,7 +60,7 @@ class TestTimeManagementPanel {
     }
 
     @Test
-    void testSetTimeButtonsDarkMode() {
+    void ButtonsDarkMode() {
         panel = new TimeManagementPanel(panelRechts, new FakeDarkModeModel(true));
 
         panel.setTimeButtons();

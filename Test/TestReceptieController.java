@@ -28,7 +28,7 @@ class TestReceptieController {
     }
 
     @Test
-    public void testSetKamerLeegEnVol() {
+    public void SetKamerLeegEnVol() {
         receptieController.setKamerLeeg(null);
         receptieController.setKamerVol(null);
 
@@ -41,7 +41,7 @@ class TestReceptieController {
     }
 
     @Test
-    public void testOnNewRoom() {
+    public void OnNewRoom() {
         receptieController.onNewKamer(testKamer);
 
         Assertions.assertEquals(1, receptieController.getKamers().size());
@@ -50,7 +50,7 @@ class TestReceptieController {
     }
 
     @Test
-    public void testOnGastAangemaakt() {
+    public void OnGastAangemaakt() {
         GastModel gast = new GastModel(1, null, null, TypePersoon.GAST, KamerClassificatie.eenSter, null);
         receptieController.onGastAangemaakt(gast);
 
@@ -58,7 +58,7 @@ class TestReceptieController {
     }
 
     @Test
-    public void testOnGastVertrokkenFullCoverage() {
+    public void OnGastVertrokken() {
         // Setup: Gast met kamer
         GastModel gast = new GastModel(1, null, null, TypePersoon.GAST, KamerClassificatie.eenSter, null);
         gast.setKamer(testKamer);
@@ -73,7 +73,7 @@ class TestReceptieController {
     }
 
     @Test
-    public void testOnGastVertrokkenNullChecks() {
+    public void OnGastVertrokkenNullChecks() {
         receptieController.onGastVertrokken(null);
 
         GastModel gastZonderKamer = new GastModel(2, null, null, TypePersoon.GAST, KamerClassificatie.tweeSterren, null);
@@ -85,7 +85,7 @@ class TestReceptieController {
     }
 
     @Test
-    public void testEmptyInterfaceMethods() {
+    public void EmptyInterfaceMethods() {
         GastModel gast = new GastModel(1, null, null, TypePersoon.GAST, KamerClassificatie.eenSter, null);
         receptieController.onGastVerplaatst(gast, new Locatie(0,0));
         receptieController.onGastAangekomenInKamer(gast, new Locatie(0,0));
@@ -93,7 +93,7 @@ class TestReceptieController {
     }
 
     @Test
-    public void testGettersSettersAndRemove() {
+    public void GettersSettersAndRemove() {
         GastModel gast = new GastModel(5, null, null, TypePersoon.GAST, KamerClassificatie.vijfSterren, null);
         receptieController.addGast(gast);
         Assertions.assertEquals(gast, receptieController.getGast(5));
@@ -105,20 +105,14 @@ class TestReceptieController {
         Assertions.assertNotNull(receptieController.getGasten());
     }
 
-    // =========================================================================
-    // GEAVANCEERDE RESET TEST ZONDER GUI-CRASH
-    // =========================================================================
 
     @Test
-    public void testResetSimulatieInclusiefNullKamerBranch() {
-        // We maken hier een anonieme subklasse van ReceptieController aan.
-        // Hiermee overschrijven we refreshView() ZODAT de breekbare OverzichtView
-        // niet wordt aangeroepen met de corrupte 'null'-data, maar de resetSimulatie()
-        // branch-logica wel 100% wordt uitgevoerd!
+    public void ResetSimulatieInclusiefNullKamer() {
+
         ReceptieController veiligeController = new ReceptieController(mockView) {
             @Override
             public void refreshView() {
-                // Doe niks, hiermee voorkomen we de NullPointerException in de GUI!
+
             }
         };
 
@@ -131,7 +125,7 @@ class TestReceptieController {
         veiligeController.addGast(gast);
 
         // 3. Forceer handmatig de 'null' waarde in de kamers-map van deze controller.
-        // Dit dwingt de 'if (kamer != null)' branch in de reset loop naar FALSE!
+
         veiligeController.getKamers().put(999, null);
 
         // Voer de reset uit (roept de overschreven, veilige refreshView aan aan het eind)
