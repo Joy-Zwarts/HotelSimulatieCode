@@ -7,15 +7,12 @@ import Model.Layout.LayoutModel;
 import Model.Layout.Locatie;
 import View.Layout.LayoutView;
 import View.Systeem.HotelSimulatieView;
-import View.Systeem.TijdsDuur;
 import hotelevents.HotelEvent;
 import hotelevents.HotelEventType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.awt.*;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -24,7 +21,6 @@ public class TestLiftController {
     private LiftController liftController;
     private LayoutController fakeLayoutController;
     private MockNewLiftListener mockListener;
-
 
     static class MockNewLiftListener implements NewLift {
         boolean aangemaaktCalled = false;
@@ -61,7 +57,6 @@ public class TestLiftController {
         }
     }
 
-
     @BeforeEach
     void setUp() {
         liftController = new LiftController();
@@ -84,17 +79,9 @@ public class TestLiftController {
         }
     }
 
-    private void injecteerLiftModel(LiftModel lift) throws Exception {
-        Field field = LiftController.class.getDeclaredField("liftModel");
-        field.setAccessible(true);
-        field.set(liftController, lift);
-        liftController.actieveEntiteiten.put(lift.getID(), lift);
-    }
-
     @Test
     void onLayoutGeladenMaaktLiftAanEnTriggertListener() {
         liftController.onLayoutGeladen(fakeLayoutController);
-
         flushSwingQueue();
 
         assertTrue(mockListener.aangemaaktCalled);
@@ -120,17 +107,15 @@ public class TestLiftController {
         assertTrue(field.getBoolean(liftController));
     }
 
-
     @Test
     void liftOmhoogEnLiftOmlaagWanneerLiftModelNullIsDoetNiets() {
-        // liftModel is default null bij constructie
         assertDoesNotThrow(() -> liftController.liftOmhoog());
         assertDoesNotThrow(() -> liftController.liftOmlaag());
         assertFalse(mockListener.verplaatstCalled);
     }
 
     @Test
-    void liftOmhoogNormaalEnRandvoorwaardeTop() throws Exception {
+    void liftOmhoogNormaalEnRandvoorwaardeTop() {
         liftController.onLayoutGeladen(fakeLayoutController); // staat nu op Y=4
         flushSwingQueue();
 
@@ -155,7 +140,7 @@ public class TestLiftController {
     }
 
     @Test
-    void liftOmlaagNormaalEnRandvoorwaardeBodem() throws Exception {
+    void liftOmlaagNormaalEnRandvoorwaardeBodem() {
         liftController.onLayoutGeladen(fakeLayoutController);
         flushSwingQueue();
 
@@ -180,12 +165,10 @@ public class TestLiftController {
         assertEquals(4, mockListener.lastLift.getLocatie().getY());
     }
 
-
     @Test
     void onStepTakenEnonDestinationReachedMetFoutieveInstantieDoetNiets() {
         DummyEntiteit dummy = new DummyEntiteit();
 
-        // Test de 'false' branch van de 'if (Entiteit instanceof LiftModel)' check
         assertDoesNotThrow(() -> liftController.onStepTaken(dummy, new Locatie(0,0)));
         assertDoesNotThrow(() -> liftController.onDestinationReached(dummy));
 
@@ -194,51 +177,14 @@ public class TestLiftController {
     }
 
     @Test
-    void onDestinationReachedMetCorrecteLiftTriggertConsoleLog() throws Exception {
+    void onDestinationReachedMetCorrecteLiftTriggertConsoleLog() {
         LiftModel fakeLift = new LiftModel(999, new Locatie(0,2), new Locatie(0,2), 0, true);
         assertDoesNotThrow(() -> liftController.onDestinationReached(fakeLift));
     }
 
     @Test
-    void timeChangeEnHTETickWanneerLayoutOfLiftNullIsRetouneertVroegtijdig() {
-        // Geen layout of lift geladen -> raakt de vroege 'if (liftModel == null || layoutController == null) return;' branch
-        assertDoesNotThrow(() -> liftController.timeChange(1000));
+    void HTETickWanneerLayoutOfLiftNullIsRetouneertVroegtijdig() {
         assertDoesNotThrow(() -> liftController.HTETick(null));
-    }
-
-    @Test
-    void AlleRichtingWisselsInTimeChange() throws Exception {
-        liftController.onLayoutGeladen(fakeLayoutController); // Lift staat op Y=4, gaatOmhoog = true
-        flushSwingQueue();
-
-        Field richtingField = LiftController.class.getDeclaredField("gaatOmhoog");
-        richtingField.setAccessible(true);
-
-        // Branch A: Gaat omhoog, huidigeY (4) > 0 -> roept liftOmhoog() aan
-        liftController.timeChange(1000);
-        flushSwingQueue();
-        assertEquals(3, mockListener.lastLift.getLocatie().getY());
-        assertTrue(richtingField.getBoolean(liftController));
-
-        // Branch B: Gaat omhoog, maar we bereiken de top (Y=0) -> moet omdraaien en omlaag gaan
-        mockListener.lastLift.getLocatie().setY(0);
-        liftController.timeChange(1000);
-        flushSwingQueue();
-        assertFalse(richtingField.getBoolean(liftController)); // gaatOmhoog is nu false
-        assertEquals(1, mockListener.lastLift.getLocatie().getY()); // liftOmlaag() uitgevoerd
-
-        // Branch C: Gaat omlaag, huidigeY (1) < maxBodemY (4) -> roept liftOmlaag() aan
-        liftController.timeChange(1000);
-        flushSwingQueue();
-        assertEquals(2, mockListener.lastLift.getLocatie().getY());
-        assertFalse(richtingField.getBoolean(liftController));
-
-        // Branch D: Gaat omlaag, maar bereikt de bodem (Y=4) -> moet omdraaien en omhoog gaan
-        mockListener.lastLift.getLocatie().setY(4);
-        liftController.timeChange(1000);
-        flushSwingQueue();
-        assertTrue(richtingField.getBoolean(liftController)); // gaatOmhoog is weer true
-        assertEquals(3, mockListener.lastLift.getLocatie().getY()); // liftOmhoog() uitgevoerd
     }
 
     @Test
@@ -247,27 +193,36 @@ public class TestLiftController {
         flushSwingQueue();
         HotelEvent dummyEvent = new HotelEvent(1, HotelEventType.NONE, 0, 0);
 
-        // 1. Gaat omhoog loop
+        Field richtingField = LiftController.class.getDeclaredField("gaatOmhoog");
+        richtingField.setAccessible(true);
+
+        // 1. Gaat normaal omhoog (van Y=4 naar Y=3)
         liftController.HTETick(dummyEvent);
         flushSwingQueue();
         assertEquals(3, mockListener.lastLift.getLocatie().getY());
+        assertTrue(richtingField.getBoolean(liftController));
 
-        // 2. Top bereikt wissel (Y=0)
+        // 2. Top bereikt wissel (Y=0).
+        // Jouw controller switcht naar false en doet DIRECT liftOmlaag() -> Y wordt dus 1!
         mockListener.lastLift.getLocatie().setY(0);
         liftController.HTETick(dummyEvent);
         flushSwingQueue();
-        assertEquals(1, mockListener.lastLift.getLocatie().getY()); // omgedraaid naar beneden
+        assertFalse(richtingField.getBoolean(liftController));
+        assertEquals(1, mockListener.lastLift.getLocatie().getY());
 
-        // 3. Gaat omlaag loop
+        // 3. Gaat normaal omlaag (van Y=1 naar Y=2)
         liftController.HTETick(dummyEvent);
         flushSwingQueue();
         assertEquals(2, mockListener.lastLift.getLocatie().getY());
+        assertFalse(richtingField.getBoolean(liftController));
 
-        // 4. Bodem bereikt wissel (Y=4)
+        // 4. Bodem bereikt wissel (Y=4).
+        // Jouw controller switcht naar true en doet DIRECT liftOmhoog() -> Y wordt dus 3!
         mockListener.lastLift.getLocatie().setY(4);
         liftController.HTETick(dummyEvent);
         flushSwingQueue();
-        assertEquals(3, mockListener.lastLift.getLocatie().getY()); // omgedraaid naar boven
+        assertTrue(richtingField.getBoolean(liftController));
+        assertEquals(3, mockListener.lastLift.getLocatie().getY());
     }
 
     @Test
