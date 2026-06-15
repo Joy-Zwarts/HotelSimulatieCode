@@ -31,10 +31,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestFaciliteitControllers {
 
-    // =========================================================================
-    // Veilige Stubs zonder Swing/UI triggers
-    // =========================================================================
-
     static class FakeWachtTimer extends WachtTimer {
         final List<String> gestartIds      = new ArrayList<>();
         final List<Integer> gestarteTijden = new ArrayList<>();
@@ -114,21 +110,10 @@ public class TestFaciliteitControllers {
         FakeAndereRuimte() { super(KamerType.FITNESS, new Locatie(0, 0), "1x1"); }
         @Override public KamerType getAreaType() { return KamerType.FITNESS; }
     }
-
-    // =========================================================================
-    // GEFIXTE VEILIGE STUB VOOR LAYOUTCONTROLLER
-    // =========================================================================
-    // =========================================================================
-    // GEFIXTE VEILIGE STUB VOOR LAYOUTCONTROLLER (Inclusief Fake View)
-    // =========================================================================
-    // =========================================================================
-    // GEFIXTE VEILIGE STUB VOOR LAYOUTCONTROLLER (Omzeilt de complete UI Init)
-    // =========================================================================
     static class FakeLayoutController extends LayoutController {
         private final LayoutModel mockModel;
 
         FakeLayoutController(List<RuimteModel> ruimtes) {
-            // We geven minimale dummy objecten mee om de Java compiler tevreden te houden
             super(
                     new LayoutModel() {
                         @Override
@@ -136,11 +121,10 @@ public class TestFaciliteitControllers {
                             return new ArrayList<>(ruimtes);
                         }
                     },
-                    null, // View mag nu null zijn, want we slaan de init() over!
-                    null  // SimulatieView mag nu null zijn
+                    null,
+                    null
             );
 
-            // Lokale referentie voor onze eigen getModel() override
             this.mockModel = new LayoutModel() {
                 @Override
                 public ArrayList<RuimteModel> getRuimtes() {
@@ -149,11 +133,8 @@ public class TestFaciliteitControllers {
             };
         }
 
-        // CRUCIAL: Door init() leeg te overschrijven, stoppen we de executie van
-        // view.berekenGridGrootte() en simulatieView.getLayoutScrollPane() volledig!
         @Override
         protected void init() {
-            // Lege implementatie: doet niets, voorkomt alle NullPointerExceptions tijdens testen.
         }
 
         @Override
@@ -162,10 +143,8 @@ public class TestFaciliteitControllers {
         }
     }
 
-    // =========================================================================
-    // RestaurantController Tests
-    // =========================================================================
 
+    // RestaurantController Tests
     @Nested
     class RestaurantControllerTests {
         FakeWachtTimer timer;
@@ -181,7 +160,7 @@ public class TestFaciliteitControllers {
         }
 
         @Test
-        void stuurGastWeg_verwijdertGastEnNotificeertListeners() {
+        void stuurGastWegTest() {
             FakeRestaurant r = new FakeRestaurant(3, 5, 10);
             r.voegGastToe(42);
             ctrl.stuurGastWeg(42, r);
@@ -190,13 +169,13 @@ public class TestFaciliteitControllers {
         }
 
         @Test
-        void gastGeweigerd_notificeertListeners() {
+        void gastGeweigerdTest() {
             ctrl.gastGeweigerd(99);
             assertTrue(listener.geweigerd.contains(99));
         }
 
         @Test
-        void onGastAangekomenInKamer_plekBeschikbaar_voegtGastToeEnStartTimer() {
+        void plekBeschikbaarTest() {
             FakeRestaurant r = new FakeRestaurant(3, 5, 10);
             ctrl.restaurants.put(r.vastId(), r);
 
@@ -209,7 +188,7 @@ public class TestFaciliteitControllers {
         }
 
         @Test
-        void onGastAangekomenInKamer_restaurantVol_startWeigertimer() {
+        void restaurantVolTest() {
             FakeRestaurant r = new RestaurantControllerTests.FakeRestaurantCustomId(3, 5, 0, "R-VOL");
             ctrl.restaurants.put("R-VOL", r);
 
@@ -222,7 +201,7 @@ public class TestFaciliteitControllers {
         }
 
         @Test
-        void onGastAangekomenInKamer_locatieXWijktAf_geenMatch() {
+        void locatieXWijktAfTest() {
             FakeRestaurant r = new FakeRestaurant(3, 5, 10);
             ctrl.restaurants.put(r.vastId(), r);
 
@@ -234,7 +213,7 @@ public class TestFaciliteitControllers {
         }
 
         @Test
-        void onGastAangekomenInKamer_locatieYWijktAf_geenMatch() {
+        void locatieYWijktAfTest() {
             FakeRestaurant r = new FakeRestaurant(3, 5, 10);
             ctrl.restaurants.put(r.vastId(), r);
 
@@ -246,14 +225,14 @@ public class TestFaciliteitControllers {
         }
 
         @Test
-        void restaurantCapaciteitVeranderd_pastCapaciteitAan() {
+        void restaurantCapaciteitVeranderdTest() {
             FakeRestaurant r = new FakeRestaurant(1, 1, 5);
             ctrl.restaurants.put(r.vastId(), r);
             ctrl.restaurantCapaciteitVeranderd(20);
         }
 
         @Test
-        void onLayoutGeladen_filtertEnKoppeltRestaurantsEnSlaatAnderenOver() {
+        void onLayoutGeladenTest() {
             FakeRestaurant r = new FakeRestaurant(1, 1, 10);
             FakeAndereRuimte gym = new FakeAndereRuimte();
             FakeLayoutController layoutCtrl = new FakeLayoutController(List.of(r, gym));
@@ -266,7 +245,7 @@ public class TestFaciliteitControllers {
         }
 
         @Test
-        void testLegeOverridesVoorVolledigeCoverage() {
+        void testLegeOverridesTest() {
             FakeGast gast = new FakeGast(1, 0, 0);
             assertDoesNotThrow(() -> {
                 ctrl.onGastAangemaakt(gast);
@@ -291,9 +270,7 @@ public class TestFaciliteitControllers {
         }
     }
 
-    // =========================================================================
     // BioscoopController Tests
-    // =========================================================================
 
     @Nested
     class BioscoopControllerTests {
@@ -310,7 +287,7 @@ public class TestFaciliteitControllers {
         }
 
         @Test
-        void goToCinemaEvent_gastWordtHerkendBijAankomst() {
+        void goToCinemaEventTest() {
             ctrl.goToCinemaEvent(new FakeHotelEvent(5));
             FakeGast gast = new FakeGast(5, 0, 0);
             ctrl.onGastAangekomenInKamer(gast, null);
@@ -318,14 +295,14 @@ public class TestFaciliteitControllers {
         }
 
         @Test
-        void onGastAangekomenInKamer_gastNietInLijst_doetNiets() {
+        void onGastAangekomenInKamerTest() {
             FakeGast gast = new FakeGast(99, 0, 0);
             ctrl.onGastAangekomenInKamer(gast, null);
             assertNull(gast.getActiviteit());
         }
 
         @Test
-        void startCinemaEvent_verschillendeFilmDuren_timerBereikKlopt() {
+        void startCinemaEventTest() {
             ctrl.filmDuurVeranderd(TijdsDuur.KORT);
             ctrl.startCinemaEvent(new FakeHotelEvent(0));
 
@@ -339,7 +316,7 @@ public class TestFaciliteitControllers {
         }
 
         @Test
-        void stuurGastenWeg_stuurtAlleGastenEnCleartLijst() {
+        void stuurGastenWegTest() {
             ctrl.goToCinemaEvent(new FakeHotelEvent(1));
             ctrl.goToCinemaEvent(new FakeHotelEvent(2));
             ctrl.stuurGastenWeg();
@@ -348,7 +325,7 @@ public class TestFaciliteitControllers {
         }
 
         @Test
-        void testLegeOverridesVoorVolledigeCoverage() {
+        void testLegeOverridesTest() {
             FakeGast gast = new FakeGast(1, 0, 0);
             assertDoesNotThrow(() -> {
                 ctrl.onGastAangemaakt(gast);
@@ -364,9 +341,7 @@ public class TestFaciliteitControllers {
         }
     }
 
-    // =========================================================================
     // FitnessController Tests
-    // =========================================================================
 
     @Nested
     class FitnessControllerTests {
@@ -383,7 +358,7 @@ public class TestFaciliteitControllers {
         }
 
         @Test
-        void goToFitnessEvent_gastWordtHerkendEnTimerGestart() {
+        void goToFitnessEventTest() {
             ctrl.goToFitnessEvent(new FakeHotelEvent(10));
             FakeGast gast = new FakeGast(10, 0, 0);
             ctrl.onGastAangekomenInKamer(gast, null);
@@ -392,7 +367,7 @@ public class TestFaciliteitControllers {
         }
 
         @Test
-        void onGastAangekomenInKamer_gastNietInLijst_doetNiets() {
+        void onGastAangekomenInKamerTest() {
             FakeGast gast = new FakeGast(555, 0, 0);
             ctrl.onGastAangekomenInKamer(gast, null);
             assertTrue(timer.gestartIds.isEmpty());
@@ -400,14 +375,14 @@ public class TestFaciliteitControllers {
         }
 
         @Test
-        void stuurGastenWeg_gastInLijst_notificeertListeners() {
+        void stuurGastenWegTest() {
             ctrl.goToFitnessEvent(new FakeHotelEvent(11));
             ctrl.stuurGastenWeg(11);
             assertTrue(listener.weggestuurd.contains(11));
         }
 
         @Test
-        void testLegeOverridesVoorVolledigeCoverage() {
+        void testLegeOverridesTest() {
             FakeGast gast = new FakeGast(1, 0, 0);
             assertDoesNotThrow(() -> {
                 ctrl.onGastAangemaakt(gast);

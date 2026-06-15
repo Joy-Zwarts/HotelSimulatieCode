@@ -22,10 +22,6 @@ public class TestBeweegHelper implements BeweegHelper.MovementListener {
     private EntiteitenModel lastEventEntiteit;
     private Locatie lastOudeLocatie;
 
-    // =========================================================================
-    // Veilige Fakes / Mocks voor Isolatie
-    // =========================================================================
-
     static class FakePersoon extends PersoonModel {
         private final Locatie locatie;
         public FakePersoon(int id, Locatie startLocatie) {
@@ -67,10 +63,6 @@ public class TestBeweegHelper implements BeweegHelper.MovementListener {
         @Override public boolean isGepauzeerd() { return gepauzeerd; }
     }
 
-    // =========================================================================
-    // Setup & Interface implementatie
-    // =========================================================================
-
     @BeforeEach
     void setUp() {
         stepTakenCalled = false;
@@ -92,10 +84,6 @@ public class TestBeweegHelper implements BeweegHelper.MovementListener {
         lastEventEntiteit = entiteit;
     }
 
-    // =========================================================================
-    // De Tests voor 100% Branch Coverage
-    // =========================================================================
-
     @Test
     public void testSetSpeed() throws Exception {
         BeweegHelper gastBeweeg = new BeweegHelper(100, this);
@@ -116,8 +104,7 @@ public class TestBeweegHelper implements BeweegHelper.MovementListener {
     }
 
     @Test
-    public void testProcessMovement_WanneerOverzichtViewNullIs_LooptGewoonDoor() throws Exception {
-        // ONTBREKENDE BRANCH 1: overzichtView is NULL. Moet de if-statement overslaan en bewegen.
+    public void OverzichtViewNullTest() throws Exception {
         BeweegHelper gb = new BeweegHelper(100, this);
         gb.setOverzichtView(null);
 
@@ -134,7 +121,7 @@ public class TestBeweegHelper implements BeweegHelper.MovementListener {
     }
 
     @Test
-    public void testProcessMovement_WanneerGepauzeerd_DoetNiets() throws Exception {
+    public void ProcessMovementGepauzeerdTest() throws Exception {
         BeweegHelper gb = new BeweegHelper(100, this);
         FakeOverzichtView fakeOverzicht = new FakeOverzichtView();
         fakeOverzicht.setGepauzeerd(true);
@@ -153,7 +140,7 @@ public class TestBeweegHelper implements BeweegHelper.MovementListener {
     }
 
     @Test
-    public void testProcessMovement_BestemmingBereiktBranch() throws Exception {
+    public void BestemmingBereiktTest() throws Exception {
         BeweegHelper gb = new BeweegHelper(100, this);
         FakePersoon persoon = new FakePersoon(2, new Locatie(5, 5));
         FakePathFinder pf = new FakePathFinder();
@@ -170,7 +157,7 @@ public class TestBeweegHelper implements BeweegHelper.MovementListener {
     }
 
     @Test
-    public void testProcessMovement_HorizontaleStapZonderVertraging() throws Exception {
+    public void HorizontaleStapZonderVertragingTest() throws Exception {
         BeweegHelper gb = new BeweegHelper(100, this);
         FakePersoon persoon = new FakePersoon(3, new Locatie(0, 0));
         FakePathFinder pf = new FakePathFinder();
@@ -189,51 +176,46 @@ public class TestBeweegHelper implements BeweegHelper.MovementListener {
     }
 
     @Test
-    public void testProcessMovement_WanneerVolgendeStapNullIs_SlaatWachtCalculatieOver() throws Exception {
-        // ONTBREKENDE BRANCH 2: pf.isBestemmingBereikt() == false, maar volgendeStap == null
+    public void VolgendeStapNullTest() throws Exception {
         BeweegHelper gb = new BeweegHelper(100, this);
         FakePersoon persoon = new FakePersoon(9, new Locatie(0, 0));
         FakePathFinder pf = new FakePathFinder();
 
         pf.voegStapToe(new Locatie(1, 1));
-        pf.setForceerPeekNull(true); // Forceert 'volgendeStap == null' branch condition
+        pf.setForceerPeekNull(true);
         gb.voegRouteToe(persoon, pf);
 
         Method m = BeweegHelper.class.getDeclaredMethod("processMovement");
         m.setAccessible(true);
 
-        // Mag niet crashen op de Math.max check en moet de stap gewoon uitvoeren
         assertDoesNotThrow(() -> m.invoke(gb));
         assertTrue(stepTakenCalled);
     }
 
     @Test
-    public void testProcessMovement_VerticaleStapMetNegatieveOfNulVertraging() throws Exception {
-        // ONTBREKENDE BRANCH 3: trapVertragingTicks <= 0. Moet door Math.max(1, ...) afgevangen worden naar 1.
+    public void VerticaleStapNulVertragingTest() throws Exception {
         BeweegHelper gb = new BeweegHelper(100, this);
-        gb.setTrapVertragingTicks(0); // Test de randvoorwaarde van 0 of negatief
+        gb.setTrapVertragingTicks(0);
 
         FakePersoon persoon = new FakePersoon(5, new Locatie(0, 0));
         FakePathFinder pf = new FakePathFinder();
-        pf.voegStapToe(new Locatie(0, 1)); // Verticaal
+        pf.voegStapToe(new Locatie(0, 1));
         gb.voegRouteToe(persoon, pf);
 
         Method m = BeweegHelper.class.getDeclaredMethod("processMovement");
         m.setAccessible(true);
 
-        // Eerste tick: registreert vertraging en dwingt minimale fallback af (1 tick wachtstand)
         m.invoke(gb);
         assertTrue(stepTakenCalled);
 
         stepTakenCalled = false;
 
-        // Tweede tick: Resterende wacht-ticks was 1 -> wordt verlaagd naar 0 -> slaat stap over (continue)
         m.invoke(gb);
         assertFalse(stepTakenCalled, "Moet alsnog 1 tick wachten door de Math.max(1, ...) restrictie.");
     }
 
     @Test
-    public void testProcessMovement_VerticaleStapTriggertTrapVertraging() throws Exception {
+    public void VerticaleStapTriggertTrapVertragingTest() throws Exception {
         BeweegHelper gb = new BeweegHelper(100, this);
         gb.setTrapVertragingTicks(2);
 

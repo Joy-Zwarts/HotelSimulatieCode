@@ -52,7 +52,7 @@ public class TestButtonController {
         LayoutLoader layoutLoader =
                 new LayoutLoader(manager, view, null, pauseController);
 
-        // Maak de controller aan zodat alle buttons een ActionListener krijgen.
+
         buttonController = new ButtonController(
                 view,
                 simulatieController,
@@ -62,8 +62,6 @@ public class TestButtonController {
     }
 
 
-
-    // Dummy reset-listener.
     private static class TestReset implements reset {
 
         boolean resetAangeroepen = false;
@@ -74,9 +72,9 @@ public class TestButtonController {
         }
     }
 
-    // Controleert dat de simulatie niet start zonder layout.
+
     @Test
-    void testStartSimulationButtonZonderLayout() {
+    void testStartSimulationZonderLayout() {
 
         simulatieController.setStarted(false);
 
@@ -85,14 +83,12 @@ public class TestButtonController {
         assertFalse(simulatieController.getStarted());
     }
 
-    // Controleert dat de settingsknop bestaat.
     @Test
     void testSettingsButtonBestaat() {
 
         assertNotNull(view.getSettingsButton());
     }
 
-    // Controleert dat op de settingsknop geklikt kan worden.
     @Test
     void testOpenWindow() {
 
@@ -101,7 +97,6 @@ public class TestButtonController {
         assertNotNull(view.getSettingsButton());
     }
 
-    // Controleert dat stoppen niets doet als de simulatie niet gestart is.
     @Test
     void testStopSimulationNietGestart() {
 
@@ -112,12 +107,8 @@ public class TestButtonController {
         assertFalse(simulatieController.getStarted());
     }
 
-    // Controleert dat de simulatie stopt.
-
-
-    // Controleert dat de simulatie niet opnieuw gestart wordt.
     @Test
-    void testStartSimulationWanneerAlGestart() {
+    void testStartSimulationAlGestart() {
 
         simulatieController.setStarted(true);
 

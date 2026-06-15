@@ -20,12 +20,10 @@ import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TestGastPlaatser { // Klasse even op public gezet
+public class TestGastPlaatser {
 
     private PlaatsHelper gastPlaatser;
     private HashMap<Locatie, GridVakjeController> testGrid;
-
-    // Test data velden
     private Locatie testLocatie;
     private GastModel testGast;
     private GridVakjeController testVakController;
@@ -37,13 +35,9 @@ public class TestGastPlaatser { // Klasse even op public gezet
 
     @BeforeEach
     void setUp() {
-        // 1. Basis data initialiseren
         testLocatie = new Locatie(1, 1);
         pauseController = new PauseController(manager, view2);
         KamerClassificatie sterren = KamerClassificatie.eenSter;
-
-        // 2. Maak het KamerModel aan met de 5 juiste parameters
-        // (Type, Positie, Dimensie, Classificatie, IsBezet)
         KamerModel testKamer = new KamerModel(
                 KamerType.ROOM,
                 testLocatie,
@@ -52,9 +46,8 @@ public class TestGastPlaatser { // Klasse even op public gezet
                 false
         );
 
-        this.testRuimte = testKamer; // RuimteModel veld vullen
+        this.testRuimte = testKamer;
 
-        // 3. GridVakjeModel & View (4 ints: x, y, w, h)
         GridVakjeModel vakModel = new GridVakjeModel(testLocatie.getX(), testLocatie.getY());
         vakModel.setRuimte(testKamer);
 
@@ -64,12 +57,9 @@ public class TestGastPlaatser { // Klasse even op public gezet
         testGrid = new HashMap<>();
         testGrid.put(testLocatie, testVakController);
 
-        // 4. GastPlaatser initialiseren en grid injecteren
         gastPlaatser = new PlaatsHelper(null, null);
-        injectGridIntoPlaatser(testGrid);
+        injectGridTest(testGrid);
 
-        // 5. GastModel aanmaken
-        // Gebruik de testKamer die we net hebben gemaakt
         testGast = new GastModel(
                 1,
                 testLocatie,
@@ -79,7 +69,7 @@ public class TestGastPlaatser { // Klasse even op public gezet
                 testKamer);
     }
 
-    private void injectGridIntoPlaatser(HashMap<Locatie, GridVakjeController> grid) {
+    private void injectGridTest(HashMap<Locatie, GridVakjeController> grid) {
         try {
             java.lang.reflect.Field field = PlaatsHelper.class.getDeclaredField("grid");
             field.setAccessible(true);
@@ -91,7 +81,6 @@ public class TestGastPlaatser { // Klasse even op public gezet
 
     @Test
     public void testOnGastAangemaakt() {
-        // We gebruiken this.testVakController om zeker te weten dat we het veld pakken
         JPanel panel = this.testVakController.getGridView().getGuestPanel();
         int voor = panel.getComponentCount();
 
@@ -106,7 +95,6 @@ public class TestGastPlaatser { // Klasse even op public gezet
         panel.add(this.testGast.getPersoonLabel());
         this.testRuimte.setAantalGasten(0);
 
-        // Gebruik expliciet het veld testLocatie
         this.gastPlaatser.onGastAangekomenInKamer(this.testGast, this.testLocatie);
 
         assertEquals(1, this.testRuimte.getAantalGasten());
@@ -114,8 +102,7 @@ public class TestGastPlaatser { // Klasse even op public gezet
     }
 
     @Test
-    public void testOnGastVerplaatst_SuccesvolleVerplaatsing() {
-        // Setup: Maak een tweede locatie en vakje aan
+    public void testOnGastVerplaatst() {
         Locatie nieuweLocatie = new Locatie(2, 2);
         GridVakjeModel nieuwVakModel = new GridVakjeModel(2, 2);
         GridVakjeView nieuwVakView = new GridVakjeView(2, 2, 50, 50);
@@ -123,69 +110,55 @@ public class TestGastPlaatser { // Klasse even op public gezet
 
         testGrid.put(nieuweLocatie, nieuwVakController);
 
-        // Plaats de gast eerst op de oude locatie
         JPanel oudPanel = testVakController.getGridView().getGuestPanel();
         oudPanel.add(testGast.getPersoonLabel());
 
-        // Actie: Verplaats de gast in het model en roep de methode aan
         Locatie oudeLocatie = testLocatie;
-        testGast.setLocatie(nieuweLocatie); // Zorg dat je GastModel een setLocatie heeft
+        testGast.setLocatie(nieuweLocatie);
         gastPlaatser.onGastVerplaatst(testGast, oudeLocatie);
 
-        // Assert: Check of hij weg is bij oud en erbij bij nieuw
         assertEquals(0, oudPanel.getComponentCount(), "Gast moet verwijderd zijn uit het oude vakje.");
         assertEquals(1, nieuwVakController.getGridView().getGuestPanel().getComponentCount(), "Gast moet toegevoegd zijn aan het nieuwe vakje.");
     }
 
 
     @Test
-    public void testOnGastVerplaatst_ZelfdeLocatieDoetNiets() {
+    public void testOnGastVerplaatstZelfdeLocatie() {
         JPanel panel = testVakController.getGridView().getGuestPanel();
         panel.add(testGast.getPersoonLabel());
-
-        // We simuleren een verplaatsing naar de huidige locatie (1,1 naar 1,1)
         gastPlaatser.onGastVerplaatst(testGast, testLocatie);
-
-        // De gast moet gewoon blijven staan en de methode moet vroegtijdig 'returnen'
         assertEquals(1, panel.getComponentCount(), "Gast moet gewoon blijven staan als de locatie hetzelfde is.");
     }
 
 
 
     @Test
-    public void testOnGastVerplaatst_OudeLocatieNull_AlleenToevoegen() {
-        // Setup: Zorg dat de gast op de nieuwe plek staat, maar de 'oudeLocatie' parameter is null
+    public void testOudeLocatieNull() {
+
         JPanel nieuwPanel = testVakController.getGridView().getGuestPanel();
 
-        // Actie: Verplaatsing aanroepen met null als oude locatie
         gastPlaatser.onGastVerplaatst(testGast, null);
 
-        // Assert: De code moet niet crashen en de gast moet op de huidige locatie geplaatst worden
         assertEquals(1, nieuwPanel.getComponentCount(), "Gast moet alsnog geplaatst worden, ook als de oude locatie onbekend was.");
     }
 
     @Test
-    void testOnGastVertrokken_VerwijdertLabel() {
-        // Setup: Voeg de gast handmatig toe aan het panel
+    void testOnGastVertrokken() {
         JPanel guestPanel = testVakController.getGridView().getGuestPanel();
         guestPanel.add(testGast.getPersoonLabel());
         int initialCount = guestPanel.getComponentCount();
 
-        // Actie
         gastPlaatser.onGastVertrokken(testGast);
 
-        // Assert
         assertEquals(initialCount - 1, guestPanel.getComponentCount(),
                 "Het gast-label moet verwijderd zijn uit het panel.");
     }
 
 
     @Test
-    void testOnGastVertrokken_MetNullLocatie_CrashtNiet() {
-        // Setup: Maak een gast zonder locatie
+    void testOnGastVertrokkenMetNullLocatie() {
         GastModel spookGast = new GastModel(99, null, null, TypePersoon.GAST, KamerClassificatie.eenSter, (KamerModel) testRuimte);
 
-        // Actie & Assert
         assertDoesNotThrow(() -> gastPlaatser.onGastVertrokken(spookGast),
                 "De methode mag niet crashen als de locatie van de gast null is.");
     }

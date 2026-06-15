@@ -17,7 +17,6 @@ class TestDarkmode {
 
         SwingUtilities.invokeAndWait(() -> {
 
-            // Begin set up
             DarkModeModel model = new DarkModeModel();
             JPanel dummyPanel = new JPanel();
             TimeManagementPanel timePanel = new TimeManagementPanel(dummyPanel, model);
@@ -25,7 +24,6 @@ class TestDarkmode {
 
             DarkModeController controller = new DarkModeController(view, timePanel, model);
 
-            // begin state
             boolean initialState = model.isDarkMode();
             Color initialBg = UIManager.getColor("Panel.background");
 

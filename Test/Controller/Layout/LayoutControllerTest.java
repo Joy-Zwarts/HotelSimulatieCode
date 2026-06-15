@@ -23,34 +23,25 @@ public class LayoutControllerTest {
     private StubHotelSimulatieView stubHoofdView;
     private LayoutController controller;
 
-    // =========================================================================
-    // Lightweight Stubs / Fakes om Swing UI dependencies te isoleren
-    // =========================================================================
-
     static class StubLayoutView extends LayoutView {
         int gridBreedte = 10;
         int gridLengte = 10;
 
         public StubLayoutView() {
-            super(null, null); // Voorkom UI-bindingen in de echte LayoutView
+            super(null, null);
         }
 
         @Override public int getGridBreedte() { return gridBreedte; }
         @Override public int getGridLengte() { return gridLengte; }
         @Override public void berekenGridGrootte(ArrayList<RuimteModel> r) {}
 
-        // CRUCIAL: Overschrijf deze methodes om de echte, zware UI-logica
-        // (die de ClassCastException veroorzaakte) volledig te passeren!
         @Override
         public void maakGrid(int b, int l, int vb, int vh, HashMap<Locatie, GridVakjeController> grid) {
-            // We simuleren het gedrag van de echte maakGrid door een lege grid te instantiëren
-            // zodat de controller geen NullPointer krijgt bij eventuele vervolgacties.
             this.setGrid(grid != null ? grid : new HashMap<>());
         }
 
         @Override
         public void plaatsKamers(ArrayList<RuimteModel> ruimtes, ArrayList<RuimteModel> verplichteElementen) {
-            // Leeglaten: we hoeven de kamers visueel niet te plaatsen tijdens een controller branch-test
         }
     }
 
@@ -59,7 +50,7 @@ public class LayoutControllerTest {
         private final JPanel fakeViewportView = new JPanel();
 
         public StubHotelSimulatieView() {
-            super(null); // Omzeil de constructor die een JFrame bouwt
+            super(null);
             fakeScrollPane.setViewportView(fakeViewportView);
         }
 
@@ -88,9 +79,6 @@ public class LayoutControllerTest {
         }
     }
 
-    // =========================================================================
-    // Test Setup
-    // =========================================================================
 
     @BeforeEach
     void setUp() {
@@ -99,12 +87,8 @@ public class LayoutControllerTest {
         stubHoofdView = new StubHotelSimulatieView();
     }
 
-    // =========================================================================
-    // Branch & Functionaliteit Tests
-    // =========================================================================
-
     @Test
-    void berekenEnPasVakgrootteAan_metNormaleSchermGrootte_berekentDimensies() {
+    void berekenEnPasVakgrootteAanTest() {
         stubHoofdView.setMockViewportSize(800, 600);
         controller = new LayoutController(fakeModel, stubView, stubHoofdView);
 
@@ -113,7 +97,7 @@ public class LayoutControllerTest {
     }
 
     @Test
-    void berekenEnPasVakgrootteAan_wanneerSchermGrootteNulIs_valtTerugOpFallbacks() {
+    void SchermGrootteNullTest() {
         stubHoofdView.setMockViewportSize(0, 0);
         controller = new LayoutController(fakeModel, stubView, stubHoofdView);
 
@@ -122,7 +106,7 @@ public class LayoutControllerTest {
     }
 
     @Test
-    void vindLocatie_wanneerKamerBestaat_geeftGecorrigeerdeLocatieTerug() {
+    void vindLocatieTest() {
         FakeRuimte lobby = new FakeRuimte(KamerType.LOBBY, 4, 6);
         fakeModel.getRuimtes().add(lobby);
 
@@ -135,7 +119,7 @@ public class LayoutControllerTest {
     }
 
     @Test
-    void vindLocatie_wanneerKamerNietBestaat_geeftNullTerug() {
+    void KamerBestaatNietTest() {
         FakeRuimte kamer = new FakeRuimte(KamerType.ROOM, 1, 1);
         fakeModel.getRuimtes().add(kamer);
 

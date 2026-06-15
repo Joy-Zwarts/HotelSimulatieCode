@@ -17,8 +17,6 @@ public class SettingsControllerTest {
 
     private SettingsController controller;
 
-    // Dummy listener waarmee gecontroleerd wordt
-    // of de juiste methodes worden aangeroepen.
     private static class TestListener implements settingsListener {
 
         TijdsDuur schoonmaakTijd;
@@ -77,7 +75,6 @@ public class SettingsControllerTest {
         controller = new SettingsController(view, panel, darkController);
     }
 
-    // Controleert dat de listener toegevoegd kan worden.
     @Test
     void testAddListener() {
 
@@ -88,7 +85,6 @@ public class SettingsControllerTest {
         assertNotNull(listener);
     }
 
-    // Controleert of de schoonmaaktijd op Kort gezet kan worden.
     @Test
     void testSchoonmaakKort() {
 
@@ -101,7 +97,6 @@ public class SettingsControllerTest {
         assertEquals(TijdsDuur.KORT, listener.schoonmaakTijd);
     }
 
-    // Controleert of de schoonmaaktijd op Lang gezet kan worden.
     @Test
     void testSchoonmaakLang() {
 
@@ -114,7 +109,6 @@ public class SettingsControllerTest {
         assertEquals(TijdsDuur.LANG, listener.schoonmaakTijd);
     }
 
-    // Controleert of de filmduur op Kort gezet kan worden.
     @Test
     void testFilmKort() {
 
@@ -127,7 +121,6 @@ public class SettingsControllerTest {
         assertEquals(TijdsDuur.KORT, listener.filmDuur);
     }
 
-    // Controleert of de filmduur op Lang gezet kan worden.
     @Test
     void testFilmLang() {
 
@@ -140,9 +133,6 @@ public class SettingsControllerTest {
         assertEquals(TijdsDuur.LANG, listener.filmDuur);
     }
 
-
-
-    // Controleert of de wachttijdslider werkt.
     @Test
     void testGastWachttijdSlider() {
 

@@ -1,6 +1,8 @@
 import Controller.PersoonFactory.EntiteitenFactory;
 import Controller.PersoonFactory.GastCreator;
+import Controller.PersoonFactory.SchoonmakerCreator;
 import Model.Entiteiten.GastModel;
+import Model.Entiteiten.SchoonmakerModel;
 import Model.Entiteiten.TypePersoon;
 import Model.Layout.Locatie;
 import Model.Ruimtes.KamerClassificatie;
@@ -39,18 +41,20 @@ public class TestFactories {
         Assertions.assertEquals(KamerClassificatie.vijfSterren, gasten.get(4).getWensen());
     }
 
-//    @Test
-//    public void testSchoonmakerCreatie() {
-//        PersoonFactory factory = new SchoonmakerCreator();
-//        Locatie loc = new Locatie(5, 5);
-//        Locatie target = new Locatie(10, 10);
-//
-//        SchoonmakerModel schoonmaker = (SchoonmakerModel) factory.createPersoon(99, loc, target, 0, null);
-//
-//        Assertions.assertNotNull(schoonmaker);
-//        Assertions.assertEquals(10, schoonmaker.getLocatie().getX());
-//        Assertions.assertEquals(10, schoonmaker.getLocatie().getY());
-//    }
+    @Test
+    public void testSchoonmakerCreatie() {
+        EntiteitenFactory factory = new SchoonmakerCreator();
+        Locatie loc = new Locatie(5, 5);
+        Locatie target = new Locatie(10, 10);
+
+        SchoonmakerModel schoonmaker = (SchoonmakerModel) factory.createEntiteit(99, loc, target, 0, null, TypePersoon.SCHOONMAKER);
+
+        Assertions.assertNotNull(schoonmaker);
+        Assertions.assertEquals(5, schoonmaker.getLocatie().getX());
+        Assertions.assertEquals(5, schoonmaker.getLocatie().getY());
+        Assertions.assertEquals(10, schoonmaker.getTargetLocatie().getX());
+        Assertions.assertEquals(10, schoonmaker.getTargetLocatie().getY());
+    }
 
     @Test
     public void testRoomCreatorAlleClassificaties() {
