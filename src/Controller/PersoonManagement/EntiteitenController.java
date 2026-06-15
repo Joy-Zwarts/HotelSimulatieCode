@@ -4,7 +4,7 @@ import Controller.Layout.LayoutController;
 import Controller.Layout.Interfaces.LayoutGeladen;
 import Controller.Systeem.Interfaces.settingsListener;
 import Model.Entiteiten.EntiteitenModel;
-import View.Systeem.OverzichtView; // Import toevoegen
+import View.Systeem.OverzichtView;
 
 import java.util.HashMap;
 import java.util.Map;

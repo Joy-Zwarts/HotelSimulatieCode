@@ -6,23 +6,22 @@ import java.awt.*;
 
 public class PersoonModel extends EntiteitenModel {
 
-    // VERWIJDERD: ID, locatie, targetLocatie en vorigeLocatie (staan al in EntiteitenModel)
+    // attributen
+
     private final Color kleur;
     private final JLabel persoonLabel;
     private final TypePersoon typePersoon;
 
+    // constructor
     public PersoonModel(int ID, Locatie locatie, Locatie targetLocatie, Color bolletjeKleur, TypePersoon typePersoon) {
-        // Dit stuurt de data netjes door naar EntiteitenModel
         super(ID, locatie, targetLocatie);
         this.kleur = bolletjeKleur;
-        // Let op: createLabel() wordt nu aangeroepen ná super(), zodat getID() de juiste waarde heeft
         this.persoonLabel = createLabel();
         this.typePersoon = typePersoon;
     }
 
+    // maakt het bolletje voor het lopen door het hotel (moet later in een view klasse)
     private JLabel createLabel() {
-        // Gebruik getID() in plaats van de losse variabele ID,
-        // zodat je de ID uit de superclass ophaalt.
         JLabel label = new JLabel(String.valueOf(getID()), SwingConstants.CENTER) {
 
             @Override
@@ -53,9 +52,6 @@ public class PersoonModel extends EntiteitenModel {
     public JLabel getPersoonLabel() {
         return persoonLabel;
     }
-
-    // VERWIJDERD: getVorigeLocatie() en setVorigeLocatie()
-    // Deze stonden al in EntiteitenModel en wermsten hier de werking tegen.
 
     public TypePersoon getTypePersoon() {
         return typePersoon;

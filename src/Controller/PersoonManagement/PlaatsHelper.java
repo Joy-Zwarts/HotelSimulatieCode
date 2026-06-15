@@ -43,7 +43,6 @@ public class PlaatsHelper implements NewGast, LayoutGeladen, NewSchoonmaker, res
 
     @Override
     public void onLiftAangemaakt(LiftModel lift) {
-        // Zorg dat het grid up-to-date is vanuit de controller
         if (this.grid == null && this.layoutController != null && this.layoutController.getView() != null) {
             this.grid = this.layoutController.getView().getGrid();
         }
@@ -55,18 +54,18 @@ public class PlaatsHelper implements NewGast, LayoutGeladen, NewSchoonmaker, res
             if (vak != null) {
                 GridVakjeView vakView = vak.getGridView();
 
-                // Vraag direct de echte maten op uit het LayoutModel via de controller
+                // vraag de juiste maten op
                 int actueleBreedte = layoutController.getModel().getVakBreedte();
                 int actueleHoogte = layoutController.getModel().getVakHoogte();
 
-                // Veilige fallback (just in case)
+                // fallback
                 if (actueleBreedte <= 0) actueleBreedte = 118;
                 if (actueleHoogte <= 0) actueleHoogte = 59;
 
-                // Maak de LiftView aan met de exacte model-maten
+                // maak de liftView aan met het model
                 LiftView liftView = new LiftView(actueleBreedte, actueleHoogte);
 
-                // VOEG TOE AAN DE LIFT LAYER (LAAG 1) via de nieuwe methode in GridVakjeView
+                // voeg toe aan lift layer van het juiste vakje
                 vakView.voegLiftToe(liftView);
             }
         }
@@ -285,13 +284,14 @@ public class PlaatsHelper implements NewGast, LayoutGeladen, NewSchoonmaker, res
         }
     }
 
+    // haal de lift uit het oude vakje hun lift layer en zet hem in de nieuwe
     @Override
     public void onLiftVerplaatst(LiftModel lift, Locatie oudeLocatie) {
         if (oudeLocatie != null && oudeLocatie.equals(lift.getLocatie())) return;
 
         LiftView deLiftView = null;
 
-        // 1. Oude vakje opschonen en de LiftView uit de liftContainer halen (Laag 1)
+        // oude vakje opschonen en de lift view uit de liftContainer halen
         GridVakjeController oudVak = grid.get(oudeLocatie);
         if (oudVak != null) {
             JPanel oudLiftContainer = oudVak.getGridView().getLiftContainer();
@@ -307,11 +307,10 @@ public class PlaatsHelper implements NewGast, LayoutGeladen, NewSchoonmaker, res
             oudLiftContainer.repaint();
         }
 
-        // 2. De lift in de liftContainer van het nieuwe vakje plaatsen
+        // plaats de lift in de liftContainer van het nieuwe vakje
         if (deLiftView != null) {
             GridVakjeController nieuwVak = grid.get(lift.getLocatie());
             if (nieuwVak != null) {
-                // Voeg direct toe via de methode van GridVakjeView (zet hem weer netjes op Laag 1)
                 nieuwVak.getGridView().voegLiftToe(deLiftView);
             }
         }

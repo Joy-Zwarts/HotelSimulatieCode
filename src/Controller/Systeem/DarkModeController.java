@@ -38,7 +38,7 @@ public class DarkModeController {
 
     // pas het thema toe aan alle componenten
     public void applyTheme() {
-        // stel de standaard Java Swing kleuren in
+        // stel de standaard swing kleuren in
         UIManager.put("Panel.background", model.getBackgroundColor());
         UIManager.put("Label.foreground", model.getForegroundColor());
         UIManager.put("Button.background", model.getButtonBackgroundColor());

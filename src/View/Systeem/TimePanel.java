@@ -1,7 +1,7 @@
 package View.Systeem;
 
 import Controller.Events.Interfaces.noneEvent;
-import Controller.SimulatieController; // Zorg dat deze import klopt
+import Controller.SimulatieController;
 import hotelevents.HotelEvent;
 import hotelevents.HotelEventManager;
 
@@ -17,7 +17,7 @@ public class TimePanel implements noneEvent {
     // constructor
     public TimePanel(HotelEventManager manager, JPanel panelRechts, HotelSimulatieView hotelSimulatieView, SimulatieController controller) {
         this.view = hotelSimulatieView;
-        this.controller = controller; // <-- Opslaan
+        this.controller = controller;
 
         // panel for tijd
         JPanel panelTime = new JPanel(new FlowLayout(FlowLayout.LEFT));

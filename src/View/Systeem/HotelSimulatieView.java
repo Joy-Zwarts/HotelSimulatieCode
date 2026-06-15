@@ -164,10 +164,8 @@ public class HotelSimulatieView extends JFrame{
         add(rightPanel, BorderLayout.EAST);
     }
 
-    // VERBETERD: vervang de inhoud van de scrollpane direct
+    // vervang de inhoud van de scrollpane
     public void setLayoutView(JPanel newLayout) {
-        // We hangen het nieuwe hotelscherm DIRECT in de viewport van de scrollpane.
-        // Hierdoor "snapt" de JScrollPane hoe groot het hotelscherm écht is en scrollt hij wanneer nodig.
         layoutScrollPane.setViewportView(newLayout);
 
         layoutScrollPane.revalidate();

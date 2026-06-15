@@ -1,6 +1,6 @@
-package Model.Ruimtes;
-
 import Model.Layout.Locatie;
+import Model.Ruimtes.KamerType;
+import Model.Ruimtes.RestaurantModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

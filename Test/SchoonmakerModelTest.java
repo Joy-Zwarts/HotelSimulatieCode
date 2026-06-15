@@ -1,5 +1,3 @@
-package Model.Personen;
-
 import Model.Entiteiten.SchoonmakerModel;
 import Model.Entiteiten.TypePersoon;
 import Model.Layout.Locatie;

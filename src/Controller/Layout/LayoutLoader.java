@@ -62,14 +62,12 @@ public class LayoutLoader {
             LayoutView layoutView = new LayoutView(pauseController, view);
             EventPanel eventPrint = new EventPanel(manager);
 
-            // DE FIX: De LayoutController constructor bouwt intern de complete grid-grootte,
-            // verplichte elementen, dynamische vakgrootte, grid-opzet en kamers al op via zijn init() methode.
             controller = new LayoutController(model, layoutView, view);
 
-            // De kamers nummeren (moet gebeuren nadat kamers en grid geplaatst zijn)
+            // de kamers nummeren (moet gebeuren nadat kamers en grid geplaatst zijn)
             layoutView.nummerDeKamers();
 
-            // Koppel de gegenereerde views vast aan de hoofd-simulatie-interface
+            // koppel de gegenereerde views
             view.setLayoutView(layoutView.getHotelPanel());
             view.setLegendaView();
             view.setRightView(eventPrint.getContainer());

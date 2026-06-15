@@ -58,7 +58,7 @@ public class LayoutController {
         int dynamischeHoogte = beschikbareHoogte / hotelHoogteInVakjes;
         int uiteindelijkeHoogte = Math.max(dynamischeHoogte, uiteindelijkeBreedte / 2); // houdt dat het een rechthoek blijft
 
-        // Sla de definitieve maten op in het model
+        // sla de definitieve maten op in het model
         model.setVakDimensies(uiteindelijkeBreedte, uiteindelijkeHoogte);
     }
 

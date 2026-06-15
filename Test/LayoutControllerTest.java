@@ -1,5 +1,5 @@
-package Controller.Layout;
-
+import Controller.Layout.GridVakjeController;
+import Controller.Layout.LayoutController;
 import Model.Layout.LayoutModel;
 import Model.Layout.Locatie;
 import Model.Ruimtes.KamerType;

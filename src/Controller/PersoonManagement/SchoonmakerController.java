@@ -121,6 +121,7 @@ public class SchoonmakerController extends EntiteitenController implements clean
         verwerkNieuweTaak(gekozen, kamer, benodigdeTijd);
     }
 
+    // bij een checkout event kies het aantal ticks om schoon te maken en kies een schoonmaker voor de klus
     @Override
     public void checkOut(HotelEvent hotelEvent) {
         KamerModel kamer = receptieController.getGast(hotelEvent.getGuestId()).getKamer();

@@ -1,8 +1,9 @@
-package Controller.Faciliteiten;
-
+import Controller.Faciliteiten.BioscoopController;
+import Controller.Faciliteiten.FitnessController;
 import Controller.Faciliteiten.Interfaces.bioscoopOver;
 import Controller.Faciliteiten.Interfaces.fitnessOver;
 import Controller.Faciliteiten.Interfaces.restaurantOver;
+import Controller.Faciliteiten.RestaurantController;
 import Controller.Layout.LayoutController;
 import Controller.Timer.TimerPing;
 import Controller.Timer.WachtTimer;

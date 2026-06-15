@@ -1,5 +1,4 @@
-package Controller.Layout;
-
+import Controller.Layout.GridVakjeController;
 import Controller.Systeem.PauseController;
 import Model.Layout.GridVakjeModel;
 import Model.Ruimtes.KamerType;

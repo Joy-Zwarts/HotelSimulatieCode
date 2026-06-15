@@ -1,12 +1,9 @@
-package Controller.Systeem;
-
 import Controller.Systeem.DarkModeController;
 import Controller.Systeem.SettingsController;
 import Controller.Systeem.Interfaces.settingsListener;
 import View.Systeem.TijdsDuur;
 import Model.Systeem.DarkModeModel;
 import View.Systeem.HotelSimulatieView;
-import View.Systeem.TijdsDuur;
 import View.Systeem.TimeManagementPanel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

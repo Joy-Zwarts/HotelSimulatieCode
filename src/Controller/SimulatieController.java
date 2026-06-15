@@ -200,7 +200,6 @@ public class SimulatieController implements reset {
         System.out.println("Simulatie gereset");
     }
 
-    // In SimulatieController.java (of jouw centrale controller)
     public int getMaxHteVoorScenario() {
         if (this.scenario == 1) {
             return 500;

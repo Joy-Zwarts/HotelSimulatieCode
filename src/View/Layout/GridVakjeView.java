@@ -9,9 +9,9 @@ public class GridVakjeView {
 
     // attributen
     private final JLayeredPane layeredPane;
-    private final JPanel backgroundPanel; // Back Layer (Laag 0)
-    private final JPanel liftContainer;    // Lift Layer (Laag 1) - NIEUW
-    private final JPanel gastenContainer;  // Gasten Container (Laag 2)
+    private final JPanel backgroundPanel; // back layer (layout)
+    private final JPanel liftContainer;    // lift layer (laag 1)
+    private final JPanel gastenContainer;  // gasten layer (laag 2)
 
     // constructor
     public GridVakjeView(int x, int y, int breedte, int hoogte) {
@@ -19,7 +19,7 @@ public class GridVakjeView {
         layeredPane.setBounds(x * breedte, y * hoogte, breedte, hoogte);
         layeredPane.setPreferredSize(new Dimension(breedte, hoogte));
 
-        // 1. Achtergrond & Basis layout (Laag 0)
+        // layout laag
         backgroundPanel = new JPanel();
         backgroundPanel.setBackground(Color.WHITE);
         backgroundPanel.setLayout(null);
@@ -27,12 +27,12 @@ public class GridVakjeView {
         backgroundPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         backgroundPanel.putClientProperty("noTheme", true);
 
-        // 2. Container voor de Lift (Laag 1)
+        // laag 1
         liftContainer = new JPanel(new BorderLayout());
         liftContainer.setOpaque(false);
         liftContainer.setBounds(0, 0, breedte, hoogte);
 
-        // 3. Front layer voor de gasten (Laag 2)
+        // laag 2
         JPanel guestPanel = new JPanel();
         guestPanel.setOpaque(false);
         guestPanel.setBounds(0, 0, breedte, hoogte);
@@ -44,21 +44,21 @@ public class GridVakjeView {
         gastenContainer.setLayout(new FlowLayout(FlowLayout.CENTER, 1, 0));
         guestPanel.add(gastenContainer, BorderLayout.SOUTH);
 
-        // Voeg de panelen in de juiste volgorde (lagen) toe aan de layeredPane
+        // voeg de panelen in de juiste volgorde toe aan de layeredPane
         layeredPane.add(backgroundPanel, Integer.valueOf(0));
-        layeredPane.add(liftContainer, Integer.valueOf(1)); // Lift zit nu tussen achtergrond en gasten in
+        layeredPane.add(liftContainer, Integer.valueOf(1));
         layeredPane.add(guestPanel, Integer.valueOf(2));
     }
 
-    // Voegt de lift toe aan dit specifieke vakje
+    // voegt de lift toe aan dit specifieke vakje
     public void voegLiftToe(LiftView lift) {
-        liftContainer.removeAll(); // Zorg dat er niet per ongeluk twee liften in staan
+        liftContainer.removeAll();
         liftContainer.add(lift, BorderLayout.CENTER);
         layeredPane.revalidate();
         layeredPane.repaint();
     }
 
-    // Verwijdert de lift uit dit vakje (handig als de lift gaat bewegen)
+    // verwijdert de lift uit dit vakje (als de lift gaat bewegen)
     public void verwijderLift() {
         liftContainer.removeAll();
         layeredPane.revalidate();
@@ -130,7 +130,7 @@ public class GridVakjeView {
         int iconSize = 12;
         int spacing = 2;
 
-        // Schoonmakers
+        // schoonmakers
         if (isLinksboven && ruimte.getAantalSchoonmakers() > 0) {
             ImageIcon schoonmakerIcon = laadIcon("Schoonmaker.png");
             JLabel schoonmakerLabel = new JLabel(String.valueOf(ruimte.getAantalSchoonmakers()));
@@ -154,7 +154,7 @@ public class GridVakjeView {
             backgroundPanel.add(schoonmakerLabel);
         }
 
-        // Gasten
+        // gasten
         if (isRechtsboven && ruimte.getAantalGasten() > 0) {
             ImageIcon gastIcon = laadIcon("gast.png");
             JLabel gastenLabel = new JLabel(String.valueOf(ruimte.getAantalGasten()));

@@ -16,7 +16,7 @@ import hotelevents.HotelEvent;
 import javax.swing.SwingUtilities;
 import java.util.ArrayList;
 
-public class LiftController extends EntiteitenController implements onTimeChange, reset, noneEvent { // Voeg hier straks je liftEvent interface aan toe!
+public class LiftController extends EntiteitenController implements reset, noneEvent {
 
     private final LiftCreator factory;
     private final ArrayList<NewLift> listeners;
@@ -30,7 +30,7 @@ public class LiftController extends EntiteitenController implements onTimeChange
     }
 
 
-    // Plaats de lift zodra de layout geladen is
+    // plaats de lift zodra de layout geladen is
     @Override
     public void onLayoutGeladen(LayoutController controller) {
         super.onLayoutGeladen(controller);
@@ -40,12 +40,12 @@ public class LiftController extends EntiteitenController implements onTimeChange
         int bodemY = layoutController.getView().getGridLengte() - 1;
         Locatie startLocatie = new Locatie(schachtX, bodemY);
 
-        // Maak de lift aan via de factory
+        // maak de lift aan via de factory
         liftModel = (LiftModel) factory.createEntiteit(999, startLocatie, startLocatie, 0, startLocatie, TypePersoon.LIFT);
 
         actieveEntiteiten.put(liftModel.getID(), liftModel);
 
-        // Laat de listeners weten dat de lift getekend moet worden
+        // laat de listeners weten dat de lift getekend moet worden
         SwingUtilities.invokeLater(() -> {
             for (NewLift listener : listeners) {
                 listener.onLiftAangemaakt(liftModel);
@@ -55,17 +55,15 @@ public class LiftController extends EntiteitenController implements onTimeChange
 
     public void liftOmhoog() {
         if (liftModel != null) {
-            // 1. Sla de huidige (oude) locatie op voor de listeners
+            // sla de huidige (oude) locatie op voor de listeners
             Locatie oudeLocatie = new Locatie(liftModel.getLocatie().getX(), liftModel.getLocatie().getY());
 
-            // 2. Bereken de nieuwe Y-waarde (omhoog = Y wordt kleiner)
+            // bereken de nieuwe Y-waarde (omhoog = y wordt kleiner)
             int nieuweY = liftModel.getLocatie().getY() - 1;
 
-            // 3. Zorg dat we niet boven het grid uitvliegen (veiligheidscheck)
+            // zorg dat het niet boven het grid uitkomt
             if (nieuweY >= 0) {
                 liftModel.getLocatie().setY(nieuweY);
-
-                // 4. Trigger de methode die de View een seintje geeft
                 onStepTaken(liftModel, oudeLocatie);
             }
         }
@@ -73,18 +71,16 @@ public class LiftController extends EntiteitenController implements onTimeChange
 
     public void liftOmlaag() {
         if (liftModel != null && layoutController != null) {
-            // 1. Sla de huidige (oude) locatie op
+            // sla de huidige (oude) locatie op
             Locatie oudeLocatie = new Locatie(liftModel.getLocatie().getX(), liftModel.getLocatie().getY());
 
-            // 2. Bereken de nieuwe Y-waarde (omlaag = Y wordt groter)
+            // bereken de nieuwe Y-waarde (omlaag = y wordt groter)
             int nieuweY = liftModel.getLocatie().getY() + 1;
             int maxBodemY = layoutController.getView().getGridLengte() - 1;
 
-            // 3. Zorg dat we niet door de bodem zakken
+            // zorg dat de lift niet lager kan dan de begane grond
             if (nieuweY <= maxBodemY) {
                 liftModel.getLocatie().setY(nieuweY);
-
-                // 4. Trigger de methode die de View een seintje geeft
                 onStepTaken(liftModel, oudeLocatie);
             }
         }
@@ -93,7 +89,7 @@ public class LiftController extends EntiteitenController implements onTimeChange
     public void liftCalled() {
     }
 
-    // Per stap die de lift zet, de PlaatsHelper aansturen
+    // per stap die de lift zet, laat de PlaatsHelper hem tekenen
     @Override
     public void onStepTaken(EntiteitenModel Entiteit, Locatie oudeLocatie) {
         if (Entiteit instanceof LiftModel) {
@@ -106,13 +102,13 @@ public class LiftController extends EntiteitenController implements onTimeChange
         }
     }
 
-    // Als de lift arriveert op de verdieping waar hij heen moest
+    // als de lift arriveert op de verdieping waar hij heen moest
     @Override
     public void onDestinationReached(EntiteitenModel Entiteit) {
         if (Entiteit instanceof LiftModel) {
             LiftModel lift = (LiftModel) Entiteit;
             System.out.println("Lift is aangekomen op bestemming: " + lift.getLocatie());
-            // hier moet er nog komen te staan wat de gasten moeten doen: in en uitstappen
+            // hier moet er nog komen te staan wat de gasten moeten doen
         }
     }
 
@@ -121,36 +117,8 @@ public class LiftController extends EntiteitenController implements onTimeChange
         listeners.add(listener);
     }
 
-    // OPTIE A: Laat de lift automatisch op en neer pendelen bij elke kloktik
-    @Override
-    public void timeChange(int HTE) {
-        if (liftModel == null || layoutController == null) return;
-
-        int maxBodemY = layoutController.getView().getGridLengte() - 1;
-        int huidigeY = liftModel.getLocatie().getY();
-
-        if (gaatOmhoog) {
-            if (huidigeY > 0) {
-                liftOmhoog();
-            } else {
-                // Het hoogste punt (Y=0) is bereikt, wissel van richting en ga omlaag
-                gaatOmhoog = false;
-                liftOmlaag();
-            }
-        } else {
-            if (huidigeY < maxBodemY) {
-                liftOmlaag();
-            } else {
-                // De bodem is bereikt, wissel van richting en ga weer omhoog
-                gaatOmhoog = true;
-                liftOmhoog();
-            }
-        }
-    }
-
     @Override
     public void resetSimulatie() {
-        // Zet de richting weer terug naar standaard omhoog bij een reset
         gaatOmhoog = true;
     }
 
@@ -179,7 +147,7 @@ public class LiftController extends EntiteitenController implements onTimeChange
 
     }
 
-    // Deze methode wordt nu elke tick keurig uitgevoerd
+    // elke tick is een stap omhoog of omlaag zodat de lift de hele tijd omhoog en omlaag gaat
     @Override
     public void HTETick(HotelEvent event) throws InterruptedException {
         if (liftModel == null || layoutController == null) return;
@@ -187,12 +155,12 @@ public class LiftController extends EntiteitenController implements onTimeChange
         int maxBodemY = layoutController.getView().getGridLengte() - 1;
         int huidigeY = liftModel.getLocatie().getY();
 
-        // Elke tick is 1 stap omhoog of omlaag
+        // elke tick is 1 stap omhoog of omlaag
         if (gaatOmhoog) {
             if (huidigeY > 0) {
                 liftOmhoog();
             } else {
-                // Top bereikt (Y=0), draai om en zet de eerste stap omlaag
+                // top bereikt (y=0), draai om en zet de eerste stap omlaag
                 gaatOmhoog = false;
                 liftOmlaag();
             }
@@ -200,7 +168,7 @@ public class LiftController extends EntiteitenController implements onTimeChange
             if (huidigeY < maxBodemY) {
                 liftOmlaag();
             } else {
-                // Bodem bereikt, draai om en zet de eerste stap omhoog
+                // bodem bereikt, draai om en zet de eerste stap omhoog
                 gaatOmhoog = true;
                 liftOmhoog();
             }
