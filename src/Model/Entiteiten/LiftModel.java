@@ -2,14 +2,13 @@ package Model.Entiteiten;
 
 import Model.Layout.Locatie;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 public class LiftModel extends EntiteitenModel {
     private int verdieping;
     private boolean beschikbaar;
-
-    // VERANDERD: Van Queue naar een List om vrij te kunnen zoeken en sorteren
     private final List<Integer> verzoeken;
     private boolean richtingOmhoog; // Onthoudt welke kant de lift op reist
 
@@ -85,4 +84,8 @@ public class LiftModel extends EntiteitenModel {
     public void setVerdieping(int verdieping) { this.verdieping = verdieping; }
     public boolean isBeschikbaar() { return this.beschikbaar; }
     public void setBeschikbaar(boolean beschikbaar) { this.beschikbaar = beschikbaar; }
+
+    public List<Integer> getVerzoeken() {
+        return verzoeken;
+    }
 }

@@ -112,7 +112,11 @@ public class SimulatieController implements reset {
 
         eventHandler.setEventListenerCheckOut(factuurController);
 
+        eventHandler.setEventListenerEvacuate(liftController);
+
         eventHandler.setEventListenerEvacuate(gastController);
+
+        eventHandler.setEventListenerEvacuate(schoonmakerController);
 
         bioscoopController.addlisteners(gastController);
 

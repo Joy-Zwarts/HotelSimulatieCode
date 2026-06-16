@@ -100,9 +100,14 @@ public class ButtonController implements ActionListener {
 
         //Brandalarm button
         if (source == view.getBrandalarmButton()) {
-            HotelEvent Evacuate = new HotelEvent(0, HotelEventType.EVACUATE, -1, -1);
+            HotelEvent evacuateEvent = new HotelEvent(0, HotelEventType.EVACUATE, -1, -1);
+            for (reset listener : listeners) {
+                if (listener instanceof Controller.Events.EventHandler) {
+                    ((Controller.Events.EventHandler) listener).notify(evacuateEvent);
+                    System.out.println("ButtonController: Evacuatie-signaal succesvol gedistribueerd via EventHandler.");
+                }
+            }
         }
-
     }
 
     public void setListeners(reset listener) {

@@ -2,6 +2,7 @@ package Controller.PersoonManagement;
 
 import Controller.Events.Interfaces.checkOutEvent;
 import Controller.Events.Interfaces.cleaningEmergencyEvent;
+import Controller.Events.Interfaces.evacuateEvent;
 import Controller.JoyOpdracht.FactuurController;
 import Controller.Layout.LayoutController;
 import Controller.PersoonManagement.Interfaces.NewSchoonmaker;
@@ -23,7 +24,7 @@ import hotelevents.HotelEvent;
 import javax.swing.SwingUtilities;
 import java.util.*;
 
-public class SchoonmakerController extends EntiteitenController implements cleaningEmergencyEvent, checkOutEvent, onTimeChange, reset, settingsListener {
+public class SchoonmakerController extends EntiteitenController implements cleaningEmergencyEvent, checkOutEvent, onTimeChange, reset, settingsListener, evacuateEvent {
 
     private final SchoonmakerCreator factory;
     private final ArrayList<NewSchoonmaker> listeners;
@@ -366,5 +367,13 @@ public class SchoonmakerController extends EntiteitenController implements clean
 
     public int getActieveKlussenAantal() {
         return this.actieveKlussen.size();
+    }
+
+    @Override
+    public void evacuate(HotelEvent hotelEvent) {
+        PathFinder padSchoonmaker1 = new PathFinder(schoonmaker1.getLocatie(), startLocatie, layoutController);
+        beweegHelper.voegRouteToe(schoonmaker1, padSchoonmaker1);
+        PathFinder padSchoonmaker2 = new PathFinder(schoonmaker2.getLocatie(), startLocatie, layoutController);
+        beweegHelper.voegRouteToe(schoonmaker2, padSchoonmaker2);
     }
 }

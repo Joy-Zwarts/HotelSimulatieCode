@@ -30,6 +30,7 @@ public class GastController extends EntiteitenController implements checkInEvent
     private final ArrayList<NewGast> listeners;
     private Locatie startLocatie;
     private final Map<Integer, GastModel> gasten;
+    private Boolean checkInMogelijk = true;
 
     // constructor
     public GastController() {
@@ -91,27 +92,28 @@ public class GastController extends EntiteitenController implements checkInEvent
     // bij een check in event, maak een nieuwe gast, laat de abonnees het weten en stuur hun naar hun kamer
     @Override
     public void checkIn(HotelEvent hotelEvent) {
+        if (checkInMogelijk) {
+            // failsafe als de gast al bestaat
+            if (gasten.containsKey(hotelEvent.getGuestId())) {
+                return;
+            }
 
-        // failsafe als de gast al bestaat
-        if (gasten.containsKey(hotelEvent.getGuestId())) {
-            return;
-        }
+            // maak de gast aan op startlocatie
+            GastModel gast = (GastModel) factory.createEntiteit(hotelEvent.getGuestId(), new Locatie(startLocatie.getX(), startLocatie.getY()), new Locatie(0, 0), hotelEvent.getData(), null, TypePersoon.GAST);
 
-        // maak de gast aan op startlocatie
-        GastModel gast = (GastModel) factory.createEntiteit(hotelEvent.getGuestId(), new Locatie(startLocatie.getX(), startLocatie.getY()), new Locatie(0, 0), hotelEvent.getData(), null, TypePersoon.GAST);
+            gasten.put(gast.getID(), gast);
 
-        gasten.put(gast.getID(), gast);
+            // notify de listener dat er een nieuwe gast is gemaakt
+            for (NewGast listener : listeners) {
+                listener.onGastAangemaakt(gast);
+            }
 
-        // notify de listener dat er een nieuwe gast is gemaakt
-        for (NewGast listener : listeners) {
-            listener.onGastAangemaakt(gast);
-        }
-
-        // bereken de route naar hun kamer
-        if (gast.getTargetLocatie() != null) {
-            PathFinder pf = new PathFinder(gast.getLocatie(), gast.getTargetLocatie(), layoutController);
-            beweegHelper.voegRouteToe(gast, pf);
-            gast.setActiviteit(Activiteit.ONDERWEG);
+            // bereken de route naar hun kamer
+            if (gast.getTargetLocatie() != null) {
+                PathFinder pf = new PathFinder(gast.getLocatie(), gast.getTargetLocatie(), layoutController);
+                beweegHelper.voegRouteToe(gast, pf);
+                gast.setActiviteit(Activiteit.ONDERWEG);
+            }
         }
     }
 
@@ -221,11 +223,6 @@ public class GastController extends EntiteitenController implements checkInEvent
     }
 
     @Override
-    public void startCinemaEvent(HotelEvent hotelEvent) {
-
-    }
-
-    @Override
     public void gaWegUitBioscoop(ArrayList<Integer> gastenInBios) {
         for (int gastID : gastenInBios) {
             GastModel gast = gasten.get(gastID);
@@ -289,37 +286,24 @@ public class GastController extends EntiteitenController implements checkInEvent
         super.resetController();
         this.gasten.clear();
     }
-
-    @Override
-    public void schoonmaakTijdVeranderd(TijdsDuur tijdsDuur) {
-
-    }
-
-    @Override
-    public void filmDuurVeranderd(TijdsDuur tijdsDuur) {
-
-    }
-
-    @Override
-    public void showFactuurBonnen(boolean bool) {}
-
-    @Override
-    public void restaurantCapaciteitVeranderd(int restaurantCapaciteit) {
-
-    }
-
-    @Override
-    public void trapLoopDuurVeranderd(int trapLoopDuur) {
-        beweegHelper.setTrapVertragingTicks(trapLoopDuur);
-    }
-
-    @Override
-    public void gastMaxWachttijdVeranderd(int gastMaxWachttijd) {
-
-    }
-
     @Override
     public void evacuate(HotelEvent hotelEvent) {
         System.out.println("RENNEN!!!!!!");
+        checkInMogelijk = false;
+
+        for (GastModel gast : gasten.values()) {
+            if (gast != null) {
+                PathFinder pf = new PathFinder(gast.getLocatie(), startLocatie, layoutController);
+                beweegHelper.voegRouteToe(gast, pf);
+                gast.setActiviteit(Activiteit.ONDERWEG);
+            }
+        }
     }
+
+    @Override public void schoonmaakTijdVeranderd(TijdsDuur tijdsDuur) {}
+    @Override public void filmDuurVeranderd(TijdsDuur tijdsDuur) {}
+    @Override public void showFactuurBonnen(boolean bool) {}
+    @Override public void restaurantCapaciteitVeranderd(int restaurantCapaciteit) {}
+    @Override public void gastMaxWachttijdVeranderd(int gastMaxWachttijd) {}
+    @Override public void startCinemaEvent(HotelEvent hotelEvent) {}
 }

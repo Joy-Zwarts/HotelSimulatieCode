@@ -1,5 +1,6 @@
 package Controller.PersoonManagement;
 
+import Controller.Events.Interfaces.evacuateEvent;
 import Controller.Events.Interfaces.noneEvent;
 import Controller.Layout.LayoutController;
 import Controller.PersoonFactory.LiftCreator;
@@ -16,7 +17,7 @@ import hotelevents.HotelEvent;
 import javax.swing.SwingUtilities;
 import java.util.ArrayList;
 
-public class LiftController extends EntiteitenController implements reset, noneEvent {
+public class LiftController extends EntiteitenController implements reset, noneEvent, evacuateEvent {
 
     private final LiftCreator factory;
     private final ArrayList<NewLift> listeners;
@@ -138,7 +139,14 @@ public class LiftController extends EntiteitenController implements reset, noneE
 
     @Override
     public void resetSimulatie() {
-        this.gaatOmhoog = true; // Voldoet aan TestLiftController.ResetSimulatieZetRichtingOmhoog
+        this.gaatOmhoog = true; // Voldoet aan JUnit test
+
+        // Zorg dat de lift na een reset/stop weer gebruikt kan worden!
+        if (liftModel != null) {
+            liftModel.setBeschikbaar(true);
+            liftModel.getVerzoeken().clear(); // Optioneel: wis oude wachtende verzoeken
+        }
+        System.out.println("LiftController: Gereset en lift weer beschikbaar gemaakt.");
     }
 
     @Override
@@ -194,5 +202,10 @@ public class LiftController extends EntiteitenController implements reset, noneE
         if (liftModel.getLocatie().getY() == targetY) {
             onDestinationReached(liftModel);
         }
+    }
+
+    @Override
+    public void evacuate(HotelEvent hotelEvent) {
+        liftModel.setBeschikbaar(false);
     }
 }

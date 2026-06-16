@@ -31,10 +31,21 @@ public class PathFinder {
         // check of we naar een andere verdieping moeten
         if (currentLocatie.getY() != targetLocatie.getY()) {
 
-            // Bepaal de X-coördinaat op basis van 50% kans
             int transportX;
+            boolean kiesTrap = true; // Standaard vallen we terug op de trap
 
-            if (random.nextBoolean()) {
+            // 1. Controleer of de controller en liftmodel bestaan
+            if (layoutController != null && layoutController.getLiftController() != null) {
+                var liftController = layoutController.getLiftController();
+
+                // 2. Controleer EXTRA of de lift operationeel/beschikbaar is (niet gedeactiveerd door brand)
+                if (liftController.getLiftModel() != null && liftController.getLiftModel().isBeschikbaar()) {
+                    // Alleen als de lift werkt, is er een 50/50 kans om hem te gebruiken
+                    kiesTrap = random.nextBoolean();
+                }
+            }
+
+            if (kiesTrap) {
                 // Kiest de trap (helemaal rechts)
                 transportX = layoutController.getView().getGridBreedte() - 1;
 
@@ -46,6 +57,7 @@ public class PathFinder {
                 planVerticaalPad(transportHuidigeVerdieping, transportTargetVerdieping);
                 planHorizontaalPad(transportTargetVerdieping, targetLocatie);
 
+                System.out.println("PathFinder: Route berekend via de TRAP.");
             } else {
                 // Kiest de lift (helemaal links op X = 0)
                 transportX = 0;
@@ -53,11 +65,12 @@ public class PathFinder {
                 Locatie transportHuidigeVerdieping = new Locatie(transportX, currentLocatie.getY());
                 Locatie transportTargetVerdieping = new Locatie(transportX, targetLocatie.getY());
 
-                // 1. Plan de route tot aan de lift, en vanaf de lift naar de kamer
+                // Plan de route tot aan de lift, en vanaf de lift naar de kamer
                 planHorizontaalPad(currentLocatie, transportHuidigeVerdieping);
-                planVerticaalPad(transportHuidigeVerdieping, transportTargetVerdieping); // De gast wacht virtueel in de lift tot hij op de target Y is
+                planVerticaalPad(transportHuidigeVerdieping, transportTargetVerdieping);
                 planHorizontaalPad(transportTargetVerdieping, targetLocatie);
 
+                System.out.println("PathFinder: Route berekend via de LIFT.");
             }
 
         } else {
