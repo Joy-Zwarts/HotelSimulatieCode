@@ -10,7 +10,7 @@ import java.awt.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class TestDarkmode {
+class TestDarkMode {
 
     @Test
     void testToggleDarkModeChangesModelAndUI() throws Exception {

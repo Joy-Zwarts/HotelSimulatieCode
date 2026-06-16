@@ -6,7 +6,9 @@ import Controller.Systeem.Interfaces.reset;
 import Model.Layout.LayoutModel;
 import View.Systeem.EventPanel;
 import View.Systeem.HotelSimulatieView;
+import hotelevents.HotelEvent;
 import hotelevents.HotelEventManager;
+import hotelevents.HotelEventType;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -42,6 +44,7 @@ public class ButtonController implements ActionListener {
         view.getStopSimulationButton().addActionListener(this);
         view.getLoadLayoutButton().addActionListener(this);
         view.getSettingsButton().addActionListener(this);
+        view.getBrandalarmButton().addActionListener(this);
     }
 
     // reactie op een button klik, kijkt van welke button het komt en reageert accordingly
@@ -94,6 +97,12 @@ public class ButtonController implements ActionListener {
                 JOptionPane.showMessageDialog(view, "De simulatie is nog niet gestart!", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
+
+        //Brandalarm button
+        if (source == view.getBrandalarmButton()) {
+            HotelEvent Evacuate = new HotelEvent(0, HotelEventType.EVACUATE, -1, -1);
+        }
+
     }
 
     public void setListeners(reset listener) {

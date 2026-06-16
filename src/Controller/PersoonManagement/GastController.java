@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GastController extends EntiteitenController implements checkInEvent, checkOutEvent, onTimeChange, needFoodEvent, fitnessEvent, cinemaEvent, BeweegHelper.MovementListener, bioscoopOver, restaurantOver, fitnessOver, reset {
+public class GastController extends EntiteitenController implements checkInEvent, checkOutEvent, onTimeChange, needFoodEvent, fitnessEvent, cinemaEvent, BeweegHelper.MovementListener, bioscoopOver, restaurantOver, fitnessOver, reset, evacuateEvent {
 
     // attributen
     private final GastCreator factory;
@@ -316,5 +316,10 @@ public class GastController extends EntiteitenController implements checkInEvent
     @Override
     public void gastMaxWachttijdVeranderd(int gastMaxWachttijd) {
 
+    }
+
+    @Override
+    public void evacuate(HotelEvent hotelEvent) {
+        System.out.println("RENNEN!!!!!!");
     }
 }

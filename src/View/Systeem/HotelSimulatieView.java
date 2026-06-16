@@ -25,6 +25,7 @@ public class HotelSimulatieView extends JFrame{
     private JButton settingsButton;
     private final DarkModeModel darkMode;
     private final EindeSimulatieView eindeOverlay;
+    private JButton BrandalarmButton;
 
     // constructor
     public HotelSimulatieView(DarkModeModel darkMode) {
@@ -90,6 +91,7 @@ public class HotelSimulatieView extends JFrame{
         startSimulationButton = new JButton("Start Simulation");
         stopSimulationButton = new JButton("Stop Simulation");
         settingsButton = new JButton("Settings");
+        BrandalarmButton = new JButton("Brandalarm");
 
         leftPanel.add(Box.createVerticalStrut(20));
         leftPanel.add(loadScenarioButton);
@@ -101,6 +103,8 @@ public class HotelSimulatieView extends JFrame{
         leftPanel.add(stopSimulationButton);
         leftPanel.add(Box.createVerticalStrut(10));
         leftPanel.add(settingsButton);
+        leftPanel.add(Box.createVerticalStrut(10));
+        leftPanel.add(BrandalarmButton);
 
         add(leftPanel, BorderLayout.WEST);
     }
@@ -226,7 +230,9 @@ public class HotelSimulatieView extends JFrame{
     public JButton getStartSimulationButton() { return startSimulationButton; }
     public JButton getSettingsButton() { return settingsButton; }
     public JButton getStopSimulationButton() { return stopSimulationButton; }
+    public JButton getBrandalarmButton() { return BrandalarmButton; }
     public JPanel getTopBar() { return topbar; }
+
 
     public JScrollPane getLayoutScrollPane() {
         return layoutScrollPane;
