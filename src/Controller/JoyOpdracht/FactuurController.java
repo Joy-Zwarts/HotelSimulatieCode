@@ -1,4 +1,4 @@
-package Controller.Systeem;
+package Controller.JoyOpdracht;
 
 import Controller.Events.Interfaces.checkOutEvent;
 import Controller.Layout.Interfaces.LayoutGeladen;
@@ -9,7 +9,8 @@ import Model.Layout.LayoutModel;
 import Model.Layout.Locatie;
 import Model.Ruimtes.KamerClassificatie;
 import Model.Ruimtes.RuimteModel;
-import View.Systeem.NewDag;
+import View.JoyOpdracht.FactuurPrint;
+import View.JoyOpdracht.NewDag;
 import hotelevents.HotelEvent;
 
 import java.util.HashMap;
@@ -30,11 +31,14 @@ public class FactuurController implements NewGast, LayoutGeladen, NewDag, checkO
     private final HashMap<KamerClassificatie, Integer> prijsPerNacht;
     private Locatie uitgang;
     private int huidigeDag = 1;
+    private FactuurPrint factuurPrint;
 
     // constructor
-    public FactuurController() {
+    public FactuurController(FactuurPrint factuurPrint) {
         gastenInSysteem = new HashMap<>();
         prijsPerNacht = new HashMap<>();
+
+        this.factuurPrint = factuurPrint;
 
         prijsPerNacht.put(KamerClassificatie.eenSter, 75);
         prijsPerNacht.put(KamerClassificatie.tweeSterren, 110);
@@ -138,24 +142,8 @@ public class FactuurController implements NewGast, LayoutGeladen, NewDag, checkO
         // pak de rekening van de gast
         HashMap<String, Integer> factuur = gastenInSysteem.get(gast);
 
-        if (factuur == null) {
-            System.out.println("Gast " + gast.getID() + " heeft geen openstaande factuur.");
-            return;
-        }
-
-        int totaalbedrag = 0;
-
-        // we printen de bon (voor nu) in de console
-        System.out.println("--- FACTUUR GAST " + gast.getID() + " ---");
-
-        // loop door elke entry van de rekening heen
-        for (Map.Entry<String, Integer> regel : factuur.entrySet()) {
-            System.out.println("- " + regel.getKey() + ": €" + regel.getValue());
-            totaalbedrag = totaalbedrag + regel.getValue(); // tel het op bij het totaal
-        }
-
-        System.out.println("Totaalbedrag voor gast " + gast.getID() + " : €" + totaalbedrag);
-        System.out.println("--------------------------------");
+        // print de bon visueel uit in swing met de factuurPrint klasse
+        factuurPrint.PrintBon(factuur, gast);
 
         // de gast heeft betaald, dus we halen hem uit het rekeningsysteem
         gastenInSysteem.remove(gast);

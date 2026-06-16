@@ -340,14 +340,9 @@ public class SchoonmakerController extends EntiteitenController implements clean
     }
 
     @Override
-    public void filmDuurVeranderd(TijdsDuur tijdsDuur) {
-
-    }
-
+    public void filmDuurVeranderd(TijdsDuur tijdsDuur) {}
     @Override
-    public void aantalSchoonmakersVeranderd(int aantalSchoonmakers) {
-
-    }
+    public void showFactuurBonnen(boolean bool) {}
 
     @Override
     public void restaurantCapaciteitVeranderd(int restaurantCapaciteit) {

@@ -63,7 +63,12 @@ public class TestEntiteitenController {
 
         @Override public void schoonmaakTijdVeranderd(TijdsDuur tijdsDuur) {}
         @Override public void filmDuurVeranderd(TijdsDuur tijdsDuur) {}
-        @Override public void aantalSchoonmakersVeranderd(int aantalSchoonmakers) {}
+
+        @Override
+        public void showFactuurBonnen(boolean bool) {
+
+        }
+
         @Override public void restaurantCapaciteitVeranderd(int restaurantCapaciteit) {}
         @Override public void gastMaxWachttijdVeranderd(int gastMaxWachttijd) {}
     }
@@ -163,7 +168,6 @@ public class TestEntiteitenController {
 
         assertDoesNotThrow(() -> controller.schoonmaakTijdVeranderd(null));
         assertDoesNotThrow(() -> controller.filmDuurVeranderd(null));
-        assertDoesNotThrow(() -> controller.aantalSchoonmakersVeranderd(10));
         assertDoesNotThrow(() -> controller.restaurantCapaciteitVeranderd(50));
         assertDoesNotThrow(() -> controller.gastMaxWachttijdVeranderd(100));
     }

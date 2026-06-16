@@ -1,4 +1,3 @@
-
 import Controller.Systeem.DarkModeController;
 import Controller.Systeem.Interfaces.settingsListener;
 import Controller.Systeem.SettingsController;
@@ -38,9 +37,9 @@ public class TestSettingsController {
 
     static class FakeSettingsView extends SettingsView {
         private final JButton darkModeButton = new JButton();
+        private final JButton factuurButton = new JButton();
         private final JComboBox<String> schoonmaakTijd = new JComboBox<>(new String[]{"Normaal", "Lang", "Kort", "Onbekend"});
         private final JComboBox<String> filmDuur = new JComboBox<>(new String[]{"Normaal", "Lang", "Kort", "Onbekend"});
-        private final JSlider aantalSchoonmakers = new JSlider();
         private final JSlider restaurantCapaciteit = new JSlider();
         private final JSlider trapLoopDuur = new JSlider();
         private final JSlider gastMaxWachttijd = new JSlider();
@@ -50,9 +49,9 @@ public class TestSettingsController {
         }
 
         @Override public JButton getDarkModeButton() { return darkModeButton; }
+        @Override public JButton getFactuurButton() { return factuurButton; }
         @Override public JComboBox<String> getSchoonmaakTijd() { return schoonmaakTijd; }
         @Override public JComboBox<String> getFilmDuur() { return filmDuur; }
-        @Override public JSlider getAantalSchoonmakers() { return aantalSchoonmakers; }
         @Override public JSlider getRestaurantCapaciteit() { return restaurantCapaciteit; }
         @Override public JSlider getTrapLoopDuur() { return trapLoopDuur; }
         @Override public JSlider getGastMaxWachttijd() { return gastMaxWachttijd; }
@@ -61,14 +60,22 @@ public class TestSettingsController {
     static class MockSettingsListener implements settingsListener {
         TijdsDuur lastSchoonmaakTijd;
         TijdsDuur lastFilmDuur;
-        int lastAantalSchoonmakers = -1;
+        boolean lastShowFactuurBonnenWaarde = false; // Slaat de doorgegeven boolean op
+        boolean factuurButtonAangeroepen = false;
         int lastRestaurantCapaciteit = -1;
         int lastTrapLoopDuur = -1;
         int lastGastMaxWachttijd = -1;
 
         @Override public void schoonmaakTijdVeranderd(TijdsDuur duur) { this.lastSchoonmaakTijd = duur; }
         @Override public void filmDuurVeranderd(TijdsDuur duur) { this.lastFilmDuur = duur; }
-        @Override public void aantalSchoonmakersVeranderd(int waarde) { this.lastAantalSchoonmakers = waarde; }
+
+        // Matcht nu 100% met jouw interface
+        @Override
+        public void showFactuurBonnen(boolean bool) {
+            this.factuurButtonAangeroepen = true;
+            this.lastShowFactuurBonnenWaarde = bool;
+        }
+
         @Override public void restaurantCapaciteitVeranderd(int waarde) { this.lastRestaurantCapaciteit = waarde; }
         @Override public void trapLoopDuurVeranderd(int waarde) { this.lastTrapLoopDuur = waarde; }
         @Override public void gastMaxWachttijdVeranderd(int waarde) { this.lastGastMaxWachttijd = waarde; }
@@ -95,7 +102,6 @@ public class TestSettingsController {
         settingsController.addListener(mockListener);
     }
 
-
     @Test
     void testActionPerformedDarkModeButton() {
         ActionEvent event = new ActionEvent(fakeSettingsView.getDarkModeButton(), ActionEvent.ACTION_PERFORMED, "");
@@ -104,23 +110,29 @@ public class TestSettingsController {
     }
 
     @Test
+    void testActionPerformedFactuurButton() {
+        // Initial staat de controller op 'false', dus na 1 klik moet de listener 'true' ontvangen
+        ActionEvent event = new ActionEvent(fakeSettingsView.getFactuurButton(), ActionEvent.ACTION_PERFORMED, "");
+        settingsController.actionPerformed(event);
+
+        assertTrue(mockListener.factuurButtonAangeroepen);
+        assertTrue(mockListener.lastShowFactuurBonnenWaarde); // Controleert of de boolean 'true' is geworden
+    }
+
+    @Test
     void testActionPerformedSchoonmaakTijd() {
-        // case: normaal
         fakeSettingsView.getSchoonmaakTijd().setSelectedItem("Normaal");
         settingsController.actionPerformed(new ActionEvent(fakeSettingsView.getSchoonmaakTijd(), ActionEvent.ACTION_PERFORMED, ""));
         assertEquals(TijdsDuur.NORMAAL, mockListener.lastSchoonmaakTijd);
 
-        // case: lang
         fakeSettingsView.getSchoonmaakTijd().setSelectedItem("Lang");
         settingsController.actionPerformed(new ActionEvent(fakeSettingsView.getSchoonmaakTijd(), ActionEvent.ACTION_PERFORMED, ""));
         assertEquals(TijdsDuur.LANG, mockListener.lastSchoonmaakTijd);
 
-        // case: kort
         fakeSettingsView.getSchoonmaakTijd().setSelectedItem("Kort");
         settingsController.actionPerformed(new ActionEvent(fakeSettingsView.getSchoonmaakTijd(), ActionEvent.ACTION_PERFORMED, ""));
         assertEquals(TijdsDuur.KORT, mockListener.lastSchoonmaakTijd);
 
-        // case: default/null
         fakeSettingsView.getSchoonmaakTijd().setSelectedItem("Onbekend");
         settingsController.actionPerformed(new ActionEvent(fakeSettingsView.getSchoonmaakTijd(), ActionEvent.ACTION_PERFORMED, ""));
         assertEquals(TijdsDuur.NORMAAL, mockListener.lastSchoonmaakTijd);
@@ -128,47 +140,21 @@ public class TestSettingsController {
 
     @Test
     void testActionPerformedFilmDuur() {
-        // case: normaal
         fakeSettingsView.getFilmDuur().setSelectedItem("Normaal");
         settingsController.actionPerformed(new ActionEvent(fakeSettingsView.getFilmDuur(), ActionEvent.ACTION_PERFORMED, ""));
         assertEquals(TijdsDuur.NORMAAL, mockListener.lastFilmDuur);
 
-        // case: lang
         fakeSettingsView.getFilmDuur().setSelectedItem("Lang");
         settingsController.actionPerformed(new ActionEvent(fakeSettingsView.getFilmDuur(), ActionEvent.ACTION_PERFORMED, ""));
         assertEquals(TijdsDuur.LANG, mockListener.lastFilmDuur);
 
-        // case: kort
         fakeSettingsView.getFilmDuur().setSelectedItem("Kort");
         settingsController.actionPerformed(new ActionEvent(fakeSettingsView.getFilmDuur(), ActionEvent.ACTION_PERFORMED, ""));
         assertEquals(TijdsDuur.KORT, mockListener.lastFilmDuur);
 
-        // case: default/null
         fakeSettingsView.getFilmDuur().setSelectedItem("Onbekend");
         settingsController.actionPerformed(new ActionEvent(fakeSettingsView.getFilmDuur(), ActionEvent.ACTION_PERFORMED, ""));
         assertEquals(TijdsDuur.NORMAAL, mockListener.lastFilmDuur);
-    }
-
-
-    @Test
-    void testStateChangedSlider() {
-        JSlider slider = fakeSettingsView.getAantalSchoonmakers();
-        slider.setValue(45);
-        slider.setValueIsAdjusting(true); // gebruiker houdt de slider nog vast
-
-        settingsController.stateChanged(new ChangeEvent(slider));
-
-        assertEquals(-1, mockListener.lastAantalSchoonmakers);
-    }
-
-    @Test
-    void testStateChangedAantalSchoonmakers() {
-        JSlider slider = fakeSettingsView.getAantalSchoonmakers();
-        slider.setValue(12);
-        slider.setValueIsAdjusting(false);
-
-        settingsController.stateChanged(new ChangeEvent(slider));
-        assertEquals(12, mockListener.lastAantalSchoonmakers);
     }
 
     @Test
@@ -208,7 +194,7 @@ public class TestSettingsController {
         onbekendeSlider.setValueIsAdjusting(false);
 
         assertDoesNotThrow(() -> settingsController.stateChanged(new ChangeEvent(onbekendeSlider)));
-        assertEquals(-1, mockListener.lastAantalSchoonmakers);
+        assertFalse(mockListener.factuurButtonAangeroepen);
     }
 
     @Test

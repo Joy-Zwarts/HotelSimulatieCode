@@ -113,7 +113,7 @@ public class BioscoopController implements cinemaEvent, NewGast, settingsListene
     }
 
     @Override
-    public void aantalSchoonmakersVeranderd(int aantalSchoonmakers) {
+    public void showFactuurBonnen(boolean bool) {
 
     }
 

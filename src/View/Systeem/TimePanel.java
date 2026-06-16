@@ -2,6 +2,7 @@ package View.Systeem;
 
 import Controller.Events.Interfaces.noneEvent;
 import Controller.SimulatieController;
+import View.JoyOpdracht.NewDag;
 import hotelevents.HotelEvent;
 import hotelevents.HotelEventManager;
 

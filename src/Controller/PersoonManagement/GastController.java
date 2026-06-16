@@ -301,9 +301,7 @@ public class GastController extends EntiteitenController implements checkInEvent
     }
 
     @Override
-    public void aantalSchoonmakersVeranderd(int aantalSchoonmakers) {
-
-    }
+    public void showFactuurBonnen(boolean bool) {}
 
     @Override
     public void restaurantCapaciteitVeranderd(int restaurantCapaciteit) {

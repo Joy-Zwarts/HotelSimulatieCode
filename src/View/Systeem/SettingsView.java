@@ -9,7 +9,7 @@ public class SettingsView {
     // attributen
     private final JFrame settingsFrame;
     private final JButton darkModeButton;
-    private final JSlider aantalSchoonmakers;
+    private final JButton factuurButton;
     private final JComboBox<String> schoonmaakTijd;
     private final JComboBox<String> filmDuur;
     private final JSlider restaurantCapaciteit;
@@ -44,6 +44,11 @@ public class SettingsView {
         darkModeButton.setForeground(Color.WHITE);
         darkModeButton.setFont(new Font("Arial", Font.BOLD, 13));
 
+        factuurButton = new JButton("Toggle gast Bonnen");
+        factuurButton.setBackground(dark);
+        factuurButton.setForeground(Color.WHITE);
+        factuurButton.setFont(new Font("Arial", Font.BOLD, 13));
+
         schoonmaakTijd = new JComboBox<>();
         schoonmaakTijd.setBackground(dark);
         schoonmaakTijd.setForeground(Color.WHITE);
@@ -60,13 +65,6 @@ public class SettingsView {
 
         // sliders
         Font sliderFont = new Font("Arial", Font.PLAIN, 11);
-
-        aantalSchoonmakers = new JSlider(1, 4, 2);
-        aantalSchoonmakers.setPaintTicks(true);
-        aantalSchoonmakers.setMajorTickSpacing(1);
-        aantalSchoonmakers.setPaintLabels(true);
-        aantalSchoonmakers.setForeground(dark);
-        aantalSchoonmakers.setFont(sliderFont);
 
         restaurantCapaciteit = new JSlider(1, 10, 5);
         restaurantCapaciteit.setPaintTicks(true);
@@ -94,10 +92,10 @@ public class SettingsView {
         c.gridx = 0; c.gridy = 0; c.weightx = 0.35; tabelPaneel.add(lbl1, c);
         c.gridx = 1; c.gridy = 0; c.weightx = 0.65; tabelPaneel.add(darkModeButton, c);
 
-        // schoonmakers
-        JLabel lbl2 = new JLabel("Aantal Schoonmakers:"); lbl2.setFont(new Font("Arial", Font.BOLD, 13));
+        //factuurbutton
+        JLabel lbl2 = new JLabel("Show Gast Bonnen bij Checkout:"); lbl2.setFont(new Font("Arial", Font.BOLD, 13));
         c.gridx = 0; c.gridy = 1; c.weightx = 0.35; tabelPaneel.add(lbl2, c);
-        c.gridx = 1; c.gridy = 1; c.weightx = 0.65; tabelPaneel.add(aantalSchoonmakers, c);
+        c.gridx = 1; c.gridy = 1; c.weightx = 0.65; tabelPaneel.add(factuurButton, c);
 
         // schoonmaaktijd
         JLabel lbl3 = new JLabel("Schoonmaak Tijd:"); lbl3.setFont(new Font("Arial", Font.BOLD, 13));
@@ -133,7 +131,7 @@ public class SettingsView {
 
     // getters & setters
     public JButton getDarkModeButton() { return darkModeButton; }
-    public JSlider getAantalSchoonmakers() { return aantalSchoonmakers; }
+    public JButton getFactuurButton() { return factuurButton; }
     public JComboBox<String> getSchoonmaakTijd() { return schoonmaakTijd; }
     public JComboBox<String> getFilmDuur() { return filmDuur; }
     public JSlider getRestaurantCapaciteit() { return restaurantCapaciteit; }

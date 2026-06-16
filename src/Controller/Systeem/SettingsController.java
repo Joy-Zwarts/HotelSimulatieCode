@@ -16,6 +16,7 @@ public class SettingsController implements ActionListener, ChangeListener {
     private final SettingsView settingsFrame;
     private final DarkModeController darkModeController;
     private final ArrayList<settingsListener> listeners;
+    private Boolean showFactuurBonnen = false;
 
     // constructor
     public SettingsController(HotelSimulatieView view, TimeManagementPanel panel, DarkModeController controller) {
@@ -29,11 +30,11 @@ public class SettingsController implements ActionListener, ChangeListener {
     public void init() {
         // buttons & drop downs
         settingsFrame.getDarkModeButton().addActionListener(this);
+        settingsFrame.getFactuurButton().addActionListener(this);
         settingsFrame.getSchoonmaakTijd().addActionListener(this);
         settingsFrame.getFilmDuur().addActionListener(this);
 
         // sliders
-        settingsFrame.getAantalSchoonmakers().addChangeListener(this);
         settingsFrame.getRestaurantCapaciteit().addChangeListener(this);
         settingsFrame.getTrapLoopDuur().addChangeListener(this);
         settingsFrame.getGastMaxWachttijd().addChangeListener(this);
@@ -46,7 +47,12 @@ public class SettingsController implements ActionListener, ChangeListener {
 
         if (source == settingsFrame.getDarkModeButton()) {
             darkModeController.toggleDarkMode();
-
+        } else if (source == settingsFrame.getFactuurButton()) {
+            showFactuurBonnen = !showFactuurBonnen;
+            System.out.println("Het laten zijn van de Gast bonnen bij checkout is nu: " + showFactuurBonnen);
+            for (settingsListener listener : listeners) {
+                listener.showFactuurBonnen(showFactuurBonnen);
+            }
         } else if (source == settingsFrame.getSchoonmaakTijd()) {
             String gekozenTijd = (String) settingsFrame.getSchoonmaakTijd().getSelectedItem();
             System.out.println("Schoonmaaktijd veranderd naar: " + gekozenTijd);
@@ -89,12 +95,7 @@ public class SettingsController implements ActionListener, ChangeListener {
         if (!slider.getValueIsAdjusting()) {
             int waarde = slider.getValue();
 
-            if (slider == settingsFrame.getAantalSchoonmakers()) {
-                System.out.println("Aantal Schoonmakers aangepast naar: " + waarde);
-                for(settingsListener listener : listeners) {
-                    listener.aantalSchoonmakersVeranderd(waarde);
-                }
-            } else if (slider == settingsFrame.getRestaurantCapaciteit()) {
+            if (slider == settingsFrame.getRestaurantCapaciteit()) {
                 System.out.println("Restaurant Capaciteit aangepast naar: " + waarde);
                 for(settingsListener listener : listeners) {
                     listener.restaurantCapaciteitVeranderd(waarde);

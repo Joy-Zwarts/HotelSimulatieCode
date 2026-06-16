@@ -4,12 +4,14 @@ import Controller.Events.EventHandler;
 import Controller.Faciliteiten.BioscoopController;
 import Controller.Faciliteiten.FitnessController;
 import Controller.Faciliteiten.RestaurantController;
+import Controller.JoyOpdracht.FactuurController;
 import Controller.Layout.LayoutLoader;
 import Controller.PersoonManagement.*;
 import Controller.Systeem.*;
 import Controller.Systeem.Interfaces.reset;
 import Controller.Timer.WachtTimer;
 import Model.Systeem.DarkModeModel;
+import View.JoyOpdracht.FactuurPrint;
 import View.Systeem.HotelSimulatieView;
 import View.Systeem.OverzichtView;
 import View.Systeem.TimeManagementPanel;
@@ -68,7 +70,9 @@ public class SimulatieController implements reset {
 
         FitnessController fitnessController = new FitnessController(timer);
 
-        FactuurController factuurController = new FactuurController();
+        FactuurPrint factuurPrint =  new FactuurPrint(view, manager);
+
+        FactuurController factuurController = new FactuurController(factuurPrint);
 
         gastController.setNewGuestListener(kamerAssign);
 
@@ -161,6 +165,8 @@ public class SimulatieController implements reset {
         settingsController.addListener(restaurantController);
 
         settingsController.addListener(gastController);
+
+        settingsController.addListener(factuurPrint);
 
         darkController.verbindExtraSchermen(settingsController.getSettingsFrame(), overzichtView);
 

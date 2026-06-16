@@ -315,7 +315,6 @@ public class TestSchoonmakerController {
     void OngebruikteSettingsListeners() {
         schoonmakerController.filmDuurVeranderd(TijdsDuur.NORMAAL);
         schoonmakersVeranderd();
-        schoonmakerController.aantalSchoonmakersVeranderd(5);
         schoonmakerController.restaurantCapaciteitVeranderd(50);
         schoonmakerController.trapLoopDuurVeranderd(4);
         schoonmakerController.gastMaxWachttijdVeranderd(20);

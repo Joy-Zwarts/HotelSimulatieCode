@@ -133,7 +133,7 @@ public class LiftController extends EntiteitenController implements reset, noneE
     }
 
     @Override
-    public void aantalSchoonmakersVeranderd(int aantalSchoonmakers) {
+    public void showFactuurBonnen(boolean bool) {
 
     }
 

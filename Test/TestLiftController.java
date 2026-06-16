@@ -229,7 +229,6 @@ public class TestLiftController {
     void LegeInterfaceStubs() {
         assertDoesNotThrow(() -> liftController.schoonmaakTijdVeranderd(null));
         assertDoesNotThrow(() -> liftController.filmDuurVeranderd(null));
-        assertDoesNotThrow(() -> liftController.aantalSchoonmakersVeranderd(5));
         assertDoesNotThrow(() -> liftController.restaurantCapaciteitVeranderd(10));
         assertDoesNotThrow(() -> liftController.gastMaxWachttijdVeranderd(20));
     }

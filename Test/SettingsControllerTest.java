@@ -34,11 +34,9 @@ public class SettingsControllerTest {
             filmDuur = duur;
         }
 
-
         @Override
-        public void aantalSchoonmakersVeranderd(int waarde) {
-            schoonmakers = waarde;
-        }
+        public void showFactuurBonnen(boolean bool) {}
+
 
         @Override
         public void restaurantCapaciteitVeranderd(int waarde) {

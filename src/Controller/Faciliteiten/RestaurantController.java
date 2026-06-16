@@ -110,7 +110,7 @@ public class RestaurantController implements NewGast, settingsListener, LayoutGe
     @Override public void onGastGaatWegUitKamer(GastModel gast, Locatie oudeLocatie) {}
     @Override public void schoonmaakTijdVeranderd(TijdsDuur tijdsDuur) {}
     @Override public void filmDuurVeranderd(TijdsDuur tijdsDuur) {}
-    @Override public void aantalSchoonmakersVeranderd(int aantalSchoonmakers) {}
+    @Override public void showFactuurBonnen(boolean bool) {}
     @Override public void trapLoopDuurVeranderd(int trapLoopDuur) {}
     @Override public void gastMaxWachttijdVeranderd(int gastMaxWachttijd) {}
 }

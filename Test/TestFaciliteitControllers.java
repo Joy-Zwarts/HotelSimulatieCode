@@ -255,7 +255,6 @@ public class TestFaciliteitControllers {
                 ctrl.onGastGaatWegUitKamer(gast, null);
                 ctrl.schoonmaakTijdVeranderd(TijdsDuur.NORMAAL);
                 ctrl.filmDuurVeranderd(TijdsDuur.KORT);
-                ctrl.aantalSchoonmakersVeranderd(5);
                 ctrl.trapLoopDuurVeranderd(3);
                 ctrl.gastMaxWachttijdVeranderd(15);
             });
@@ -334,7 +333,6 @@ public class TestFaciliteitControllers {
                 ctrl.onGastVerplaatst(gast, null);
                 ctrl.onGastGaatWegUitKamer(gast, null);
                 ctrl.schoonmaakTijdVeranderd(TijdsDuur.NORMAAL);
-                ctrl.aantalSchoonmakersVeranderd(2);
                 ctrl.restaurantCapaciteitVeranderd(32);
                 ctrl.trapLoopDuurVeranderd(10);
                 ctrl.gastMaxWachttijdVeranderd(5);
