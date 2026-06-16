@@ -110,7 +110,6 @@ public class PlaatsHelper implements NewGast, LayoutGeladen, NewSchoonmaker, res
         }
     }
 
-    // zet het schoonmaker-icoontje op de juiste plek na een stap
     @Override
     public void onSchoonmakerVerplaatst(SchoonmakerModel schoonmaker, Locatie oudeLocatie) {
         if (oudeLocatie != null && oudeLocatie.equals(schoonmaker.getLocatie())) {return;}
@@ -123,12 +122,18 @@ public class PlaatsHelper implements NewGast, LayoutGeladen, NewSchoonmaker, res
             oudPanel.repaint();
         }
 
-        GridVakjeController nieuwVak = grid.get(schoonmaker.getLocatie());
-        if (nieuwVak != null) {
-            JPanel nieuwPanel = nieuwVak.getGridView().getGuestPanel();
-            nieuwPanel.add(schoonmaker.getPersoonLabel());
-            nieuwPanel.revalidate();
-            nieuwPanel.repaint();
+        Locatie nieuweLocatie = schoonmaker.getLocatie();
+        boolean inLiftschacht = (nieuweLocatie.getX() == 0);
+
+        // Als de schoonmaker in de liftschacht zit, voegen we het label niet toe
+        if (!inLiftschacht) {
+            GridVakjeController nieuwVak = grid.get(nieuweLocatie);
+            if (nieuwVak != null) {
+                JPanel nieuwPanel = nieuwVak.getGridView().getGuestPanel();
+                nieuwPanel.add(schoonmaker.getPersoonLabel());
+                nieuwPanel.revalidate();
+                nieuwPanel.repaint();
+            }
         }
     }
 
