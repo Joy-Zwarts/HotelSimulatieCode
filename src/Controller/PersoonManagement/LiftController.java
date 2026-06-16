@@ -115,13 +115,16 @@ public class LiftController extends EntiteitenController implements reset, noneE
     public void onDestinationReached(EntiteitenModel Entiteit) {
         if (Entiteit instanceof LiftModel) {
             LiftModel lift = (LiftModel) Entiteit;
-            System.out.println("Lift is aangekomen op geroepen verdieping: " + lift.getLocatie().getY());
+            int bereikteY = lift.getLocatie().getY();
 
-            // Verwijder dit verzoek, we zijn er!
-            lift.verwijderHuidigeVerzoek();
+            System.out.println("Lift stopt op verdieping Y: " + bereikteY);
 
-            // TODO: Geef een seintje aan de gasten op deze verdieping dat ze mogen instappen/uitstappen.
-            // Bijvoorbeeld via een event of door de gasten op deze Y-locatie te 'waken'.
+            // Verwijder SPECIFIEK dit verzoek uit de lijst, de rest blijft staan!
+            lift.verwijderVerzoek(bereikteY);
+
+            // De lift staat nu stil op deze verdieping.
+            // Alle gasten die in de BeweegHelper stonden te wachten op DEZE Y-as,
+            // zullen tijdens hun eigen tick zien dat liftY == hunY, en stappen nu veilig in!
         }
     }
 
@@ -163,24 +166,25 @@ public class LiftController extends EntiteitenController implements reset, noneE
     public void HTETick(HotelEvent event) throws InterruptedException {
         if (liftModel == null || layoutController == null) return;
 
-        // Als er geen verzoeken zijn, doet de lift lekker niks (staat stil)
+        // Als er geen verzoeken zijn, doet de lift niks
         if (!liftModel.heeftVerzoeken()) {
             return;
         }
 
         int huidigeY = liftModel.getLocatie().getY();
-        int targetY = liftModel.peekVolgendeVerzoek(); // Wat is het doel?
+
+        // Bereken dynamisch wat NU het slimste volgende doel is in de reisrichting
+        Integer targetY = liftModel.bepaalVolgendeBestemming();
+        if (targetY == null) return;
 
         if (huidigeY < targetY) {
-            // Target ligt lager (grotere Y), dus lift moet omlaag
             liftOmlaag();
         } else if (huidigeY > targetY) {
-            // Target ligt hoger (kleinere Y), dus lift moet omhoog
             liftOmhoog();
         }
 
-        // Check of we er na deze stap zijn gekomen
-        // (De check doen we hier direct na het bewegen in de tick)
+        // Check of we NU (na de stap) op een verdieping zijn waar iemand in/uit moet
+        // We checken direct de actuele locatie, want de lift kan zojuist een 'tussenstop' hebben bereikt!
         if (liftModel.getLocatie().getY() == targetY) {
             onDestinationReached(liftModel);
         }
