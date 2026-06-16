@@ -258,29 +258,43 @@ public class PlaatsHelper implements NewGast, LayoutGeladen, NewSchoonmaker, res
         }
     }
 
-    // als de gast verplaatst moet hun icoontje op de juiste plek verschijnen
+    // als de gast verplaatst moet hun icoontje op de juiste plek verschijnen, of verdwijnen in de lift
     @Override
     public void onGastVerplaatst(GastModel gast, Locatie oudeLocatie) {
         if (oudeLocatie != null && oudeLocatie.equals(gast.getLocatie())) return;
 
-        // oude vakje opschonen
+        // 1. Oude vakje opschonen
         GridVakjeController oudVak = grid.get(oudeLocatie);
         if (oudVak != null) {
             JPanel oudPanel = oudVak.getGridView().getGuestPanel();
             oudPanel.remove(gast.getPersoonLabel());
-
             oudPanel.revalidate();
             oudPanel.repaint();
         }
 
-        // gast icoontje op nieuw vakje plaatsten
-        GridVakjeController nieuwVak = grid.get(gast.getLocatie());
-        if (nieuwVak != null) {
-            JPanel nieuwPanel = nieuwVak.getGridView().getGuestPanel();
-            nieuwPanel.add(gast.getPersoonLabel());
+        // 2. Gast icoontje op nieuw vakje plaatsen (MITS ze niet in de lift zitten)
+        Locatie nieuweLocatie = gast.getLocatie();
 
-            nieuwPanel.revalidate();
-            nieuwPanel.repaint();
+        // Controleer of de gast zich in de liftschacht bevindt (X = 0)
+        // en nog niet op de eindbestemming van deze verdieping is aangekomen
+        boolean inLiftschacht = (nieuweLocatie.getX() == 0);
+        boolean reistVerticaal = (oudeLocatie != null && oudeLocatie.getY() != nieuweLocatie.getY());
+
+        // We tonen de gast NIET als hij zich in de liftschacht bevindt en verticaal reist
+        if (inLiftschacht) {
+            // De gast is "onzichtbaar" in de lift, dus we voegen het label NIET toe aan het gridvakje.
+            System.out.println("Gast " + gast.getID() + " is in de lift gestapt op Y: " + nieuweLocatie.getY());
+        } else {
+            // Normaal verplaatsen over de gangen: voeg label toe aan het nieuwe vakje
+            GridVakjeController nieuwVak = grid.get(nieuweLocatie);
+            if (nieuwVak != null) {
+                JPanel nieuwPanel = nieuwVak.getGridView().getGuestPanel();
+                if (gast.getPersoonLabel() != null) {
+                    nieuwPanel.add(gast.getPersoonLabel());
+                    nieuwPanel.revalidate();
+                    nieuwPanel.repaint();
+                }
+            }
         }
     }
 
