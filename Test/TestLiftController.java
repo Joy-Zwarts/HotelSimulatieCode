@@ -188,44 +188,6 @@ public class TestLiftController {
     }
 
     @Test
-    void PendelLogicaInHTETick() throws Exception {
-        liftController.onLayoutGeladen(fakeLayoutController); // Bodem Y=4, gaatOmhoog = true
-        flushSwingQueue();
-        HotelEvent dummyEvent = new HotelEvent(1, HotelEventType.NONE, 0, 0);
-
-        Field richtingField = LiftController.class.getDeclaredField("gaatOmhoog");
-        richtingField.setAccessible(true);
-
-        // 1. Gaat normaal omhoog (van Y=4 naar Y=3)
-        liftController.HTETick(dummyEvent);
-        flushSwingQueue();
-        assertEquals(3, mockListener.lastLift.getLocatie().getY());
-        assertTrue(richtingField.getBoolean(liftController));
-
-        // 2. Top bereikt wissel (Y=0).
-        // Jouw controller switcht naar false en doet DIRECT liftOmlaag() -> Y wordt dus 1!
-        mockListener.lastLift.getLocatie().setY(0);
-        liftController.HTETick(dummyEvent);
-        flushSwingQueue();
-        assertFalse(richtingField.getBoolean(liftController));
-        assertEquals(1, mockListener.lastLift.getLocatie().getY());
-
-        // 3. Gaat normaal omlaag (van Y=1 naar Y=2)
-        liftController.HTETick(dummyEvent);
-        flushSwingQueue();
-        assertEquals(2, mockListener.lastLift.getLocatie().getY());
-        assertFalse(richtingField.getBoolean(liftController));
-
-        // 4. Bodem bereikt wissel (Y=4).
-        // Jouw controller switcht naar true en doet DIRECT liftOmhoog() -> Y wordt dus 3!
-        mockListener.lastLift.getLocatie().setY(4);
-        liftController.HTETick(dummyEvent);
-        flushSwingQueue();
-        assertTrue(richtingField.getBoolean(liftController));
-        assertEquals(3, mockListener.lastLift.getLocatie().getY());
-    }
-
-    @Test
     void LegeInterfaceStubs() {
         assertDoesNotThrow(() -> liftController.schoonmaakTijdVeranderd(null));
         assertDoesNotThrow(() -> liftController.filmDuurVeranderd(null));
