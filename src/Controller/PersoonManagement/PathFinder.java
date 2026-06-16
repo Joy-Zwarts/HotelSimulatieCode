@@ -3,6 +3,7 @@ package Controller.PersoonManagement;
 import Controller.Layout.LayoutController;
 import Model.Layout.Locatie;
 import java.util.LinkedList;
+import java.util.Random; // 1. Random import toegevoegd
 
 public class PathFinder {
     // attributen
@@ -10,6 +11,7 @@ public class PathFinder {
     private final LayoutController layoutController;
     private Locatie currentLocatie;
     private final Locatie targetLocatie;
+    private final Random random; // 2. Random attribuut toegevoegd
 
     // constructor
     public PathFinder(Locatie start, Locatie target, LayoutController controller) {
@@ -17,6 +19,7 @@ public class PathFinder {
         this.targetLocatie = target;
         this.layoutController = controller;
         this.walkQueue = new LinkedList<>();
+        this.random = new Random(); // 3. Random geïnitialiseerd
 
         berekenRoute();
     }
@@ -28,21 +31,34 @@ public class PathFinder {
         // check of we naar een andere verdieping moeten
         if (currentLocatie.getY() != targetLocatie.getY()) {
 
+            // Bepaal de X-coördinaat op basis van 50% kans
+            int transportX;
 
-            // locatie van de trap ophalen
-            int trapX = layoutController.getView().getGridBreedte() - 1;
+            if (random.nextBoolean()) {
+                // Kiest de trap (helemaal rechts)
+                transportX = layoutController.getView().getGridBreedte() - 1;
 
-            Locatie trapHuidigeVerdieping = new Locatie(trapX, currentLocatie.getY());
-            Locatie trapTargetVerdieping = new Locatie(trapX, targetLocatie.getY());
+                Locatie transportHuidigeVerdieping = new Locatie(transportX, currentLocatie.getY());
+                Locatie transportTargetVerdieping = new Locatie(transportX, targetLocatie.getY());
 
-            // loop horizontaal naar de trap op de current verdieping
-            planHorizontaalPad(currentLocatie, trapHuidigeVerdieping);
+                // Plan de route via de trap
+                planHorizontaalPad(currentLocatie, transportHuidigeVerdieping);
+                planVerticaalPad(transportHuidigeVerdieping, transportTargetVerdieping);
+                planHorizontaalPad(transportTargetVerdieping, targetLocatie);
 
-            // ga verticaal (met de trap) naar de target verdieping
-            planVerticaalPad(trapHuidigeVerdieping, trapTargetVerdieping);
+            } else {
+                // Kiest de lift (helemaal links op X = 0)
+                transportX = 0;
 
-            // loop vanaf de trap op de nieuwe verdieping naar de target kamer
-            planHorizontaalPad(trapTargetVerdieping, targetLocatie);
+                Locatie transportHuidigeVerdieping = new Locatie(transportX, currentLocatie.getY());
+                Locatie transportTargetVerdieping = new Locatie(transportX, targetLocatie.getY());
+
+                // 1. Plan de route tot aan de lift, en vanaf de lift naar de kamer
+                planHorizontaalPad(currentLocatie, transportHuidigeVerdieping);
+                planVerticaalPad(transportHuidigeVerdieping, transportTargetVerdieping); // De gast wacht virtueel in de lift tot hij op de target Y is
+                planHorizontaalPad(transportTargetVerdieping, targetLocatie);
+
+            }
 
         } else {
             // als je al op de juiste verdieping bent loop direct horizontaal naar de target kamer
@@ -64,6 +80,7 @@ public class PathFinder {
 
     // plan het verticale pad stap voor stap van de beginlocatie naar de eindlocatie
     private void planVerticaalPad(Locatie start, Locatie eind) {
+
         int x = start.getX();
         int tempY = start.getY();
 
@@ -75,6 +92,11 @@ public class PathFinder {
     }
 
     // getters & setters
+
+
+    public LayoutController getLayoutController() {
+        return this.layoutController;
+    }
 
     // krijg de eerstvolgende stap in de walk queue
     public Locatie getNextStep() {

@@ -1,5 +1,6 @@
 package Controller.Layout;
 
+import Controller.PersoonManagement.LiftController;
 import Model.Layout.LayoutModel;
 import Model.Layout.Locatie;
 import Model.Ruimtes.KamerType;
@@ -12,6 +13,7 @@ public class LayoutController {
     private final LayoutModel model;
     private final LayoutView view;
     private final HotelSimulatieView simulatieView;
+    private LiftController liftController;
 
     public LayoutController(LayoutModel model, LayoutView view, HotelSimulatieView hoofdView) {
         this.model = model;
@@ -72,7 +74,14 @@ public class LayoutController {
         }
         return null;
     }
+    public void setLiftController(LiftController liftController) {
+        this.liftController = liftController;
+    }
 
+    // De getter die de PathFinder gaat gebruiken
+    public LiftController getLiftController() {
+        return this.liftController;
+    }
     public LayoutModel getModel() { return model; }
     public LayoutView getView() { return view; }
 }

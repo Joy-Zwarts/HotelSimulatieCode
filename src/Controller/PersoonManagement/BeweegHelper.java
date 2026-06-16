@@ -63,11 +63,11 @@ public class BeweegHelper  {
             PersoonModel persoon = actieveMensen.get(id);
             PathFinder pf = actieveRoutes.get(id);
 
-            // controleer of deze persoon nog in de wachtstand staat (bijvoorbeeld op de trap)
+            // 1. Controleer of deze persoon nog in de wachtstand staat (bijvoorbeeld op de trap)
             int resterendeWachtTicks = wachtTicksPerPersoon.getOrDefault(id, 0);
             if (resterendeWachtTicks > 0) {
                 wachtTicksPerPersoon.put(id, resterendeWachtTicks - 1);
-                continue; // sla deze tick over voor dit persoon, ze zijn nog de trap op/af aan het gaan
+                continue;
             }
 
             if (pf.isBestemmingBereikt()) {
@@ -80,19 +80,42 @@ public class BeweegHelper  {
                         persoon.getLocatie().getY()
                 );
 
-                // peek de volgende stap om te kijken of het een verticale stap is
+                // Peek de volgende stap om te controleren wat voor soort beweging dit is
                 Locatie volgendeStap = pf.peekNextStep();
 
                 if (volgendeStap != null) {
-                    // check of de y verandert
-                    if (oudeLocatie.getY() != volgendeStap.getY()) {
-                        // zorg dat resterende wacht ticks nooit kleiner dan 1 wordt tijdens de stap zelf
+                    // --- NIEUW: LIFT LOGICA START ---
+                    // Staat de gast bij de liftschacht (X=0) en gaat de volgende stap verticaal (Y verandert)?
+                    boolean staatBijLiftSchacht = (oudeLocatie.getX() == 0);
+                    boolean gaatVerdiepingWisselen = (oudeLocatie.getY() != volgendeStap.getY());
+
+                    if (staatBijLiftSchacht && gaatVerdiepingWisselen && pf.getLayoutController().getLiftController() != null) {
+
+                        // Haal de actuele Y-positie van de lift op
+                        int liftY = pf.getLayoutController().getLiftController().getLiftModel().getLocatie().getY();
+
+                        // Als de lift nog NIET op de verdieping van de gast is:
+                        if (liftY != oudeLocatie.getY()) {
+                            // Roep de lift naar de huidige verdieping van de gast
+                            pf.getLayoutController().getLiftController().liftCalled(oudeLocatie.getY());
+                            // Sla deze bewegingstick over (wacht op de gang)
+                            continue;
+                        }
+
+                        // Als de lift er WEL is: de gast stapt in!
+                        // Meld direct de DOEL-verdieping aan bij de lift, zodat de lift weet waar hij heen moet
+                        pf.getLayoutController().getLiftController().liftCalled(volgendeStap.getY());
+                    }
+                    // --- NIEUW: LIFT LOGICA EIND ---
+
+                    // Bestaande trap logica (alleen uitvoeren als het geen lift-beweging was)
+                    if (!staatBijLiftSchacht && oudeLocatie.getY() != volgendeStap.getY()) {
                         int ticks = Math.max(1, trapVertragingTicks);
                         wachtTicksPerPersoon.put(id, ticks);
                     }
                 }
 
-                // voer de stap nu uit
+                // Voer de stap nu uit
                 volgendeStap = pf.getNextStep();
                 persoon.getLocatie().setX(volgendeStap.getX());
                 persoon.getLocatie().setY(volgendeStap.getY());

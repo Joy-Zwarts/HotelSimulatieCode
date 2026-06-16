@@ -21,7 +21,6 @@ public class LiftController extends EntiteitenController implements reset, noneE
     private final LiftCreator factory;
     private final ArrayList<NewLift> listeners;
     private LiftModel liftModel;
-    private boolean gaatOmhoog = true;
 
     public LiftController() {
         super();
@@ -30,27 +29,32 @@ public class LiftController extends EntiteitenController implements reset, noneE
     }
 
 
-    // plaats de lift zodra de layout geladen is
     @Override
     public void onLayoutGeladen(LayoutController controller) {
         super.onLayoutGeladen(controller);
 
-        // waar staat de lift
+        // ZET DIT HIERNEER: Koppel deze lift instantie aan de zojuist geladen LayoutController
+        controller.setLiftController(this);
+
         int schachtX = 0;
         int bodemY = layoutController.getView().getGridLengte() - 1;
         Locatie startLocatie = new Locatie(schachtX, bodemY);
 
-        // maak de lift aan via de factory
         liftModel = (LiftModel) factory.createEntiteit(999, startLocatie, startLocatie, 0, startLocatie, TypePersoon.LIFT);
-
         actieveEntiteiten.put(liftModel.getID(), liftModel);
 
-        // laat de listeners weten dat de lift getekend moet worden
         SwingUtilities.invokeLater(() -> {
             for (NewLift listener : listeners) {
                 listener.onLiftAangemaakt(liftModel);
             }
         });
+    }
+
+    public void liftCalled(int yVerdieping) {
+        if (liftModel != null) {
+            liftModel.voegVerzoekToe(yVerdieping);
+            System.out.println("Lift geroepen naar verdieping Y: " + yVerdieping);
+        }
     }
 
     public void liftOmhoog() {
@@ -89,6 +93,10 @@ public class LiftController extends EntiteitenController implements reset, noneE
     public void liftCalled() {
     }
 
+    public LiftModel getLiftModel() {
+        return this.liftModel;
+    }
+
     // per stap die de lift zet, laat de PlaatsHelper hem tekenen
     @Override
     public void onStepTaken(EntiteitenModel Entiteit, Locatie oudeLocatie) {
@@ -107,8 +115,13 @@ public class LiftController extends EntiteitenController implements reset, noneE
     public void onDestinationReached(EntiteitenModel Entiteit) {
         if (Entiteit instanceof LiftModel) {
             LiftModel lift = (LiftModel) Entiteit;
-            System.out.println("Lift is aangekomen op bestemming: " + lift.getLocatie());
-            // hier moet er nog komen te staan wat de gasten moeten doen
+            System.out.println("Lift is aangekomen op geroepen verdieping: " + lift.getLocatie().getY());
+
+            // Verwijder dit verzoek, we zijn er!
+            lift.verwijderHuidigeVerzoek();
+
+            // TODO: Geef een seintje aan de gasten op deze verdieping dat ze mogen instappen/uitstappen.
+            // Bijvoorbeeld via een event of door de gasten op deze Y-locatie te 'waken'.
         }
     }
 
@@ -119,7 +132,6 @@ public class LiftController extends EntiteitenController implements reset, noneE
 
     @Override
     public void resetSimulatie() {
-        gaatOmhoog = true;
     }
 
     @Override
@@ -147,31 +159,30 @@ public class LiftController extends EntiteitenController implements reset, noneE
 
     }
 
-    // elke tick is een stap omhoog of omlaag zodat de lift de hele tijd omhoog en omlaag gaat
     @Override
     public void HTETick(HotelEvent event) throws InterruptedException {
         if (liftModel == null || layoutController == null) return;
 
-        int maxBodemY = layoutController.getView().getGridLengte() - 1;
-        int huidigeY = liftModel.getLocatie().getY();
+        // Als er geen verzoeken zijn, doet de lift lekker niks (staat stil)
+        if (!liftModel.heeftVerzoeken()) {
+            return;
+        }
 
-        // elke tick is 1 stap omhoog of omlaag
-        if (gaatOmhoog) {
-            if (huidigeY > 0) {
-                liftOmhoog();
-            } else {
-                // top bereikt (y=0), draai om en zet de eerste stap omlaag
-                gaatOmhoog = false;
-                liftOmlaag();
-            }
-        } else {
-            if (huidigeY < maxBodemY) {
-                liftOmlaag();
-            } else {
-                // bodem bereikt, draai om en zet de eerste stap omhoog
-                gaatOmhoog = true;
-                liftOmhoog();
-            }
+        int huidigeY = liftModel.getLocatie().getY();
+        int targetY = liftModel.peekVolgendeVerzoek(); // Wat is het doel?
+
+        if (huidigeY < targetY) {
+            // Target ligt lager (grotere Y), dus lift moet omlaag
+            liftOmlaag();
+        } else if (huidigeY > targetY) {
+            // Target ligt hoger (kleinere Y), dus lift moet omhoog
+            liftOmhoog();
+        }
+
+        // Check of we er na deze stap zijn gekomen
+        // (De check doen we hier direct na het bewegen in de tick)
+        if (liftModel.getLocatie().getY() == targetY) {
+            onDestinationReached(liftModel);
         }
     }
 }
