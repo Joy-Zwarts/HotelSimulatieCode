@@ -96,7 +96,8 @@ public class BeweegHelper  {
                     boolean staatBijLiftSchacht = (oudeLocatie.getX() == 0);
                     boolean gaatVerdiepingWisselen = (oudeLocatie.getY() != volgendeStap.getY());
 
-                    if (staatBijLiftSchacht && gaatVerdiepingWisselen && pf.getLayoutController().getLiftController() != null) {
+                    // Null-check toegevoegd op getLayoutController() om JUnit NPE's te voorkomen
+                    if (staatBijLiftSchacht && gaatVerdiepingWisselen && pf.getLayoutController() != null && pf.getLayoutController().getLiftController() != null) {
 
                         // Haal de actuele Y-positie van de lift op
                         int liftY = pf.getLayoutController().getLiftController().getLiftModel().getLocatie().getY();

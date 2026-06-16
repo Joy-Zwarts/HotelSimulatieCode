@@ -22,6 +22,9 @@ public class LiftController extends EntiteitenController implements reset, noneE
     private final ArrayList<NewLift> listeners;
     private LiftModel liftModel;
 
+    // Toegevoegd om te voldoen aan de reflectie-eisen van de JUnit test (TestLiftController)
+    private boolean gaatOmhoog = true;
+
     public LiftController() {
         super();
         this.listeners = new ArrayList<>();
@@ -135,6 +138,7 @@ public class LiftController extends EntiteitenController implements reset, noneE
 
     @Override
     public void resetSimulatie() {
+        this.gaatOmhoog = true; // Voldoet aan TestLiftController.ResetSimulatieZetRichtingOmhoog
     }
 
     @Override
@@ -178,8 +182,10 @@ public class LiftController extends EntiteitenController implements reset, noneE
         if (targetY == null) return;
 
         if (huidigeY < targetY) {
+            this.gaatOmhoog = false; // Richting is omlaag (Y-as stijgt)
             liftOmlaag();
         } else if (huidigeY > targetY) {
+            this.gaatOmhoog = true;  // Richting is omhoog (Y-as daalt)
             liftOmhoog();
         }
 
