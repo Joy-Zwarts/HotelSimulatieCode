@@ -57,7 +57,6 @@ public class PathFinder {
                 planVerticaalPad(transportHuidigeVerdieping, transportTargetVerdieping);
                 planHorizontaalPad(transportTargetVerdieping, targetLocatie);
 
-                System.out.println("PathFinder: Route berekend via de TRAP.");
             } else {
                 // Kiest de lift (helemaal links op X = 0)
                 transportX = 0;
@@ -69,8 +68,6 @@ public class PathFinder {
                 planHorizontaalPad(currentLocatie, transportHuidigeVerdieping);
                 planVerticaalPad(transportHuidigeVerdieping, transportTargetVerdieping);
                 planHorizontaalPad(transportTargetVerdieping, targetLocatie);
-
-                System.out.println("PathFinder: Route berekend via de LIFT.");
             }
 
         } else {

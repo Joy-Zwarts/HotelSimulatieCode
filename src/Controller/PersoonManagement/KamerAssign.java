@@ -43,6 +43,8 @@ public class KamerAssign implements NewGast {
         // als er geen kamer meer over is met die specifieke classificaties wordt er gekeken of er een kamer over is met 1 ster minder totdat er geen kamers meer over zijn
 
         System.out.println("Geen kamer beschikbaar voor gast " + gast.getID() + " met de wensen " + gast.getWensen());
+        gast.setLastigeGast(true);
+        System.out.println("Gast " + gast.getID() + " is een lastige gast");
 
         // kamer downgraden als eer geen kamer is met de wensen van de gast
 

@@ -1,6 +1,7 @@
 package Controller.JoyOpdracht;
 
 import Controller.Events.Interfaces.checkOutEvent;
+import Controller.Events.Interfaces.noneEvent;
 import Controller.Layout.Interfaces.LayoutGeladen;
 import Controller.Layout.LayoutController;
 import Controller.PersoonManagement.Interfaces.NewGast;
@@ -14,29 +15,28 @@ import View.JoyOpdracht.NewDag;
 import hotelevents.HotelEvent;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
-public class FactuurController implements NewGast, LayoutGeladen, NewDag, checkOutEvent {
+public class FactuurController implements NewGast, LayoutGeladen, NewDag, checkOutEvent, noneEvent {
 
     // attributen
-
     private final Random rand = new Random();
     private LayoutModel layoutModel;
-
-    // per gast wordt er een lijstje bijgehouden van de naam van de kost en het bedrag
     private final HashMap<GastModel, HashMap<String, Integer>> gastenInSysteem;
-
-    //  lijstje om op te zoeken hoeveel een kamer per ster kost
     private final HashMap<KamerClassificatie, Integer> prijsPerNacht;
+    private final HashMap<GastModel, String> checkInTijdstip;
+    private final HashMap<GastModel, String> checkOutTijdstip;
     private Locatie uitgang;
     private int huidigeDag = 1;
-    private FactuurPrint factuurPrint;
+    private int huidigeTicks = 0;
+    private final FactuurPrint factuurPrint;
 
     // constructor
     public FactuurController(FactuurPrint factuurPrint) {
         gastenInSysteem = new HashMap<>();
         prijsPerNacht = new HashMap<>();
+        checkInTijdstip = new HashMap<>();
+        checkOutTijdstip = new HashMap<>();
 
         this.factuurPrint = factuurPrint;
 
@@ -47,29 +47,28 @@ public class FactuurController implements NewGast, LayoutGeladen, NewDag, checkO
         prijsPerNacht.put(KamerClassificatie.vijfSterren, 350);
     }
 
-
-    // voegt kosten toe aan de rekening van een gast
+    // voegt kosten toe aan de rekening van de gast met de bijbehorende omschrijving en prijs
     private void voegKostenToe(GastModel gast, String omschrijving, int bedrag) {
-        // kijkt of de gast al een rekening heeft, zo niet, maak dan een lege rekening
+        // kijk of de gast al in het systeem zit
         if (!gastenInSysteem.containsKey(gast)) {
             gastenInSysteem.put(gast, new HashMap<>());
         }
-
-        // pak de rekening van deze gast erbij
+        // pak de gast
         HashMap<String, Integer> factuurVanGast = gastenInSysteem.get(gast);
 
-        // kijkt of deze kost al op de rekening staat zodat je ze bij elkaar op kan tellen
         int oudBedrag = 0;
+
+        // kijk of er al een zelfde kost op de rekening staat van die gast om de binnenkomende kost daar bij op te tellen
         if (factuurVanGast.containsKey(omschrijving)) {
             oudBedrag = factuurVanGast.get(omschrijving);
         }
-
-        // tel het nieuwe bedrag op bij het oude bedrag en sla het op
         int nieuwBedrag = oudBedrag + bedrag;
+
+        // zet het op de rekening van de gast
         factuurVanGast.put(omschrijving, nieuwBedrag);
     }
 
-    // zoek het GastModel bij hun ID zo nodig
+    // zoekt een gast in het systeem bij hun ID
     private GastModel vindGastBijId(int id) {
         for (GastModel gast : gastenInSysteem.keySet()) {
             if (gast.getID() == id) {
@@ -79,117 +78,101 @@ public class FactuurController implements NewGast, LayoutGeladen, NewDag, checkO
         return null;
     }
 
-    // berekent de prijs van de kamer op basis van hoeveel nachten de gast er al slaapt
+    // kijkt in wat voor sterren kamer de gast zit, rekent de overnachtingsprijs per nacht en zet deze op hun rekening
     private void rekenKamerPrijsVoorGast(GastModel gast) {
         if (gast.getKamer() != null) {
-            // kijk hoeveel sterren de kamer heeft en zoek de prijs op
             KamerClassificatie aantalSterren = gast.getKamer().getClassification();
-            int nachtPrijs = prijsPerNacht.getOrDefault(aantalSterren, 0);
 
-            // tel de hoeveelste nacht dit wordt voor deze specifieke gast
+            int nachtPrijs = prijsPerNacht.get(aantalSterren);
             int nachtNummer = 1;
             HashMap<String, Integer> factuur = gastenInSysteem.get(gast);
 
-            // we lopen door de huidige rekening van de gast om te kijken hoeveel overnachtingen er al op staan
             if (factuur != null) {
+                // kijkt of de gast al een nacht heeft verbleven, zo ja, dan zet je het er in als een dagje meer dan de vorige nacht
                 for (String omschrijving : factuur.keySet()) {
                     if (omschrijving.contains("Overnachting")) {
-                        nachtNummer++; // elke overnachtings entry die wordt gevonden, betekent een nacht extra
+                        nachtNummer++;
                     }
                 }
             }
 
-            String omschrijving = "Overnachting " + nachtNummer + " (" + aantalSterren + ")";
-
-            // voeg de kosten toe
+            // voeg het toe aan de gast hun rekening
+            String omschrijving = "Overnachting NACHT " + nachtNummer + " (" + aantalSterren + ")";
             voegKostenToe(gast, omschrijving, nachtPrijs);
-            System.out.println("Gast: " + gast.getID() + " betaalt voor nacht #" + nachtNummer);
         }
     }
 
-    // als de gast naar de bios gaat, bereken een random prijs en voeg deze toe
+    // bereken de kosten voor gebruik van de faciliteiten en voeg deze kosten toe aan de rekening van de gast
+
     public void gastGaatNaarBios(GastModel gast) {
-        int maxPrijsBioscoop = 25;
-        int minPrijsBioscoop = 20;
-
-        int randomKostBioscoop = rand.nextInt(minPrijsBioscoop, maxPrijsBioscoop);
+        int randomKostBioscoop = rand.nextInt(20, 25);
         voegKostenToe(gast, "Prijs voor Bioscoopbezoek", randomKostBioscoop);
-
-        System.out.println("Gast: " + gast.getID() + " heeft een bedrag van " + randomKostBioscoop + " op zijn rekening gekregen voor zijn Bioscoopbezoek");
     }
 
-    // als de gast naar het restaurant gaat, bereken een random prijs en voeg deze toe
     public void gastGaatNaarRestaurant(GastModel gast) {
-        int minPrijsRestaurant = 35;
-        int maxPrijsRestaurant = 110;
-
-        int randomKostRestaurant = rand.nextInt(minPrijsRestaurant, maxPrijsRestaurant);
+        int randomKostRestaurant = rand.nextInt(35, 110);
         voegKostenToe(gast, "Prijs voor Restaurantbezoek", randomKostRestaurant);
-
-        System.out.println("Gast: " + gast.getID() + " heeft een bedrag van " + randomKostRestaurant + " op zijn rekening gekregen voor zijn Restaurantbezoek");
     }
 
-    // voeg de prijs van een gym bezoek toe aan de gast zijn rekening
     public void gastGaatNaarGym(GastModel gast) {
-        int prijsPerBezoekGym = 10;
-        voegKostenToe(gast, "Prijs voor Gym bezoek", prijsPerBezoekGym);
-
-        System.out.println("Gast: " + gast.getID() + " heeft een bedrag van " + prijsPerBezoekGym + " op zijn rekening gekregen voor zijn Gym bezoek");
+        voegKostenToe(gast, "Prijs voor Gym bezoek", 10);
     }
 
-    // als de gast uitcheckt, print zijn vacature uit
+    // bij check out, pak alle nodige attributen van die gast en print hun bon met de FactuurPrint klasse
     public void checkOutGast(GastModel gast) {
-        // pak de rekening van de gast
         HashMap<String, Integer> factuur = gastenInSysteem.get(gast);
 
-        // print de bon visueel uit in swing met de factuurPrint klasse
-        factuurPrint.PrintBon(factuur, gast);
+        // pak de opgeslagen tijden
+        String checkIn = checkInTijdstip.get(gast);
+        String checkOut = checkOutTijdstip.get(gast);
 
-        // de gast heeft betaald, dus we halen hem uit het rekeningsysteem
+        factuurPrint.PrintBon(factuur, gast, checkIn, checkOut);
+
         gastenInSysteem.remove(gast);
+        checkInTijdstip.remove(gast);
+        checkOutTijdstip.remove(gast);
     }
 
-
-    // als een gast een checkout event krijgt, laat hem afrekenen met de methode
+    // registreer de checkout tijd van de gast en handel e rest van de checkout af met CheckOutGast
     @Override
     public void checkOut(HotelEvent hotelEvent) {
         int gastId = hotelEvent.getGuestId();
         GastModel gast = vindGastBijId(gastId);
 
         if (gast != null) {
-            System.out.println("CheckOut-event ontvangen via HotelEventManager voor gast: " + gastId);
+            // registreer de check out tijd
+            checkOutTijdstip.put(gast, getDatum(hotelEvent.getTime()));
             checkOutGast(gast);
         }
     }
 
-    // maak per nieuwe gast, maak een rekening voor hun aan met 5 euro administratiekosten up front
-    // zet ook alvast de kamer prijs van de dag van aankomst op hun rekening
+    // registreer de check in tijd en reken de kamerprijs voor de gast voor de eerste nacht
     @Override
     public void onGastAangemaakt(GastModel gast) {
         if (!gastenInSysteem.containsKey(gast)) {
             gastenInSysteem.put(gast, new HashMap<>());
         }
+        // registreer de check in tijd
+        checkInTijdstip.put(gast, getDatum(huidigeTicks));
+
         voegKostenToe(gast, "Administratiekosten", 5);
         rekenKamerPrijsVoorGast(gast);
     }
 
-    // kijk in wat voor kamer de gast is aangekomen en roep daarbij de bijpassende methode aan
+    // kijk of een gast een faciliteit is binnen gelopen en roep daarbij de bijpassende methode aan om de kosten te rekenen
     @Override
     public void onGastAangekomenInKamer(GastModel gast, Locatie behaaldeLocatie) {
         if (layoutModel == null) return;
 
-        // zoek op wat voor soort kamer er op deze locatie staat
         RuimteModel aankomstRuimte = layoutModel.getRuimteBijLocatie(behaaldeLocatie);
 
-        // als het geen faciliteit is
         if (aankomstRuimte == null) {
-            if (behaaldeLocatie.equals(uitgang)) { // is het de locatie van de uitgang?
+            if (behaaldeLocatie.equals(uitgang)) {
                 checkOutGast(gast);
             }
             return;
         }
 
-        // als het wel een faciliteit is roep de bijbehorende methode aan
         switch (aankomstRuimte.getAreaType()) {
             case CINEMA:
                 gastGaatNaarBios(gast);
@@ -201,7 +184,6 @@ public class FactuurController implements NewGast, LayoutGeladen, NewDag, checkO
                 gastGaatNaarGym(gast);
                 break;
             default:
-                // check nog voor de zekerheid of hij niet bij de uitgang staat
                 if (behaaldeLocatie.equals(uitgang)) {
                     checkOutGast(gast);
                 }
@@ -209,28 +191,37 @@ public class FactuurController implements NewGast, LayoutGeladen, NewDag, checkO
         }
     }
 
+    // bereken de locatie van de uitgang zodra de layout is geladen
     @Override
     public void onLayoutGeladen(LayoutController layoutController) {
-        this.layoutModel = layoutController.getModel(); // sla layout model op om de ruimte bij de locatie op te kunnen halen
-
-        // bereken de startlocatie net zoals bij de gastcontroller
+        this.layoutModel = layoutController.getModel();
         int x = layoutController.getView().getGridBreedte() / 2;
         int y = layoutController.getView().getGridLengte() - 1;
         uitgang = new Locatie(x, y);
     }
 
-    // als er een dag voorbij is, zet dit in de huidige dag en voor elke gast in het hotel, bereken hun vaste dagtarief
+    // als de dag voorbij is pas de huidige dag aan en reken de prijs voor die nacht voor elke gast in het systeem
     @Override
     public void dagVoorbij(int dag) {
         this.huidigeDag = dag;
-
-        // geef elke gast die nu in het hotel is de volgende nacht op de bon
         for (GastModel gast : gastenInSysteem.keySet()) {
             rekenKamerPrijsVoorGast(gast);
         }
     }
 
-    // onnodige implements
+    // bereken de datum op dezelfde manier als de time panel om de check in en out tijdstippen te berekenen
+    public String getDatum(int verstrekenHTE){
+        int dag = (int) (verstrekenHTE / 500) + 1;
+        int ticksVandaag = (int) (verstrekenHTE % 500);
+
+        double fractieVanDag = (double) ticksVandaag / 500;
+        int totaleMinutenVandaag = (int) (fractieVanDag * 1440);
+
+        int uren = totaleMinutenVandaag / 60;
+        int minuten = totaleMinutenVandaag % 60;
+
+        return String.format("Dag %d, %02d:%02d", dag, uren, minuten);
+    }
 
     @Override
     public void onGastVertrokken(GastModel gast) {}
@@ -238,4 +229,10 @@ public class FactuurController implements NewGast, LayoutGeladen, NewDag, checkO
     public void onGastVerplaatst(GastModel gast, Locatie oudeLocatie) {}
     @Override
     public void onGastGaatWegUitKamer(GastModel gast, Locatie oudeLocatie) {}
+
+    // luister naar de HTE ticks om de huidige tijd exact te weten voor de check in- en out tijden te berekenen
+    @Override
+    public void HTETick(HotelEvent event) throws InterruptedException {
+        huidigeTicks++;
+    }
 }

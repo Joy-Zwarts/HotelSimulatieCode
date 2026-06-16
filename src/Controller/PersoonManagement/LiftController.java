@@ -57,7 +57,6 @@ public class LiftController extends EntiteitenController implements reset, noneE
     public void liftCalled(int yVerdieping) {
         if (liftModel != null) {
             liftModel.voegVerzoekToe(yVerdieping);
-            System.out.println("Lift geroepen naar verdieping Y: " + yVerdieping);
         }
     }
 
@@ -146,7 +145,6 @@ public class LiftController extends EntiteitenController implements reset, noneE
             liftModel.setBeschikbaar(true);
             liftModel.getVerzoeken().clear(); // Optioneel: wis oude wachtende verzoeken
         }
-        System.out.println("LiftController: Gereset en lift weer beschikbaar gemaakt.");
     }
 
     @Override

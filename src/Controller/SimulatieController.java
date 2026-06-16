@@ -154,6 +154,8 @@ public class SimulatieController implements reset {
 
         eventHandler.setEventListenerNoneEvent(timePanel);
 
+        eventHandler.setEventListenerNoneEvent(factuurController);
+
         TimeManagementPanel timeManagementPanel = new TimeManagementPanel(view.getTopBar(), darkModeModel);
 
         TimeManagementController timeManagement = new TimeManagementController(manager, this, view, timeManagementPanel);

@@ -92,21 +92,16 @@ public class HotelSimulatieView extends JFrame{
         stopSimulationButton = new JButton("Stop Simulation");
         settingsButton = new JButton("Settings");
 
-        try {
-            ImageIcon alarmIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("/Res/alarm.png")));
-            Image schaalAfbeelding = alarmIcon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
-            alarmIcon = new ImageIcon(schaalAfbeelding);
+        ImageIcon alarmIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("/Res/alarm.png")));
+        Image schaalAfbeelding = alarmIcon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+        alarmIcon = new ImageIcon(schaalAfbeelding);
 
-            BrandalarmButton = new JButton(alarmIcon);
-            BrandalarmButton.setBorderPainted(false);
-            BrandalarmButton.setContentAreaFilled(false);
-            BrandalarmButton.setFocusPainted(false);
-            BrandalarmButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-        } catch (Exception e) {
-            System.out.println("HotelSimulatieView: alarm.png kon niet worden geladen, fallback naar tekst.");
-            BrandalarmButton = new JButton("Brandalarm");
-        }
+        BrandalarmButton = new JButton(alarmIcon);
+        BrandalarmButton.setBorderPainted(false);
+        BrandalarmButton.setContentAreaFilled(false);
+        BrandalarmButton.setFocusPainted(false);
+        BrandalarmButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        updateAlarmIcoontje();
 
         JButton[] tekstKnoppen = {
                 loadScenarioButton,
@@ -252,6 +247,24 @@ public class HotelSimulatieView extends JFrame{
     public void toonEindScherm() {
         eindeOverlay.setVisible(true);
         eindeOverlay.repaint();
+    }
+
+    public void updateAlarmIcoontje() {
+        if (BrandalarmButton == null) return;
+
+        try {
+            String fotoNaam = darkMode.isDarkMode() ? "/Res/alarmLight.png" : "/Res/alarm.png";
+            ImageIcon alarmIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource(fotoNaam)));
+
+            Image schaalAfbeelding = alarmIcon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+            BrandalarmButton.setIcon(new ImageIcon(schaalAfbeelding));
+
+        } catch (Exception e) {
+            System.out.println("HotelSimulatieView: Alarm-icoon kon niet worden gewisseld. Fallback naar tekst.");
+            if (BrandalarmButton.getText().isEmpty()) {
+                BrandalarmButton.setText("Brandalarm");
+            }
+        }
     }
 
     public void verbergEindScherm() {

@@ -10,6 +10,7 @@ public class GastModel extends PersoonModel {
     private KamerClassificatie wensen;
     private KamerModel kamer;
     private Activiteit activiteitStatus;
+    private Boolean lastigeGast = false;
 
     public GastModel(int ID, Locatie locatie, Locatie targetLocatie, TypePersoon type, KamerClassificatie wensen, KamerModel kamer) {
         super(ID, locatie, targetLocatie, new Color(36, 104, 181), type);
@@ -40,4 +41,11 @@ public class GastModel extends PersoonModel {
     public void setActiviteit(Activiteit activity) {
         this.activiteitStatus = activity;
     }
+    public Boolean isLastigeGast() {
+        return lastigeGast;
+    }
+    public void setLastigeGast(Boolean lastigeGast) {
+        this.lastigeGast = lastigeGast;
+    }
+
 }
