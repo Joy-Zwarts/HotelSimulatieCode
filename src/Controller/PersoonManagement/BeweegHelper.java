@@ -89,7 +89,6 @@ public class BeweegHelper  {
                         // zorg dat resterende wacht ticks nooit kleiner dan 1 wordt tijdens de stap zelf
                         int ticks = Math.max(1, trapVertragingTicks);
                         wachtTicksPerPersoon.put(id, ticks);
-                        System.out.println("Gast " + id + " neemt de trap naar verdieping " + volgendeStap.getY() + " (Vertraging ingezet).");
                     }
                 }
 

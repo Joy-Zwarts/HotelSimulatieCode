@@ -68,13 +68,15 @@ public class SimulatieController implements reset {
 
         FitnessController fitnessController = new FitnessController(timer);
 
-        // EVENT LISTENERS
+        FactuurController factuurController = new FactuurController();
 
+        gastController.setNewGuestListener(kamerAssign);
+
+        gastController.setNewGuestListener(factuurController);
         gastController.setNewGuestListener(fitnessController);
-
         gastController.setNewGuestListener(restaurantController);
-
         gastController.setNewGuestListener(bioscoopController);
+        gastController.setNewGuestListener(receptieController);
 
         eventHandler.setEventListenerCheckIn(gastController);
 
@@ -100,6 +102,8 @@ public class SimulatieController implements reset {
 
         eventHandler.setEventListenerNoneEvent(liftController);
 
+        eventHandler.setEventListenerCheckOut(factuurController);
+
         bioscoopController.addlisteners(gastController);
 
         restaurantController.addListeners(gastController);
@@ -109,6 +113,8 @@ public class SimulatieController implements reset {
         LayoutLoader layoutLoader = new LayoutLoader(manager, view, null, pauseController);
 
         PlaatsHelper plaatsHelper = new PlaatsHelper(null, null);
+
+        gastController.setNewGuestListener(plaatsHelper);
 
         liftController.setNewLiftListener(plaatsHelper);
 
@@ -122,17 +128,15 @@ public class SimulatieController implements reset {
 
         layoutLoader.setNewLayoutListener(liftController);
 
+        layoutLoader.setNewLayoutListener(factuurController);
+
         layoutLoader.setNewRoomListener(receptieController);
-
-        gastController.setNewGuestListener(kamerAssign);
-
-        gastController.setNewGuestListener(plaatsHelper);
-
-        gastController.setNewGuestListener(receptieController);
 
         schoonmakerController.setNewSchoonmakerListener(plaatsHelper);
 
         TimePanel timePanel = new TimePanel(manager, view.getTopBar(), view, this);
+
+        timePanel.setListeners(factuurController);
 
         eventHandler.setEventListenerNoneEvent(timePanel);
 
