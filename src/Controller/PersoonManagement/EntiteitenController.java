@@ -4,6 +4,7 @@ import Controller.Layout.LayoutController;
 import Controller.Layout.Interfaces.LayoutGeladen;
 import Controller.Systeem.Interfaces.settingsListener;
 import Model.Entiteiten.EntiteitenModel;
+import View.JoyOpdracht.FactuurPrint;
 import View.Systeem.OverzichtView;
 
 import java.util.HashMap;
@@ -25,6 +26,12 @@ public abstract class EntiteitenController implements LayoutGeladen, BeweegHelpe
     public void injecteerOverzichtView(OverzichtView overzichtView) {
         if (this.beweegHelper != null) {
             this.beweegHelper.setOverzichtView(overzichtView);
+        }
+    }
+
+    public void injecteerFactuurPrint(FactuurPrint factuurPrint) {
+        if (this.beweegHelper != null) {
+            this.beweegHelper.setFactuurPrint(factuurPrint);
         }
     }
 

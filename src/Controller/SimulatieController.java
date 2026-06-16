@@ -56,11 +56,7 @@ public class SimulatieController implements reset {
 
         LiftController liftController = new LiftController();
 
-        SchoonmakerController schoonmakerController = new SchoonmakerController(receptieController, overzichtView, timer);
-
         gastController.injecteerOverzichtView(overzichtView);
-
-        schoonmakerController.injecteerOverzichtView(overzichtView);
 
         KamerAssign kamerAssign = new KamerAssign(receptieController);
 
@@ -71,6 +67,14 @@ public class SimulatieController implements reset {
         FitnessController fitnessController = new FitnessController(timer);
 
         FactuurPrint factuurPrint =  new FactuurPrint(view, manager);
+
+        SchoonmakerController schoonmakerController = new SchoonmakerController(receptieController, overzichtView, factuurPrint, timer);
+
+        schoonmakerController.injecteerOverzichtView(overzichtView);
+
+        gastController.injecteerFactuurPrint(factuurPrint);
+
+        gastController.injecteerFactuurPrint(factuurPrint);
 
         FactuurController factuurController = new FactuurController(factuurPrint);
 

@@ -152,4 +152,8 @@ public class FactuurPrint implements settingsListener {
     public void gastMaxWachttijdVeranderd(int gastMaxWachttijd) {
 
     }
+
+    public boolean isGepauzeerd() {
+        return this.paused;
+    }
 }

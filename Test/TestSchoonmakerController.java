@@ -81,7 +81,7 @@ public class TestSchoonmakerController {
         fakeWachtTimer = new FakeWachtTimer();
         fakeLayoutController = new FakeLayoutController();
 
-        schoonmakerController = new SchoonmakerController(fakeReceptieController, fakeOverzichtView, fakeWachtTimer);
+        schoonmakerController = new SchoonmakerController(fakeReceptieController, fakeOverzichtView, null, fakeWachtTimer);
 
         schoonmakerController.setNewSchoonmakerListener(new Controller.PersoonManagement.Interfaces.NewSchoonmaker() {
             @Override public void onSchoonmakerAangemaakt(SchoonmakerModel s) { aangemaaktAangeroepen = true; }
