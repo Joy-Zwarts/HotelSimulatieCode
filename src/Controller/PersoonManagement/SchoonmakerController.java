@@ -376,4 +376,32 @@ public class SchoonmakerController extends EntiteitenController implements clean
         PathFinder padSchoonmaker2 = new PathFinder(schoonmaker2.getLocatie(), startLocatie, layoutController);
         beweegHelper.voegRouteToe(schoonmaker2, padSchoonmaker2);
     }
+
+    public void verwerkGodzillaSchade(int verwoesteX) {
+        controleerSchoonmakerVoorGodzilla(schoonmaker1, verwoesteX);
+        controleerSchoonmakerVoorGodzilla(schoonmaker2, verwoesteX);
+    }
+
+    private void controleerSchoonmakerVoorGodzilla(SchoonmakerModel schoonmaker, int verwoesteX) {
+        if (schoonmaker == null) {
+            return;
+        }
+
+        boolean isVeilig = schoonmaker.getLocatie().equals(startLocatie);
+        boolean isInVerwoestGebied = schoonmaker.getLocatie().getX() <= verwoesteX;
+
+        if (!isVeilig && isInVerwoestGebied) {
+            System.out.println("Schoonmaker " + schoonmaker.getID() + " is geraakt door Godzilla.");
+
+            actieveEntiteiten.remove(schoonmaker.getID());
+            actieveKlussen.remove(schoonmaker.getID());
+
+            Queue<KamerModel> wachtrij = taakWachtrijen.get(schoonmaker.getID());
+            if (wachtrij != null) {
+                wachtrij.clear();
+            }
+
+            updateOverzichtView();
+        }
+    }
 }

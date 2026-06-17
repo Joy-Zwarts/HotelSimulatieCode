@@ -300,6 +300,32 @@ public class GastController extends EntiteitenController implements checkInEvent
         }
     }
 
+    public void verwerkGodzillaSchade(int verwoesteX) {
+        ArrayList<Integer> dodeGasten = new ArrayList<>();
+
+        for (GastModel gast : gasten.values()) {
+            if (gast == null) {
+                continue;
+            }
+
+            boolean isVeilig = gast.getLocatie().equals(startLocatie);
+            boolean isInVerwoestGebied = gast.getLocatie().getX() <= verwoesteX;
+
+            if (!isVeilig && isInVerwoestGebied) {
+                System.out.println("Gast " + gast.getID() + " is geraakt door Godzilla.");
+                dodeGasten.add(gast.getID());
+
+                for (NewGast listener : listeners) {
+                    listener.onGastVertrokken(gast);
+                }
+            }
+        }
+
+        for (int gastID : dodeGasten) {
+            gasten.remove(gastID);
+        }
+    }
+
     @Override public void schoonmaakTijdVeranderd(TijdsDuur tijdsDuur) {}
     @Override public void filmDuurVeranderd(TijdsDuur tijdsDuur) {}
     @Override public void showFactuurBonnen(boolean bool) {}

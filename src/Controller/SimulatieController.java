@@ -1,6 +1,7 @@
 package Controller;
 
 import Controller.Events.EventHandler;
+import Controller.Events.GodzillaController;
 import Controller.Faciliteiten.BioscoopController;
 import Controller.Faciliteiten.FitnessController;
 import Controller.Faciliteiten.RestaurantController;
@@ -188,12 +189,19 @@ public class SimulatieController implements reset {
 
         overzichtView.verbindDataBronnen(receptieController.getGasten(), receptieController.getKamers(), schoonmakerController);
 
+
+        GodzillaController godzillaController = new GodzillaController(gastController, schoonmakerController);
+
+        eventHandler.setEventListenerGodzilla(godzillaController);
+        eventHandler.setEventListenerNoneEvent(godzillaController);
+
         buttonController.setListeners(this);
         buttonController.setListeners(plaatsHelper);
         buttonController.setListeners(gastController);
         buttonController.setListeners(schoonmakerController);
         buttonController.setListeners(receptieController);
         buttonController.setListeners(eventHandler);
+        buttonController.setListeners(godzillaController);
     }
 
     // getters & setters
