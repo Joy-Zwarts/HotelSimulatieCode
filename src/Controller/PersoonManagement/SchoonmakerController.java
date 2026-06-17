@@ -2,6 +2,8 @@ package Controller.PersoonManagement;
 
 import Controller.Events.Interfaces.checkOutEvent;
 import Controller.Events.Interfaces.cleaningEmergencyEvent;
+import Controller.Events.Interfaces.evacuateEvent;
+import Controller.JoyOpdracht.FactuurController;
 import Controller.Layout.LayoutController;
 import Controller.PersoonManagement.Interfaces.NewSchoonmaker;
 import Controller.Systeem.Interfaces.onTimeChange;
@@ -13,6 +15,7 @@ import Model.Entiteiten.SchoonmakerModel;
 import Controller.PersoonFactory.SchoonmakerCreator;
 import Model.Entiteiten.TypePersoon;
 import Model.Ruimtes.KamerModel;
+import View.JoyOpdracht.FactuurPrint;
 import View.Systeem.OverzichtView;
 import View.Systeem.TijdsDuur;
 import Controller.Systeem.Interfaces.settingsListener;
@@ -21,7 +24,7 @@ import hotelevents.HotelEvent;
 import javax.swing.SwingUtilities;
 import java.util.*;
 
-public class SchoonmakerController extends EntiteitenController implements cleaningEmergencyEvent, checkOutEvent, onTimeChange, reset, settingsListener {
+public class SchoonmakerController extends EntiteitenController implements cleaningEmergencyEvent, checkOutEvent, onTimeChange, reset, settingsListener, evacuateEvent {
 
     private final SchoonmakerCreator factory;
     private final ArrayList<NewSchoonmaker> listeners;
@@ -38,11 +41,14 @@ public class SchoonmakerController extends EntiteitenController implements clean
     private final HashMap<TijdsDuur, Integer> maxTijdCheckout;
     private final HashMap<TijdsDuur, Integer> minTijdCheckout;
     private TijdsDuur cleanDuur = TijdsDuur.NORMAAL;
+    private FactuurPrint factuurPrint;
 
-    public SchoonmakerController(ReceptieController rec, OverzichtView overzichtView, WachtTimer wachtTimer) {
+    public SchoonmakerController(ReceptieController rec, OverzichtView overzichtView, FactuurPrint factuur, WachtTimer wachtTimer) {
         super();
         this.receptieController = rec;
         this.overzichtView = overzichtView;
+        this.factuurPrint = factuur;
+        injecteerFactuurPrint(factuur); // Zorgt dat BeweegHelper de factuurPrint referentie krijgt
         this.listeners = new ArrayList<>();
         this.factory = new SchoonmakerCreator();
         this.taakWachtrijen = new HashMap<>();
@@ -209,7 +215,7 @@ public class SchoonmakerController extends EntiteitenController implements clean
             KamerModel volgendeKamer = wachtrij.poll();
             int opvolgendeTijd = rand.nextInt(4, 8);
             stuurSchoonmakerNaarKamer(schoonmaker, volgendeKamer, opvolgendeTijd);
-            // als er geen taken meer in de wachtrij staan ga dan terug naar je station
+            // als er geen templates meer in de wachtrij staan ga dan terug naar je station
         } else {
             SwingUtilities.invokeLater(() -> {
                 PathFinder pf = new PathFinder(schoonmaker.getLocatie(), schoonmaker.getStation(), layoutController);
@@ -224,7 +230,7 @@ public class SchoonmakerController extends EntiteitenController implements clean
     // per stap laat de listeners dat weten en stop bij pauze
     @Override
     public void onStepTaken(EntiteitenModel Entiteit, Locatie oudeLocatie) {
-        if (overzichtView != null && overzichtView.isGepauzeerd()) {
+        if ((overzichtView != null && overzichtView.isGepauzeerd()) || (factuurPrint != null && factuurPrint.isGepauzeerd())) {
             return;
         }
 
@@ -241,7 +247,7 @@ public class SchoonmakerController extends EntiteitenController implements clean
     @Override
     public void onDestinationReached(EntiteitenModel Entiteit) {
         // bij pauze, niet bewegen
-        if (overzichtView != null && overzichtView.isGepauzeerd()) {
+        if ((overzichtView != null && overzichtView.isGepauzeerd()) || (factuurPrint != null && factuurPrint.isGepauzeerd())) {
             return;
         }
 
@@ -361,5 +367,13 @@ public class SchoonmakerController extends EntiteitenController implements clean
 
     public int getActieveKlussenAantal() {
         return this.actieveKlussen.size();
+    }
+
+    @Override
+    public void evacuate(HotelEvent hotelEvent) {
+        PathFinder padSchoonmaker1 = new PathFinder(schoonmaker1.getLocatie(), startLocatie, layoutController);
+        beweegHelper.voegRouteToe(schoonmaker1, padSchoonmaker1);
+        PathFinder padSchoonmaker2 = new PathFinder(schoonmaker2.getLocatie(), startLocatie, layoutController);
+        beweegHelper.voegRouteToe(schoonmaker2, padSchoonmaker2);
     }
 }

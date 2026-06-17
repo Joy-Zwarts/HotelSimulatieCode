@@ -25,6 +25,7 @@ public class HotelSimulatieView extends JFrame{
     private JButton settingsButton;
     private final DarkModeModel darkMode;
     private final EindeSimulatieView eindeOverlay;
+    private JButton BrandalarmButton;
 
     // constructor
     public HotelSimulatieView(DarkModeModel darkMode) {
@@ -81,7 +82,7 @@ public class HotelSimulatieView extends JFrame{
     private void initLeftPanel() {
         JPanel leftPanel = new JPanel();
         leftPanel.setPreferredSize(new Dimension(210, 670));
-        setBackground(UIManager.getColor("Panel.background"));
+        leftPanel.setBackground(UIManager.getColor("Panel.background"));
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
         leftPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
@@ -91,16 +92,48 @@ public class HotelSimulatieView extends JFrame{
         stopSimulationButton = new JButton("Stop Simulation");
         settingsButton = new JButton("Settings");
 
+        ImageIcon alarmIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("/Res/alarm.png")));
+        Image schaalAfbeelding = alarmIcon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+        alarmIcon = new ImageIcon(schaalAfbeelding);
+
+        BrandalarmButton = new JButton(alarmIcon);
+        BrandalarmButton.setBorderPainted(false);
+        BrandalarmButton.setContentAreaFilled(false);
+        BrandalarmButton.setFocusPainted(false);
+        BrandalarmButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        updateAlarmIcoontje();
+
+        JButton[] tekstKnoppen = {
+                loadScenarioButton,
+                loadLayoutButton,
+                startSimulationButton,
+                stopSimulationButton,
+                settingsButton
+        };
+
+        Dimension knopGrootte = new Dimension(160, 30);
+
+        for (JButton knop : tekstKnoppen) {
+            knop.setPreferredSize(knopGrootte);
+            knop.setMaximumSize(knopGrootte);
+            knop.setMinimumSize(knopGrootte);
+            knop.setAlignmentX(Component.CENTER_ALIGNMENT);
+        }
+
+        BrandalarmButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+
         leftPanel.add(Box.createVerticalStrut(20));
         leftPanel.add(loadScenarioButton);
-        leftPanel.add(Box.createVerticalStrut(10));
+        leftPanel.add(Box.createVerticalStrut(12));
         leftPanel.add(loadLayoutButton);
-        leftPanel.add(Box.createVerticalStrut(10));
+        leftPanel.add(Box.createVerticalStrut(12));
         leftPanel.add(startSimulationButton);
-        leftPanel.add(Box.createVerticalStrut(10));
+        leftPanel.add(Box.createVerticalStrut(12));
         leftPanel.add(stopSimulationButton);
-        leftPanel.add(Box.createVerticalStrut(10));
+        leftPanel.add(Box.createVerticalStrut(12));
         leftPanel.add(settingsButton);
+        leftPanel.add(Box.createVerticalStrut(25));
+        leftPanel.add(BrandalarmButton);
 
         add(leftPanel, BorderLayout.WEST);
     }
@@ -216,6 +249,24 @@ public class HotelSimulatieView extends JFrame{
         eindeOverlay.repaint();
     }
 
+    public void updateAlarmIcoontje() {
+        if (BrandalarmButton == null) return;
+
+        try {
+            String fotoNaam = darkMode.isDarkMode() ? "/Res/alarmLight.png" : "/Res/alarm.png";
+            ImageIcon alarmIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource(fotoNaam)));
+
+            Image schaalAfbeelding = alarmIcon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+            BrandalarmButton.setIcon(new ImageIcon(schaalAfbeelding));
+
+        } catch (Exception e) {
+            System.out.println("HotelSimulatieView: Alarm-icoon kon niet worden gewisseld. Fallback naar tekst.");
+            if (BrandalarmButton.getText().isEmpty()) {
+                BrandalarmButton.setText("Brandalarm");
+            }
+        }
+    }
+
     public void verbergEindScherm() {
         eindeOverlay.setVisible(false);
     }
@@ -226,7 +277,9 @@ public class HotelSimulatieView extends JFrame{
     public JButton getStartSimulationButton() { return startSimulationButton; }
     public JButton getSettingsButton() { return settingsButton; }
     public JButton getStopSimulationButton() { return stopSimulationButton; }
+    public JButton getBrandalarmButton() { return BrandalarmButton; }
     public JPanel getTopBar() { return topbar; }
+
 
     public JScrollPane getLayoutScrollPane() {
         return layoutScrollPane;

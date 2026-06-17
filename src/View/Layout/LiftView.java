@@ -15,6 +15,10 @@ public class LiftView extends JLabel {
         this.setVerticalAlignment(SwingConstants.CENTER);
         this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
+        // --- VOEG DIT TOE: Bescherm de lift tegen de DarkModeController ---
+        this.putClientProperty("noTheme", true);
+        // ------------------------------------------------------------------
+
         // afmetingen instellen
         Dimension liftGrootte = new Dimension(vakBreedte, vakHoogte);
         this.setPreferredSize(liftGrootte);

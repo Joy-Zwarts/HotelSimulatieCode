@@ -3,6 +3,7 @@ package Controller.PersoonManagement;
 import Model.Layout.Locatie;
 import Model.Entiteiten.EntiteitenModel;
 import Model.Entiteiten.PersoonModel;
+import View.JoyOpdracht.FactuurPrint;
 import View.Systeem.OverzichtView;
 
 import javax.swing.*;
@@ -18,6 +19,7 @@ public class BeweegHelper  {
     private final MovementListener listener;
     private OverzichtView overzichtView;
     private static int trapVertragingTicks = 1;
+    private FactuurPrint factuurPrint;
 
     public void reset() {
         bewegingsTimer.stop();
@@ -43,6 +45,11 @@ public class BeweegHelper  {
     public void setOverzichtView(OverzichtView overzichtView) {
         this.overzichtView = overzichtView;
     }
+
+    public void setFactuurPrint(FactuurPrint print) {
+        this.factuurPrint = print;
+    }
+
     public void start() { bewegingsTimer.start(); }
     public void setSpeed(int speed) { bewegingsTimer.setDelay(speed); }
 
@@ -55,7 +62,7 @@ public class BeweegHelper  {
     }
 
     private void processMovement() {
-        if (overzichtView != null && overzichtView.isGepauzeerd()) {
+        if ((overzichtView != null && overzichtView.isGepauzeerd()) || (factuurPrint != null && factuurPrint.isGepauzeerd())) {
             return;
         }
 
@@ -89,7 +96,8 @@ public class BeweegHelper  {
                     boolean staatBijLiftSchacht = (oudeLocatie.getX() == 0);
                     boolean gaatVerdiepingWisselen = (oudeLocatie.getY() != volgendeStap.getY());
 
-                    if (staatBijLiftSchacht && gaatVerdiepingWisselen && pf.getLayoutController().getLiftController() != null) {
+                    // Null-check toegevoegd op getLayoutController() om JUnit NPE's te voorkomen
+                    if (staatBijLiftSchacht && gaatVerdiepingWisselen && pf.getLayoutController() != null && pf.getLayoutController().getLiftController() != null) {
 
                         // Haal de actuele Y-positie van de lift op
                         int liftY = pf.getLayoutController().getLiftController().getLiftModel().getLocatie().getY();

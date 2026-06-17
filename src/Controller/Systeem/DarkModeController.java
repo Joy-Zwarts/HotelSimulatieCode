@@ -47,6 +47,7 @@ public class DarkModeController {
         // update de Hoofdview
         SwingUtilities.updateComponentTreeUI(view);
         updateComponentColors(view, model.getBackgroundColor(), model.getForegroundColor());
+        view.updateAlarmIcoontje();
 
         // update de SettingsView (als deze is gekoppeld)
         if (settingsView != null && settingsView.getFrame() != null) {

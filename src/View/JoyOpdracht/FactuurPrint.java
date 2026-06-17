@@ -8,7 +8,6 @@ import hotelevents.HotelEventManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,16 +24,18 @@ public class FactuurPrint implements settingsListener {
         this.eventManager = hotelEventManager;
     }
 
-    public void PrintBon(HashMap<String, Integer> factuur, GastModel gast) {
+    public void PrintBon(HashMap<String, Integer> factuur, GastModel gast, String checkInTijstip, String checkOutTijdstip) {
         if (showFactuurBonnen == false) {
             return;
         }
 
         JFrame frame = new JFrame("Factuur - Gast " + gast.getID());
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setSize(320, 450);
+        frame.setSize(330, 450);
         frame.setLocationRelativeTo(hotelSimulatieView);
         frame.setResizable(false);
+
+        frame.getRootPane().putClientProperty("noTheme", true);
 
         openstaandeBonnen++;
 
@@ -51,15 +52,42 @@ public class FactuurPrint implements settingsListener {
 
         // hoofdpaneel
         JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
+        mainPanel.putClientProperty("noTheme", true);
         mainPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         mainPanel.setBackground(Color.WHITE);
 
-        // header
-        JLabel headerLabel = new JLabel("FACTUUR VOOR GAST " + gast.getID(), SwingConstants.CENTER);
+        JPanel headerContainer = new JPanel();
+        headerContainer.setLayout(new BoxLayout(headerContainer, BoxLayout.Y_AXIS));
+        headerContainer.putClientProperty("noTheme", true);
+        headerContainer.setBackground(Color.WHITE);
+
+        // de hoofdtitel
+        JLabel headerLabel = new JLabel("FACTUUR VOOR GAST " + gast.getID());
         headerLabel.setFont(new Font("Monospaced", Font.BOLD, 16));
-        mainPanel.add(headerLabel, BorderLayout.NORTH);
+        headerLabel.setForeground(Color.BLACK);
+        headerLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        headerContainer.add(headerLabel);
+
+        headerContainer.add(Box.createVerticalStrut(8));
+
+        // check-in regel
+        JLabel checkInLabel = new JLabel("Inchecken: " + checkInTijstip);
+        checkInLabel.setFont(new Font("Monospaced", Font.PLAIN, 11));
+        checkInLabel.setForeground(Color.DARK_GRAY);
+        checkInLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        headerContainer.add(checkInLabel);
+
+        // check-out regel
+        JLabel checkOutLabel = new JLabel("Uitchecken: " + checkOutTijdstip);
+        checkOutLabel.setFont(new Font("Monospaced", Font.PLAIN, 11));
+        checkOutLabel.setForeground(Color.DARK_GRAY);
+        checkOutLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        headerContainer.add(checkOutLabel);
+
+        mainPanel.add(headerContainer, BorderLayout.NORTH);
 
         JPanel itemsPanel = new JPanel(new GridBagLayout());
+        itemsPanel.putClientProperty("noTheme", true);
         itemsPanel.setBackground(Color.WHITE);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -76,6 +104,7 @@ public class FactuurPrint implements settingsListener {
             gbc.anchor = GridBagConstraints.WEST;
             JLabel itemLabel = new JLabel(regel.getKey());
             itemLabel.setFont(bonFont);
+            itemLabel.setForeground(Color.BLACK);
             itemsPanel.add(itemLabel, gbc);
 
             // prijs (rechts)
@@ -83,6 +112,7 @@ public class FactuurPrint implements settingsListener {
             gbc.anchor = GridBagConstraints.EAST;
             JLabel priceLabel = new JLabel(String.format("€%4d,-", regel.getValue()));
             priceLabel.setFont(bonFont);
+            priceLabel.setForeground(Color.BLACK);
             itemsPanel.add(priceLabel, gbc);
 
             // tel het op bij het totaal
@@ -92,22 +122,26 @@ public class FactuurPrint implements settingsListener {
 
         // scrollPane voor het geval de lijst lang is
         JScrollPane scrollPane = new JScrollPane(itemsPanel);
+        scrollPane.putClientProperty("noTheme", true);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
         scrollPane.getViewport().setBackground(Color.WHITE);
         mainPanel.add(scrollPane, BorderLayout.CENTER);
 
         // footer
         JPanel footerPanel = new JPanel(new BorderLayout());
+        footerPanel.putClientProperty("noTheme", true);
         footerPanel.setBackground(Color.WHITE);
 
         JLabel separator = new JLabel("--------------------------------");
         separator.setFont(bonFont);
+        separator.setForeground(Color.BLACK);
         separator.setHorizontalAlignment(SwingConstants.CENTER);
         footerPanel.add(separator, BorderLayout.NORTH);
 
         // totaalbedrag
         JLabel totaalLabel = new JLabel(String.format("TOTAAL: €%d,-", totaalbedrag));
         totaalLabel.setFont(new Font("Monospaced", Font.BOLD, 14));
+        totaalLabel.setForeground(Color.BLACK);
         totaalLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         footerPanel.add(totaalLabel, BorderLayout.SOUTH);
 
@@ -151,5 +185,9 @@ public class FactuurPrint implements settingsListener {
     @Override
     public void gastMaxWachttijdVeranderd(int gastMaxWachttijd) {
 
+    }
+
+    public boolean isGepauzeerd() {
+        return this.paused;
     }
 }
