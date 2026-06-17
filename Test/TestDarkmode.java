@@ -10,13 +10,14 @@ import java.awt.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class TestDarkmode {
+class TestDarkMode {
 
     @Test
     void testToggleDarkModeChangesModelAndUI() throws Exception {
 
         SwingUtilities.invokeAndWait(() -> {
 
+            // Begin set up
             DarkModeModel model = new DarkModeModel();
             JPanel dummyPanel = new JPanel();
             TimeManagementPanel timePanel = new TimeManagementPanel(dummyPanel, model);
@@ -24,6 +25,7 @@ class TestDarkmode {
 
             DarkModeController controller = new DarkModeController(view, timePanel, model);
 
+            // begin state
             boolean initialState = model.isDarkMode();
             Color initialBg = UIManager.getColor("Panel.background");
 
