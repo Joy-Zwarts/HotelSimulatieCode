@@ -126,6 +126,11 @@ public class BeweegHelper  {
     }
 
     public void setTrapVertragingTicks(int vertraging) {
-        this.trapVertragingTicks = vertraging;
+        BeweegHelper.trapVertragingTicks = vertraging;
+    }
+
+    // VOEG DEZE GETTER TOE zodat PathFinder de actuele waarde kan opvragen:
+    public static int getTrapVertragingTicks() {
+        return trapVertragingTicks;
     }
 }

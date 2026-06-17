@@ -31,6 +31,27 @@ public class LiftModel extends EntiteitenModel {
         return !verzoeken.isEmpty();
     }
 
+    public int berekenVerwachteTicks(int startY, int targetY) {
+        int huidigeY = getLocatie().getY();
+        int totaleTicks = 0;
+
+        // 1. Hoe ver is de lift verwijderd van de gast?
+        totaleTicks += Math.abs(huidigeY - startY);
+
+        // 2. Strafregels/Extra ticks voor openstaande verzoeken die tussendoor liggen
+        for (int reqY : verzoeken) {
+            // Ligt het verzoek op de route van de lift naar de gast?
+            if ((huidigeY < reqY && reqY < startY) || (huidigeY > reqY && reqY > startY)) {
+                totaleTicks += 2; // Extra ticks voor het stoppen en openen van deuren
+            }
+        }
+
+        // 3. Hoe lang duurt de rit van de startverdieping naar de targetverdieping?
+        totaleTicks += Math.abs(startY - targetY);
+
+        return totaleTicks;
+    }
+
     // NIEUW: Bepaal de logische VOLGENDE verdieping op basis van de huidige rijrichting
     public Integer bepaalVolgendeBestemming() {
         if (verzoeken.isEmpty()) return null;
