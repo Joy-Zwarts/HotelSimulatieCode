@@ -1,6 +1,7 @@
 package Controller.PersoonManagement;
 
 import Controller.Layout.LayoutController;
+import Model.Entiteiten.LiftModel;
 import Model.Layout.Locatie;
 import java.util.LinkedList;
 import java.util.Random; // 1. Random import toegevoegd
@@ -28,50 +29,51 @@ public class PathFinder {
     public void berekenRoute() {
         walkQueue.clear();
 
-        // check of we naar een andere verdieping moeten
+        // Check of we naar een andere verdieping moeten
         if (currentLocatie.getY() != targetLocatie.getY()) {
 
-            int transportX;
+            int trapX = layoutController.getView().getGridBreedte() - 1;
+            int liftX = 0;
             boolean kiesTrap = true; // Standaard vallen we terug op de trap
 
-            // 1. Controleer of de controller en liftmodel bestaan
+            // 1. Bereken de kosten voor de trap op basis van de dynamische vertragingsticks
+            int verticaleAfstand = Math.abs(currentLocatie.getY() - targetLocatie.getY());
+            int trapTicks = verticaleAfstand * BeweegHelper.getTrapVertragingTicks();
+            // Voeg de horizontale loopafstand naar en van de trap toe
+            trapTicks += Math.abs(currentLocatie.getX() - trapX) + Math.abs(trapX - targetLocatie.getX());
+
+            // 2. Controleer of de lift bestaat én of hij beschikbaar is (bij brand is isBeschikbaar() false)
             if (layoutController != null && layoutController.getLiftController() != null) {
                 var liftController = layoutController.getLiftController();
+                LiftModel lift = liftController.getLiftModel();
 
-                // 2. Controleer EXTRA of de lift operationeel/beschikbaar is (niet gedeactiveerd door brand)
-                if (liftController.getLiftModel() != null && liftController.getLiftModel().isBeschikbaar()) {
-                    // Alleen als de lift werkt, is er een 50/50 kans om hem te gebruiken
-                    kiesTrap = random.nextBoolean();
+                if (lift != null && lift.isBeschikbaar()) {
+                    // De lift werkt! Bereken nu of de lift ook daadwerkelijk sneller is dan de trap
+                    int liftTicks = lift.berekenVerwachteTicks(currentLocatie.getY(), targetLocatie.getY());
+                    // Voeg de horizontale loopafstand naar en van de lift toe
+                    liftTicks += Math.abs(currentLocatie.getX() - liftX) + Math.abs(liftX - targetLocatie.getX());
+
+                    // Alleen als de lift sneller is, gaan we NIET met de trap
+                    if (liftTicks < trapTicks) {
+                        kiesTrap = false;
+                    }
                 }
+                // Als lift.isBeschikbaar() false is (brand), blijft kiesTrap dus 'true'!
             }
 
-            if (kiesTrap) {
-                // Kiest de trap (helemaal rechts)
-                transportX = layoutController.getView().getGridBreedte() - 1;
+            // 3. Bepaal de transport X op basis van de gemaakte keuze
+            int transportX = kiesTrap ? trapX : liftX;
 
-                Locatie transportHuidigeVerdieping = new Locatie(transportX, currentLocatie.getY());
-                Locatie transportTargetVerdieping = new Locatie(transportX, targetLocatie.getY());
+            Locatie transportHuidigeVerdieping = new Locatie(transportX, currentLocatie.getY());
+            Locatie transportTargetVerdieping = new Locatie(transportX, targetLocatie.getY());
 
-                // Plan de route via de trap
-                planHorizontaalPad(currentLocatie, transportHuidigeVerdieping);
-                planVerticaalPad(transportHuidigeVerdieping, transportTargetVerdieping);
-                planHorizontaalPad(transportTargetVerdieping, targetLocatie);
-
-            } else {
-                // Kiest de lift (helemaal links op X = 0)
-                transportX = 0;
-
-                Locatie transportHuidigeVerdieping = new Locatie(transportX, currentLocatie.getY());
-                Locatie transportTargetVerdieping = new Locatie(transportX, targetLocatie.getY());
-
-                // Plan de route tot aan de lift, en vanaf de lift naar de kamer
-                planHorizontaalPad(currentLocatie, transportHuidigeVerdieping);
-                planVerticaalPad(transportHuidigeVerdieping, transportTargetVerdieping);
-                planHorizontaalPad(transportTargetVerdieping, targetLocatie);
-            }
+            // Plan de gekozen route
+            planHorizontaalPad(currentLocatie, transportHuidigeVerdieping);
+            planVerticaalPad(transportHuidigeVerdieping, transportTargetVerdieping);
+            planHorizontaalPad(transportTargetVerdieping, targetLocatie);
 
         } else {
-            // als je al op de juiste verdieping bent loop direct horizontaal naar de target kamer
+            // Als je al op de juiste verdieping bent, loop direct horizontaal naar de target kamer
             planHorizontaalPad(currentLocatie, targetLocatie);
         }
     }
